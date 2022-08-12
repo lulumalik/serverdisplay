@@ -46,6 +46,24 @@
                 font-semibold
                 rounded
                 text-xs
+                mr-3
+              "
+              v-if="templateDBSelected"
+              @click="toGallery"
+            >
+              Show Display
+            </button>
+            <button
+              class="
+                bg-blue-200
+                border border-blue-400
+                shadow
+                px-6
+                py-2
+                text-blue-600
+                font-semibold
+                rounded
+                text-xs
               "
               @click="creating"
             >
@@ -73,6 +91,8 @@ export default {
   mounted() {
     this.callAllData()
   },
+
+  middleware: ['checkLogin'],
   methods: {
     callAllData() {
       this.$axios.$get('display').then((res) => {
@@ -91,13 +111,19 @@ export default {
       })
     })
     },
+    toGallery() {
+      var id = this.templateDB.find((db) => db._id == this.templateDBSelected)
+              .username
+      
+      this.$router.push('/g/' + id)
+    },
     creating() {
       if (this.templateDBSelected) {
         this.$router.push({
           name: 'display-create',
           query: {
             id: this.templateDB.find((db) => db._id == this.templateDBSelected)
-              ._id,
+              .username,
           },
         })
       } else {

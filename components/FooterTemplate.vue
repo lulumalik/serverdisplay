@@ -53,9 +53,9 @@
           :repeat="10"
           v-if="$parent.runningText.length > 0"
           :duration="20"
-          class="bg-white text-gray-700 p-1"
+          class="bg-white text-gray-700 p-2"
         >
-          <div class="flex space-x-4"><img src="/bmkg.png" class="w-5 mx-3" alt="bmkg"/>  {{$parent.runningText}}</div>
+          <div class="flex space-x-4 text-xl"><img src="/bmkg.png" class="w-6 mx-3" alt="bmkg"/>  {{$parent.runningText}}</div>
         </marquee-text>
         <div v-else>
           Running Text

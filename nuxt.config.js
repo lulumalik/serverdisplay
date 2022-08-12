@@ -59,7 +59,7 @@ export default {
     build: {},
     fontLoader: {
         /* module options */
-        url: "https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@100,200,300,400;0,500,600,700;1,300&display=swap",
+        url: "https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;400;700&display=swap",
         prefetch: true,
         preconnect: true
 

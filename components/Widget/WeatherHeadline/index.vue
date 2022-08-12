@@ -1,7 +1,9 @@
 <template>
   <div class="w-full">
-    <div class="bg-white rounded p-3 flex items-center space-x-6 w-full">
-      <div class="flex-none">
+    <div
+      class="bg-white/70 rounded py-3 px-6 flex items-center space-x-8 w-full"
+    >
+      <div class="flex-none rounded-full">
         <img
           :src="'/Archive/' + forecast[0].weather_code + '.svg'"
           class="w-32"
@@ -9,36 +11,73 @@
         />
       </div>
       <div class="font-bold flex-grow">
-        <div class="uppercase text-3xl">
+        <div class="uppercase text-4xl">
           {{ weather_code[forecast[0].weather_code] }}
         </div>
-        <div class="text-3xl mt-2">{{ forecast[0].temp }}<sup>o</sup>C</div>
+        <div class="text-4xl mt-2">{{ forecast[0].temp }}<sup>o</sup>C</div>
       </div>
-      <div class="flex-grow text-xl">
+      <div class="flex-grow text-2xl">
         <table>
           <tr>
-            <td>Humidity</td>
-            <td class="font-bold">: {{ forecast[0].rh }} %</td>
+            <td>
+              <div class="flex items-center space-x-3">
+                <div>
+                  <img class="w-4" src="/weatherheadline/Humidity.svg" />
+                </div>
+                <div>Humidity</div>
+              </div>
+            </td>
+            <td class="font-bold pl-6">: {{ forecast[0].rh }} %</td>
           </tr>
           <tr>
-            <td>Wind Speed</td>
-            <td class="font-bold">: {{ forecast[0].wSpdf }} km/hours</td>
+            <td>
+              <div class="flex items-center space-x-3">
+                <div><img class="w-5" src="/weatherheadline/WSpd.svg" /></div>
+                <div class="relative right-1">Wind Speed</div>
+              </div>
+            </td>
+            <td class="font-bold pl-6">: {{ forecast[0].wSpd }} km/hours</td>
           </tr>
           <tr>
-            <td>Wind Direction</td>
-            <td class="font-bold">: {{ forecast[0].wDir }}</td>
+            <td>
+              <div class="flex items-center space-x-3">
+                <div><img class="w-4" src="/weatherheadline/WDir.svg" /></div>
+                <div>Wind Direction</div>
+              </div>
+            </td>
+            <td class="font-bold pl-6">
+              : {{ dirTo[forecast[0].wDir] }}<sup>o</sup>
+            </td>
           </tr>
         </table>
       </div>
-      <div class="flex-grow text-xl">
+      <div class="flex-grow text-2xl">
         <table>
           <tr>
-            <td>Min. Temperature</td>
-            <td class="font-bold">: {{ forecast[0].minTemp }} <sup>o</sup>C</td>
+            <td>
+              <div class="flex items-center space-x-3">
+                <div>
+                  <img class="w-3" src="/weatherheadline/Temperature.svg" />
+                </div>
+                <div>Min. Temperature</div>
+              </div>
+            </td>
+            <td class="font-bold pl-6">
+              : {{ forecast[0].minTemp }} <sup>o</sup>C
+            </td>
           </tr>
           <tr>
-            <td>Max. Temperature</td>
-            <td class="font-bold">: {{ forecast[0].maxTemp }} <sup>o</sup>C</td>
+            <td>
+              <div class="flex items-center space-x-3">
+                <div>
+                  <img class="w-3" src="/weatherheadline/Temperature.svg" />
+                </div>
+                <div>Max. Temperature</div>
+              </div>
+            </td>
+            <td class="font-bold pl-6">
+              : {{ forecast[0].maxTemp }} <sup>o</sup>C
+            </td>
           </tr>
         </table>
       </div>
@@ -82,33 +121,38 @@ export default {
     parseNameDir() {
       return parseNameDir
     },
+    ndflistener() {
+      return this.$store.state.ndfData.allNDF
+    },
   },
-  mounted() {
-    if (this.$parent.$parent && this.$parent.$parent.$parent) {
+  methods: {
+    getData() {
       var parent = this.$parent.$parent.$parent
       if (parent.currentId) {
-        // this.forecast.length = 0
+        this.forecast.length = 0
         var ndf = parent.obj.properties.widgetndf
         if (parent.obj.properties.widgetndf) {
           ndf.forEach((el) => {
-            if (el.key == 'WidgetWeatherHeadlinesubdistrict') {
-              this.forecast.length = 0
-              this.$axios
-                .$get(
-                  'https://api.gis.co.id/api/cgms/weather/ndf/get?locationId=' +
-                    el.value.ndf
-                )
-                .then((res) => {
-                  // console.log(res)
-                  for (var i = 0; i < 1; i++) {
-                    this.forecast.push(res.data[i])
-                  }
-                })
+            if (el.key == '_WidgetWeatherHeadline_subdistrict') {
+              // console.log(this.ndflistener[el.value.ndf], 'ea')
+              var datares = this.ndflistener[el.value.ndf]
+              for (var i = 0; i < datares.length; i++) {
+                var comp = datares[i]
+                if (comp.date.split('T')[1].split(':')[0] == '12') {
+                  this.forecast.push(comp)
+                  break
+                }
+              }
             }
           })
         }
       }
-    }
+    },
+  },
+  mounted() {
+    // console.log('ea')
+    this.getData()
+    // if (this.$parent.$parent && this.$parent.$parent.$parent) {
   },
 }
 </script>

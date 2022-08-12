@@ -61,6 +61,8 @@
 
 <script>
 export default {
+
+  middleware: ['checkLogin'],
   data() {
     return {
       templateDB: [],

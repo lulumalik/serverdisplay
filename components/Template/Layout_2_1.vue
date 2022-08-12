@@ -29,9 +29,11 @@
               border-dashed border-gray-400
               h-80
             "
+            v-if="!nodrag"
           >
             <div>Drop Widget Here.</div>
           </div>
+        <div v-else class="h-80 w-full"></div>
         </div>
       </draggable>
     </div>

@@ -1,38 +1,38 @@
 <template>
-  <div class="text-lg">
-    <div class="bg-sky-500 text-white p-4 text-center">
+  <div>
+    <div class="bg-sky-500 text-lg text-white p-4 text-center">
       <div>Earthquake Information {{datagempa.Tanggal}}</div>
       <div></div>
     </div>
     <div class="flex">
       <div
-        style="min-width: 240px"
-        class="bg-white flex flex-grow items-center justify-center"
+        class="bg-white/80 flex flex-grow items-center justify-center overflow-hidden"
         v-if="datagempa.Shakemap"
+        style="width:525px !important;height:330px !important;" 
       >
-        <img :src="'https://ews.bmkg.go.id/tews/data/' + datagempa.Shakemap" class="w-64" alt="gempa">
+        <img :src="'https://ews.bmkg.go.id/tews/data/' + datagempa.Shakemap" alt="gempa">
       </div>
-      <div class="uppercase flex-grow bg-white p-6">
+      <div class="uppercase flex-grow text-xl bg-white/80 pl-2 pr-6 py-6">
         <table>
           <tr>
             <td class="text-sky-400">Location</td>
-            <td class="pl-2 pt-1">: {{datagempa.Lintang}} , {{datagempa.Bujur}}</td>
+            <td class="pl-2 pt-1">: {{datagempa.Lintang || '-'}} , {{datagempa.Bujur || '-'}}</td>
           </tr>
           <tr>
             <td class="text-sky-400">Depth</td>
-            <td class="pl-2 pt-1">: {{datagempa.Kedalaman}}</td>
+            <td class="pl-2 pt-1">: {{datagempa.Kedalaman || '-'}}</td>
           </tr>
           <tr>
             <td class="text-sky-400">Magnitude</td>
-            <td class="pl-2 pt-1">: {{datagempa.Magnitude}}</td>
+            <td class="pl-2 pt-1">: {{datagempa.Magnitude || '-'}}</td>
           </tr>
         </table>
         <hr class="border-gray-200 my-4" />
-        <div class="w-full">
-          <p>{{datagempa.Wilayah}}</p>
+        <div class="w-full" :class="datagempa.Wilayah ? '' : 'mt-16 pt-1.5'">
+          <p>{{datagempa.Wilayah || '-'}}</p>
 
           <p class="mt-2.5">
-            {{datagempa.Potensi}}
+            {{datagempa.Potensi || '-'}}
           </p>
         </div>
       </div>
@@ -50,7 +50,7 @@ export default {
   mounted() {
     if (this.$parent.$parent && this.$parent.$parent.$parent) {
       var parent = this.$parent.$parent.$parent
-      if (parent.currentId) {
+      // if (parent.currentId) {
         this.$axios
           .post('https://sena.circlegeo.com/api/sena/research/forward', {
             url: 'https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json',
@@ -70,7 +70,7 @@ export default {
         //   .then((res) => {
         //     console.log(res)
         //   })
-      }
+      // }
     }
   },
 }

@@ -38,13 +38,20 @@
       </button>
     </div>
     <div class="text-sm">
-      Preview Display
+      <div class="flex items-center">
+        <div class="flex-grow">Preview Display</div>
+        <div class="flex flex-none space-x-3">
+          <input type="number" v-model="width" class="py-1 w-24 text-xs px-4 rounded border border-gray-300" />
+          <div>x</div>
+          <input type="number" v-model="height" class="py-1 w-24 text-xs px-4 rounded border border-gray-300" />
+        </div>
+      </div>
       <div
         class="
           bg-gray-300
           w-full
           rounded
-          mt-3
+          mt-1.5
           overflow-y-hidden overflow-x-auto
           relative
         "
@@ -56,13 +63,17 @@
             :style="{
               transform: 'scale(' + scaleparent + ')',
               'transform-origin': '20% 0%',
+              width: width + 'px',
+              height: height + 'px'
             }"
           >
+            <BackgroundVideo v-if="objData && objData.properties.video !== null" />
             <ShowLayout
               v-if="objData"
               :obj="objData"
-              :style="getBackground"
-              class="baseBrowser"
+              :style="getBackground(objData)"
+              :layoutDB="layoutDB"
+              :widgetDB="widget"
               ref="layout"
               @scale="scale = $event.scale"
               @background="initialbackground"
@@ -93,7 +104,7 @@
               v-model="scale"
               @change="scaleToChild"
               class="mx-auto"
-              v-bind="{ min: 0, max: 1, interval: 0.001 }"
+              v-bind="{ min: 0, max: 4, interval: 0.001 }"
             ></vue-slider>
           </div>
         </div>
@@ -207,31 +218,45 @@ export default {
       times: 60,
       scale: 1,
       scaleparent: 0.5,
+      layoutDB: {},
+      widget: [],
+      width: 1366,
+      height: 768
     }
   },
-  computed: {
-    getBackground() {
-      var obj
-      if (this.background.length > 7) {
-        obj = {
-          'background-image': 'url(' + this.background + ')',
+  async mounted() {
+    const res1 = await this.$axios.$get('widget')
+    this.widget = res1.data
+
+    const res = await this.$axios.$get('layout')
+    res.data.forEach((data) => {
+      this.$set(this.layoutDB, data._id, data.name)
+    })
+  },
+  methods: {
+    getBackground(el) {
+      var background = {}
+       if (el.backgroundImage) {
+        background = {
+          'background-image':
+            'url(' +
+            this.$axios.defaults.baseURL +
+            el.backgroundImage.replace('/api/', '') +
+            ')',
           'background-size': 'cover',
           'background-position': 'center',
           'background-repeat': 'no-repeat',
         }
       } else {
-        obj = {
-          background: this.background,
+        // console.log(el.properties.video)
+        if (el.properties.video) {
+          background = 'transparent'
+        } else {
+          background = el.properties.background
         }
       }
-      return obj
+      return background
     },
-  },
-  async mounted() {
-    const res1 = await this.$axios.$get('widget')
-    this.widget = res1.data
-  },
-  methods: {
     scaleToChild(val) {
       // console.log(this.objData)
       for (let i = 0; i < this.$parent.templateAddedList.length; i++) {

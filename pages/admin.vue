@@ -15,7 +15,7 @@
       <img
         src="/loginbg2.svg"
         alt="img"
-        class="absolute top-8 -right-16 w-96 z-50"
+        class="absolute top-8 -right-16 w-96  z-50"
       />
       <!-- <img src="/inapows/logo/black.png" class="w-6 md:w-12 fixed top-6 left-6" />
       <div class="p-2.5 mb-6 md:p-12">
@@ -57,10 +57,10 @@
             md:mb-12
           "
         >
-          Display Log in
+          Log in
         </div>
         <div class="mb-6">
-          <div class="py-2">Display id</div>
+          <div class="py-2">Username</div>
           <input
             v-model="login.username"
             placeholder="Username"
@@ -68,11 +68,11 @@
           />
         </div>
         <div class="mb-6 md:mb-12">
-          <div class="py-2">Token</div>
+          <div class="py-2">Password</div>
           <input
-            v-model="login.token"
-            placeholder="Token"
-            type="text"
+            v-model="login.password"
+            placeholder="Password"
+            type="password"
             class="mb-4 form-input shadow-md w-full rounded text-gray-800"
           />
         </div>
@@ -133,7 +133,7 @@ export default {
     return {
       login: {
         username: '',
-        token: null,
+        password: '',
       },
       loading: false,
     }
@@ -151,20 +151,37 @@ export default {
       return str.join('&')
     },
     loginFunc() {
+      var query = this.$route.query
       this.loading = true
-      if (!this.login.token) {
-        this.$axios.$post('display/login', {
-          username: this.login.username
-        }).then(res => {
-          // console.log(res)
-          this.$cookies.set('displayprod', res.data.username)
-          setTimeout(() => {
-            this.$router.push('/gallery')
-          }, 1000)
+      this.$axios
+        .$post(`user/login`, this.login)
+        .then((res) => {
+          this.loading = false
+          // clearTimeout(timeout);
+          // if (res.data.status == "OK") {
+          // var data = res.data.data;
+          this.$cookies.set('users', res.token, {
+            path: '/',
+            maxAge: 60 * 60 * 24 * 7,
+          })
+          this.$router.push('/template')
+          // this.$router.push(`/${query.redirect}`)
+          // this.$router.push(
+          //   `/?token=${data.token}&redirect=${query.redirect}`
+          // );
+          // window.location.href = data.redirect
+          //   ? `/?token=${data.token}&redirect=${query.redirect}`
+          //   : `/sso?token=${data.token}`;
+          // }
         })
-      } else {
-        this.$axios.$post('display/login', this.login)
-      }
+        .catch((error) => {
+          console.log(error)
+          this.loading = false
+          alert('error')
+          // this.onLogin = false;
+          // clearTimeout(timeout);
+          // this.modalOpen = true;
+        })
     },
   },
 }

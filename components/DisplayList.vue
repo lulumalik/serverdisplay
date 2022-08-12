@@ -1,5 +1,5 @@
 <template>
-  <div style="height: calc(100vh - 300px)">
+  <div style="height: calc(100vh - 150px)">
     <div class="text-xl mb-4 font-bold text-sky-500">Display</div>
     <div class="flex items-center flex-wrap">
       <div
@@ -9,7 +9,7 @@
           rounded
           px-4
           w-56
-          h-24
+          h-32
           flex
           items-center
           justify-center

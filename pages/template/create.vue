@@ -119,7 +119,7 @@
                   class="py-2 px-2 w-full shadow rounded border border-gray-500"
                 />
               </div>
-              <DisplayBase ref="display"/>
+              <DisplayBase ref="display" />
               <div class="mt-1 text-lg">Category</div>
               <div>
                 <select
@@ -133,7 +133,7 @@
                 </select>
               </div>
               <div class="mt-1 text-lg">Widget</div>
-              <div>
+              <div style="height:150px" class="overflow-y-auto overflow-x-hidden">
                 <draggable group="widget" :list="widget" class="list-group">
                   <div
                     class="
@@ -146,6 +146,7 @@
                       border border-blue-500
                       list-group-item
                       mt-2
+                      cursor-pointer
                     "
                     v-for="(w, i) in widget"
                     :key="i"
@@ -189,13 +190,7 @@
                 class="w-full overflow-hidden baseBrowser rounded relative"
                 id="canvas"
                 style="transform-origin: top center"
-                :style="{
-                  transform: 'scale(' + scale + ')',
-                  background:
-                    backgroundColor.toString().length == 7
-                      ? backgroundColor
-                      : 'url(' + backgroundColor + ')',
-                }"
+                :style="backgroundInitial"
               >
                 <HeaderTemplate
                   ref="header"
@@ -207,7 +202,6 @@
                   :style="{
                     transform: 'scale(' + scaleinner + ')',
                   }"
-                  class="relative absolute top-0 left-0"
                 >
                   <div class="mx-auto w-full h-full">
                     <component
@@ -295,7 +289,7 @@
                   :tooltip-placement="'right'"
                   v-model="scaleinner"
                   class="mx-auto"
-                  v-bind="{ min: 0, max: 1, interval: 0.001 }"
+                  v-bind="{ min: 0, max: 5, interval: 0.001 }"
                 ></vue-slider>
               </div>
               <div
@@ -323,6 +317,8 @@
 <script>
 import html2canvas from 'html2canvas'
 export default {
+
+  middleware: ['checkLogin'],
   data() {
     return {
       templateDB: [],
@@ -342,15 +338,30 @@ export default {
       useVideo: false,
       runningText: '',
       logos: '',
-      useLocationName: true,
-      useLocalTime: true,
       scale: 1,
       scaleinner: 1,
     }
   },
+  computed: {
+    backgroundInitial() {
+      if (this.backgroundColor.toString().length == 7) {
+        return {
+          transform: 'scale(' + this.scale + ')',
+          background: this.backgroundColor,
+        }
+      } else {
+        return {
+          transform: 'scale(' + this.scale + ')',
+          'background-image': 'url(' + this.backgroundColor + ')',
+          'background-size': 'cover',
+          'background-position': 'center',
+          'background-repeat': 'no-repeat',
+        }
+      }
+    },
+  },
   async mounted() {
     var widget = await this.$axios.$get('widget')
-    console.log(widget)
     this.widget = widget.data
 
     this.$axios.$get('template').then((res) => {
@@ -473,6 +484,13 @@ export default {
       this.scaleinner = obj.properties.scale
       this.templatename = obj.name
       this.useHeader = obj.properties.header ? true : false
+
+      // console.log(obj)
+      if (obj.properties.video) {
+        this.useVideo = true
+        this.$refs['display'].subdistrict = obj.properties.video
+      }
+
       if (obj.properties.footer) {
         this.useFooter = true
         this.runningText = obj.properties.footer.text
@@ -481,7 +499,6 @@ export default {
         this.logos =
           this.$axios.defaults.baseURL + obj.logo.items[0].split('/api/')[1]
       }
-
       var array1 = []
       obj.component.widgets.forEach((data) => {
         array1.push({
@@ -640,6 +657,7 @@ export default {
           })
         })
         .catch((err) => {
+          console.log(err)
           this.saving = false
           this.rerender = false
           this.$toast.open({
@@ -669,6 +687,7 @@ export default {
           })
         })
         .catch((err) => {
+          console.log(err)
           this.saving = false
           this.rerender = false
           this.$toast.open({
@@ -737,13 +756,7 @@ export default {
       }
       // header section
       if (this.useHeader) {
-        properties.header = {}
-        if (this.useLocationName) {
-          properties.header.locationName = true
-        }
-        if (this.useLocalTime) {
-          properties.header.localTime = true
-        }
+        properties.header = true
       } else {
         properties.header = null
       }
@@ -821,26 +834,20 @@ export default {
       }
       var url = 'logo'
 
-      return new Promise((resolve, reject) => {
-        if (!img) {
-          var url2
-          var obj = this.templateDB.find(
-            (data) => data._id == this.$route.query.id
-          )
-          if (obj.logo.items.length > 0 && !img) {
-            url2 = obj.logo.items[0]
-          }
-          return this.$axios
-            .$put('template/' + url + '/delete/' + id, {
-              logo: url2,
-            })
-            .then((res) => {
-              //
-              resolve(res)
-            })
-            .catch((e) => {
-              resolve(e)
-            })
+      return new Promise(async (resolve, reject) => {
+        var obj = this.templateDB.find(
+          (data) => data._id == this.$route.query.id
+        )
+        if (
+          obj &&
+          ((!img && obj.logo.items.length > 0) ||
+            (img && obj.logo.items.length > 0))
+        ) {
+          var url2 = obj.logo.items[0]
+
+          await this.$axios.$put('template/' + url + '/delete/' + id, {
+            logo: url2,
+          })
         }
         var data = new FormData()
         data.append('file', img)

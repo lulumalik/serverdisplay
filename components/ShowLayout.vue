@@ -1,27 +1,31 @@
 <template>
-  <div class="relative">
+  <div class="relative overflow-hidden">
     <HeaderTemplate
       ref="header"
       :class="
         production
           ? 'z-50 w-screen fixed top-0 px-8 py-2'
-          : 'absolute top-0 baseBrowserWidth px-8 py-2 left-0'
+          : 'fixed top-0 w-full px-8 py-2 left-0'
       "
       v-if="useHeader"
       :nodrag="true"
     />
-    <div class="baseBrowser overflow-hidden mx-auto">
+           <!-- style="transform-origin: top center"
+        :style="{
+          transform: 'scale(' + scaleinner + ')',
+        }" -->
+    <div :class="useHeader ? 'top-24' : ''" class="baseBrowser relative mx-auto">
       <div
         style="transform-origin: top center"
         :style="{
           transform: 'scale(' + scaleinner + ')',
         }"
-        class="relative top-24 left-0"
+        class=""
       >
         <div class="mx-auto w-full h-full">
           <component
             ref="dynamic"
-            class="px-6 pt-2"
+            class=""
             :nodrag="true"
             v-if="!rerender"
             :is="selectedTemplate"
@@ -33,11 +37,7 @@
     <FooterTemplate
       :nodrag="true"
       ref="footer"
-      :class="
-        production
-          ? 'overflow-hidden fixed bottom-0 w-screen'
-          : 'overflow-hidden absolute bottom-0 baseBrowserWidth'
-      "
+      :class="'overflow-hidden fixed bottom-0 w-full'"
       v-if="useFooter"
     />
   </div>
@@ -70,13 +70,22 @@ export default {
       default: () => {
         return false
       }
-    }
+    },
+    widgetDB: {
+      default: () => {
+        return []
+      }
+    },
+    layoutDB: {
+      default: () => {
+        return {}
+      }
+    },
   },
   data() {
     return {
       rerender: false,
       selectedCategory: 'Maritim',
-      widget: [],
       selectedTemplate: 'Layout_1',
       saving: false,
       templatename: '',
@@ -88,21 +97,15 @@ export default {
       logos: '',
       scaleinner: 1,
       listTemplate: {},
-      layoutDB: {},
+      widget: [],
       currentId: null,
     }
   },
   async mounted() {
-    const res1 = await this.$axios.$get('widget')
-    this.widget = res1.data
-
-    const res = await this.$axios.$get('layout')
-    res.data.forEach((data) => {
-      this.$set(this.layoutDB, data._id, data.name)
-    })
     if (this.dataid) {
       this.currentId = this.dataid
     }
+    this.widget = this.widgetDB
     this.getComp(this.obj)
   },
   methods: {

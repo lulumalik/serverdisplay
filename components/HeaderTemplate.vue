@@ -10,24 +10,32 @@
     </picture-input>
     <div class="w-full flex items-center">
       <div class="flex-grow flex items-center space-x-4">
-        <img src="/bmkg.png" alt="bmkg" class="w-12" />
-        <div class="flex-grow" v-if="!nodrag">
-          <div class=" text-xs flex items-center">
-            <input type="checkbox" v-model="$parent.useLocationName"/>
-            <div class="ml-2">Location Name</div>
+        <img src="/bmkg.png" alt="bmkg" class="w-14" />
+        <div class="flex-grow" >
+          <div class="text-xl font-semibold">
+            BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA
           </div>
-          <div class=" text-xs mt-1 flex items-center">
-            <input type="checkbox" v-model="$parent.useLocalTime"/>
-            <div class="ml-2">Local Time</div>
-            <!-- Selasa, 12 Juli 2022 | 10:31:22 WIB -->
+          <div class="text-md mt-1" style="font-family: pristina">
+            Cepat, Tepat, Akurat, Luas, dan Mudah Dipahami
           </div>
         </div>
-        <div class="flex-grow font-semibold" v-else>
-          <div class=" text-md flex items-center">
-            <div class="ml-2">{{$parent.location ? $parent.location.name : '-'}}</div>
+        <div class="flex-none font-thin pr-4" v-if="nodrag">
+          <div class="flex items-center justify-end">
+            <div class="ml-2 font-bold text-3xl">
+              {{ $parent.location ? $parent.location.name : '-' }}
+            </div>
           </div>
-          <div class=" text-md mt-1 flex items-center">
-            <div class="ml-2">{{new Date().toString().split(' ').splice(0,5).join(' ')}}</div>
+          <div class="text-md mt-1 flex items-center font-semibold justify-end">
+            <div class="ml-2">
+              {{
+                new Date(currentDate)
+                  .toString()
+                  .split(' ')
+                  .splice(0, 5)
+                  .join(' ')
+              }}
+              {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+            </div>
             <!-- Selasa, 12 Juli 2022 | 10:31:22 WIB -->
           </div>
         </div>
@@ -82,10 +90,36 @@ export default {
   },
   data() {
     return {
+      currentDate: '',
       indexdata: null,
     }
   },
+  mounted() {
+    this.returningTimeZone()
+    setInterval(() => {
+      this.returningTimeZone()
+    }, 1000)
+  },
+  computed: {
+    getTimeZone() {
+      var date = new Date().getTimezoneOffset()
+      if (date == -420) {
+        return 7
+      } else if (date == -480) {
+        return 6
+      } else if (date == -540) {
+        return 5
+      }
+    },
+  },
   methods: {
+    returningTimeZone() {
+      this.currentDate =
+        new Date().toString().split(' ').splice(0, 5).join(' ') +
+        ' GMT+0' +
+        this.getTimeZone +
+        '00'
+    },
     uploadLogo(i) {
       // this.indexdata = i
       document.getElementById('fileUpload2').click()

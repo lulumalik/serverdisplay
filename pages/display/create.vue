@@ -36,39 +36,39 @@
           </div>
         </div>
         <div class="flex-grow">
-          <div>Secret Code <small>( optional )</small></div>
-          <div class="mt-2 relative">
-            <input
-              v-model="secretCode"
-              placeholder="secret code"
-              class="w-full rounded border border-gray-300 px-2 py-1.5"
-              type="text"
-              required
-              :class="getDisplaySecretSpaces ? 'border-red-500' : ''"
-            />
-            <div class="absolute -top-5 right-0">
-              <small class="text-red-500" v-if="getDisplaySecretSpaces">
-                no spaces allowed
-              </small>
-            </div>
-          </div>
-        </div>
-        <div class="flex-grow">
           <div>Display Location</div>
           <div class="mt-2">
-              <v-select label="name" v-model="getDisplayLocation" :options="options"></v-select>
+            <v-select
+              label="name"
+              v-model="getDisplayLocation"
+              :options="options"
+            ></v-select>
           </div>
         </div>
         <div class="flex-grow">
           <!--  -->
-          <button
+          <label class="flex items-center space-x-3 mb-2">
+            <input type="checkbox" v-model="secretCode" class="text-xs p-0.5 rounded" />
+            <div class="text-xs">
+              Secret code
+            </div>
+          </label>
+          <div
             type="submit"
-            class="px-4 py-2 rounded bg-sky-500 text-white"
+            class="
+              px-4
+              cursor-pointer
+              text-center
+              rounded
+              bg-sky-500
+              text-white
+            "
+            style="padding-top:7px;padding-bottom:7px;"
             @click="updateAndCreateDisplay"
             :disabled="saving"
           >
             {{ saving ? 'Saving Display...' : 'Update and Refresh Display' }}
-          </button>
+          </div>
         </div>
       </form>
     </client-only>
@@ -94,14 +94,18 @@ export default {
       displayID: null,
       displayName: null,
       displayLocation: null,
-      secretCode: null,
+      secretCode: false,
       getDisplayLocation: 'Kepulauan Bangka Belitung',
-      options: [{
-        name: 'Kepulauan Bangka Belitung',
-        value: 'Kepulauan Bangka Belitung',
-      }]
+      options: [
+        {
+          name: 'Kepulauan Bangka Belitung',
+          value: 'Kepulauan Bangka Belitung',
+        },
+      ],
+      allfind: {}
     }
   },
+  middleware: ['checkLogin'],
   computed: {
     getDisplaySecretSpaces() {
       return /\s/g.test(this.secretCode)
@@ -113,12 +117,64 @@ export default {
       return this.$store.state.displayWidget.widgetSaved
     },
   },
-  mounted() {
-    this.$axios.$get('template').then((res) => {
-      this.templateDB = res.data
-    })
+  async mounted() {
+    const res1 = await this.$axios.$get('template')
+    var alltemplate = res1.data
+    if (this.$route.query.id) {
+      const res = await this.$axios.$get('display/find/' + this.$route.query.id)
+      this.allfind = res.data
+      this.templateDB = this.getDifference(alltemplate, res.data.template)
+      this.templateAddedList = res.data.template
+      this.displayID = res.data.username
+      this.displayName = res.data.name
+      this.$refs['preview'].width = res.data.properties.width || 1366
+      this.$refs['preview'].height = res.data.properties.height || 768
+      this.templateAddedList.forEach((el) => {
+        if (el.properties.widgetndf) {
+          el.properties.widgetndf.forEach((l) => {
+            this.$store.commit('displayWidget/mutationWidget', {
+              key: el._id + l.key,
+              value: l.value,
+            })
+          })
+        }
+      })
+    } else {
+      this.templateDB = alltemplate
+    }
   },
   methods: {
+    getDifference(array1, array2) {
+      return array1.filter((object1) => {
+        return !array2.some((object2) => {
+          return object1._id === object2._id
+        })
+      })
+    },
+    updateData(obj) {
+      // console.log(this.allfind)
+      this.$axios
+        .$put('display/update/' + this.allfind._id, obj)
+        .then((res) => {
+          console.log(res)
+          this.saving = false
+          this.$toast.open({
+            message: 'Display saved',
+            type: 'success',
+            duration: 2000,
+          })
+        })
+    },
+    createData(obj) {
+      this.$axios.$post('display/create?generateSecret' + (this.secretCode ? '=true' : '=false'), obj).then((res) => {
+        this.saving = false
+        this.$toast.open({
+          message: 'Display saved',
+          type: 'success',
+          duration: 2000,
+        })
+      })
+    },
     updateAndCreateDisplay() {
       // this.saving = true
       var widgetparse = {}
@@ -131,15 +187,11 @@ export default {
           widgetparse[kparse[0]] = []
         }
         widgetparse[kparse[0]].push({
-          key: kparse[1] + kparse[2],
-          value: this.getWidgetSaved[k]
+          key: '_' + kparse[1] + (kparse[2] ? '_' + kparse[2] : ''),
+          value: this.getWidgetSaved[k],
         })
-        // widgetparse[this.getWidgetSaved[k].id].push({
-        //   key:this.getWidgetSaved[k].id,
-        //   value: this.getWidgetSaved[k].value
-        // })
       }
-      this.templateAddedList.forEach(el => {
+      this.templateAddedList.forEach((el) => {
         if (widgetparse[el._id]) {
           el.properties.widgetndf = widgetparse[el._id]
         }
@@ -148,25 +200,24 @@ export default {
         username: this.displayID,
         name: this.displayName,
         location: {
-          name: 'Tanjung Pandan',
+          name: 'Sijuk',
           geometry: {
             type: 'Point',
-            coordinates: [107.652999, -2.741668],
+            coordinates: [107.77268, -2.58072],
           },
         },
         template: this.templateAddedList,
         properties: {
           delay: parseFloat(this.$refs['preview'].times) || 60,
+          width: this.$refs['preview'].width,
+          height: this.$refs['preview'].height
         },
       }
-      this.$axios.$post('display/create', obj).then((res) => {
-        this.saving = false
-        this.$toast.open({
-          message: 'Display saved',
-          type: 'success',
-          duration: 2000,
-        })
-      })
+      if (!this.$route.query.id) {
+        this.createData(obj)
+      } else {
+        this.updateData(obj)
+      }
     },
   },
 }

@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex w-full items-center space-x-8 rounded"
-  >
+  <div class="flex w-full items-center space-x-8 rounded">
     <div class="flex-grow w-7/12 space-y-8">
       <div v-for="val in 2" :key="val">
         <draggable
@@ -10,7 +8,7 @@
           group="widget"
           :draggable="nodrag ? '' : '.datadrag' + val"
         >
-            <div
+          <div
             v-for="(item, index) in listing(val)"
             :key="index"
             :class="'datadrag' + val"
@@ -30,9 +28,12 @@
                 border-dashed border-gray-400
                 h-44
               "
+              v-if="!nodrag"
             >
               <div>Drop Widget Here.</div>
             </div>
+
+            <div v-else class="h-44 w-full"></div>
           </div>
         </draggable>
       </div>
@@ -44,30 +45,33 @@
         group="widget"
         :draggable="nodrag ? '' : '.datadrag3'"
       >
-         <div
-            v-for="(item, index) in list3"
-            :key="index"
-            :class="'datadrag3'"
-            class="w-full m-3"
+        <div
+          v-for="(item, index) in list3"
+          :key="index"
+          :class="'datadrag3'"
+          class="w-full m-3"
+        >
+          <component :is="item.component" />
+        </div>
+        <div v-if="list3.length == 0" class="w-full">
+          <div
+            class="
+              border-2
+              rounded
+              flex
+              items-center
+              justify-center
+              w-full
+              border-dashed border-gray-400
+              h-96
+            "
+            v-if="!nodrag"
           >
-            <component :is="item.component" />
+            <div>Drop Widget Here.</div>
           </div>
-          <div v-if="list3.length == 0" class="w-full">
-            <div
-              class="
-                border-2
-                rounded
-                flex
-                items-center
-                justify-center
-                w-full
-                border-dashed border-gray-400
-                h-96
-              "
-            >
-              <div>Drop Widget Here.</div>
-            </div>
-          </div>
+
+          <div v-else class="h-96 w-full"></div>
+        </div>
       </draggable>
     </div>
   </div>
@@ -76,9 +80,9 @@
 <script>
 export default {
   props: {
-  nodrag: {
+    nodrag: {
       default: () => false,
-    }
+    },
   },
   data() {
     return {
@@ -99,6 +103,5 @@ export default {
       }
     },
   },
-
 }
 </script>

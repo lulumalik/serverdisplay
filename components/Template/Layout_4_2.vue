@@ -25,11 +25,14 @@
                 justify-center
                 w-full
                 border-dashed border-gray-400
-                h-80
+                h-96
               "
+              v-if="!nodrag"
             >
               <div>Drop Widget Here.</div>
             </div>
+
+        <div v-else class="h-96 w-full"></div>
           </div>
       </draggable>
     </div>

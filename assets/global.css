@@ -1,6 +1,11 @@
 html {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     /* Local */
+}
+
+@font-face {
+    font-family: pristina;
+    src: url(./PRISTINA.TTF);
 }
 
 .form-input {
