@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  server-display:
+    image: "bmkg/server-display"
+    restart: unless-stopped
+    networks:
+      - "core-infra"
+networks:
+  core-infra:
+    external: true
