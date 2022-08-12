@@ -36,58 +36,7 @@ export default {
   data() {
     return {
       selected: '',
-      listKecamatan: [
-        {
-          'nama lokasi': 'pantai tanjung tinggi ',
-          Kecamatan: 'Sijuk',
-          'ID NDF': '5011055',
-        },
-        {
-          'nama lokasi': 'P. Tanjung Pendam',
-          Kecamatan: 'Tajung Pandan',
-          'ID NDF': '501367',
-        },
-        {
-          'nama lokasi': 'Wisata Replika Sekolah Laskar Pelangi',
-          Kecamatan: 'Gantung',
-          'ID NDF': '5011058',
-        },
-        {
-          'nama lokasi': 'P. Tanjung Kelayang',
-          Kecamatan: 'Sijuk',
-          'ID NDF': '5011055',
-        },
-        {
-          'nama lokasi': 'P. Bukit Berahu',
-          Kecamatan: 'Sijuk',
-          'ID NDF': '5011055',
-        },
-        {
-          'nama lokasi': 'Pulau Lengkuas',
-          Kecamatan: 'Sijuk',
-          'ID NDF': '5011054',
-        },
-        {
-          'nama lokasi': 'P. Penyabong',
-          Kecamatan: 'Membalong',
-          'ID NDF': '5011052',
-        },
-        {
-          'nama lokasi': 'Wisata Museum Kata Andrea Hirata',
-          Kecamatan: 'Gantung',
-          'ID NDF': '5011058',
-        },
-        {
-          'nama lokasi': 'Danau Kaolin',
-          Kecamatan: 'Tanjung Pandan',
-          'ID NDF': '501367',
-        },
-        {
-          'nama lokasi': 'Eco wisata Gusong Bugis',
-          Kecamatan: 'Tanjung Pandan',
-          'ID NDF': '501367',
-        },
-      ],
+      listKecamatan: []
     }
   },
 }

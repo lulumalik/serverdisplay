@@ -38,17 +38,18 @@
         <div class="flex-grow">
           <div>Display Location</div>
           <div class="mt-2">
-            <v-select
+            <input
               label="name"
+              class="w-full rounded border-gray-300 border px-2 py-1.5"
               v-model="getDisplayLocation"
-              :options="options"
-            ></v-select>
+              type="text"
+            />
           </div>
         </div>
         <div class="flex-grow">
           <!--  -->
           <label class="flex items-center space-x-3 mb-2">
-            <input type="checkbox" v-model="secretCode" class="text-xs p-0.5 rounded" />
+            <input type="checkbox" diabled v-model="secretCode" class="text-xs p-0.5 rounded" />
             <div class="text-xs">
               Secret code
             </div>
@@ -69,6 +70,26 @@
           >
             {{ saving ? 'Saving Display...' : 'Update and Refresh Display' }}
           </div>
+        </div>
+        <div class="flex-none">
+                     <div
+              class="
+                bg-blue-200
+                border border-blue-400
+                shadow
+                px-6
+                py-2
+                text-blue-600
+                font-semibold
+                rounded
+                text-xs
+                cursor-pointer
+              "
+              v-if="$route.query.id"
+              @click="toGallery"
+            >
+              Preview Display
+            </div>
         </div>
       </form>
     </client-only>
@@ -96,12 +117,6 @@ export default {
       displayLocation: null,
       secretCode: false,
       getDisplayLocation: 'Kepulauan Bangka Belitung',
-      options: [
-        {
-          name: 'Kepulauan Bangka Belitung',
-          value: 'Kepulauan Bangka Belitung',
-        },
-      ],
       allfind: {}
     }
   },
@@ -127,6 +142,8 @@ export default {
       this.templateAddedList = res.data.template
       this.displayID = res.data.username
       this.displayName = res.data.name
+      // console.log(res.data)
+      this.$refs['preview'].times = res.data.properties.delay
       this.$refs['preview'].width = res.data.properties.width || 1366
       this.$refs['preview'].height = res.data.properties.height || 768
       this.templateAddedList.forEach((el) => {
@@ -144,6 +161,9 @@ export default {
     }
   },
   methods: {
+    toGallery() {
+      this.$router.push('/g/' + this.allfind.username)
+    },
     getDifference(array1, array2) {
       return array1.filter((object1) => {
         return !array2.some((object2) => {
@@ -200,7 +220,7 @@ export default {
         username: this.displayID,
         name: this.displayName,
         location: {
-          name: 'Sijuk',
+          name: this.getDisplayLocation,
           geometry: {
             type: 'Point',
             coordinates: [107.77268, -2.58072],

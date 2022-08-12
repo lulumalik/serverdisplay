@@ -46,28 +46,10 @@
                 font-semibold
                 rounded
                 text-xs
-                mr-3
-              "
-              v-if="templateDBSelected"
-              @click="toGallery"
-            >
-              Show Display
-            </button>
-            <button
-              class="
-                bg-blue-200
-                border border-blue-400
-                shadow
-                px-6
-                py-2
-                text-blue-600
-                font-semibold
-                rounded
-                text-xs
               "
               @click="creating"
             >
-              {{ templateDBSelected ? 'Edit Template' : 'Create New' }}
+              {{ templateDBSelected ? 'Edit Display' : 'Create New' }}
             </button>
           </div>
         </div>
@@ -91,7 +73,6 @@ export default {
   mounted() {
     this.callAllData()
   },
-
   middleware: ['checkLogin'],
   methods: {
     callAllData() {
@@ -110,12 +91,6 @@ export default {
         this.$set(this.categoryDB, data.name, data._id)
       })
     })
-    },
-    toGallery() {
-      var id = this.templateDB.find((db) => db._id == this.templateDBSelected)
-              .username
-      
-      this.$router.push('/g/' + id)
     },
     creating() {
       if (this.templateDBSelected) {

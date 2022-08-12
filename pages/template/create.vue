@@ -214,7 +214,7 @@
                     />
                   </div>
                 </div>
-                <FooterTemplate
+                <!-- <FooterTemplate
                   ref="footer"
                   class="
                     z-50
@@ -224,7 +224,7 @@
                     overflow-hidden
                   "
                   v-if="useFooter"
-                />
+                /> -->
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div
+    <!-- <div
       v-if="showPopup"
       class="
         fixed
@@ -47,23 +47,24 @@
             />
           </svg>
         </button>
-      </div>
-      <div class="flex-grow">
-        <marquee-text
-          :repeat="10"
-          v-if="$parent.runningText.length > 0"
-          :duration="20"
-          class="bg-white text-gray-700 p-2"
-        >
-          <div class="flex space-x-4 text-xl"><img src="/bmkg.png" class="w-6 mx-3" alt="bmkg"/>  {{$parent.runningText}}</div>
-        </marquee-text>
-        <div v-else>
-          Running Text
+      </div> -->
+    <div class="flex-grow">
+      <marquee-text
+        :repeat="10"
+        :duration="20"
+        class="bg-white text-gray-700 p-2"
+      >
+        <div class="flex space-x-4 text-xl">
+          <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" /> 12:25:02 WIB -
+          Pusat gempa berada di darat 10 km BaratDaya Pinrang
         </div>
-      </div>
-
+      </marquee-text>
+      <!-- <div v-else>
+          Running Text
+        </div> -->
     </div>
   </div>
+  <!-- </div> -->
 </template>
 
 <script>

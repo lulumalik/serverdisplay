@@ -1,7 +1,11 @@
 <template>
-  <div class="overflow-hidden h-screen w-screen">
+  <div class="overflow-hidden h-screen w-screen relative">
     <client-only>
-      <VueSlickCarousel v-if="templates.length > 0" :autoplay="true" :autoplaySpeed="speed">
+      <VueSlickCarousel
+        v-if="templates.length > 0"
+        :autoplay="true"
+        :autoplaySpeed="speed"
+      >
         <template slot="prevArrow">
           <div></div>
         </template>
@@ -31,6 +35,11 @@
         </div>
       </VueSlickCarousel>
     </client-only>
+    <FooterTemplate
+      :nodrag="true"
+      ref="footer"
+      :class="'overflow-hidden fixed bottom-0 w-full'"
+    />
   </div>
 </template>
 
@@ -60,22 +69,25 @@ export default {
       widget: [],
       layoutDB: {},
       allNDF: {},
-      speed: 5000
+      speed: 10000,
     }
   },
   async mounted() {
-    var res;
+    var res
     if (this.withrouter) {
       if (!this.$cookies.get('displayprod')) {
         alert('display not found')
         this.$router.push('/')
       }
       res = await this.$axios.$post('display/login', {
-        username: this.$cookies.get('displayprod')
+        username: this.$cookies.get('displayprod'),
       })
     } else {
       res = await this.$axios.$get(
-        'display/find/' + (this.withrouter ? this.$cookies.get('displayprod') : this.$route.params.displayid)
+        'display/find/' +
+          (this.withrouter
+            ? this.$cookies.get('displayprod')
+            : this.$route.params.displayid)
       )
     }
     const res1 = await this.$axios.$get('widget')
@@ -87,7 +99,7 @@ export default {
     })
 
     if (res.data.properties.delay) {
-        this.speed = res.data.properties.delay * 1000
+      this.speed = res.data.properties.delay * 1000
     }
 
     res.data.template.forEach(async (el, i) => {

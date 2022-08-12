@@ -21,6 +21,7 @@
   </div>
 </template>
 <script>
+import {dataStatic} from '../../../utils/listStatic.js'
 export default {
   props: {
     idTemplate: {
@@ -75,13 +76,7 @@ export default {
           name: 'Kepulauan Bangka Belitung',
         },
       ],
-      listKecamatan: [
-        {
-          location: 'P. Tanjung Kelayang',
-          subdistrict: 'Sijuk',
-          ndf: '5011055',
-        },
-      ],
+      listKecamatan: dataStatic,
     }
   },
 }

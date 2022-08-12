@@ -34,12 +34,12 @@
         </div>
       </div>
     </div>
-    <FooterTemplate
+    <!-- <FooterTemplate
       :nodrag="true"
       ref="footer"
       :class="'overflow-hidden fixed bottom-0 w-full'"
       v-if="useFooter"
-    />
+    /> -->
   </div>
 </template>
 

@@ -61,10 +61,10 @@
       <input type="checkbox" class="text-xs p-1" v-model="$parent.useHeader" />
       <div class="text-gray-500">Header</div>
     </label>
-    <label class="flex space-x-4 mt-3 items-center">
+    <!-- <label class="flex space-x-4 mt-3 items-center">
       <input type="checkbox" class="text-xs p-1" v-model="$parent.useFooter" />
       <div class="text-gray-500">Footer</div>
-    </label>
+    </label> -->
     <!-- <div class="flex space-x-4 mt-3  items-center">
       <div class="w-16 text-gray-500 font-thin">Logo</div>
       <div>
@@ -77,17 +77,12 @@
 </template>
 
 <script>
+import {dataStatic} from '../utils/listStatic.js'
 export default {
   data() {
     return {
       subdistrict: null,
-      listKecamatan: [
-        {
-          location: 'P. Tanjung Kelayang',
-          subdistrict: 'Sijuk',
-          ndf: '5011055',
-        },
-      ],
+      listKecamatan: dataStatic,
     }
   },
   methods: {

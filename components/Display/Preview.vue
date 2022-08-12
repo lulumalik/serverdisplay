@@ -233,6 +233,12 @@ export default {
     res.data.forEach((data) => {
       this.$set(this.layoutDB, data._id, data.name)
     })
+    setTimeout(() => {
+      if (this.$parent.templateAddedList.length > 0) {
+        this.$parent.selectedTemplateID = this.$parent.templateAddedList[0]._id
+        this.objData = this.$parent.templateAddedList[0]
+      }
+    }, 1000)
   },
   methods: {
     getBackground(el) {
