@@ -14,7 +14,8 @@ export default {
         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     },
     server: {
-        port: 3002
+        port: process.env.PORT || 3002,
+        host: process.env.HOST || 'localhost'
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
@@ -46,12 +47,13 @@ export default {
     modules: [
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
+        '@nuxtjs/dotenv',
     ],
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
         // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-        baseURL: 'https://bmkg-display.circlegeo.com/api/'
+        baseURL: process.env.BASE_URL || 'https://bmkg-display.circlegeo.com/api/'
     },
 
 
