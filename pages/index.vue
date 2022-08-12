@@ -138,9 +138,12 @@ export default {
       loading: false,
     }
   },
-  //   beforeMount() {
-  //     this.$router.push("/login?redirect=inapows");
-  //   },
+    beforeMount() {
+      // this.$router.push("/login?redirect=inapows");
+      if (this.$cookies.get('displayprod')) {
+        this.$router.push('/gallery')
+      }
+    },
   methods: {
     serialize(obj) {
       var str = []

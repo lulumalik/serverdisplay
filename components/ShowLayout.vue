@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-hidden">
+  <div class="relative">
     <HeaderTemplate
       ref="header"
       :class="

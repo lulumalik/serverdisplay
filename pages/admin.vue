@@ -157,30 +157,16 @@ export default {
         .$post(`user/login`, this.login)
         .then((res) => {
           this.loading = false
-          // clearTimeout(timeout);
-          // if (res.data.status == "OK") {
-          // var data = res.data.data;
           this.$cookies.set('users', res.token, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7,
           })
-          this.$router.push('/template')
-          // this.$router.push(`/${query.redirect}`)
-          // this.$router.push(
-          //   `/?token=${data.token}&redirect=${query.redirect}`
-          // );
-          // window.location.href = data.redirect
-          //   ? `/?token=${data.token}&redirect=${query.redirect}`
-          //   : `/sso?token=${data.token}`;
-          // }
+          this.$router.push('/display')
         })
         .catch((error) => {
           console.log(error)
           this.loading = false
           alert('error')
-          // this.onLogin = false;
-          // clearTimeout(timeout);
-          // this.modalOpen = true;
         })
     },
   },

@@ -64,17 +64,20 @@ export default {
     }
   },
   async mounted() {
+    var res;
     if (this.withrouter) {
       if (!this.$cookies.get('displayprod')) {
         alert('display not found')
         this.$router.push('/')
-        return
       }
+      res = await this.$axios.$post('display/login', {
+        username: this.$cookies.get('displayprod')
+      })
+    } else {
+      res = await this.$axios.$get(
+        'display/find/' + (this.withrouter ? this.$cookies.get('displayprod') : this.$route.params.displayid)
+      )
     }
-    const res = await this.$axios.$get(
-      'display/find/' + (this.withrouter ? this.$cookies.get('displayprod') : this.$route.params.displayid)
-    )
-
     const res1 = await this.$axios.$get('widget')
     this.widget = res1.data
 

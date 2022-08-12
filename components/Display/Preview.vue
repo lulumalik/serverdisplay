@@ -74,6 +74,7 @@
               :style="getBackground(objData)"
               :layoutDB="layoutDB"
               :widgetDB="widget"
+              class="w-full h-full overflow-hidden"
               ref="layout"
               @scale="scale = $event.scale"
               @background="initialbackground"
