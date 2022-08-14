@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative" :class="!production ? 'border-2 border-white' : ''">
     <HeaderTemplate
       ref="header"
       :class="

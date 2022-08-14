@@ -2,9 +2,18 @@
   <div class="h-44 w-full">
     &nbsp;
     <div
+      :style="backgroundnize"
+      class="fixed -top-24 w-full left-0"
+      style="z-index: -1"
+    ></div>
+    <!-- <img :src="img" class="fixed -top-24 w-full left-0" style="z-index: -1" /> -->
+    <div
       class="
         rounded-tr-full
-        p-12
+        pt-10
+        pb-16
+        pr-12
+        pl-16
         w-full
         absolute
         -bottom-4
@@ -12,9 +21,9 @@
         flex
         items-end
       "
-      style="background: #ecf4ff"
+      :style="{ background: backgroundColor }"
     >
-      <div class="w-8/12" style="color: #00408a">
+      <div class="w-8/12" :style="{ color: color }">
         <div class="font-bold text-5xl">
           {{ name !== '' ? name : 'No Name of location' }}
         </div>
@@ -34,8 +43,8 @@
             alt="imgdata"
           />
         </div>
-        <div class="flex-grow" style="color: #00408a">
-          <div class="text-6xl text-left" style="font-weight:200 !important">
+        <div class="flex-grow" :style="{ color: color }">
+          <div class="text-6xl text-left" style="font-weight: 200 !important">
             <div>{{ forecast[0].temp }}<sup>o</sup>C</div>
           </div>
           <div class="relative left-5">
@@ -55,6 +64,10 @@ export default {
       name: '',
       desc: '',
       forecast: [],
+      color: '#000000',
+      backgroundColor: '#ffffff',
+      img: '',
+      backgroundnize: {},
     }
   },
   computed: {
@@ -79,8 +92,8 @@ export default {
               for (var i = 0; i < datares.length; i++) {
                 var comp = datares[i]
                 // if (comp.date.split('T')[1].split(':')[0] == '12') {
-                  this.forecast.push(comp)
-                  break
+                this.forecast.push(comp)
+                break
                 // }
               }
             }
@@ -104,6 +117,19 @@ export default {
               this.getData()
             } else if (el.key == '_WidgetWisataBottombar_description') {
               this.desc = el.value
+            } else if (el.key == '_WidgetWisataBottombar_color') {
+              this.color = el.value
+            } else if (el.key == '_WidgetWisataBottombar_background') {
+              this.backgroundColor = el.value
+            } else if (el.key == '_WidgetWisataBottombar_img') {
+              this.img = el.value
+              this.backgroundnize = {
+                'background-image': 'url(' + this.img + ')',
+                'background-size': 'length',
+                'background-position': 'center',
+                'background-repeat': 'no-repeat',
+                'height': '100%',
+              }
             }
           })
         }

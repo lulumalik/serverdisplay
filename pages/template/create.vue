@@ -133,7 +133,7 @@
                 </select>
               </div>
               <div class="mt-1 text-lg">Widget</div>
-              <div style="height:150px" class="overflow-y-auto overflow-x-hidden">
+              <div style="height:calc(100vh - 670px)" class="overflow-y-auto overflow-x-hidden">
                 <draggable group="widget" :list="widget" class="list-group">
                   <div
                     class="

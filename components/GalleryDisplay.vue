@@ -34,12 +34,13 @@
           />
         </div>
       </VueSlickCarousel>
+
+      <FooterTemplate
+        :nodrag="true"
+        ref="footer"
+        :class="'overflow-hidden fixed bottom-0 w-full'"
+      />
     </client-only>
-    <FooterTemplate
-      :nodrag="true"
-      ref="footer"
-      :class="'overflow-hidden fixed bottom-0 w-full'"
-    />
   </div>
 </template>
 
@@ -74,21 +75,32 @@ export default {
   },
   async mounted() {
     var res
-    if (this.withrouter) {
-      if (!this.$cookies.get('displayprod')) {
-        alert('display not found')
-        this.$router.push('/')
+    try {
+      if (this.withrouter) {
+        if (!this.$cookies.get('displayprod')) {
+          alert('display not found')
+          this.$router.push('/')
+        }
+        res = await this.$axios.$post('display/login', {
+          username: this.$cookies.get('displayprod'),
+        })
+      } else {
+        res = await this.$axios.$get(
+          'display/find/' +
+            (this.withrouter
+              ? this.$cookies.get('displayprod')
+              : this.$route.params.displayid)
+        )
       }
-      res = await this.$axios.$post('display/login', {
-        username: this.$cookies.get('displayprod'),
-      })
-    } else {
-      res = await this.$axios.$get(
-        'display/find/' +
-          (this.withrouter
-            ? this.$cookies.get('displayprod')
-            : this.$route.params.displayid)
-      )
+    } catch (error) {
+      console.log(error.response)
+    }
+    
+    if (!res) {
+      this.$cookies.remove('displayprod')
+      alert('display not found')
+      this.$router.go(0)
+      
     }
     const res1 = await this.$axios.$get('widget')
     this.widget = res1.data

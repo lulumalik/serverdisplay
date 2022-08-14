@@ -49,7 +49,7 @@
         <div class="flex-grow">
           <!--  -->
           <label class="flex items-center space-x-3 mb-2">
-            <input type="checkbox" diabled v-model="secretCode" class="text-xs p-0.5 rounded" />
+            <input type="checkbox" :disabled="true" v-model="secretCode" class="text-xs p-0.5 rounded" />
             <div class="text-xs">
               Secret code
             </div>
@@ -71,7 +71,30 @@
             {{ saving ? 'Saving Display...' : 'Update and Refresh Display' }}
           </div>
         </div>
-        <div class="flex-none">
+        <div class="flex-grow" v-if="$route.query.id">
+          <div
+            type="submit"
+            class="
+                 bg-blue-200
+                border border-blue-400
+                shadow
+                px-6
+                py-2
+                text-blue-600
+                font-semibold
+                rounded
+                text-xs
+                text-center
+                cursor-pointer
+            "
+            style="padding-top:7px;padding-bottom:7px;"
+            @click="createWithUpdate"
+            :disabled="saving"
+          >
+            {{ saving ? 'Saving Display...' : 'Save as new Display' }}
+          </div>
+        </div>
+        <!-- <div class="flex-none">
                      <div
               class="
                 bg-blue-200
@@ -90,7 +113,7 @@
             >
               Preview Display
             </div>
-        </div>
+        </div> -->
       </form>
     </client-only>
 
@@ -172,7 +195,6 @@ export default {
       })
     },
     updateData(obj) {
-      // console.log(this.allfind)
       this.$axios
         .$put('display/update/' + this.allfind._id, obj)
         .then((res) => {
@@ -195,7 +217,10 @@ export default {
         })
       })
     },
-    updateAndCreateDisplay() {
+    createWithUpdate() {
+      this.updateAndCreateDisplay('create')
+    },
+    updateAndCreateDisplay(createOnly) {
       // this.saving = true
       var widgetparse = {}
       for (var k in this.getWidgetSaved) {
@@ -232,6 +257,10 @@ export default {
           width: this.$refs['preview'].width,
           height: this.$refs['preview'].height
         },
+      }
+      if (createOnly == 'create') {
+        this.createData(obj)
+        return true
       }
       if (!this.$route.query.id) {
         this.createData(obj)

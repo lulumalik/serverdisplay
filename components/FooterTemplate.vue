@@ -50,13 +50,12 @@
       </div> -->
     <div class="flex-grow">
       <marquee-text
-        :repeat="10"
-        :duration="20"
+        :repeat="1"
+        :duration="5000"
         class="bg-white text-gray-700 p-2"
       >
         <div class="flex space-x-4 text-xl">
-          <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" /> 12:25:02 WIB -
-          Pusat gempa berada di darat 10 km BaratDaya Pinrang
+          <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" /> {{runningText.join(', ')}}
         </div>
       </marquee-text>
       <!-- <div v-else>
@@ -68,15 +67,39 @@
 </template>
 
 <script>
+const xml = require("txml");
+
 export default {
   props: {
     nodrag: {
       default: () => false,
     },
   },
+  mounted() {
+    // 
+    this.$axios
+          .post('https://sena.circlegeo.com/api/sena/research/forward', {
+            url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
+          })
+          .then((res) => {
+            const json = xml.parse(res.data);
+            var dataparsed = json[0].children[0].children
+            var index = json[0].children[0].children.length - 1
+            var listParsedArray = dataparsed[index].children
+            this.runningText.length = 0
+            for (var i = 0; i < 4; i++) {
+              this.runningText.push(listParsedArray[i].children[4].children[0])
+            }
+            // listParsedArray.forEach((item, index) => {
+            //   // console.log(item)
+            //   this.runningText.push(item.children[4].children[0])
+            // })
+          })
+  },
   data() {
     return {
       showPopup: false,
+      runningText: []
     }
   },
 }
