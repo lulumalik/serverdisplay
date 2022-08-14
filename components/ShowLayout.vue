@@ -46,6 +46,11 @@
 <script>
 export default {
   props: {
+    displayName: {
+      default: () => {
+        return '-';
+      }
+    },
     production: {
       default: () => {
         return false

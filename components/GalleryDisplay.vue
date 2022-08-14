@@ -71,6 +71,7 @@ export default {
       layoutDB: {},
       allNDF: {},
       speed: 10000,
+      responseDisplay: {}
     }
   },
   async mounted() {
@@ -109,7 +110,7 @@ export default {
     res2.data.forEach((data) => {
       this.$set(this.layoutDB, data._id, data.name)
     })
-
+    this.responseDisplay = res.data
     if (res.data.properties.delay) {
       this.speed = res.data.properties.delay * 1000
     }
