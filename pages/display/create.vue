@@ -165,8 +165,8 @@ export default {
       this.templateAddedList = res.data.template
       this.displayID = res.data.username
       this.displayName = res.data.name
-      console.log(res.data)
-      // this.getDisplayLocation = res.data
+      // console.log(res.data)
+      this.getDisplayLocation = res.data.location.name
       // console.log(res.data)
       this.$refs['preview'].times = res.data.properties.delay
       this.$refs['preview'].width = res.data.properties.width || 1366
