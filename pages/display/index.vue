@@ -5,7 +5,16 @@
       <Sidebar class="flex-none" />
       <client-only>
         <div
-          class="flex-grow bg-gray-100 w-full h-full px-4 py-4 overflow-auto relative"
+          class="
+            flex-grow
+            bg-gray-100
+            w-full
+            h-full
+            px-4
+            py-4
+            overflow-auto
+            relative
+          "
         >
           <div class="mb-6 flex space-x-6 absolute top-4 right-4">
             <div class="relative">
@@ -15,7 +24,7 @@
                 placeholder="Search"
                 class="rounded-full w-56 py-2 px-4 border border-sky-400"
               />
-              <div class="absolute right-4 top-3.5"> 
+              <div class="absolute right-4 top-3.5">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="14"
@@ -34,29 +43,55 @@
           <div>
             <DisplayList :templateDB="templateDB" />
           </div>
-          <div class="text-right">
-            <button
-              class="
-                bg-blue-200
-                border border-blue-400
-                shadow
-                px-6
-                py-2
-                text-blue-600
-                font-semibold
-                rounded
-                text-xs
-              "
-              @click="creating"
-            >
-              {{ templateDBSelected ? 'Edit Display' : 'Create New' }}
-            </button>
+          <div class="text-right flex justify-end w-full">
+            <div class="flex-none">
+              <paginate
+                :page-count="total"
+                :click-handler="functionName"
+                :prev-text="'Prev'"
+                :next-text="'Next'"
+                :container-class="'flex space-x-4'"
+              >
+              </paginate>
+            </div>
+            <div class="flex-grow">
+              <button
+                class="
+                  bg-blue-200
+                  border border-blue-400
+                  shadow
+                  px-6
+                  py-2
+                  text-blue-600
+                  font-semibold
+                  rounded
+                  text-xs
+                "
+                @click="creating"
+              >
+                {{ templateDBSelected ? 'Edit Display' : 'Create New' }}
+              </button>
+            </div>
           </div>
         </div>
       </client-only>
     </div>
   </div>
 </template>
+
+<style >
+ul li {
+  text-align: center !important;
+  padding: 5px !important;
+  border-radius: 5px !important;
+  width: 3rem !important;
+  background: white;
+}
+ul li.active {
+  background: #3b82f6 !important;
+  color: white;
+}
+</style>
 
 <script>
 export default {
@@ -67,7 +102,9 @@ export default {
       categoryDB: {},
       selectedCategory: '',
       templateDBSelected: null,
-      searchname: ''
+      searchname: '',
+      page: 1,
+      total: 10,
     }
   },
   mounted() {
@@ -77,20 +114,27 @@ export default {
   methods: {
     callAllData() {
       this.$axios.$get('display').then((res) => {
-      this.templateDB = res.data
-    })
-    this.$axios.$get('layout').then((res) => {
-      // this.layoutDB = res.data
-      res.data.forEach((data) => {
-        this.$set(this.layoutDB, data.name, data._id)
+        this.total = res.count / 10 + 1
+        this.templateDB = res.data
       })
-    })
-    this.$axios.$get('category').then((res) => {
-      // this.categoryDB = res.data
-      res.data.forEach((data) => {
-        this.$set(this.categoryDB, data.name, data._id)
+      this.$axios.$get('layout').then((res) => {
+        // this.layoutDB = res.data
+        res.data.forEach((data) => {
+          this.$set(this.layoutDB, data.name, data._id)
+        })
       })
-    })
+      this.$axios.$get('category').then((res) => {
+        // this.categoryDB = res.data
+        res.data.forEach((data) => {
+          this.$set(this.categoryDB, data.name, data._id)
+        })
+      })
+    },
+    functionName(e) {
+      this.$axios.$get('display?page=' + e).then((res) => {
+        this.total = res.count / 10 + 1
+        this.templateDB = res.data
+      })
     },
     creating() {
       if (this.templateDBSelected) {

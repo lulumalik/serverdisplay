@@ -29,6 +29,9 @@ export default {
         src: '~/plugins/axios.js',
     }, {
         src: '~/plugins/componentssr.js',
+    }, {
+        src: '~/plugins/paginate.js',
+        ssr: false
     }],
 
     // Auto import components: https://go.nuxtjs.dev/config-components

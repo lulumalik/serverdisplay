@@ -33,6 +33,20 @@
         <p class="truncate relative z-20">
           {{ db.name }}
         </p>
+        <div class="absolute bottom-3 left-3 cursor-pointer " @click="copytext(db.username)">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            class="text-sky-400"
+          >
+            <path
+              fill="currentColor"
+              d="M21 2h-19v19h-2v-21h21v2zm3 2v20h-20v-20h20zm-2 2h-1.93c-.669 0-1.293.334-1.664.891l-1.406 2.109h-6l-1.406-2.109c-.371-.557-.995-.891-1.664-.891h-1.93v16h16v-16zm-3 6h-10v1h10v-1zm0 3h-10v1h10v-1zm0 3h-10v1h10v-1z"
+            />
+          </svg>
+        </div>
         <img
           v-if="$parent.templateDBSelected == db._id"
           @click="deleteTemplate(db)"
@@ -67,23 +81,33 @@ export default {
         this.$parent.templateDBSelected = db._id
       }
     },
+    copytext(text) {
+        
+      navigator.clipboard.writeText(text).then(function() {
+  console.log('Async: Copying to clipboard was successful!');
+}, function(err) {
+  console.error('Async: Could not copy text: ', err);
+});
+    },
     deleteTemplate(db) {
-      this.$confirm('Are you sure?, this template cannot be returned').then((res) => {
-        this.$axios.$delete('display/delete/' + db._id).then((res) => {
-          this.$parent.templateDBSelected = null
-          this.$parent.callAllData()
-        })
-      })
+      this.$confirm('Are you sure?, this template cannot be returned').then(
+        (res) => {
+          this.$axios.$delete('display/delete/' + db._id).then((res) => {
+            this.$parent.templateDBSelected = null
+            this.$parent.callAllData()
+          })
+        }
+      )
     },
   },
   computed: {
     filterByCategory() {
       return this.templateDB.filter((db) => {
         return this.$parent.searchname
-              .toLowerCase()
-              .split(' ')
-              .every((v) => db.name.toLowerCase().includes(v))
-          
+          .toLowerCase()
+          .split(' ')
+          .every((v) => db.name.toLowerCase().includes(v))
+
         // return db.category.name == this.$parent.selectedCategory
       })
     },
