@@ -33,7 +33,10 @@
         <p class="truncate relative z-20">
           {{ db.name }}
         </p>
-        <div class="absolute bottom-3 left-3 cursor-pointer " @click="copytext(db.username)">
+        <div
+          class="absolute bottom-3 left-3 cursor-pointer"
+          @click="copytext(db.usernamey)"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -82,12 +85,20 @@ export default {
       }
     },
     copytext(text) {
-        
-      navigator.clipboard.writeText(text).then(function() {
-  console.log('Async: Copying to clipboard was successful!');
-}, function(err) {
-  console.error('Async: Could not copy text: ', err);
-});
+      var self = this
+      navigator.clipboard.writeText(text).then(
+        function () {
+          console.log('Async: Copying to clipboard was successful!')
+          self.$toast.open({
+            message: 'ID has been copied',
+            type: 'success',
+            duration: 2000,
+          })
+        },
+        function (err) {
+          console.error('Async: Could not copy text: ', err)
+        }
+      )
     },
     deleteTemplate(db) {
       this.$confirm('Are you sure?, this template cannot be returned').then(
