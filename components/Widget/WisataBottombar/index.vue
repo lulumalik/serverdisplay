@@ -125,7 +125,7 @@ export default {
               this.img = el.value
               this.backgroundnize = {
                 'background-image': 'url(' + this.img + ')',
-                'background-size': 'length',
+                'background-size': 'cover',
                 'background-position': 'center',
                 'background-repeat': 'no-repeat',
                 'height': '100%',

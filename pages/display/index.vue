@@ -84,7 +84,7 @@ ul li {
   text-align: center !important;
   padding: 5px !important;
   border-radius: 5px !important;
-  width: 3rem !important;
+  width: auto !important;
   background: white;
 }
 ul li.active {

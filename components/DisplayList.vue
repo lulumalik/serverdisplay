@@ -35,7 +35,7 @@
         </p>
         <div
           class="absolute bottom-3 left-3 cursor-pointer"
-          @click="copytext(db.usernamey)"
+          @click="copytext(db.username)"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
