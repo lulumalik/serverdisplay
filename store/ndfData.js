@@ -4,6 +4,10 @@ export const state = () => ({
 
 export const mutations = {
     mutationNDF(state, data) {
-        state.allNDF[data.key] = data.value
+        if (data && data.value.isPush) {
+            state.allNDF[data.key].push(data.value.data)
+        } else {
+            state.allNDF[data.key] = data.value
+        }
     },
 }

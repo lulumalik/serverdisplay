@@ -113,7 +113,7 @@ export default {
   middleware: ['checkLogin'],
   methods: {
     callAllData() {
-      this.$axios.$get('display').then((res) => {
+      this.$axios.$get('display?row=20').then((res) => {
         this.total = res.count / 10 + 1
         this.templateDB = res.data
       })
@@ -131,8 +131,8 @@ export default {
       })
     },
     functionName(e) {
-      this.$axios.$get('display?page=' + e).then((res) => {
-        this.total = res.count / 10 + 1
+      this.$axios.$get('display?row=20&page=' + e).then((res) => {
+        this.total = res.count / 20 + 1
         this.templateDB = res.data
       })
     },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <client-only>
-      <WidgetWisataBottombar />
+      <WidgetWeatherTable />
     </client-only>
   </div>
 </template>

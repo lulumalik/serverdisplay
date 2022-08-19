@@ -87,7 +87,7 @@ export default {
             var index = json[0].children[0].children.length - 1
             var listParsedArray = dataparsed[index].children
             this.runningText.length = 0
-            for (var i = 0; i < 4; i++) {
+            for (var i = 0; i < 2; i++) {
               this.runningText.push(listParsedArray[i].children[4].children[0])
             }
             // listParsedArray.forEach((item, index) => {

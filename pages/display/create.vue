@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-200 h-screen">
-    <Navbar class="w-full sticky top-0" />
+    <Navbar class="w-full sticky top-0" style="z-index:1000"/>
     <client-only>
       <form class="text-sm px-6 pt-4 flex items-end space-x-4">
         <div class="flex-grow">
@@ -140,7 +140,8 @@ export default {
       displayLocation: null,
       secretCode: false,
       getDisplayLocation: 'Kepulauan Bangka Belitung',
-      allfind: {}
+      allfind: {},
+      useFooter: true
     }
   },
   middleware: ['checkLogin'],
@@ -166,6 +167,7 @@ export default {
       this.displayID = res.data.username
       this.displayName = res.data.name
       // console.log(res.data)
+      this.useFooter = res.data.properties.footer
       this.getDisplayLocation = res.data.location.name
       // console.log(res.data)
       this.$refs['preview'].times = res.data.properties.delay
@@ -182,7 +184,7 @@ export default {
         }
       })
     } else {
-      this.templateDB = alltemplate
+      this.templateDB = res1.data
     }
   },
   methods: {
@@ -257,7 +259,8 @@ export default {
         properties: {
           delay: parseFloat(this.$refs['preview'].times) || 60,
           width: this.$refs['preview'].width,
-          height: this.$refs['preview'].height
+          height: this.$refs['preview'].height,
+          footer: this.useFooter
         },
       }
       if (createOnly == 'create') {

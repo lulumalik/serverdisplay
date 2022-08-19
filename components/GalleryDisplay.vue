@@ -38,6 +38,7 @@
       <FooterTemplate
         :nodrag="true"
         ref="footer"
+        v-if="useFooter"
         :class="'overflow-hidden fixed bottom-0 w-full'"
       />
     </client-only>
@@ -71,7 +72,8 @@ export default {
       layoutDB: {},
       allNDF: {},
       speed: 10000,
-      responseDisplay: {}
+      responseDisplay: {},
+      useFooter: false,
     }
   },
   async mounted() {
@@ -96,12 +98,11 @@ export default {
     } catch (error) {
       console.log(error.response)
     }
-    
+
     if (!res) {
       this.$cookies.remove('displayprod')
       alert('display not found')
       this.$router.go(0)
-      
     }
     const res1 = await this.$axios.$get('widget')
     this.widget = res1.data
@@ -115,6 +116,10 @@ export default {
       this.speed = res.data.properties.delay * 1000
     }
 
+    if (res.data.properties.footer) {
+      this.useFooter = res.data.properties.footer
+    }
+
     res.data.template.forEach(async (el, i) => {
       // console.log(el.properties.widgetndf)
       if (el.properties.widgetndf) {
@@ -124,6 +129,14 @@ export default {
             this.$store.commit('ndfData/mutationNDF', {
               key: el2.value.ndf,
               value: [],
+            })
+          } else if (el2.key.split('_')[2] == 'arrayNDF') {
+            el2.value.value.forEach(async (el3) => {
+              this.allNDF[el3.ndf] = []
+              this.$store.commit('ndfData/mutationNDF', {
+                key: el3.ndf,
+                value: [],
+              })
             })
           } else if (el2.key == '_WidgetOfsStatic') {
             const modelrun = await this.$axios.get(
@@ -152,20 +165,38 @@ export default {
         if (el.properties.video) {
           this.background[i] = 'transparent'
         } else {
-          this.background[i] = el.properties.background
+          this.background[i] = {
+            backgroundColor: el.properties.background,
+          }
         }
       }
     })
 
-    for (var key in this.allNDF) {
-      const ndf = await this.$axios.$get(
-        'https://api.gis.co.id/api/cgms/weather/ndf/get?locationId=' + key
-      )
-      this.$store.commit('ndfData/mutationNDF', {
-        key: key,
-        value: ndf.data,
-      })
-    }
+    // for (var key in this.allNDF) {
+    //   const ndf = await this.$axios.$get(
+    //     'https://api.gis.co.id/api/cgms/weather/ndf/get?locationId=' + key
+    //   )
+    //   this.$store.commit('ndfData/mutationNDF', {
+    //     key: key,
+    //     value: ndf.data,
+    //   })
+    // }
+    const ndf2 = await this.$axios.$post(
+      'https://api.gis.co.id/api/cgms/weather/ndf/getMany',
+      {
+        location: Object.keys(this.allNDF),
+        date: new Date().toISOString(),
+      }
+    )
+    ndf2.data.forEach((el) => {
+        this.$store.commit('ndfData/mutationNDF', {
+          key: el.location.locationId,
+          value: {
+            isPush: true,
+            data: el,
+          },
+        })
+    })
 
     this.templates = res.data.template
 

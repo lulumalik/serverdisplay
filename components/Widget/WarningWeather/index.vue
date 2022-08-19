@@ -2,7 +2,7 @@
   <div>
     <div v-if="shownotfound">
       <div class="text-3xl font-bold">
-        Image not found
+        <img src="/notfound.svg" class="mx-auto" alt="notfound"/>
       </div>
     </div>
     <div v-else class="flex space-x-4">

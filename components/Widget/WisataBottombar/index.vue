@@ -13,7 +13,7 @@
         pt-10
         pb-16
         pr-12
-        pl-16
+        pl-24
         w-full
         absolute
         -bottom-4
