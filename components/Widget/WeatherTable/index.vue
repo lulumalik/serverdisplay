@@ -4,12 +4,13 @@
       <div class="font-bold text-4xl text-center">
         {{ area }}
       </div>
+      <!-- ambil yang jam 12 saja -->
       <div class="text-2xl text-center mt-3" v-if="forecast.length > 0">
         <!-- {{forecast[0].data.date}} -->
         {{
-          returningTimeZone(new Date(forecast[0].data.date))
+          splitting(returningTimeZone(new Date(forecast[0].data.date))
             .split(' ')
-            .splice(4, 4)[0]
+            .splice(4, 4)[0])
         }}
         {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
       </div>
@@ -88,6 +89,9 @@ export default {
     this.getData()
   },
   methods: {
+    splitting(val) {
+      return val ? val.toString().split(':').splice(0,2).join(':') : ''
+    },
     returningTimeZone(date) {
       return (
         date.toString().split(' ').splice(0, 5).join(' ') +

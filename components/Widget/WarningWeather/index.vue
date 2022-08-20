@@ -6,9 +6,10 @@
         <!-- <img src="/notfound.svg" class="mx-auto" alt="notfound"/> -->
       </div>
     </div>
-    <div v-else class="flex space-x-4">
+    <div v-else class="flex justify-center space-x-4">
       <div>
         <img
+          style="width: 450px "
           :src="
             'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
             year +
@@ -22,6 +23,7 @@
       </div>
       <div>
         <img
+          style="width: 450px"
           :src="
             'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
             year +

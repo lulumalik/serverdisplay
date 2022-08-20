@@ -1,12 +1,21 @@
 <template>
   <div>
-    <GalleryDisplay :withrouter="false"/>
+    <OverlayLoading v-if="loading" />
+    <GalleryDisplay :withrouter="true" @finishloading="finishing"/>
   </div>
 </template>
 
 <script>
 export default {
-  
-  middleware: ['checkLogin'],
+  data() {
+    return {
+      loading: true
+    }
+  },
+  methods: {
+    finishing() {
+      this.loading = false
+    }
+  }
 }
 </script>

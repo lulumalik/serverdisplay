@@ -79,22 +79,22 @@ export default {
   async mounted() {
     var res
     try {
-      if (this.withrouter) {
-        if (!this.$cookies.get('displayprod')) {
+      // if (this.withrouter) {
+        if (!this.$route.params.displayid) {
           alert('display not found')
           this.$router.push('/')
         }
         res = await this.$axios.$post('display/login', {
-          username: this.$cookies.get('displayprod'),
+          username: this.$route.params.displayid,
         })
-      } else {
-        res = await this.$axios.$get(
-          'display/find/' +
-            (this.withrouter
-              ? this.$cookies.get('displayprod')
-              : this.$route.params.displayid)
-        )
-      }
+      // } else {
+      //   res = await this.$axios.$get(
+      //     'display/find/' +
+      //       (this.withrouter
+      //         ? this.$cookies.get('displayprod')
+      //         : this.$route.params.displayid)
+      //   )
+      // }
     } catch (error) {
       console.log(error.response)
     }
@@ -198,6 +198,7 @@ export default {
         })
     })
 
+    this.$emit('finishloading', true)
     this.templates = res.data.template
 
     this.location = res.data.location

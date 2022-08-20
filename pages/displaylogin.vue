@@ -15,7 +15,7 @@
       <img
         src="/loginbg2.svg"
         alt="img"
-        class="absolute top-8 -right-16 w-96  z-50"
+        class="absolute top-8 -right-16 w-96 z-50"
       />
       <!-- <img src="/inapows/logo/black.png" class="w-6 md:w-12 fixed top-6 left-6" />
       <div class="p-2.5 mb-6 md:p-12">
@@ -57,10 +57,10 @@
             md:mb-12
           "
         >
-          Log in
+          Display Log in
         </div>
         <div class="mb-6">
-          <div class="py-2">Username</div>
+          <div class="py-2">Display id</div>
           <input
             v-model="login.username"
             placeholder="Username"
@@ -68,11 +68,11 @@
           />
         </div>
         <div class="mb-6 md:mb-12">
-          <div class="py-2">Password</div>
+          <div class="py-2">Token</div>
           <input
-            v-model="login.password"
-            placeholder="Password"
-            type="password"
+            v-model="login.token"
+            placeholder="Token"
+            type="text"
             class="mb-4 form-input shadow-md w-full rounded text-gray-800"
           />
         </div>
@@ -133,14 +133,17 @@ export default {
     return {
       login: {
         username: '',
-        password: '',
+        token: null,
       },
       loading: false,
     }
   },
-  //   beforeMount() {
-  //     this.$router.push("/login?redirect=inapows");
-  //   },
+    beforeMount() {
+      // this.$router.push("/login?redirect=inapows");
+      if (this.$cookies.get('displayprod')) {
+        this.$router.push('/gallery')
+      }
+    },
   methods: {
     serialize(obj) {
       var str = []
@@ -151,23 +154,20 @@ export default {
       return str.join('&')
     },
     loginFunc() {
-      var query = this.$route.query
       this.loading = true
-      this.$axios
-        .$post(`user/login`, this.login)
-        .then((res) => {
-          this.loading = false
-          this.$cookies.set('users', res.token, {
-            path: '/',
-            maxAge: 60 * 60 * 24 * 7,
-          })
-          this.$router.push('/display')
+      if (!this.login.token) {
+        this.$axios.$post('display/login', {
+          username: this.login.username
+        }).then(res => {
+          // console.log(res)
+          this.$cookies.set('displayprod', res.data.username)
+          setTimeout(() => {
+            this.$router.push('/gallery')
+          }, 1000)
         })
-        .catch((error) => {
-          console.log(error)
-          this.loading = false
-          alert('error')
-        })
+      } else {
+        this.$axios.$post('display/login', this.login)
+      }
     },
   },
 }
