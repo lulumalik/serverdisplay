@@ -3,7 +3,7 @@
     <client-only>
       <carousel
         v-if="templates.length > 0"
-        :autoPlay="false"
+        :autoPlay="true"
         :playSpeed="speed"
         :wheelControl="false"
         style="height: 100vw !important; width: 100vw !important"
