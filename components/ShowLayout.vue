@@ -111,6 +111,12 @@ export default {
     this.getComp(this.obj)
   },
   methods: {
+    spliceSlide(isHide) {
+      this.$emit('splice', {
+        id: this.indexLoop,
+        hide: isHide
+      })
+    },
     getComp(obj) {
       this.listTemplate = obj
       var self = this

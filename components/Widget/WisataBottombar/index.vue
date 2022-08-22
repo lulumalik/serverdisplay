@@ -39,7 +39,7 @@
         <div class="flex-none">
           <img
             :src="'/Archive/' + forecast[0].weather_code + '.svg'"
-            class="w-32 mx-auto"
+            class="w-24 mx-auto"
             alt="imgdata"
           />
         </div>
@@ -68,34 +68,44 @@ export default {
       backgroundColor: '#ffffff',
       img: '',
       backgroundnize: {},
+      allNDF: {}
     }
   },
   computed: {
     weather_code: function () {
       return weather_code
     },
-    ndflistener() {
-      return this.$store.state.ndfData.allNDF
-    },
   },
   methods: {
-    getData() {
-      var parentDisplay = this.$parent.$parent.$parent
+    async getData() {
+      var self = this;
+      var parentDisplay = self.$parent.$parent.$parent
       if (parentDisplay.production) {
+        this.allNDF = {}
+        var ndflistener = this.allNDF
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
-        setting[obj].forEach((el) => {
+        setting[obj].forEach(async (el) => {
           var key = el.key.split('_')[2]
-
           if (key == 'subdistrict') {
-            var datares = this.ndflistener[el.value.ndf]
-              for (var i = 0; i < datares.length; i++) {
-                var comp = datares[i]
+            // console.log(this.ndflistener[el.value.ndf], el)
+            const datares = await this.$axios.$get(
+              'https://api.gis.co.id/api/cgms/weather/ndf/get?locationId=' +
+                el.value.ndf
+            )
+
+            self.$set(ndflistener, el.value.ndf, datares.data)
+            // ndflistener[el.value.ndf] = datares.data
+
+            if (ndflistener[el.value.ndf].length > 0) {
+              for (var i = 0; i < ndflistener[el.value.ndf].length; i++) {
+                var comp = ndflistener[el.value.ndf][i]
                 // if (comp.date.split('T')[1].split(':')[0] == '12') {
                 this.forecast.push(comp)
                 break
                 // }
               }
+            }
           }
         })
       }
@@ -130,40 +140,12 @@ export default {
           }
         }
       })
-      // parentDisplay.obj.properties.setting.forEach((el) => {
-      //   var key = el.key.split('_')[2]
-      //   if (key == 'name') {
-      //     this.name = el.value
-      //   } else if (key == 'subdistrict') {
-      //     this.forecast.length = 0
-      //     this.getData()
-      //   } else if (key == 'description') {
-      //     this.desc = el.value
-      //   } else if (key == 'color') {
-      //     this.color = el.value
-      //   } else if (key == 'background') {
-      //     this.backgroundColor = el.value
-      //   } else if (key == 'img') {
-      //     this.img = el.value
-      //     this.backgroundnize = {
-      //       'background-image': 'url(' + this.img + ')',
-      //       'background-size': 'cover',
-      //       'background-position': 'center',
-      //       'background-repeat': 'no-repeat',
-      //       height: '100%',
-      //     }
-      //   }
-      // })
+      
+      setInterval(() => {
+        this.forecast.length = 0
+        this.getData()
+      }, 3600000)
     }
-
-    // var parentObj = this.$parent.$parent.$parent
-    // if (parentDisplay.obj.properties.setting) {
-    // console.log(parentDisplay.responseDisplay)
-    // var ndf = parent.obj.properties.widgetndf
-    // if (parent.obj.properties.widgetndf) {
-
-    // }
-    // }
   },
 }
 </script>

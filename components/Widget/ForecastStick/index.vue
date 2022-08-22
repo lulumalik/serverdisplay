@@ -43,12 +43,8 @@
         <div v-for="(w, i) in forecast" :key="i">
           <div class="mb-4 font-bold text-center">
             <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
-            {{
-              returningTimeZone(new Date(w.date)).split(' ').splice(4, 4)[0]
-            }}
-            {{
-            getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
-          }}
+            {{ returningTimeZone(new Date(w.date)) }}
+            {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
           </div>
           <div
             class="
@@ -87,7 +83,7 @@
               <div class="w-6">
                 <img src="/svg/wind.svg" class="w-6 relative right-1" />
               </div>
-              <div>{{ w.wSpd }} km/h</div>
+              <div>{{ w.wSpd }} km/jam</div>
             </div>
             <div class="flex space-x-4 items-center mt-4">
               <div class="w-6">
@@ -115,11 +111,12 @@ import { weather_code, dirTo, parseNameDir } from '../../../utils/helperNDF.js'
 export default {
   data() {
     return {
+      allNDF:{},
       forecast: [
         {
           _id: '62e1d18fe1ec873f27342d0b',
           location: '625c7d97c1a1102fc994072e',
-          date: 'T00:00:00.000Z',
+          date: '2022-08-12T00:00:00.000Z',
           rh: 0,
           temp: 0,
           weather_code: 1,
@@ -129,7 +126,7 @@ export default {
         {
           _id: '62e1d18fe1ec873f27342d0c',
           location: '625c7d97c1a1102fc994072e',
-          date: 'T00:00:00.000Z',
+          date: '2022-08-12T00:00:00.000Z',
           rh: 0,
           temp: 0,
           weather_code: 1,
@@ -139,7 +136,7 @@ export default {
         {
           _id: '62e1d18fe1ec873f27342d0d',
           location: '625c7d97c1a1102fc994072e',
-          date: 'T00:00:00.000Z',
+          date: '2022-08-12T00:00:00.000Z',
           rh: 0,
           temp: 0,
           weather_code: 1,
@@ -158,7 +155,7 @@ export default {
         Weather: '',
         Temperature: ' ᵒC',
         Humidity: ' %',
-        'Wind Speed': ' km/h',
+        'Wind Speed': ' km/jam',
         'Wind Direction': ' ᵒ',
       },
     }
@@ -183,65 +180,60 @@ export default {
         return 5
       }
     },
-    ndflistener() {
-      return this.$store.state.ndfData.allNDF
-    },
   },
   methods: {
     returningTimeZone(date) {
-      return (
+      var parsed = (
         date.toString().split(' ').splice(0, 5).join(' ') +
         ' GMT+0' +
         this.getTimeZone +
         '00'
       )
+        .toString()
+        .split(' ')
+        .splice(4, 4)
+      return parsed[0] ? parsed[0].split(':').splice(0, 2).join(':') : ''
     },
-    getData() {
+    async getData() {
       var parentDisplay = this.$parent.$parent.$parent
       if (parentDisplay.production) {
         this.forecast.length = 0
+        this.allNDF = {}
+        var ndflistener = this.allNDF
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
         // console.log(setting[obj])
-        setting[obj].forEach((el) => {
+        setting[obj].forEach(async (el) => {
           var key = el.key.split('_')[2]
           if (key == 'subdistrict') {
-            var datares = this.ndflistener[el.value.ndf]
+            const datares = await this.$axios.$get(
+              'https://api.gis.co.id/api/cgms/weather/ndf/get?locationId=' +
+                el.value.ndf
+            )
+
+            this.$set(ndflistener, el.value.ndf, datares.data)
+            // ndflistener[el.value.ndf] = datares.data
+
+            if (ndflistener[el.value.ndf].length > 0) {
               for (var i = 0; i < 3; i++) {
-                var comp = datares[i]
+                var comp = ndflistener[el.value.ndf][i]
                 // if (comp.date.split('T')[1].split(':')[0] == '12') {
                 this.forecast.push(comp)
+                
                 // }
               }
+            }
           }
         })
       }
     },
-    // getData() {
-    //   var parent = this.$parent.$parent.$parent
-    //   if (parent.currentId) {
-    //     this.forecast.length = 0
-    //     var ndf = parent.obj.properties.widgetndf
-    //     if (parent.obj.properties.widgetndf) {
-    //       ndf.forEach((el) => {
-    //         if (el.key == '_WidgetForecastStick_subdistrict') {
-    //           // console.log(this.ndflistener[el.value.ndf], 'ea')
-    //           // console.log(this.ndflistener[el.value.ndf], this.ndflistener, el.value)
-    //           var datares = this.ndflistener[el.value.ndf]
-    //           for (var i = 0; i < 3; i++) {
-    //             var comp = datares[i]
-    //             // if (comp.date.split('T')[1].split(':')[0] == '12') {
-    //             this.forecast.push(comp)
-    //             // }
-    //           }
-    //         }
-    //       })
-    //     }
-    //   }
-    // },
   },
   mounted() {
     this.getData()
+
+    setInterval(() => {
+      this.getData()
+    }, 3600000)
   },
 }
 </script>

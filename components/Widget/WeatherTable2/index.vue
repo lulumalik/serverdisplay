@@ -10,17 +10,20 @@
           returningTimeZone(new Date(forecast[0].data.date))
             .split(' ')
             .splice(4, 4)[0]
+            .split(':')
+            .splice(0, 2)
+            .join(':')
         }}
         {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
       </div>
     </div>
     <table class="w-full text-2xl mt-6">
       <tr style="background: #303030" class="text-white">
-        <th>Nama Lokasi</th>
-        <th>Cuaca</th>
-        <th>Angin</th>
-        <th>Suhu</th>
-        <th>Kelembaban</th>
+        <th class="text-left"><div class="pl-2">Nama Lokasi</div></th>
+        <th class="text-center">Cuaca</th>
+        <th class="text-center">Angin</th>
+        <th class="text-center">Suhu</th>
+        <th class="text-center">Kelembaban</th>
       </tr>
       <tr
         v-for="(b, i) in forecast"
@@ -31,12 +34,12 @@
         <td class="px-6">
           {{ b.location.location }}
         </td>
-        <td class="text-center font-semibold">
+        <td class="text-center font-semibold p-2">
           <div class="flex items-center justify-center space-x-2">
             <div class="w-14">
               <img
                 :src="'/Archive/' + b.data.weather_code + '.svg'"
-                class="w-12"
+                class="w-10"
               />
             </div>
             <div class="w-44 text-left">
@@ -44,7 +47,7 @@
             </div>
           </div>
         </td>
-        <td class="text-center font-semibold">{{ b.data.wSpd }} km/h</td>
+        <td class="text-center font-semibold">{{ b.data.wSpd }} km/jam</td>
         <td class="text-center font-semibold">
           {{ b.data.temp }} <sup>o</sup>C
         </td>
@@ -61,12 +64,10 @@ export default {
     return {
       forecast: [],
       area: '',
+      allNDF: {},
     }
   },
   computed: {
-    ndflistener() {
-      return this.$store.state.ndfData.allNDF
-    },
     weather_code() {
       return weather_code
     },
@@ -89,6 +90,10 @@ export default {
   },
   mounted() {
     this.getData()
+
+    setInterval(() => {
+      this.getData()
+    }, 3600000)
   },
   methods: {
     returningTimeZone(date) {
@@ -99,63 +104,53 @@ export default {
         '00'
       )
     },
-    getData() {
+    async getData() {
       var parentDisplay = this.$parent.$parent.$parent
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
 
-        // console.log(setting, obj)
         this.forecast.length = 0
-        // console.log(setting[obj])
+        this.allNDF = {}
+
         this.area = setting[obj][0].value.area
+        // console.log(setting[obj][0].value.value)
+        var allndf = []
         setting[obj][0].value.value.forEach((el) => {
-          // console.log(el , this.ndflistener[el.ndf])
-          // var key = el.key.split('_')[2]
-          // if (key == 'arrayNDF') {
-          var datares = this.ndflistener[el.ndf]
-              this.forecast.push({
+          allndf.push(el.ndf)
+        })
+        const ndf2 = await this.$axios.$post(
+          'https://api.gis.co.id/api/cgms/weather/ndf/getMany',
+          {
+            location: allndf,
+            date: new Date().toISOString(),
+          }
+        )
+
+        ndf2.data.forEach((el) => {
+          if (!this.allNDF[el.location.locationId]) {
+            this.allNDF[el.location.locationId] = []
+          }
+          this.allNDF[el.location.locationId].push(el)
+        })
+
+        setting[obj][0].value.value.forEach((el) => {
+          var datares = this.allNDF[el.ndf]
+          if (datares && datares.length > 0) {
+            this.forecast.push({
               location: el,
               data: datares[0],
             })
-          // for (var i = 0; i < datares.length; i++) {
-            // var comp = datares[i]
-        
-            // if (comp.date.split('T')[1].split(':')[0] == '12') {
-            // this.forecast.push(comp)
-            // break
-            // }
-          // }
-          // }
+          }
         })
       }
     },
-    // getData() {
-    //   var parent = this.$parent.$parent.$parent
-    //   if (parent.currentId) {
-    //     this.forecast.length = 0
-    //     var ndf = parent.obj.properties.widgetndf
-
-    //     ndf.forEach((el) => {
-    //       if (el.key == '_WidgetWeatherTable2_arrayNDF') {
-    //         this.area = el.value.area
-    //         el.value.value.forEach((el) => {
-    //           var datares = this.ndflistener[el.ndf]
-    //           this.forecast.push({
-    //             location: el,
-    //             data: datares[0],
-    //           })
-    //         })
-    //       }
-    //     })
-    //   }
-    // },
   },
 }
 </script>
 
 <style scoped>
 th {
-  padding: 10px;
+  padding: 15px !important;
 }
 </style>

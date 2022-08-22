@@ -14,8 +14,8 @@
 <style>
 #myVideo {
   position: absolute;
-  right: 0;
-  top: -10px;
+  right: 0px;
+  top: -22%;
   min-width: 100%; 
   min-height: 100%;
   z-index:-1;

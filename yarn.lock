@@ -4554,6 +4554,11 @@ hmac-drbg@^1.0.1:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
+hooper@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/hooper/-/hooper-0.3.4.tgz#afb425d23f47f931ce2a9c00b755992cb0e2bcf9"
+  integrity sha512-hV1c+MCiCfVjltdvZIgTrGYHInvhKiNLVNOT/hRWbfjZNIS9H6F6ZUPeaxhxrYkjsEL96Z0RIs+4YPoBqrrrHQ==
+
 hsl-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/hsl-regex/-/hsl-regex-1.0.0.tgz#d49330c789ed819e276a4c0d272dffa30b18fe6e"
@@ -5518,7 +5523,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==
 
-lodash@^4.15.0, lodash@^4.17.14, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.5:
+lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.5:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -8739,6 +8744,11 @@ timsort@^0.3.0:
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha512-qsdtZH+vMoCARQtyod4imc2nIJwg9Cc7lPRrw9CzF8ZKR0khdr8+2nX80PBhET3tcyTtJDxAffGh2rXH4tyU8A==
 
+tiny-slider@^2.9.2:
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/tiny-slider/-/tiny-slider-2.9.4.tgz#dd5cbf3065f1688ade8383ea6342aefcba22ccc4"
+  integrity sha512-LAs2kldWcY+BqCKw4kxd4CMx2RhWrHyEePEsymlOIISTlOVkjfK40sSD7ay73eKXBLg/UkluAZpcfCstimHXew==
+
 tinyqueue@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/tinyqueue/-/tinyqueue-2.0.3.tgz#64d8492ebf39e7801d7bd34062e29b45b2035f08"
@@ -9185,6 +9195,11 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
+vue-l-carousel@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-l-carousel/-/vue-l-carousel-1.1.0.tgz#dc6b189c297724a8f059ee57c48f07584c277285"
+  integrity sha512-E5rTJPRLWf0+ahYcymntloHilQD9+VJplpiIxX3y2f9KeFYCazvS6aOmaRHpgFEyLzMHkTLStyzGNlY8ZxLLNw==
+
 vue-loader@^15.9.7:
   version "15.9.8"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.9.8.tgz#4b0f602afaf66a996be1e534fb9609dc4ab10e61"
@@ -9301,6 +9316,14 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue-tiny-slider@^0.1.39:
+  version "0.1.39"
+  resolved "https://registry.yarnpkg.com/vue-tiny-slider/-/vue-tiny-slider-0.1.39.tgz#9301eada256fa12725b050767e1e67a287b3e3ef"
+  integrity sha512-dLOuMI6YyIBabXPZTQ0LL2jhOqZuwsCD7ztPEoE1ejFQ9GNxyRxwkRsIwUtVnq5SCTzQAhCYlgoibyMGoDHReA==
+  dependencies:
+    lodash "^4.17.11"
+    tiny-slider "^2.9.2"
 
 vue-toast-notification@^0.6:
   version "0.6.3"

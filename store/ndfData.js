@@ -1,6 +1,5 @@
 export const state = () => ({
     allNDF: {},
-    int: 1
 })
 
 export const mutations = {
@@ -11,7 +10,7 @@ export const mutations = {
             state.allNDF[data.key] = data.value
         }
     },
-    increment(state) {
-        state.int++
+    emptyNDF(state) {
+        state.allNDF = {}
     }
 }

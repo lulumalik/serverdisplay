@@ -9,7 +9,7 @@
     <div v-else class="flex justify-center space-x-4">
       <div>
         <img
-          style="width: 450px "
+          style="width: 450px"
           :src="
             'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
             year +
@@ -86,6 +86,27 @@ export default {
         this.getZero(this.day) +
         '/infografis_text.jpg'
     )
+
+    setInterval(() => {
+      this.testImage(
+        'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
+          this.year +
+          '/' +
+          this.getZero(this.month) +
+          '/' +
+          this.getZero(this.day) +
+          '/infografis.jpg'
+      )
+      this.testImage(
+        'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
+          this.year +
+          '/' +
+          this.getZero(this.month) +
+          '/' +
+          this.getZero(this.day) +
+          '/infografis_text.jpg'
+      )
+    }, 1800000)
   },
 }
 </script>

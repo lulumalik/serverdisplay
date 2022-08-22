@@ -36,7 +36,7 @@
                 <div class="relative right-1">Wind Speed</div>
               </div>
             </td>
-            <td class="font-bold pl-6">: {{ forecast[0].wSpd }} km/hours</td>
+            <td class="font-bold pl-6">: {{ forecast[0].wSpd }} km/jam</td>
           </tr>
           <tr>
             <td>

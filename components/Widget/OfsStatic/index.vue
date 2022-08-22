@@ -33,14 +33,6 @@ export default {
       imgurl: '',
     }
   },
-  watch: {
-    selected: {
-      handler() {
-        this.getData()
-      },
-      deep: true,
-    },
-  },
   mounted() {
     this.getData()
 
@@ -51,7 +43,10 @@ export default {
   methods: {
     getData() {
       var parentDisplay = this.$parent.$parent.$parent
+
+      this.allModel = null
       if (parentDisplay.production) {
+
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
         this.selected.area = setting[obj][0].value
@@ -62,7 +57,7 @@ export default {
         })
       } else {
         // console.log(this.$store.state.displayWidget.widgetSaved)
-        
+
         this.selected.area = 'indonesia'
         this.$axios.get('https://pusmar.id/api21/modelrun').then((res) => {
           this.allModel = res.data

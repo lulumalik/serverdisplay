@@ -38,9 +38,14 @@ Vue.component('v-select', vSelect)
 import 'vue-select/dist/vue-select.css';
 
 
-import VueAgile from '../components/Carousel.vue'
-Vue.component('agile', VueAgile)
+import { Hooper, Slide } from 'hooper';
+import 'hooper/dist/hooper.css';
 
+Vue.component('carousel', Hooper)
+Vue.component('carouselitem', Slide)
+
+// import swiper module styles
+// import 'swiper/css'
 
 
 import Layout_1 from '@/components/Template/Layout_1.vue'

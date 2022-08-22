@@ -97,7 +97,7 @@ export default {
             })
 
             if (this.runningText.length == 0) {
-              this.runningText('Tidak ada peringatan Cuaca pada wilayah ini')
+              this.runningText.push('Badan Meteorologi Klimatologi dan Geofisika - Cepat Tepat Akurat Luas dan Mudah Dipahami')
             }
             // for (var i = 0; i < 2; i++) {
 

@@ -1,0 +1,15 @@
+<svg width="180" height="167" viewBox="0 0 180 167" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M127.645 102.859C156.048 102.859 179.074 79.8335 179.074 51.4297C179.074 48.9352 178.897 46.4822 178.553 44.0827C175.56 61.9664 160.01 75.5954 141.276 75.5954C120.401 75.5954 103.478 58.6728 103.478 37.7977C103.478 19.0645 117.106 3.51428 134.989 0.520458C132.59 0.177466 130.138 0 127.645 0C99.2407 0 76.2148 23.0258 76.2148 51.4297C76.2148 79.8335 99.2407 102.859 127.645 102.859Z" fill="url(#paint0_radial_1197_771)"/>
+<path d="M31.0895 90.3178L31.3919 90.2553L31.4714 89.9569C37.4963 67.3486 58.1584 50.6895 82.7212 50.6895C110.49 50.6895 133.272 71.9805 135.558 99.087L135.592 99.486L135.988 99.5403C152.345 101.78 164.942 115.776 164.942 132.704C164.942 151.192 149.918 166.181 131.381 166.181H85.1542H38.9276C17.7035 166.181 0.5 149.018 0.5 127.85C0.5 109.361 13.6244 93.9277 31.0895 90.3178Z" fill="url(#paint1_linear_1197_771)" stroke="white"/>
+<defs>
+<radialGradient id="paint0_radial_1197_771" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(148.342 26.5929) rotate(127.112) scale(87.5755)">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="#FFD84F"/>
+</radialGradient>
+<linearGradient id="paint1_linear_1197_771" x1="0" y1="50.1895" x2="167.957" y2="162.934" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity="0.9"/>
+<stop offset="0.0001" stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0.69"/>
+</linearGradient>
+</defs>
+</svg>

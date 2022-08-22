@@ -47,7 +47,7 @@ export default {
         uv: 'UV Index',
       },
       parseUnit: {
-        wSpd: 'km/h',
+        wSpd: 'km/jam',
         pressure: 'hpa',
         rain: '%',
         uv: '',

@@ -88,7 +88,7 @@ export default {
         Weather: '',
         Temperature: ' ᵒC',
         Humidity: ' %',
-        'Wind Speed': ' km/h',
+        'Wind Speed': ' km/jam',
         'Wind Direction': ' ᵒ',
       },
     }
