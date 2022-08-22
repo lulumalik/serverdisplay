@@ -44,7 +44,7 @@ export default {
   computed: {
     listWidget() {
       return this.$parent.templateAddedList.filter(
-        (val) => val._id == this.$parent.selectedTemplateID
+        (val) => val.idtemplate == this.$parent.selectedTemplateID
       )
     },
   },

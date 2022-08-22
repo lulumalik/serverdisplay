@@ -80,15 +80,15 @@ export default {
   },
   methods: {
     getData() {
-      var parent = this.$parent.$parent.$parent
-      if (parent.currentId) {
-        this.forecast.length = 0
-        var ndf = parent.obj.properties.widgetndf
-        if (parent.obj.properties.widgetndf) {
-          ndf.forEach((el) => {
-            if (el.key == '_WidgetWisataBottombar_subdistrict') {
-              // console.log(this.ndflistener[el.value.ndf], 'ea')
-              var datares = this.ndflistener[el.value.ndf]
+      var parentDisplay = this.$parent.$parent.$parent
+      if (parentDisplay.production) {
+        var setting = parentDisplay.responseDisplay.properties.allSetting
+        var obj = parentDisplay.obj.idtemplate
+        setting[obj].forEach((el) => {
+          var key = el.key.split('_')[2]
+
+          if (key == 'subdistrict') {
+            var datares = this.ndflistener[el.value.ndf]
               for (var i = 0; i < datares.length; i++) {
                 var comp = datares[i]
                 // if (comp.date.split('T')[1].split(':')[0] == '12') {
@@ -96,45 +96,74 @@ export default {
                 break
                 // }
               }
-            }
-          })
-        }
+          }
+        })
       }
     },
   },
   mounted() {
-    if (this.$parent.$parent && this.$parent.$parent.$parent) {
-      var parent = this.$parent.$parent.$parent
-      if (parent.currentId) {
-        // this.forecast.length = 0
-        var ndf = parent.obj.properties.widgetndf
-        if (parent.obj.properties.widgetndf) {
-          ndf.forEach((el) => {
-            if (el.key == '_WidgetWisataBottombar_name') {
-              this.name = el.value
-            } else if (el.key == '_WidgetWisataBottombar_subdistrict') {
-              this.forecast.length = 0
-              this.getData()
-            } else if (el.key == '_WidgetWisataBottombar_description') {
-              this.desc = el.value
-            } else if (el.key == '_WidgetWisataBottombar_color') {
-              this.color = el.value
-            } else if (el.key == '_WidgetWisataBottombar_background') {
-              this.backgroundColor = el.value
-            } else if (el.key == '_WidgetWisataBottombar_img') {
-              this.img = el.value
-              this.backgroundnize = {
-                'background-image': 'url(' + this.img + ')',
-                'background-size': 'cover',
-                'background-position': 'center',
-                'background-repeat': 'no-repeat',
-                'height': '100%',
-              }
-            }
-          })
+    var parentDisplay = this.$parent.$parent.$parent
+    if (parentDisplay.production) {
+      var setting = parentDisplay.responseDisplay.properties.allSetting
+      var obj = parentDisplay.obj.idtemplate
+      setting[obj].forEach((el) => {
+        var key = el.key.split('_')[2]
+        if (key == 'name') {
+          this.name = el.value
+        } else if (key == 'subdistrict') {
+          this.forecast.length = 0
+          this.getData()
+        } else if (key == 'description') {
+          this.desc = el.value
+        } else if (key == 'color') {
+          this.color = el.value
+        } else if (key == 'background') {
+          this.backgroundColor = el.value
+        } else if (key == 'img') {
+          this.img = el.value
+          this.backgroundnize = {
+            'background-image': 'url(' + this.img + ')',
+            'background-size': 'cover',
+            'background-position': 'center',
+            'background-repeat': 'no-repeat',
+            height: '100%',
+          }
         }
-      }
+      })
+      // parentDisplay.obj.properties.setting.forEach((el) => {
+      //   var key = el.key.split('_')[2]
+      //   if (key == 'name') {
+      //     this.name = el.value
+      //   } else if (key == 'subdistrict') {
+      //     this.forecast.length = 0
+      //     this.getData()
+      //   } else if (key == 'description') {
+      //     this.desc = el.value
+      //   } else if (key == 'color') {
+      //     this.color = el.value
+      //   } else if (key == 'background') {
+      //     this.backgroundColor = el.value
+      //   } else if (key == 'img') {
+      //     this.img = el.value
+      //     this.backgroundnize = {
+      //       'background-image': 'url(' + this.img + ')',
+      //       'background-size': 'cover',
+      //       'background-position': 'center',
+      //       'background-repeat': 'no-repeat',
+      //       height: '100%',
+      //     }
+      //   }
+      // })
     }
+
+    // var parentObj = this.$parent.$parent.$parent
+    // if (parentDisplay.obj.properties.setting) {
+    // console.log(parentDisplay.responseDisplay)
+    // var ndf = parent.obj.properties.widgetndf
+    // if (parent.obj.properties.widgetndf) {
+
+    // }
+    // }
   },
 }
 </script>

@@ -48,11 +48,12 @@
           </svg>
         </button>
       </div> -->
-    <div class="flex-grow">
+    <div class="flex-grow" 
+        style="background: rgba(0,0,0,0.3) !important">
       <marquee-text
-        :repeat="1"
-        :duration="5000"
-        class="bg-white text-gray-700 p-2"
+        :repeat="3"
+        :duration="500"
+        class="p-2 text-white"
       >
         <div class="flex space-x-4 text-xl">
           <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" /> {{runningText.join(', ')}}
@@ -87,9 +88,22 @@ export default {
             var index = json[0].children[0].children.length - 1
             var listParsedArray = dataparsed[index].children
             this.runningText.length = 0
-            for (var i = 0; i < 2; i++) {
-              this.runningText.push(listParsedArray[i].children[4].children[0])
+            // console.log(listParsedArray)
+            listParsedArray.forEach((item) => {
+              // this.runningText.push(item.text)
+              if (item.children[0].children[0].includes('CBB')) {
+                 this.runningText.push(item.children[4].children[0])
+              }
+            })
+
+            if (this.runningText.length == 0) {
+              this.runningText('Tidak ada peringatan Cuaca pada wilayah ini')
             }
+            // for (var i = 0; i < 2; i++) {
+
+            // console.log(listParsedArray[i])
+              // this.runningText.push(listParsedArray[i].children[4].children[0])
+            // }
             // listParsedArray.forEach((item, index) => {
             //   // console.log(item)
             //   this.runningText.push(item.children[4].children[0])

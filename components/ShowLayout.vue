@@ -46,6 +46,11 @@
 <script>
 export default {
   props: {
+    responseDisplay:{
+      default: () => {
+        return {}
+      },
+    },
     displayName: {
       default: () => {
         return '-';
@@ -59,11 +64,6 @@ export default {
     obj: {
       default: () => {
         return {}
-      },
-    },
-    dataid: {
-      default: () => {
-        return null
       },
     },
     indexLoop: {
@@ -107,9 +107,6 @@ export default {
     }
   },
   async mounted() {
-    if (this.dataid) {
-      this.currentId = this.dataid
-    }
     this.widget = this.widgetDB
     this.getComp(this.obj)
   },

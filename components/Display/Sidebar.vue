@@ -41,13 +41,28 @@
 
 <script>
 export default {
-  data() {
-    return {
-      pushToList(db, i) {
-        this.$parent.templateAddedList.push(db)
-        this.$parent.templateDB.splice(i, 1)
-      },
-    }
+  methods: {
+    makeid(length) {
+      var result = ''
+      var characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      var charactersLength = characters.length
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        )
+      }
+      return result
+    },
+    pushToList(db, i) {
+      // db.idtemplate = this.makeid(5)
+      var obj = {}
+      for(var key in db) {
+        obj[key] = db[key]
+      }
+      obj.idtemplate = this.makeid(5)
+      this.$parent.templateAddedList.push(obj)
+    },
   },
 }
 </script>

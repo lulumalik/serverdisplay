@@ -38,6 +38,10 @@ Vue.component('v-select', vSelect)
 import 'vue-select/dist/vue-select.css';
 
 
+import VueAgile from '../components/Carousel.vue'
+Vue.component('agile', VueAgile)
+
+
 
 import Layout_1 from '@/components/Template/Layout_1.vue'
 import Layout_2_1 from '@/components/Template/Layout_2_1.vue'

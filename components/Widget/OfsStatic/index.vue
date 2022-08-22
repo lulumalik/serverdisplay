@@ -42,33 +42,6 @@ export default {
     },
   },
   mounted() {
-    if (this.$parent.$parent && this.$parent.$parent.$parent) {
-      var parent = this.$parent.$parent.$parent
-      if (
-        parent.obj &&
-        this.$store.state.displayWidget.widgetSaved[
-          parent.obj._id + '_WidgetOfsStatic'
-        ]
-      ) {
-        this.selected.area =
-          this.$store.state.displayWidget.widgetSaved[
-            parent.obj._id + '_WidgetOfsStatic'
-          ]
-      }
-      if (parent.currentId) {
-        // this.forecast.length = 0
-
-        var ndf = parent.obj.properties.widgetndf
-        if (ndf) {
-          ndf.forEach((item) => {
-            if (item.key == '_WidgetOfsStatic') {
-              this.selected.area = item.value
-            }
-          })
-        }
-      }
-    }
-
     this.getData()
 
     setInterval(() => {
@@ -77,18 +50,40 @@ export default {
   },
   methods: {
     getData() {
-      // this.$axios.get('https://pusmar.id/api21/modelrun').then((res) => {
-      this.allModel = this.$store.state.maritimData.modelrun
-      if (this.allModel[this.selected.model]) {
-        this.selected.initialtime = this.allModel[this.selected.model][0]
-        this.initUTCArray(this)
+      var parentDisplay = this.$parent.$parent.$parent
+      if (parentDisplay.production) {
+        var setting = parentDisplay.responseDisplay.properties.allSetting
+        var obj = parentDisplay.obj.idtemplate
+        this.selected.area = setting[obj][0].value
+        this.$axios.get('https://pusmar.id/api21/modelrun').then((res) => {
+          this.allModel = res.data
+          this.selected.initialtime = this.allModel[this.selected.model][0]
+          this.initUTCArray(this)
+        })
       } else {
+        // console.log(this.$store.state.displayWidget.widgetSaved)
+        
+        this.selected.area = 'indonesia'
         this.$axios.get('https://pusmar.id/api21/modelrun').then((res) => {
           this.allModel = res.data
           this.selected.initialtime = this.allModel[this.selected.model][0]
           this.initUTCArray(this)
         })
       }
+
+      // this.$axios.get('https://pusmar.id/api21/modelrun').then((res) => {
+      // this.allModel = this.$store.state.maritimData.modelrun
+      // console.log(this.allModel)
+      // if (this.allModel[this.selected.model]) {
+      //   this.selected.initialtime = this.allModel[this.selected.model][0]
+      //   this.initUTCArray(this)
+      // } else {
+      // this.$axios.get('https://pusmar.id/api21/modelrun').then((res) => {
+      //   this.allModel = res.data
+      //   this.selected.initialtime = this.allModel[this.selected.model][0]
+      //   this.initUTCArray(this)
+      // })
+      // }
       // })
     },
     updateImage() {

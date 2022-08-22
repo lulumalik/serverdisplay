@@ -1,19 +1,18 @@
 <template>
   <div>
-    <div class="w-full mb-2">No settings</div>
-    <!-- <select
-      v-model="selected"
-      @change="changeSelected"
-      class="px-2 py-1 rounded w-full mt-0.5 border border-gray-300"
-    >
-      <option disabled value="">Select Location</option>
-      <option v-for="(l, i) in listKecamatan" :key="i" :value="l['ID NDF']">
-        {{ l['nama lokasi'] }}
-      </option>
-    </select> -->
+    <div>Area code</div>
+    <div>
+      <v-select
+        label="name"
+        @option:selected="changeSelected"
+        v-model="area"
+        :options="listArea"
+      ></v-select>
+    </div>
   </div>
 </template>
 <script>
+// import {dataStatic, belitung, belitungTimur} from '../../../utils/listStatic.js'
 export default {
   props: {
     idTemplate: {
@@ -25,18 +24,31 @@ export default {
   methods: {
     changeSelected() {
       this.$store.commit('displayWidget/mutationWidget', {
-        key: 'WidgetEarthquake' + '_' + this.idTemplate,
-        value: this.selected,
+        key: this.idTemplate + '_WidgetForecastStick_area',
+        value: this.area,
       })
     },
   },
-  updated() {
+  mounted() {
+    if (
+      this.$store.state.displayWidget.widgetSaved[
+        this.idTemplate + '_WidgetForecastStick_area'
+      ]
+    ) {
    
+      this.area =
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetForecastStick_area'
+        ]
+    }
   },
   data() {
     return {
-      selected: '',
-      listKecamatan: []
+      area: '',
+      listArea: [{
+        name: 'Bangka Belitung',
+        area: 'CBB'
+      }],
     }
   },
 }

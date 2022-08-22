@@ -15,7 +15,7 @@
       </div>
     </div>
     <table class="w-full text-2xl mt-6">
-      <tr class="bg-orange-300">
+      <tr style="background: #303030" class="text-white">
         <th>Nama Lokasi</th>
         <th>Cuaca</th>
         <th>Angin</th>
@@ -25,7 +25,8 @@
       <tr
         v-for="(b, i) in forecast"
         :key="i"
-        :class="i % 2 == 0 ? 'bg-orange-100/80' : 'bg-orange-300/80'"
+        style="background: rgba(48, 48, 48, 0.4)"
+        class="text-white"
       >
         <td class="px-6">
           {{ b.location.location }}
@@ -38,7 +39,9 @@
                 class="w-12"
               />
             </div>
-            <div class="w-44 text-left">{{ weather_code[b.data.weather_code] }}</div>
+            <div class="w-44 text-left">
+              {{ weather_code[b.data.weather_code] }}
+            </div>
           </div>
         </td>
         <td class="text-center font-semibold">{{ b.data.wSpd }} km/h</td>
@@ -97,25 +100,56 @@ export default {
       )
     },
     getData() {
-      var parent = this.$parent.$parent.$parent
-      if (parent.currentId) {
-        this.forecast.length = 0
-        var ndf = parent.obj.properties.widgetndf
+      var parentDisplay = this.$parent.$parent.$parent
+      if (parentDisplay.production) {
+        var setting = parentDisplay.responseDisplay.properties.allSetting
+        var obj = parentDisplay.obj.idtemplate
 
-        ndf.forEach((el) => {
-          if (el.key == '_WidgetWeatherTable2_arrayNDF') {
-            this.area = el.value.area
-            el.value.value.forEach((el) => {
-              var datares = this.ndflistener[el.ndf]
+        // console.log(setting, obj)
+        this.forecast.length = 0
+        // console.log(setting[obj])
+        this.area = setting[obj][0].value.area
+        setting[obj][0].value.value.forEach((el) => {
+          // console.log(el , this.ndflistener[el.ndf])
+          // var key = el.key.split('_')[2]
+          // if (key == 'arrayNDF') {
+          var datares = this.ndflistener[el.ndf]
               this.forecast.push({
-                location: el,
-                data: datares[0],
-              })
+              location: el,
+              data: datares[0],
             })
-          }
+          // for (var i = 0; i < datares.length; i++) {
+            // var comp = datares[i]
+        
+            // if (comp.date.split('T')[1].split(':')[0] == '12') {
+            // this.forecast.push(comp)
+            // break
+            // }
+          // }
+          // }
         })
       }
     },
+    // getData() {
+    //   var parent = this.$parent.$parent.$parent
+    //   if (parent.currentId) {
+    //     this.forecast.length = 0
+    //     var ndf = parent.obj.properties.widgetndf
+
+    //     ndf.forEach((el) => {
+    //       if (el.key == '_WidgetWeatherTable2_arrayNDF') {
+    //         this.area = el.value.area
+    //         el.value.value.forEach((el) => {
+    //           var datares = this.ndflistener[el.ndf]
+    //           this.forecast.push({
+    //             location: el,
+    //             data: datares[0],
+    //           })
+    //         })
+    //       }
+    //     })
+    //   }
+    // },
   },
 }
 </script>

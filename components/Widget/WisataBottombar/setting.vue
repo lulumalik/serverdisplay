@@ -15,7 +15,7 @@
         label="location"
         @option:selected="changeSelectedSub"
         v-model="subdistrict"
-        :options="listKecamatan"
+        :options="listAll"
       ></v-select>
     </div>
     <div class="mt-2">Name of location</div>
@@ -75,7 +75,7 @@
   </div>
 </template>
 <script>
-import { dataStatic } from '../../../utils/listStatic.js'
+import { dataStatic, belitung, belitungTimur } from '../../../utils/listStatic.js'
 export default {
   props: {
     idTemplate: {
@@ -214,7 +214,11 @@ export default {
           name: 'Kepulauan Bangka Belitung',
         },
       ],
-      listKecamatan: dataStatic,
+      listWisata: dataStatic,
+      listBelitung: belitung,
+      listBelitungTimur: belitungTimur, 
+      listAll:[...belitung, ...belitungTimur, ...dataStatic],
+
     }
   },
 }

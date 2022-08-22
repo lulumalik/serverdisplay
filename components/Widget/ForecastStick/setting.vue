@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import {dataStatic} from '../../../utils/listStatic.js'
+import {dataStatic, belitung, belitungTimur} from '../../../utils/listStatic.js'
 export default {
   props: {
     idTemplate: {
@@ -76,7 +76,7 @@ export default {
           name: 'Kepulauan Bangka Belitung',
         },
       ],
-      listKecamatan: dataStatic,
+      listKecamatan: [...belitung, ...belitungTimur, ...dataStatic],
     }
   },
 }

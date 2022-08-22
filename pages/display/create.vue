@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-200 h-screen">
-    <Navbar class="w-full sticky top-0" style="z-index:1000"/>
+    <Navbar class="w-full sticky top-0" style="z-index: 1000" />
     <client-only>
       <form class="text-sm px-6 pt-4 flex items-end space-x-4">
         <div class="flex-grow">
@@ -49,10 +49,13 @@
         <div class="flex-grow">
           <!--  -->
           <label class="flex items-center space-x-3 mb-2">
-            <input type="checkbox" :disabled="true" v-model="secretCode" class="text-xs p-0.5 rounded" />
-            <div class="text-xs">
-              Secret code
-            </div>
+            <input
+              type="checkbox"
+              :disabled="true"
+              v-model="secretCode"
+              class="text-xs p-0.5 rounded"
+            />
+            <div class="text-xs">Secret code</div>
           </label>
           <div
             type="submit"
@@ -64,7 +67,7 @@
               bg-sky-500
               text-white
             "
-            style="padding-top:7px;padding-bottom:7px;"
+            style="padding-top: 7px; padding-bottom: 7px"
             @click="updateAndCreateDisplay"
             :disabled="saving"
           >
@@ -75,19 +78,18 @@
           <div
             type="submit"
             class="
-                 bg-blue-200
-                border border-blue-400
-                shadow
-                px-6
-                py-2
-                text-blue-600
-                font-semibold
-                rounded
-                text-xs
-                text-center
-                cursor-pointer
+              bg-blue-200
+              border border-blue-400
+              shadow
+              px-6
+              py-2
+              text-blue-600
+              font-semibold
+              rounded
+              text-xs text-center
+              cursor-pointer
             "
-            style="padding-top:7px;padding-bottom:7px;"
+            style="padding-top: 7px; padding-bottom: 7px"
             @click="createWithUpdate"
             :disabled="saving"
           >
@@ -141,7 +143,7 @@ export default {
       secretCode: false,
       getDisplayLocation: 'Kepulauan Bangka Belitung',
       allfind: {},
-      useFooter: true
+      useFooter: true,
     }
   },
   middleware: ['checkLogin'],
@@ -158,12 +160,17 @@ export default {
   },
   async mounted() {
     const res1 = await this.$axios.$get('template')
-    var alltemplate = res1.data
     if (this.$route.query.id) {
       const res = await this.$axios.$get('display/find/' + this.$route.query.id)
       this.allfind = res.data
-      this.templateDB = this.getDifference(alltemplate, res.data.template)
-      this.templateAddedList = res.data.template
+      this.templateDB = res1.data
+      // this.templateDB = this.getDifference(alltemplate, res.data.template)
+      var arr = []
+      for (var key in res.data.properties.allTemplate) {
+        arr.push(res.data.properties.allTemplate[key])
+      }
+      this.templateAddedList = arr
+      var listSetting = res.data.properties.allSetting
       this.displayID = res.data.username
       this.displayName = res.data.name
       // console.log(res.data)
@@ -174,10 +181,10 @@ export default {
       this.$refs['preview'].width = res.data.properties.width || 1366
       this.$refs['preview'].height = res.data.properties.height || 768
       this.templateAddedList.forEach((el) => {
-        if (el.properties.widgetndf) {
-          el.properties.widgetndf.forEach((l) => {
+        if (listSetting[el.idtemplate]) {
+          listSetting[el.idtemplate].forEach((l) => {
             this.$store.commit('displayWidget/mutationWidget', {
-              key: el._id + l.key,
+              key: l.key,
               value: l.value,
             })
           })
@@ -212,14 +219,20 @@ export default {
         })
     },
     createData(obj) {
-      this.$axios.$post('display/create?generateSecret' + (this.secretCode ? '=true' : '=false'), obj).then((res) => {
-        this.saving = false
-        this.$toast.open({
-          message: 'Display saved',
-          type: 'success',
-          duration: 2000,
+      this.$axios
+        .$post(
+          'display/create?generateSecret' +
+            (this.secretCode ? '=true' : '=false'),
+          obj
+        )
+        .then((res) => {
+          this.saving = false
+          this.$toast.open({
+            message: 'Display saved',
+            type: 'success',
+            duration: 2000,
+          })
         })
-      })
     },
     createWithUpdate() {
       this.updateAndCreateDisplay('create')
@@ -235,14 +248,18 @@ export default {
         if (!widgetparse[kparse[0]]) {
           widgetparse[kparse[0]] = []
         }
+
         widgetparse[kparse[0]].push({
-          key: '_' + kparse[1] + (kparse[2] ? '_' + kparse[2] : ''),
+          key: kparse[0] + '_' + kparse[1] + (kparse[2] ? '_' + kparse[2] : ''),
           value: this.getWidgetSaved[k],
         })
       }
-      this.templateAddedList.forEach((el) => {
-        if (widgetparse[el._id]) {
-          el.properties.widgetndf = widgetparse[el._id]
+      var alltemplate = {}
+      var allndf = {}
+      this.templateAddedList.forEach((el, i) => {
+        if (widgetparse[el.idtemplate]) {
+          alltemplate[i] = this.templateAddedList[i]
+          allndf[el.idtemplate] = widgetparse[el.idtemplate]
         }
       })
       var obj = {
@@ -260,9 +277,14 @@ export default {
           delay: parseFloat(this.$refs['preview'].times) || 60,
           width: this.$refs['preview'].width,
           height: this.$refs['preview'].height,
-          footer: this.useFooter
+          footer: this.useFooter,
+          allTemplate: alltemplate,
+          allSetting: allndf,
         },
       }
+
+      this.$store.commit('displayWidget/emptyWidget')
+      
       if (createOnly == 'create') {
         this.createData(obj)
         return true

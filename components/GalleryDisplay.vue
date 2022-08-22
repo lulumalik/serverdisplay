@@ -1,21 +1,14 @@
 <template>
   <div class="overflow-hidden h-screen w-screen relative">
     <client-only>
-      <VueSlickCarousel
+      <agile
         v-if="templates.length > 0"
-        :autoplay="true"
-        :autoplaySpeed="speed"
+        :dots="false" :infinite="true" :autoplay="true" :autoplay-speed="speed" :navButtons="false" :mobileFirst="false"
       >
-        <template slot="prevArrow">
-          <div></div>
-        </template>
-        <template slot="nextArrow">
-          <div></div>
-        </template>
         <div
           v-for="(obj, i) in templates"
           :key="i"
-          class="h-screen w-screen overflow-hidden relative"
+          class="h-screen w-screen overflow-hidden relative slide"
           :style="background[i]"
         >
           <BackgroundVideo v-if="obj.properties.video !== null" />
@@ -26,14 +19,14 @@
             :widgetDB="widget"
             :layoutDB="layoutDB"
             style="transform-origin: 0 0"
-            :dataid="obj._id"
             :production="true"
             :indexLoop="i"
             :location="location"
             :allNDF="allNDF"
+            :responseDisplay="responseDisplay"
           />
         </div>
-      </VueSlickCarousel>
+      </agile>
 
       <FooterTemplate
         :nodrag="true"
@@ -46,9 +39,6 @@
 </template>
 
 <script>
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel.css'
-
 export default {
   props: {
     withrouter: {
@@ -56,7 +46,6 @@ export default {
       default: false,
     },
   },
-  components: { VueSlickCarousel },
   data() {
     return {
       listWidget: {},
@@ -71,7 +60,7 @@ export default {
       widget: [],
       layoutDB: {},
       allNDF: {},
-      speed: 10000,
+      speed: 5000,
       responseDisplay: {},
       useFooter: false,
     }
@@ -119,11 +108,16 @@ export default {
     if (res.data.properties.footer) {
       this.useFooter = res.data.properties.footer
     }
+    var alltemplate  = res.data.properties.allTemplate
+    var allsetting = res.data.properties.allSetting
+    var arr = []
 
-    res.data.template.forEach(async (el, i) => {
-      // console.log(el.properties.widgetndf)
-      if (el.properties.widgetndf) {
-        el.properties.widgetndf.forEach(async (el2) => {
+    // console.log(res.data.properties)
+    for(var key in alltemplate) {
+        arr.push(alltemplate[key])
+        
+        allsetting[alltemplate[key].idtemplate].forEach(async (el2) => {
+
           if (el2.key.split('_')[2] == 'subdistrict') {
             this.allNDF[el2.value.ndf] = []
             this.$store.commit('ndfData/mutationNDF', {
@@ -138,7 +132,7 @@ export default {
                 value: [],
               })
             })
-          } else if (el2.key == '_WidgetOfsStatic') {
+          } else if (el2.key.split('_')[1] == '_WidgetOfsStatic') {
             const modelrun = await this.$axios.get(
               'https://pusmar.id/api21/modelrun'
             )
@@ -148,7 +142,10 @@ export default {
             })
           }
         })
-      }
+      
+    }
+    res.data.template.forEach(async (el, i) => {
+      // console.log(el.properties.widgetndf)
       if (el.backgroundImage) {
         this.background[i] = {
           'background-image':
@@ -199,7 +196,8 @@ export default {
     })
 
     this.$emit('finishloading', true)
-    this.templates = res.data.template
+
+    this.templates = arr
 
     this.location = res.data.location
   },

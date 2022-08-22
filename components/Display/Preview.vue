@@ -151,7 +151,7 @@
               mx-3
             "
             :class="
-              $parent.selectedTemplateID == db._id
+              $parent.selectedTemplateID == db.idtemplate
                 ? 'border-2 border-sky-500'
                 : ''
             "
@@ -235,7 +235,7 @@ export default {
     })
     setTimeout(() => {
       if (this.$parent.templateAddedList.length > 0) {
-        this.$parent.selectedTemplateID = this.$parent.templateAddedList[0]._id
+        this.$parent.selectedTemplateID = this.$parent.templateAddedList[0].idtemplate
         this.objData = this.$parent.templateAddedList[0]
       }
     }, 1000)
@@ -268,7 +268,7 @@ export default {
       // console.log(this.objData)
       for (let i = 0; i < this.$parent.templateAddedList.length; i++) {
         if (
-          this.$parent.templateAddedList[i]._id ==
+          this.$parent.templateAddedList[i].idtemplate ==
           this.$parent.selectedTemplateID
         ) {
           this.$parent.templateAddedList[i].properties.scale = val
@@ -279,15 +279,14 @@ export default {
     },
     spliceData(db, i) {
       this.$parent.selectedTemplateID = null
-      this.$parent.templateDB.push(db)
+      // this.$parent.templateDB.push(db)
       this.$parent.templateAddedList.splice(i, 1)
     },
     getComp(obj) {
-      // console.log(obj)
       this.objData = null
 
       setTimeout(() => {
-        this.$parent.selectedTemplateID = obj._id
+        this.$parent.selectedTemplateID = obj.idtemplate
         this.objData = obj
       }, 300)
     },

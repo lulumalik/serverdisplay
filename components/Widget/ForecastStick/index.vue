@@ -197,27 +197,48 @@ export default {
       )
     },
     getData() {
-      var parent = this.$parent.$parent.$parent
-      if (parent.currentId) {
+      var parentDisplay = this.$parent.$parent.$parent
+      if (parentDisplay.production) {
         this.forecast.length = 0
-        var ndf = parent.obj.properties.widgetndf
-        if (parent.obj.properties.widgetndf) {
-          ndf.forEach((el) => {
-            if (el.key == '_WidgetForecastStick_subdistrict') {
-              // console.log(this.ndflistener[el.value.ndf], 'ea')
-              // console.log(this.ndflistener[el.value.ndf], this.ndflistener, el.value)
-              var datares = this.ndflistener[el.value.ndf]
+        var setting = parentDisplay.responseDisplay.properties.allSetting
+        var obj = parentDisplay.obj.idtemplate
+        // console.log(setting[obj])
+        setting[obj].forEach((el) => {
+          var key = el.key.split('_')[2]
+          if (key == 'subdistrict') {
+            var datares = this.ndflistener[el.value.ndf]
               for (var i = 0; i < 3; i++) {
                 var comp = datares[i]
                 // if (comp.date.split('T')[1].split(':')[0] == '12') {
                 this.forecast.push(comp)
                 // }
               }
-            }
-          })
-        }
+          }
+        })
       }
     },
+    // getData() {
+    //   var parent = this.$parent.$parent.$parent
+    //   if (parent.currentId) {
+    //     this.forecast.length = 0
+    //     var ndf = parent.obj.properties.widgetndf
+    //     if (parent.obj.properties.widgetndf) {
+    //       ndf.forEach((el) => {
+    //         if (el.key == '_WidgetForecastStick_subdistrict') {
+    //           // console.log(this.ndflistener[el.value.ndf], 'ea')
+    //           // console.log(this.ndflistener[el.value.ndf], this.ndflistener, el.value)
+    //           var datares = this.ndflistener[el.value.ndf]
+    //           for (var i = 0; i < 3; i++) {
+    //             var comp = datares[i]
+    //             // if (comp.date.split('T')[1].split(':')[0] == '12') {
+    //             this.forecast.push(comp)
+    //             // }
+    //           }
+    //         }
+    //       })
+    //     }
+    //   }
+    // },
   },
   mounted() {
     this.getData()
