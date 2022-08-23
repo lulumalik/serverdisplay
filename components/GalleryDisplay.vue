@@ -127,7 +127,7 @@ export default {
 
       this.interval[obj.hide] = setInterval(() => {
         this.testImage(obj.hide)
-      }, 10000)
+      }, 60000)
     },
     async getData(id) {
       this.$store.commit('ndfData/emptyNDF')
