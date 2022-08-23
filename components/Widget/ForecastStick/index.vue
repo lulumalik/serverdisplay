@@ -207,7 +207,7 @@ export default {
           var key = el.key.split('_')[2]
           if (key == 'subdistrict') {
             const datares = await this.$axios.$get(
-              'https://api.gis.co.id/api/cgms/weather/ndf/get?locationId=' +
+              'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
                 el.value.ndf
             )
 

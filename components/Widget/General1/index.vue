@@ -122,7 +122,7 @@ export default {
   mounted() {
     this.$axios
       .$get(
-        'https://api.gis.co.id/api/cgms/weather/ndf/get?latitude=-6.229728&longitude=106.6894317'
+        'https://weather.circlegeo.com/api/cgms/weather/ndf/get?latitude=-6.229728&longitude=106.6894317'
       )
       .then((res) => {
         // console.log(res)

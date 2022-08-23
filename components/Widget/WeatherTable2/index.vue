@@ -120,7 +120,7 @@ export default {
           allndf.push(el.ndf)
         })
         const ndf2 = await this.$axios.$post(
-          'https://api.gis.co.id/api/cgms/weather/ndf/getMany',
+          'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
           {
             location: allndf,
             date: new Date().toISOString(),

@@ -90,7 +90,7 @@ export default {
           if (key == 'subdistrict') {
             // console.log(this.ndflistener[el.value.ndf], el)
             const datares = await this.$axios.$get(
-              'https://api.gis.co.id/api/cgms/weather/ndf/get?locationId=' +
+              'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
                 el.value.ndf
             )
 
