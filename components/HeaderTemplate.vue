@@ -28,11 +28,11 @@
           <div class="text-2xl mt-1 flex items-center font-semibold justify-end">
             <div class="ml-2">
               {{
-                new Date(currentDate)
+                deleteSecond(new Date(currentDate)
                   .toString()
                   .split(' ')
                   .splice(0, 5)
-                  .join(' ')
+                  .join(' '))
               }}
               {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
             </div>
@@ -113,6 +113,11 @@ export default {
     },
   },
   methods: {
+    deleteSecond(date) {
+      var dat = date.split(':')
+      var final = dat.splice(0,2).join(':')
+      return final
+    },
     returningTimeZone() {
       this.currentDate =
         new Date().toString().split(' ').splice(0, 5).join(' ') +

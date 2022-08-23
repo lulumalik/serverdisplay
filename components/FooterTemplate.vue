@@ -52,7 +52,7 @@
         style="background: rgba(0,0,0,0.3) !important">
       <marquee-text
         :repeat="3"
-        :duration="500"
+        :duration="88"
         class="p-2 text-white"
       >
         <div class="flex space-x-4 text-xl">
