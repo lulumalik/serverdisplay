@@ -7,6 +7,7 @@
           :src="
             'https://g20.circlegeo.com/images/data/g20/warning1.jpg'
           "
+          @error="imageNotFound"
         />
       </div>
     </div>
@@ -31,27 +32,26 @@ export default {
       var parent = this.$parent.$parent.$parent
       if (parent.production) {
         // parent.errorImage['MaritimWarning'] =false
-        parent.spliceSlide(false)
+        // parent.spliceSlide(false)
       }
     },
 
     imageNotFound() {
-      // this.shownotfound = true
+      // this.shownotfound = true'
       var parent = this.$parent.$parent.$parent
       if (parent.production) {
-        // parent.errorImage['MaritimWarning'] =false
-        parent.spliceSlide(true)
+           parent.spliceSlide('https://g20.circlegeo.com/images/data/g20/warning1.jpg')
       }
     },
   },
   mounted() {
     this.testImage('https://g20.circlegeo.com/images/data/g20/warning1.jpg')
+    var self = this
     setInterval(() => {
-      this.refresh = true
-      this.testImage('https://g20.circlegeo.com/images/data/g20/warning1.jpg')
-
+      self.refresh = true
+      self.testImage('https://g20.circlegeo.com/images/data/g20/warning1.jpg')
       setTimeout(() => {
-        this.refresh = false
+        self.refresh = false
       }, 500);
     }, 60000)
   },

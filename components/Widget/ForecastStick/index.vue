@@ -41,7 +41,7 @@
       </div> -->
       <div class="flex space-x-4 text-gray-700" v-if="forecast.length > 0">
         <div v-for="(w, i) in forecast" :key="i">
-          <div class="mb-4 font-bold text-center">
+          <div class="mb-4 font-bold text-2xl text-center">
             <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
             {{ returningTimeZone(new Date(w.date)) }}
             {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}

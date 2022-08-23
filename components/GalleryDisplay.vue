@@ -7,7 +7,6 @@
         :playSpeed="speed"
         :wheelControl="false"
         style="height: 100vw !important; width: 100vw !important"
-        @slide="sliding"
         ref="carousel"
       >
         <carouselitem
@@ -70,31 +69,65 @@ export default {
       speed: 5000,
       responseDisplay: {},
       useFooter: false,
+      interval: {},
+      timeoutgetdata: null,
+      getDataAgain: false,
     }
   },
   async mounted() {
     this.getData()
 
-    setInterval(() => {
-      // alert('ea')
-      this.getData()
-    }, 3600000)
+    // setInterval(() => {
+    // alert('ea')
+    // this.getData()
+    // }, 3600000)
+  },
+  watch: {
+    getDataAgain(val) {
+      // console.log(val)
+      this.getData(Object.values(this.skipSlide))
+    },
   },
   methods: {
     next() {
       this.$refs.carousel.slideNext()
     },
-    sliding(val) {
-      // console.log(val)
-      // console.log(this.skipSlide[val.currentSlide], this.skipSlide, val.currentSlide)
-      if (this.skipSlide[val.currentSlide]) {
-        // console.log(document.getElementById('next'))
-        // this.$refs.carousel.slideTo(3)
-        // document.getElementById('next').click()
+    testImage(URL) {
+      var tester = new Image()
+      tester.onload = this.imageFound
+      tester.src = URL
+    },
+    imageFound(e) {
+      var img = e.path[0].currentSrc
+      console.log(img, this.skipSlide, this.interval)
+      if (this.interval[img]) {
+        clearInterval(this.interval[img])
+        delete this.interval[img]
+        delete this.skipSlide[img]
+        this.getData(Object.values(this.skipSlide))
       }
     },
     splicing(obj) {
-      this.skipSlide[obj.id] = obj.hide
+      this.skipSlide[obj.hide] = obj.id
+
+      if (this.interval[obj.hide]) {
+        clearInterval(this.interval[obj.hide])
+      }
+
+      clearTimeout(this.timeoutgetdata)
+
+      this.timeoutgetdata = setTimeout(() => {
+        //   // if (t) {
+        // console.log('ea')
+        // this.getDataOuter(obj)
+        this.getDataAgain = true
+        // this.getData(Object.values(this.skipSlide))
+        //   // }
+      }, 3000)
+
+      this.interval[obj.hide] = setInterval(() => {
+        this.testImage(obj.hide)
+      }, 10000)
     },
     async getData(id) {
       this.$store.commit('ndfData/emptyNDF')
@@ -137,36 +170,32 @@ export default {
       var allsetting = res.data.properties.allSetting
       var arr = []
 
+      console.log(id)
       // console.log(res.data.properties)
-      for (var key in alltemplate) {
-        arr.push(alltemplate[key])
-        
+      if (id && id.length > 0) {
+        var obj = {}
+        for (var key in alltemplate) {
+          obj[alltemplate[key].idtemplate] = alltemplate[key]
+        }
 
-        // allsetting[alltemplate[key].idtemplate].forEach(async (el2) => {
-        //   if (el2.key.split('_')[2] == 'subdistrict') {
-        //     this.allNDF[el2.value.ndf] = []
-        //     this.$store.commit('ndfData/mutationNDF', {
-        //       key: el2.value.ndf,
-        //       value: [],
-        //     })
-        //   } else if (el2.key.split('_')[2] == 'arrayNDF') {
-        //     el2.value.value.forEach(async (el3) => {
-        //       this.allNDF[el3.ndf] = []
-        //       this.$store.commit('ndfData/mutationNDF', {
-        //         key: el3.ndf,
-        //         value: [],
-        //       })
-        //     })
-        //   } else if (el2.key.split('_')[1] == 'WidgetOfsStatic') {
-        //     const modelrun = await this.$axios.get(
-        //       'https://pusmar.id/api21/modelrun'
-        //     )
-        //     this.$store.commit('maritimData/mutationData', {
-        //       key: 'modelrun',
-        //       value: modelrun.data,
-        //     })
+        // for (var kunci in id) {
+        //   if (obj[kunci]) {
+        //     delete obj[kunci]
         //   }
-        // })
+        // }
+        id.forEach(el => {
+          if (obj[el]) {
+            delete obj[el]
+          }
+        })
+        // console.log(obj)
+        for (var key2 in obj) {
+          arr.push(obj[key2])
+        }
+      } else {
+        for (var key in alltemplate) {
+          arr.push(alltemplate[key])
+        }
       }
 
       res.data.template.forEach(async (el, i) => {
@@ -179,8 +208,8 @@ export default {
               el.backgroundImage.replace('/api/', '') +
               ')',
             'background-size': 'initial',
-            'width': '100%',
-            'height': '100%',
+            width: '100%',
+            height: '100%',
           }
         } else {
           // console.log(el.properties.video)
@@ -193,32 +222,6 @@ export default {
           }
         }
       })
-
-      // for (var key in this.allNDF) {
-      //   const ndf = await this.$axios.$get(
-      //     'https://api.gis.co.id/api/cgms/weather/ndf/get?locationId=' + key
-      //   )
-      //   this.$store.commit('ndfData/mutationNDF', {
-      //     key: key,
-      //     value: ndf.data,
-      //   })
-      // }
-      // const ndf2 = await this.$axios.$post(
-      //   'https://api.gis.co.id/api/cgms/weather/ndf/getMany',
-      //   {
-      //     location: Object.keys(this.allNDF),
-      //     date: new Date().toISOString(),
-      //   }
-      // )
-      // ndf2.data.forEach((el) => {
-      //   this.$store.commit('ndfData/mutationNDF', {
-      //     key: el.location.locationId,
-      //     value: {
-      //       isPush: true,
-      //       data: obj ? obj : el,
-      //     },
-      //   })
-      // })
 
       this.$emit('finishloading', true)
 

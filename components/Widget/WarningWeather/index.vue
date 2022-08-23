@@ -60,11 +60,25 @@ export default {
       tester.src = URL
     },
     imageFound() {
-      this.shownotfound = false
+      var parent = this.$parent.$parent.$parent
+      if (parent.production) {
+        // parent.errorImage['MaritimWarning'] =false
+        // parent.spliceSlide()
+      }
     },
 
-    imageNotFound() {
-      this.shownotfound = true
+    imageNotFound(e) {
+      var parent = this.$parent.$parent.$parent
+      if (parent.production) {
+        // parent.errorImage['MaritimWarning'] =false
+        parent.spliceSlide('https://warningcuaca.bmkg.go.id/infografis/CBB/' +
+        this.year +
+        '/' +
+        this.getZero(this.month) +
+        '/' +
+        this.getZero(this.day) +
+        '/infografis.jpg')
+      }
     },
   },
   mounted() {
@@ -77,15 +91,15 @@ export default {
         this.getZero(this.day) +
         '/infografis.jpg'
     )
-    this.testImage(
-      'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
-        this.year +
-        '/' +
-        this.getZero(this.month) +
-        '/' +
-        this.getZero(this.day) +
-        '/infografis_text.jpg'
-    )
+    // this.testImage(
+    //   'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
+    //     this.year +
+    //     '/' +
+    //     this.getZero(this.month) +
+    //     '/' +
+    //     this.getZero(this.day) +
+    //     '/infografis_text.jpg'
+    // )
 
     setInterval(() => {
       this.testImage(
@@ -97,16 +111,16 @@ export default {
           this.getZero(this.day) +
           '/infografis.jpg'
       )
-      this.testImage(
-        'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
-          this.year +
-          '/' +
-          this.getZero(this.month) +
-          '/' +
-          this.getZero(this.day) +
-          '/infografis_text.jpg'
-      )
-    }, 1800000)
+      // this.testImage(
+      //   'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
+      //     this.year +
+      //     '/' +
+      //     this.getZero(this.month) +
+      //     '/' +
+      //     this.getZero(this.day) +
+      //     '/infografis_text.jpg'
+      // )
+    }, 60000)
   },
 }
 </script>

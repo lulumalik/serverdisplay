@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="mb-4">
-      <div class="font-bold text-4xl text-center">
+      <div class="font-bold text-6xl text-center">
         {{ area }}
       </div>
-      <div class="text-2xl text-center mt-3" v-if="forecast.length > 0">
+      <div class="text-4xl text-center mt-3" v-if="forecast.length > 0">
         <!-- {{forecast[0].data.date}} -->
         {{
           returningTimeZone(new Date(forecast[0].data.date))
@@ -34,7 +34,7 @@
         <td class="px-6">
           {{ b.location.location }}
         </td>
-        <td class="text-center font-semibold p-2">
+        <td class="text-center font-semibold px-2 py-4">
           <div class="flex items-center justify-center space-x-2">
             <div class="w-14">
               <img

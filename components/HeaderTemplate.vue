@@ -10,12 +10,12 @@
     </picture-input>
     <div class="w-full flex items-center">
       <div class="flex-grow flex items-center space-x-4">
-        <img src="/bmkg.png" alt="bmkg" class="w-14" />
+        <img src="/bmkg.png" alt="bmkg" class="w-20" />
         <div class="flex-grow" >
-          <div class="text-xl font-semibold">
+          <div class="text-3xl font-semibold">
             BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA
           </div>
-          <div class="text-md mt-1" style="font-family: pristina">
+          <div class="text-xl mt-2" style="font-family: pristina">
             Cepat, Tepat, Akurat, Luas, dan Mudah Dipahami
           </div>
         </div>
@@ -25,7 +25,7 @@
               {{ $parent.location ? $parent.location.name : '-' }}
             </div>
           </div>
-          <div class="text-md mt-1 flex items-center font-semibold justify-end">
+          <div class="text-2xl mt-1 flex items-center font-semibold justify-end">
             <div class="ml-2">
               {{
                 new Date(currentDate)
@@ -57,7 +57,7 @@
             >
               &times;
             </button>
-            <img :src="$parent.logos" class="w-12" />
+            <img :src="$parent.logos" style="width:80px" />
           </div>
           <div
             v-else-if="$parent.logos.length == 0 && !nodrag"

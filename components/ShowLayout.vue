@@ -14,7 +14,7 @@
         :style="{
           transform: 'scale(' + scaleinner + ')',
         }" -->
-    <div :class="useHeader ? 'top-24' : ''" class="baseBrowser relative mx-auto">
+    <div :class="useHeader ? 'top-28' : ''" class="baseBrowser relative mx-auto">
       <div
         style="transform-origin: top center"
         :style="{
@@ -111,10 +111,11 @@ export default {
     this.getComp(this.obj)
   },
   methods: {
-    spliceSlide(isHide) {
+    spliceSlide(url) {
+      // console.log()
       this.$emit('splice', {
-        id: this.indexLoop,
-        hide: isHide
+        id: this.obj.idtemplate,
+        hide: url
       })
     },
     getComp(obj) {
