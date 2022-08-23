@@ -41,9 +41,17 @@
       <div class="flex items-center">
         <div class="flex-grow">Preview Display</div>
         <div class="flex flex-none space-x-3">
-          <input type="number" v-model="width" class="py-1 w-24 text-xs px-4 rounded border border-gray-300" />
+          <input
+            type="number"
+            v-model="width"
+            class="py-1 w-24 text-xs px-4 rounded border border-gray-300"
+          />
           <div>x</div>
-          <input type="number" v-model="height" class="py-1 w-24 text-xs px-4 rounded border border-gray-300" />
+          <input
+            type="number"
+            v-model="height"
+            class="py-1 w-24 text-xs px-4 rounded border border-gray-300"
+          />
         </div>
       </div>
       <div
@@ -64,10 +72,12 @@
               transform: 'scale(' + scaleparent + ')',
               'transform-origin': '20% 0%',
               width: width + 'px',
-              height: height + 'px'
+              height: height + 'px',
             }"
           >
-            <BackgroundVideo v-if="objData && objData.properties.video !== null" />
+            <BackgroundVideo
+              v-if="objData && objData.properties.video !== null"
+            />
             <ShowLayout
               v-if="objData"
               :obj="objData"
@@ -111,7 +121,7 @@
         </div>
       </div>
       <div class="relative">
-        <div class="absolute right-2 top-2 flex">
+        <div class="absolute right-2 -top-12 flex">
           <div
             class="
               rounded
@@ -133,72 +143,73 @@
           </div>
         </div>
         <div class="my-2">Display Pages</div>
-        <div class="flex">
-          <div
-            v-for="(db, i) in $parent.templateAddedList"
-            :key="i"
-            class="
-              rounded
-              px-4
-              w-32
-              h-24
-              flex
-              items-center
-              justify-center
-              shadow
-              cursor-pointer
-              relative
-              mx-3
-            "
-            :class="
-              $parent.selectedTemplateID == db.idtemplate
-                ? 'border-2 border-sky-500'
-                : ''
-            "
-          >
-            <button
+        <div class="overflow-x-auto overflow-y-hidden">
+          <div class="flex space-x-3" style="width:80vw">
+            <div
+              v-for="(db, i) in $parent.templateAddedList"
+              :key="i"
               class="
-                text-white
-                bg-red-500
-                rounded-full
-                w-5
-                h-5
+                rounded
+                px-4
                 flex
                 items-center
                 justify-center
-                absolute
-                right-2
-                top-2
-                z-30
+                shadow
+                cursor-pointer
+                relative
+                overflow-hidden
               "
-              @click="spliceData(db, i)"
-            >
-              <span class="relative" style="bottom: 0.8px">&times;</span>
-            </button>
-            <img
-              @click="getComp(db)"
-              v-if="db.preview"
-              :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
-              class="absolute w-full h-full z-10"
-            />
-            <p class="truncate relative z-20" @click="getComp(db)">
-              {{ db.name }}
-            </p>
-            <div
-              class="
-                absolute
-                top-0
-                left-0
-                z-50
-                font-bold
-                bg-sky-500
-                p-0.5
-                text-xs text-white
-                w-4
-                text-center
+              :class="
+                $parent.selectedTemplateID == db.idtemplate
+                  ? 'border-2 border-sky-500'
+                  : ''
               "
+              style="height:90px;width:240px"
             >
-              {{ i + 1 }}
+              <button
+                class="
+                  text-white
+                  bg-red-500
+                  rounded-full
+                  w-5
+                  h-5
+                  flex
+                  items-center
+                  justify-center
+                  absolute
+                  right-2
+                  top-2
+                  z-30
+                "
+                @click="spliceData(db, i)"
+              >
+                <span class="relative" style="bottom: 0.8px">&times;</span>
+              </button>
+              <img
+                @click="getComp(db)"
+                v-if="db.preview"
+                :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
+                class="absolute w-full h-full z-10"
+              />
+              <p class="truncate relative z-20" @click="getComp(db)">
+                {{ db.name }}
+              </p>
+              <div
+                class="
+                  absolute
+                  top-0
+                  left-0
+                  z-50
+                  font-bold
+                  bg-sky-500
+                  p-0.5
+                  text-xs text-white
+                  w-4
+                  text-center
+                "
+              >
+                {{ i + 1 }}
+              </div>
             </div>
           </div>
         </div>
@@ -222,7 +233,7 @@ export default {
       layoutDB: {},
       widget: [],
       width: 1366,
-      height: 768
+      height: 768,
     }
   },
   async mounted() {
@@ -235,7 +246,8 @@ export default {
     })
     setTimeout(() => {
       if (this.$parent.templateAddedList.length > 0) {
-        this.$parent.selectedTemplateID = this.$parent.templateAddedList[0].idtemplate
+        this.$parent.selectedTemplateID =
+          this.$parent.templateAddedList[0].idtemplate
         this.objData = this.$parent.templateAddedList[0]
       }
     }, 1000)
@@ -243,7 +255,7 @@ export default {
   methods: {
     getBackground(el) {
       var background = {}
-       if (el.backgroundImage) {
+      if (el.backgroundImage) {
         background = {
           'background-image':
             'url(' +
