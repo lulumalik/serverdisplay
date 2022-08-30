@@ -23,7 +23,7 @@
       "
       :style="{ background: backgroundColor }"
     >
-      <div class="w-8/12" :style="{ color: color }">
+      <div class="w-9/12" :style="{ color: color }">
         <div class="font-bold text-5xl">
           {{ name !== '' ? name : 'No Name of location' }}
         </div>
@@ -33,7 +33,7 @@
         </div>
       </div>
       <div
-        class="w-4/12 flex mx-auto space-x-4 items-center"
+        class="w-3/12 flex mx-auto space-x-4 items-center"
         v-if="forecast.length > 0"
       >
         <div class="flex-none">
@@ -47,7 +47,7 @@
           <div class="text-6xl text-left" style="font-weight: 200 !important">
             <div>{{ forecast[0].temp }}<sup>o</sup>C</div>
           </div>
-          <div class="relative left-5">
+          <div class="relative text-lg left-5">
             <div class="">{{ weather_code[forecast[0].weather_code] }}</div>
           </div>
         </div>
