@@ -14,6 +14,11 @@ export const weather_code = {
     95: 'Hujan Petir',
     97: 'Hujan Petir',
 }
+
+export const weather_video = {
+    0: ''
+}
+
 export const dirTo = {
     N: 0,
     NNE: 22.5,
