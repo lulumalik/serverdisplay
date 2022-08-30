@@ -64,7 +64,7 @@ export default {
     build: {},
     fontLoader: {
         /* module options */
-        url: "https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;400;700&display=swap",
+        url: "https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap",
         prefetch: true,
         preconnect: true
 

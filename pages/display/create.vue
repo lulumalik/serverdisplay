@@ -1,7 +1,8 @@
 <template>
   <div class="bg-gray-200 h-screen">
-    <Navbar class="w-full sticky top-0" style="z-index: 1000" />
     <client-only>
+
+    <Navbar class="w-full sticky top-0" style="z-index: 1000" />
       <form class="text-sm px-6 pt-4 flex items-end space-x-4">
         <div class="flex-grow">
           <div class="flex items-center">
@@ -144,6 +145,7 @@ export default {
       getDisplayLocation: 'Kepulauan Bangka Belitung',
       allfind: {},
       useFooter: true,
+      useVideo: null
     }
   },
   middleware: ['checkLogin'],
@@ -177,6 +179,8 @@ export default {
       this.useFooter = res.data.properties.footer
       this.getDisplayLocation = res.data.location.name
       // console.log(res.data)
+      this.useVideo = res.data.properties.video
+      this.$refs['preview'].logos = res.data.properties.allLogo
       this.$refs['preview'].times = res.data.properties.delay
       this.$refs['preview'].width = res.data.properties.width || 1366
       this.$refs['preview'].height = res.data.properties.height || 768
@@ -209,7 +213,6 @@ export default {
       this.$axios
         .$put('display/update/' + this.allfind._id, obj)
         .then((res) => {
-          console.log(res)
           this.saving = false
           this.$toast.open({
             message: 'Display saved',
@@ -278,13 +281,15 @@ export default {
           width: this.$refs['preview'].width,
           height: this.$refs['preview'].height,
           footer: this.useFooter,
+          video: this.useVideo,
+          allLogo: this.$refs['preview'].logos,
           allTemplate: alltemplate,
           allSetting: allndf,
         },
       }
 
-      this.$store.commit('displayWidget/emptyWidget')
-      
+      // this.$store.commit('displayWidget/emptyWidget')
+      // console.log(obj)
       if (createOnly == 'create') {
         this.createData(obj)
         return true

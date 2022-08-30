@@ -96,7 +96,7 @@
             v-if="objData"
             class="
               absolute
-              bottom-0
+              bottom-4
               right-0
               left-0
               mx-auto
@@ -144,7 +144,7 @@
         </div>
         <div class="my-2">Display Pages</div>
         <div class="overflow-x-auto overflow-y-hidden">
-          <div class="flex space-x-3" style="width:80vw">
+          <draggable class="grid gap-x-4" :style="{'grid-template-columns': `repeat(${$parent.templateAddedList.length}, minmax(0, 1fr))`, width: $parent.templateAddedList.length * 14 + '0px'}" :list="$parent.templateAddedList">
             <div
               v-for="(db, i) in $parent.templateAddedList"
               :key="i"
@@ -158,13 +158,14 @@
                 cursor-pointer
                 relative
                 overflow-hidden
+                inline-block
               "
               :class="
                 $parent.selectedTemplateID == db.idtemplate
                   ? 'border-2 border-sky-500'
                   : ''
               "
-              style="height:90px;width:240px"
+              style="height:90px;width:140px"
             >
               <button
                 class="
@@ -211,7 +212,7 @@
                 {{ i + 1 }}
               </div>
             </div>
-          </div>
+          </draggable>
         </div>
         <div v-if="$parent.templateAddedList.length == 0" class="mt-2">
           no data selected
@@ -220,7 +221,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   data() {
@@ -234,6 +234,7 @@ export default {
       widget: [],
       width: 1366,
       height: 768,
+      logos:{}
     }
   },
   async mounted() {

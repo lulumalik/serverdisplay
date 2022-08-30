@@ -49,10 +49,10 @@
         </button>
       </div> -->
     <div class="flex-grow" 
-        style="background: rgba(0,0,0,0.3) !important">
+        style="background: rgba(0,0,0,0.5) !important">
       <marquee-text
         :repeat="3"
-        :duration="88"
+        :duration="400"
         class="p-2 text-white"
       >
         <div class="flex space-x-4 text-xl">

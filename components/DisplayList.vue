@@ -101,7 +101,7 @@ export default {
       )
     },
     deleteTemplate(db) {
-      this.$confirm('Are you sure?, this template cannot be returned').then(
+      this.$confirm('Are you sure?, this Display cannot be returned').then(
         (res) => {
           this.$axios.$delete('display/delete/' + db._id).then((res) => {
             this.$parent.templateDBSelected = null

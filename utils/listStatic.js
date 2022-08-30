@@ -1,4 +1,4 @@
-export const belitungTimur = [{
+export const belitung = [{
         location: 'Badau',
         ndf: '5011050',
     },
@@ -32,7 +32,10 @@ export const belitungTimur = [{
     }
 ]
 
-export const belitung = [{
+export const belitungTimur = [{
+        location: 'Manggar',
+        ndf: '5011056'
+    }, {
         location: 'Damar',
         ndf: '5011056',
     },

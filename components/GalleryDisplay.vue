@@ -1,11 +1,22 @@
 <template>
   <div class="overflow-hidden h-screen w-screen relative">
     <client-only>
+      <div
+        class="h-full w-full overflow-hidden fixed left-0"
+        style="z-index: 0"
+        v-if="
+          responseDisplay.properties &&
+          responseDisplay.properties.video !== null
+        "
+      >
+        <BackgroundVideo />
+      </div>
       <carousel
         v-if="templates.length > 0"
         :autoPlay="true"
         :playSpeed="speed"
         :wheelControl="false"
+        :hoverPause="false"
         style="height: 100vw !important; width: 100vw !important"
         ref="carousel"
       >
@@ -15,21 +26,23 @@
           class="overflow-hidden h-screen w-screen relative"
           :style="background[i]"
         >
-          <BackgroundVideo v-if="obj.properties.video !== null" />
-          <ShowLayout
-            @splice="splicing"
-            ref="layout"
-            id="layout"
-            :obj="obj"
-            :widgetDB="widget"
-            :layoutDB="layoutDB"
-            style="transform-origin: 0 0"
-            :production="true"
-            :indexLoop="i"
-            :location="location"
-            :allNDF="allNDF"
-            :responseDisplay="responseDisplay"
-          />
+          <Dummy ref="dummy" :logos="logos">
+            <!--  -->
+            <ShowLayout
+              @splice="splicing"
+              ref="layout"
+              id="layout"
+              :obj="obj"
+              :widgetDB="widget"
+              :layoutDB="layoutDB"
+              style="transform-origin: 0 0"
+              :production="true"
+              :indexLoop="i"
+              :location="location"
+              :allNDF="allNDF"
+              :responseDisplay="responseDisplay"
+            />
+          </Dummy>
         </carouselitem>
       </carousel>
 
@@ -72,10 +85,13 @@ export default {
       interval: {},
       timeoutgetdata: null,
       getDataAgain: false,
+      logos: {},
     }
   },
   async mounted() {
-    this.getData()
+    process.nextTick(() => {
+      this.getData()
+    })
 
     // setInterval(() => {
     // alert('ea')
@@ -99,7 +115,6 @@ export default {
     },
     imageFound(e) {
       var img = e.path[0].currentSrc
-      console.log(img, this.skipSlide, this.interval)
       if (this.interval[img]) {
         clearInterval(this.interval[img])
         delete this.interval[img]
@@ -159,6 +174,9 @@ export default {
         this.$set(this.layoutDB, data._id, data.name)
       })
       this.responseDisplay = res.data
+      if (res.data.properties.allLogo) {
+        this.logos = res.data.properties.allLogo
+      }
       if (res.data.properties.delay) {
         this.speed = res.data.properties.delay * 1000
       }
@@ -170,7 +188,6 @@ export default {
       var allsetting = res.data.properties.allSetting
       var arr = []
 
-      console.log(id)
       // console.log(res.data.properties)
       if (id && id.length > 0) {
         var obj = {}
@@ -183,7 +200,7 @@ export default {
         //     delete obj[kunci]
         //   }
         // }
-        id.forEach(el => {
+        id.forEach((el) => {
           if (obj[el]) {
             delete obj[el]
           }
@@ -214,10 +231,12 @@ export default {
         } else {
           // console.log(el.properties.video)
           if (el.properties.video) {
-            this.background[i] = 'transparent'
+            this.background[i] = {
+              backgroundColor: 'transparent',
+            }
           } else {
             this.background[i] = {
-              backgroundColor: el.properties.background,
+              backgroundColor: 'transparent' //el.properties.background,
             }
           }
         }
@@ -228,15 +247,6 @@ export default {
       this.templates = arr
 
       this.location = res.data.location
-    },
-  },
-  computed: {
-    getScreenConfig() {
-      if (this.$vssWidth >= 1920) {
-        return 1.35
-      } else {
-        return 1
-      }
     },
   },
 }

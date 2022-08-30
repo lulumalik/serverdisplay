@@ -1,27 +1,6 @@
 <template>
   <div>
     <div class="text-xl mb-4">Display Base</div>
-    <div>
-      <label class="flex space-x-4">
-        <div>
-          <input
-            type="checkbox"
-            class="text-xs p-1"
-            v-model="$parent.useVideo"
-          />
-        </div>
-        <div>Dynamic</div>
-      </label>
-      <div v-show="$parent.useVideo" class="mt-1">
-        <v-select
-          label="subdistrict"
-          class="p-0"
-          style="width:208px"
-          v-model="subdistrict"
-          :options="listKecamatan"
-        ></v-select>
-      </div>
-    </div>
     <div class="flex space-x-4 mt-2 items-center" v-show="!$parent.useVideo">
       <div class="w-16 text-gray-500 font-thin">Fill</div>
       <picture-input
@@ -57,10 +36,10 @@
         </div>
       </div>
     </div>
-    <label class="flex space-x-4 mt-3 items-center">
+    <!-- <label class="flex space-x-4 mt-3 items-center">
       <input type="checkbox" class="text-xs p-1" v-model="$parent.useHeader" />
       <div class="text-gray-500">Header</div>
-    </label>
+    </label> -->
     <!-- <label class="flex space-x-4 mt-3 items-center">
       <input type="checkbox" class="text-xs p-1" v-model="$parent.useFooter" />
       <div class="text-gray-500">Footer</div>

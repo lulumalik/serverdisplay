@@ -133,7 +133,10 @@
                 </select>
               </div>
               <div class="mt-1 text-lg">Widget</div>
-              <div style="height:calc(100vh - 670px)" class="overflow-y-auto overflow-x-hidden">
+              <div
+                style="height: calc(100vh - 670px)"
+                class="overflow-y-auto overflow-x-hidden"
+              >
                 <draggable group="widget" :list="widget" class="list-group">
                   <div
                     class="
@@ -317,7 +320,6 @@
 <script>
 import html2canvas from 'html2canvas'
 export default {
-
   middleware: ['checkLogin'],
   data() {
     return {
@@ -337,7 +339,7 @@ export default {
       useDynamic: false,
       useVideo: false,
       runningText: '',
-      logos: '',
+      logos: [null, null, null],
       scale: 1,
       scaleinner: 1,
     }
@@ -485,7 +487,6 @@ export default {
       this.templatename = obj.name
       this.useHeader = obj.properties.header ? true : false
 
-      // console.log(obj)
       if (obj.properties.video) {
         this.useVideo = true
         this.$refs['display'].subdistrict = obj.properties.video
@@ -496,8 +497,10 @@ export default {
         this.runningText = obj.properties.footer.text
       }
       if (obj.logo.items.length > 0) {
-        this.logos =
-          this.$axios.defaults.baseURL + obj.logo.items[0].split('/api/')[1]
+        obj.logo.items.forEach((el, i) => {
+          this.logos[i] =
+            this.$axios.defaults.baseURL + obj.logo.items[0].split('/api/')[1]
+        })
       }
       var array1 = []
       obj.component.widgets.forEach((data) => {
@@ -643,7 +646,10 @@ export default {
         .then(async (res) => {
           await this.uploadImage(img, res.data._id)
           await this.uploadBackground(background, res.data._id)
-          await this.uploadLogos(logo, res.data._id)
+          // console.log(logo)
+          // logo.forEach(async el => {
+          //   await this.uploadLogos(el, res.data._id)
+          // })
 
           this.rerender = false
           this.saving = false
@@ -673,18 +679,35 @@ export default {
         .then(async (res) => {
           await this.uploadImage(img, res.data._id)
           await this.uploadBackground(background, res.data._id)
-          await this.uploadLogos(logo, res.data._id)
+
+          var obj = this.templateDB.find(
+            (data) => data._id == this.$route.query.id
+          )
+          var url2 = obj.logo.items
+          
+          url2.forEach(async (el) => {
+            await this.$axios.$put('template/logo/delete/' + res.data._id, {
+              logo: el,
+            })
+          })
+          console.log(logo)
+         setTimeout(el => {
+           logo.forEach(async el => {
+            console.log(el)
+            await this.uploadLogos(el, res.data._id)
+          })
+         },5000)
 
           this.rerender = false
           this.saving = false
-          this.$toast.open({
-            message: 'Template saved',
-            type: 'success',
-            duration: 2000,
-          })
-          this.$axios.$get('template').then((res) => {
-            this.templateDB = res.data
-          })
+          // this.$toast.open({
+          //   message: 'Template saved',
+          //   type: 'success',
+          //   duration: 2000,
+          // })
+          // this.$axios.$get('template').then((res) => {
+          //   this.templateDB = res.data
+          // })
         })
         .catch((err) => {
           console.log(err)
@@ -725,19 +748,21 @@ export default {
         }
       }
       // prepare logos for saving
-      var fileLogos
-      if (this.logos.length > 7) {
-        if (this.logos.toString().includes('data:image')) {
-          fileLogos = this.dataURLtoFile(this.logos, 'logos.png')
-        } else if (
-          this.backgroundColor.toString().includes('/template/assets')
-        ) {
-          var img = await this.toDataUrl(this.logos)
-          fileLogos = this.dataURLtoFile(img, 'background.png')
-        } else {
-          fileLogos = 'no upload'
+      var fileLogos = []
+      this.logos.forEach(async (el, i) => {
+        if (el) {
+          if (el.toString().includes('data:image')) {
+            fileLogos[i] = this.dataURLtoFile(el, 'logos.png')
+          } else if (
+            this.backgroundColor.toString().includes('/template/assets')
+          ) {
+            var img = await this.toDataUrl(el)
+            fileLogos[i] = this.dataURLtoFile(img, 'background.png')
+          } else {
+            // fileLogos[i] = 'no upload'
+          }
         }
-      }
+      })
       this.saving = true
       this.rerender = true
       var layout = {
@@ -832,23 +857,14 @@ export default {
           resolve()
         })
       }
+      if (!img) {
+        return new Promise((resolve) => {
+          resolve()
+        })
+      }
       var url = 'logo'
 
       return new Promise(async (resolve, reject) => {
-        var obj = this.templateDB.find(
-          (data) => data._id == this.$route.query.id
-        )
-        if (
-          obj &&
-          ((!img && obj.logo.items.length > 0) ||
-            (img && obj.logo.items.length > 0))
-        ) {
-          var url2 = obj.logo.items[0]
-
-          await this.$axios.$put('template/' + url + '/delete/' + id, {
-            logo: url2,
-          })
-        }
         var data = new FormData()
         data.append('file', img)
 

@@ -1,17 +1,9 @@
 <template>
   <div>
-    <picture-input
-      id="fileUpload2"
-      type="file"
-      accept="image/jpeg,image/png"
-      @change="dataFile"
-      class="hidden"
-    >
-    </picture-input>
     <div class="w-full flex items-center">
       <div class="flex-grow flex items-center space-x-4">
         <img src="/bmkg.png" alt="bmkg" class="w-20" />
-        <div class="flex-grow" >
+        <div class="flex-grow">
           <div class="text-3xl font-semibold">
             BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA
           </div>
@@ -25,14 +17,18 @@
               {{ $parent.location ? $parent.location.name : '-' }}
             </div>
           </div>
-          <div class="text-2xl mt-1 flex items-center font-semibold justify-end">
+          <div
+            class="text-2xl mt-1 flex items-center font-semibold justify-end"
+          >
             <div class="ml-2">
               {{
-                deleteSecond(new Date(currentDate)
-                  .toString()
-                  .split(' ')
-                  .splice(0, 5)
-                  .join(' '))
+                deleteSecond(
+                  new Date(currentDate)
+                    .toString()
+                    .split(' ')
+                    .splice(0, 5)
+                    .join(' ')
+                )
               }}
               {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
             </div>
@@ -40,11 +36,17 @@
           </div>
         </div>
       </div>
-      <div class="flex-none flex space-x-3">
-        <div>
-          <div v-if="$parent.logos.length > 0" class="relative">
+      <div class="flex-none flex space-x-3" v-if="!nodrag">
+        <div v-for="(l, i) in 3" :key="i">
+          <div
+            v-if="
+              $parent.$parent.logos[$parent.obj.idtemplate] &&
+              $parent.$parent.logos[$parent.obj.idtemplate][l]
+            "
+            class="relative"
+          >
             <button
-              @click="$parent.logos = ''"
+              @click="deleteLogos(l)"
               v-if="!nodrag"
               class="
                 text-red-500
@@ -57,10 +59,20 @@
             >
               &times;
             </button>
-            <img :src="$parent.logos" style="width:80px" />
+
+            <img
+              :src="
+                $axios.defaults.baseURL +
+                $parent.$parent.logos[$parent.obj.idtemplate][l].url.replace(
+                  '/api/',
+                  ''
+                )
+              "
+              style="width: 80px"
+            />
           </div>
           <div
-            v-else-if="$parent.logos.length == 0 && !nodrag"
+            v-else
             class="
               h-8
               w-8
@@ -71,9 +83,30 @@
               justify-center
               cursor-pointer
             "
-            @click="uploadLogo()"
+            @click="uploadLogo(l)"
           >
             <span class="relative bottom-0.5">+</span>
+          </div>
+        </div>
+      </div>
+      <div v-else class="flex-none flex space-x-3">
+        <div v-for="(l, i) in 3" :key="i" class="relative">
+          <div
+            v-if="
+              $parent.$parent.logos[$parent.obj.idtemplate] &&
+              $parent.$parent.logos[$parent.obj.idtemplate][l]
+            "
+          >
+            <img
+              :src="
+                $axios.defaults.baseURL +
+                $parent.$parent.logos[$parent.obj.idtemplate][l].url.replace(
+                  '/api/',
+                  ''
+                )
+              "
+              style="width: 80px"
+            />
           </div>
         </div>
       </div>
@@ -92,6 +125,7 @@ export default {
     return {
       currentDate: '',
       indexdata: null,
+      chooseLogo: true,
     }
   },
   mounted() {
@@ -114,9 +148,78 @@ export default {
   },
   methods: {
     deleteSecond(date) {
-      var dat = date.split(':')
-      var final = dat.splice(0,2).join(':')
-      return final
+      var day = new Date(date).getDay()
+      var month = new Date(date).getMonth()
+
+      var dayres;
+      var monthres;
+      switch (day) {
+        case 0:
+          dayres = 'Minggu'
+          break
+        case 1:
+          dayres = 'Senin'
+          break
+        case 2:
+          dayres = 'Selasa'
+          break
+        case 3:
+          dayres = 'Rabu'
+          break
+        case 4:
+          dayres = 'Kamis'
+          break
+        case 5:
+          dayres = "Jum'at"
+          break
+        case 6:
+          dayres = 'Sabtu'
+          break
+      }
+
+      switch (month) {
+        case 0:
+          monthres = 'Januari'
+          break
+        case 1:
+          monthres = 'Februari'
+          break
+        case 2:
+          monthres = 'Maret'
+          break
+        case 3:
+          monthres = 'April'
+          break
+        case 4:
+          monthres = 'Mei'
+          break
+        case 5:
+          monthres = 'Juni'
+          break
+        case 6:
+          monthres = 'Juli'
+          break
+        case 7:
+          monthres = 'Agustus'
+          break
+        case 8:
+          monthres = 'September'
+          break
+        case 9:
+          monthres = 'Oktober'
+          break
+        case 10:
+          monthres = 'November'
+          break
+        case 11:
+          monthres = 'Desember'
+          break
+      }
+
+      var dat = date.split(' ').splice(4, 4)[0]
+      var final = dat ? dat.split(':').splice(0,2).join(':') : ''
+
+      return dayres + ', ' + new Date(date).getDay() + ' ' + monthres + ' ' +new Date(date).getFullYear() + ' ' + final
     },
     returningTimeZone() {
       this.currentDate =
@@ -126,12 +229,24 @@ export default {
         '00'
     },
     uploadLogo(i) {
-      // this.indexdata = i
-      document.getElementById('fileUpload2').click()
-      // console.log('upload logo');
+      this.indexdata = i
+      this.$parent.chooseLogo = true
     },
-    dataFile(e) {
-      this.$parent.logos = e
+    deleteLogos(index) {
+      var arr = []
+      this.$parent.$parent.logos[this.$parent.obj.idtemplate].forEach(
+        (el, i) => {
+          if (index !== i) {
+            arr.push(el)
+          } else {
+            arr.push(null)
+          }
+        }
+      )
+      // console.log(arr)
+      this.$parent.$parent.logos[this.$parent.obj.idtemplate].length = 0
+      this.$parent.$parent.logos[this.$parent.obj.idtemplate] = arr
+      // $parent.logos[i] = null
     },
   },
 }

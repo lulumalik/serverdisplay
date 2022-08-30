@@ -34,8 +34,26 @@
                 class="text-xs p-1.5 rounded"
               />
             </div>
-            <div>Use running text</div>
+            <div>Running text</div>
           </label>
+          <label class="flex mt-2 space-x-2">
+            <div>
+              <input
+                type="checkbox"
+                v-model="useVideo"
+                class="text-xs p-1.5 rounded"
+              />
+            </div>
+            <div>Background Dynamic</div>
+          </label>
+          <div v-show="useVideo">
+            <v-select
+              label="location"
+              @option:selected="changeSelected"
+              v-model="subdistrict"
+              :options="listKecamatan"
+            ></v-select>
+          </div>
         </div>
       </div>
     </div>
@@ -57,11 +75,39 @@
 </template>
 
 <script>
+import { dataStatic, belitung, belitungTimur } from '../../utils/listStatic.js'
 export default {
   data() {
     return {
       showpopup: false,
+      useVideo: false,
+      subdistrict: '',
+      listKecamatan: [...belitung, ...belitungTimur, ...dataStatic],
     }
+  },
+  watch: {
+    useVideo(val) {
+      if (!val) {
+        this.$parent.$parent.useVideo = false
+      }  else {
+        this.$parent.$parent.useVideo = this.subdistrict
+      }
+    },
+    '$parent.$parent.useVideo': {
+      handler(val) {
+        // console.log(val, 'set')
+        if (val) {
+        this.useVideo = true
+        this.subdistrict = val
+        }
+      },
+      deep:true
+    }
+  },
+  methods: {
+    changeSelected() {
+      this.$parent.$parent.useVideo = this.subdistrict
+    },
   },
 }
 </script>

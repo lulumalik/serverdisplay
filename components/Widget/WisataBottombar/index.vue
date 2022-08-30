@@ -11,7 +11,7 @@
       class="
         rounded-tr-full
         pt-10
-        pb-16
+        pb-12
         pr-12
         pl-24
         w-full
@@ -19,7 +19,7 @@
         -bottom-4
         left-0
         flex
-        items-end
+        items-center
       "
       :style="{ background: backgroundColor }"
     >
@@ -68,7 +68,8 @@ export default {
       backgroundColor: '#ffffff',
       img: '',
       backgroundnize: {},
-      allNDF: {}
+      allNDF: {},
+      idTemplate: null 
     }
   },
   computed: {
@@ -78,7 +79,7 @@ export default {
   },
   methods: {
     async getData() {
-      var self = this;
+      var self = this
       var parentDisplay = self.$parent.$parent.$parent
       if (parentDisplay.production) {
         this.allNDF = {}
@@ -113,6 +114,8 @@ export default {
   },
   mounted() {
     var parentDisplay = this.$parent.$parent.$parent
+    this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
+
     if (parentDisplay.production) {
       var setting = parentDisplay.responseDisplay.properties.allSetting
       var obj = parentDisplay.obj.idtemplate
@@ -140,11 +143,63 @@ export default {
           }
         }
       })
-      
+
       setInterval(() => {
         this.forecast.length = 0
         this.getData()
       }, 3600000)
+    } else {
+      
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWisataBottombar_description'
+        ]
+      ) {
+        this.desc =
+          this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetWisataBottombar_description'
+          ]
+      }
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWisataBottombar_name'
+        ]
+      ) {
+        this.name =
+          this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetWisataBottombar_name'
+          ]
+      }
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWisataBottombar_color'
+        ]
+      ) {
+        this.color =
+          this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetWisataBottombar_color'
+          ]
+      }
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWisataBottombar_background'
+        ]
+      ) {
+        this.backgroundColor =
+          this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetWisataBottombar_background'
+          ]
+      }
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWisataBottombar_img'
+        ]
+      ) {
+        this.img =
+          this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetWisataBottombar_img'
+          ]
+      }
     }
   },
 }

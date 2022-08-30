@@ -21,6 +21,11 @@ export default {
                 path: '/template',
                 pathname: 'template',
                 icon: 'SidebarIconTemplate'
+            }, {
+                name: 'Logos',
+                path: '/logos',
+                pathname: 'logos',
+                icon: 'SidebarIconLogo'
             }]
         }
     },

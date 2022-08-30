@@ -1,5 +1,6 @@
 <template>
   <div class="relative" :class="!production ? 'border-2 border-white' : ''">
+    <ChooseLogo v-if="chooseLogo" />
     <HeaderTemplate
       ref="header"
       :class="
@@ -8,7 +9,7 @@
           : 'fixed top-0 w-full px-8 py-2 left-0'
       "
       v-if="useHeader"
-      :nodrag="true"
+      :nodrag="$route.name == 'display-create' ? false : true"
     />
            <!-- style="transform-origin: top center"
         :style="{
@@ -34,12 +35,6 @@
         </div>
       </div>
     </div>
-    <!-- <FooterTemplate
-      :nodrag="true"
-      ref="footer"
-      :class="'overflow-hidden fixed bottom-0 w-full'"
-      v-if="useFooter"
-    /> -->
   </div>
 </template>
 
@@ -95,15 +90,15 @@ export default {
       saving: false,
       templatename: '',
       backgroundColor: '#ffffff',
-      useHeader: false,
+      useHeader: true,
       useFooter: false,
       runningText: '',
       times: 60,
-      logos: '',
       scaleinner: 1,
       listTemplate: {},
       widget: [],
       currentId: null,
+      chooseLogo:false,
     }
   },
   async mounted() {
@@ -145,16 +140,15 @@ export default {
       })
       
       this.templatename = obj.name
-      this.useHeader = obj.properties.header ? true : false
 
       if (obj.properties.footer) {
         this.useFooter = true
         this.runningText = obj.properties.footer.text
       }
-      if (obj.logo.items.length > 0) {
-        this.logos =
-          this.$axios.defaults.baseURL + obj.logo.items[0].split('/api/')[1]
-      }
+      // if (obj.logo.items.length > 0) {
+      //   this.logos =
+      //     this.$axios.defaults.baseURL + obj.logo.items[0].split('/api/')[1]
+      // }
 
       var array1 = []
       obj.component.widgets.forEach((data) => {
