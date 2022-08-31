@@ -51,7 +51,7 @@
     <div class="flex-grow" style="background: rgba(0, 0, 0, 0.5) !important">
       <marquee-text
         :repeat="3"
-        :duration="400"
+        :duration="100"
         class="p-2 text-white"
         v-if="runningText.length > 0"
       >
