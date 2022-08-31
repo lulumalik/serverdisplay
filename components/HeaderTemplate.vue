@@ -219,7 +219,7 @@ export default {
       var dat = date.split(' ').splice(4, 4)[0]
       var final = dat ? dat.split(':').splice(0,2).join(':') : ''
 
-      return dayres + ', ' + new Date(date).getDay() + ' ' + monthres + ' ' +new Date(date).getFullYear() + ' ' + final
+      return dayres + ', ' + new Date(date).getDate() + ' ' + monthres + ' ' +new Date(date).getFullYear() + ' ' + final
     },
     returningTimeZone() {
       this.currentDate =

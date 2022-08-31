@@ -48,15 +48,24 @@
           </svg>
         </button>
       </div> -->
-    <div class="flex-grow" 
-        style="background: rgba(0,0,0,0.5) !important">
+    <div class="flex-grow" style="background: rgba(0, 0, 0, 0.5) !important">
       <marquee-text
         :repeat="3"
         :duration="400"
         class="p-2 text-white"
+        v-if="runningText.length > 0"
       >
         <div class="flex space-x-4 text-xl">
-          <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" /> {{runningText.join(', ')}}
+          <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" />
+          {{ runningText.join(', ') }}
+        </div>
+      </marquee-text>
+      <marquee-text :repeat="3" :duration="20" class="p-2 text-white" v-else>
+        <div class="flex space-x-4 text-xl">
+          <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" />
+          {{
+            'Badan Meteorologi Klimatologi dan Geofisika - Cepat Tepat Akurat Luas dan Mudah Dipahami'
+          }}
         </div>
       </marquee-text>
       <!-- <div v-else>
@@ -68,7 +77,7 @@
 </template>
 
 <script>
-const xml = require("txml");
+const xml = require('txml')
 
 export default {
   props: {
@@ -77,44 +86,43 @@ export default {
     },
   },
   mounted() {
-    // 
-    this.$axios
-          .post('https://sena.circlegeo.com/api/sena/research/forward', {
-            url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
-          })
-          .then((res) => {
-            const json = xml.parse(res.data);
-            var dataparsed = json[0].children[0].children
-            var index = json[0].children[0].children.length - 1
-            var listParsedArray = dataparsed[index].children
-            this.runningText.length = 0
-            // console.log(listParsedArray)
-            listParsedArray.forEach((item) => {
-              // this.runningText.push(item.text)
-              if (item.children[0].children[0].includes('CBB')) {
-                 this.runningText.push(item.children[4].children[0])
-              }
-            })
-
-            if (this.runningText.length == 0) {
-              this.runningText.push('Badan Meteorologi Klimatologi dan Geofisika - Cepat Tepat Akurat Luas dan Mudah Dipahami')
-            }
-            // for (var i = 0; i < 2; i++) {
-
-            // console.log(listParsedArray[i])
-              // this.runningText.push(listParsedArray[i].children[4].children[0])
-            // }
-            // listParsedArray.forEach((item, index) => {
-            //   // console.log(item)
-            //   this.runningText.push(item.children[4].children[0])
-            // })
-          })
+    //
+    this.getRunningText()
+    this.interval = setInterval(() => {
+      this.getRunningText()
+    },1800000)
+  },
+  destroyed() {
+    clearTimeout(this.interval)
   },
   data() {
     return {
       showPopup: false,
-      runningText: []
+      runningText: [],
+      interval: null
     }
   },
+  methods: {
+    getRunningText() {
+      this.$axios
+      .post('https://sena.circlegeo.com/api/sena/research/forward', {
+        url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
+      })
+      .then((res) => {
+        const json = xml.parse(res.data)
+        var dataparsed = json[0].children[0].children
+        var index = json[0].children[0].children.length - 1
+        var listParsedArray = dataparsed[index].children
+        this.runningText.length = 0
+        // console.log(listParsedArray)
+        listParsedArray.forEach((item) => {
+          // this.runningText.push(item.text)
+          if (item.children[0].children[0].includes('CBB')) {
+            this.runningText.push(item.children[4].children[0])
+          }
+        })
+      })
+    }
+  }
 }
 </script>

@@ -42,7 +42,7 @@
                 class="w-10"
               />
             </div>
-            <div class="w-44 text-left">
+            <div class="w-56 text-left">
               {{ weather_code[b.data.weather_code] }}
             </div>
           </div>

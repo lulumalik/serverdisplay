@@ -30,13 +30,13 @@ export default {
   methods: {
     countint() {
       var hour = new Date().getHours()
-        if (hour >= 0 && hour <= 5) {
+        if (hour >= 0 && hour < 5) {
           this.source = '/video/berawan_malam.mp4'
-        } else if (hour > 5 && hour <= 10) {
+        } else if (hour >= 5 && hour < 10) {
           this.source = '/video/berawan_pagi.mp4'
-        } else if (hour > 10 && hour <= 15) {
+        } else if (hour >= 10 && hour < 15) {
           this.source = '/video/berawan_siang.mp4'
-        } else if (hour > 15 && hour <= 18) {
+        } else if (hour >= 15 && hour < 18) {
           this.source = '/video/berawan_sore.mp4'
         } else {
           this.source = '/video/berawan_malam.mp4'
