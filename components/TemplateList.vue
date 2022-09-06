@@ -33,6 +33,21 @@
         <p class="truncate relative z-20">
           {{ db.name }}
         </p>
+        <div 
+          @click="$parent.editing()"
+          v-if="$parent.templateDBSelected == db._id" class="bg-blue-500 w-5 h-5 absolute bottom-2.5 left-2 z-30 cursor-pointer rounded-full flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="#fff"
+              d="M1.438 16.872l-1.438 7.128 7.127-1.438 12.642-12.64-5.69-5.69-12.641 12.64zm2.271 2.253l-.85-.849 11.141-11.125.849.849-11.14 11.125zm20.291-13.436l-2.817 2.819-5.69-5.691 2.816-2.817 5.691 5.689z"
+            />
+          </svg>
+        </div>
         <img
           v-if="$parent.templateDBSelected == db._id"
           @click="deleteTemplate(db)"

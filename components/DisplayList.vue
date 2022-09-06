@@ -8,12 +8,12 @@
         class="
           rounded
           px-4
-          w-56
+          w-64
           h-32
           flex
           items-center
           justify-center
-          shadow
+          shadow-md
           cursor-pointer
           relative
           m-3
@@ -30,9 +30,14 @@
           :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
           class="absolute w-full h-full z-10"
         />
-        <p class="truncate relative z-20">
-          {{ db.name }}
-        </p>
+        <div class="text-center">
+          <p class="uppercase text-xl z-20">
+            {{ db.username }}
+          </p>
+          <small class="truncate relative">
+            {{ db.name }}
+          </small>
+        </div>
         <div
           class="absolute bottom-3 left-3 cursor-pointer"
           @click="copytext(db.username)"
@@ -47,6 +52,21 @@
             <path
               fill="currentColor"
               d="M21 2h-19v19h-2v-21h21v2zm3 2v20h-20v-20h20zm-2 2h-1.93c-.669 0-1.293.334-1.664.891l-1.406 2.109h-6l-1.406-2.109c-.371-.557-.995-.891-1.664-.891h-1.93v16h16v-16zm-3 6h-10v1h10v-1zm0 3h-10v1h10v-1zm0 3h-10v1h10v-1z"
+            />
+          </svg>
+        </div>
+        <div 
+          @click="$parent.editing()"
+          v-if="$parent.templateDBSelected == db._id" class="bg-blue-500 w-5 h-5 absolute bottom-2.5 left-12 z-30 cursor-pointer rounded-full flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="#fff"
+              d="M1.438 16.872l-1.438 7.128 7.127-1.438 12.642-12.64-5.69-5.69-12.641 12.64zm2.271 2.253l-.85-.849 11.141-11.125.849.849-11.14 11.125zm20.291-13.436l-2.817 2.819-5.69-5.691 2.816-2.817 5.691 5.689z"
             />
           </svg>
         </div>
@@ -88,7 +108,7 @@ export default {
       var self = this
       navigator.clipboard.writeText(text).then(
         function () {
-          console.log('Async: Copying to clipboard was successful!')
+          // console.log('Async: Copying to clipboard was successful!')
           self.$toast.open({
             message: 'ID has been copied',
             type: 'success',
@@ -113,14 +133,15 @@ export default {
   },
   computed: {
     filterByCategory() {
-      return this.templateDB.filter((db) => {
-        return this.$parent.searchname
-          .toLowerCase()
-          .split(' ')
-          .every((v) => db.name.toLowerCase().includes(v))
+      return this.templateDB
+      // .filter((db) => {
+      //   return this.$parent.searchname
+      //     .toLowerCase()
+      //     .split(' ')
+      //     .every((v) => db.name.toLowerCase().includes(v))
 
-        // return db.category.name == this.$parent.selectedCategory
-      })
+      //   // return db.category.name == this.$parent.selectedCategory
+      // })
     },
   },
 }

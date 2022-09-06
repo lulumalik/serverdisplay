@@ -50,7 +50,7 @@
               "
               @click="creating"
             >
-              {{ templateDBSelected ? 'Edit Template' : 'Create New' }}
+              {{  'Create New' }}
             </button>
           </div>
         </div>
@@ -94,20 +94,23 @@ export default {
       })
     })
     },
-    creating() {
-      if (this.templateDBSelected) {
-        this.$router.push({
+    editing() {
+      this.$router.push({
           name: 'template-create',
           query: {
             id: this.templateDB.find((db) => db._id == this.templateDBSelected)
               ._id,
           },
         })
-      } else {
+    },
+    creating() {
+      // if (this.templateDBSelected) {
+      
+      // } else {
         this.$router.push({
           name: 'template-create',
         })
-      }
+      // }
     },
   },
 }

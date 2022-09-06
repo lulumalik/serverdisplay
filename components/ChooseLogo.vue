@@ -48,8 +48,16 @@ export default {
     this.callAllData()
   },
   methods: {
+    searchData() {
+      this.$axios
+        .$get('display?row=1000&keyword=' + this.searchname)
+        .then((res) => {
+          this.templateDB = res.data
+          this.total = res.count / 10 + 1
+        })
+    },
     callAllData() {
-      this.$axios.$get('logo?row=50').then((res) => {
+      this.$axios.$get('logo?row=100').then((res) => {
         this.templateDB = res.data
       })
     },

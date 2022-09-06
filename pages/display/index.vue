@@ -69,7 +69,7 @@
                 "
                 @click="creating"
               >
-                {{ templateDBSelected ? 'Edit Display' : 'Create New' }}
+                {{ 'Create New' }}
               </button>
             </div>
           </div>
@@ -105,15 +105,34 @@ export default {
       searchname: '',
       page: 1,
       total: 10,
+      timeoutsearch: null,
     }
   },
   mounted() {
     this.callAllData()
   },
+  watch: {
+    searchname(val) {
+      if (this.timeoutsearch) {
+        clearTimeout(this.timeoutsearch)
+      }
+      this.timeoutsearch = setTimeout(() => {
+        this.searchData()
+      }, 500)
+    },
+  },
   middleware: ['checkLogin'],
   methods: {
+    searchData() {
+      this.$axios
+        .$get('display?row=1000&keyword=' + this.searchname)
+        .then((res) => {
+          this.templateDB = res.data
+          this.total = res.count / 10 + 1
+        })
+    },
     callAllData() {
-      this.$axios.$get('display?row=20').then((res) => {
+      this.$axios.$get('display?row=20&page=' + this.page).then((res) => {
         this.total = res.count / 10 + 1
         this.templateDB = res.data
       })
@@ -136,20 +155,23 @@ export default {
         this.templateDB = res.data
       })
     },
+    editing() {
+      this.$router.push({
+        name: 'display-create',
+        query: {
+          id: this.templateDB.find((db) => db._id == this.templateDBSelected)
+            .username,
+        },
+      })
+    },
     creating() {
-      if (this.templateDBSelected) {
-        this.$router.push({
-          name: 'display-create',
-          query: {
-            id: this.templateDB.find((db) => db._id == this.templateDBSelected)
-              .username,
-          },
-        })
-      } else {
-        this.$router.push({
-          name: 'display-create',
-        })
-      }
+      // if (this.templateDBSelected) {
+
+      // } else {
+      this.$router.push({
+        name: 'display-create',
+      })
+      // }
     },
   },
 }
