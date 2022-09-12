@@ -1,16 +1,13 @@
 <template>
   <div>
-    <div class="w-full mb-2">No settings</div>
-    <!-- <select
-      v-model="selected"
-      @change="changeSelected"
-      class="px-2 py-1 rounded w-full mt-0.5 border border-gray-300"
-    >
-      <option disabled value="">Select Location</option>
-      <option v-for="(l, i) in listKecamatan" :key="i" :value="l['ID NDF']">
-        {{ l['nama lokasi'] }}
-      </option>
-    </select> -->
+    <!-- <div class="w-full mb-2">No settings</div> -->
+    <div>Date type</div>
+    <v-select
+      label="latest"
+      @option:selected="changeSelected"
+      v-model="area"
+      :options="listArea"
+    ></v-select>
   </div>
 </template>
 <script>
@@ -26,17 +23,19 @@ export default {
     changeSelected() {
       this.$store.commit('displayWidget/mutationWidget', {
         key: 'WidgetEarthquake' + '_' + this.idTemplate,
-        value: this.selected,
+        value: this.area,
       })
     },
   },
-  updated() {
-   
-  },
+  updated() {},
   data() {
     return {
-      selected: '',
-      listKecamatan: []
+      area: {
+        latest:true
+      },
+      listArea: [{
+        latest: 'Latest Earthquake',
+      }],
     }
   },
 }
