@@ -17,14 +17,53 @@
             >
           </small>
         </div>
-        <div></div>
+        <div class="mt-8">
+          <div>Total Titik Panas di Indonesia :</div>
+          <div class="flex space-x-4 items-center mt-2">
+            <div>
+              <img
+                src="https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/hotspot/burn-2.png"
+                alt="low"
+              />
+            </div>
+            <div class="flex">
+              <div class="w-24">Rendah</div>
+              <div>( {{ totalHotspot.Low }} )</div>
+            </div>
+          </div>
+          <div class="flex space-x-4 items-center mt-2">
+            <div>
+              <img
+                src="https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/hotspot/burn-1.png"
+                alt="medium"
+              />
+            </div>
+            <div class="flex">
+              <div class="w-24">Sedang</div>
+              <div>( {{ totalHotspot.Middle }} )</div>
+            </div>
+          </div>
+          <div class="flex space-x-4 items-center mt-2">
+            <div>
+              <img
+                src="https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/hotspot/burn.png"
+                alt="high"
+              />
+            </div>
+            <div class="flex">
+              <div class="w-24">Tinggi</div>
+              <div>( {{ totalHotspot.High }} )</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-var axios = require('axios')
+// var axios = require('axios')
+var maplibregl = require('maplibre-gl')
 import { penjelasanProduct, idToName } from '../../../utils/helperSpartan.js'
 export default {
   data() {
@@ -33,6 +72,18 @@ export default {
       spartanIndex: 'fwi',
       penjelasan: penjelasanProduct,
       idToName: idToName,
+      map: null,
+      idTemplate: null,
+      totalHotspot: {
+        Low: 0,
+        Middle: 0,
+        High: 0,
+      },
+      allMarker: {
+        Low: [],
+        Middle: [],
+        High: [],
+      },
       dataLayer: {
         'Hotspot Indonesia': [
           {
@@ -56,6 +107,94 @@ export default {
         ],
       },
     }
+  },
+  mounted() {
+    var parentDisplay = this.$parent.$parent.$parent
+    this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
+
+    if (parentDisplay.production) {
+      var setting = parentDisplay.responseDisplay.properties.allSetting
+      var obj = parentDisplay.obj.idtemplate
+      setting[obj].forEach((el) => {
+        var key = el.key.split('_')[2]
+        if (key == 'province') {
+          this.map.flyTo({
+            // These options control the ending camera position: centered at
+            // the target, at zoom level 9, and north up.
+            center: [el.value.latitude, el.value.longitude],
+            zoom: 9,
+            bearing: 0,
+
+            // These options control the flight curve, making it move
+            // slowly and zoom out almost completely before starting
+            // to pan.
+            speed: 0.5, // make the flying slow
+            curve: 1, // change the speed at which it zooms out
+
+            // This can be any easing function: it takes a number between
+            // 0 and 1 and returns another number between 0 and 1.
+            easing: function (t) {
+              return t
+            },
+
+            // this animation is considered essential with respect to prefers-reduced-motion
+            essential: true,
+          })
+        }
+      })
+    }
+    process.nextTick(async () => {
+      var self = this
+      function IsJsonString(str) {
+        try {
+          JSON.parse(str)
+        } catch (e) {
+          return false
+        }
+        return true
+      }
+
+      var ws = await new WebSocket(`wss://spartan.bmkg.go.id/ws`)
+      ws.onopen = function () {
+        ws.send(
+          JSON.stringify({
+            command: 'login',
+            data: self.$cookies.get('datausers').replace('Bearer ', ''),
+          })
+        )
+      }
+      ws.addEventListener('message', function (event) {
+        var that = self
+        if (IsJsonString(event.data)) {
+          var eventData = JSON.parse(event.data)
+          if (eventData.data == 'Welcome') {
+            ws.send(
+              JSON.stringify({
+                command: 'subscribe',
+                data: 'all',
+              })
+            )
+          } else {
+            var obj = {
+              type: 'FeatureCollection',
+              features: (eventData.data && eventData.data.features) || {},
+            }
+            switch (eventData.section) {
+              case 'hotspot':
+                // code block
+                if (!that.dataLayer['Hotspot Indonesia']) {
+                  return
+                }
+                that.addFilterHotspot(obj, that)
+
+                break
+              default:
+              // code block
+            }
+          }
+        }
+      })
+    })
   },
   methods: {
     parseTime(date) {
@@ -109,13 +248,39 @@ export default {
       self.dataLayer['Hotspot Indonesia'][1].geojson = percaya8
       self.dataLayer['Hotspot Indonesia'][2].geojson = percaya9
 
-      console.log(self.dataLayer['Hotspot Indonesia'])
+      self.dataLayer['Hotspot Indonesia'].forEach((el) => {
+        var id = el.name
+        if (self.allMarker[id].length > 0) {
+          self.allMarker[id].forEach((el) => {
+            el.remove()
+          })
+          self.allMarker[id] = []
+        }
+
+        el.geojson.features.forEach(function (marker) {
+          // create a DOM element for the marker
+          var el2 = document.createElement('div')
+          el2.className = 'marker'
+          el2.style.backgroundImage =
+            'url(https://spartan.bmkg.go.id/' + el.icon + ')'
+          el2.style.width = 13 + 'px'
+          el2.style.height = 13 + 'px'
+
+          // add marker to map
+          var marker = new maplibregl.Marker(el2)
+            .setLngLat(marker.geometry.coordinates)
+            .addTo(self.map)
+
+          self.allMarker[id].push(marker)
+        })
+      })
     },
-    async mapReady() {
+    async getSpartanIndex() {
       this.modelrun = await this.$axios.$get(
         'https://spartan.bmkg.go.id/map/modelrun'
       )
-      var map = this.$refs['map'].map
+      // var map =
+      this.map = this.$refs['map'].map
       var currentDate = new Date().toISOString().split('T')[0] + 'T00:00:00Z'
       // console.log(this.parseTime(this.modelrun['spartan'][0]))
       var obj = this.getRasterSource(
@@ -127,31 +292,30 @@ export default {
           this.parseTime(currentDate) +
           '/{z}/{x}/{y}.png'
       )
-      map.addSource('spartan', obj)
-      map.addLayer(
-        {
-          id: 'spartan',
-          type: 'raster',
-          source: 'spartan',
-          paint: {
-            'raster-opacity': 0.8,
+      if (this.map.getLayer('spartan')) {
+        this.map.removeLayer('spartan')
+      }
+      if (this.map.getSource('spartan')) {
+        this.map.removeSource('spartan')
+      }
+
+      setTimeout(() => {
+        this.map.addSource('spartan', obj)
+        this.map.addLayer(
+          {
+            id: 'spartan',
+            type: 'raster',
+            source: 'spartan',
+            paint: {
+              'raster-opacity': 0.8,
+            },
           },
-        },
-        'place_label_other'
-      )
-      const token = await axios.get('https://spartan.bmkg.go.id/api/users/guestlogin')
-      console.log(token)
-      const res = await axios.get('https://spartan.bmkg.go.id/api/data/hotspot/getlatest', {
-        headers: {
-          Referer: 'https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/',
-          Authorization: `Bearer ${token.data.user.token}`,
-        },
-      })
-      console.log(res)
-      // axios.get('https://spartan.bmkg.go.id/api/data/hotspot/getlatest').then((res) => {
-      //   this.addFilterHotspot(res, self)
-      // })
-      //   https://spartan.bmkg.go.id/map/rgb_req/spartanobs/fwi/0/202209080000/202209080000/5/25/17.png
+          'place_label_other'
+        )
+      }, 500)
+    },
+    async mapReady() {
+      this.getSpartanIndex()
     },
   },
 }
