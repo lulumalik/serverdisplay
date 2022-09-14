@@ -139,10 +139,17 @@ export default {
         },
         'place_label_other'
       )
-
-      axios.get('https://spartan.bmkg.go.id/api/data/hotspot/getlatest').then((res) => {
-        this.addFilterHotspot(res, self)
+      const token = await axios.get('https://spartan.bmkg.go.id/api/users/guestlogin')
+      console.log(token)
+      const res = await axios.get('https://spartan.bmkg.go.id/api/data/hotspot/getlatest', {
+        headers: {
+          Authorization: `Bearer ${token.data.user.token}`,
+        },
       })
+      console.log(res)
+      // axios.get('https://spartan.bmkg.go.id/api/data/hotspot/getlatest').then((res) => {
+      //   this.addFilterHotspot(res, self)
+      // })
       //   https://spartan.bmkg.go.id/map/rgb_req/spartanobs/fwi/0/202209080000/202209080000/5/25/17.png
     },
   },
