@@ -143,6 +143,7 @@ export default {
       console.log(token)
       const res = await axios.get('https://spartan.bmkg.go.id/api/data/hotspot/getlatest', {
         headers: {
+          Referer: 'https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/',
           Authorization: `Bearer ${token.data.user.token}`,
         },
       })
