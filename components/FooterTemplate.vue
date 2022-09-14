@@ -64,7 +64,7 @@
         <div class="flex space-x-4 text-xl">
           <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" />
           {{
-            'Badan Meteorologi Klimatologi dan Geofisika - Cepat Tepat Akurat Luas dan Mudah Dipahami'
+            'Badan Meteorologi Klimatologi dan Geofisika - Cepat Tepat Akurat Luas dan Mudah Dipahami, Web: https://www.bmkg.go.id, Twitter: InfoBMKG, Instagram: @infobmkg, YouTube: InfoBMKG, Call Center: BMKG 196'
           }}
         </div>
       </marquee-text>

@@ -39,7 +39,7 @@
       },
       changeSelectedProvince() {
         this.$store.commit('displayWidget/mutationWidget', {
-          key: this.idTemplate + '_WidgetSpartan_subdistrict_province',
+          key: this.idTemplate + '_WidgetSpartan_province',
           value: this.province,
         })
       },

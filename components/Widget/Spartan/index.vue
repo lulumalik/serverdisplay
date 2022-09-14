@@ -1,23 +1,23 @@
 <template>
   <div class="flex space-x-4">
     <div class="flex-none">
-      <Map ref="map" @mapready="mapReady" style="width: 640px; height: 360px" />
+      <Map ref="map" @mapready="mapReady" class="rounded" style="width: 640px; height: 400px" />
     </div>
-    <div class="flex-grow p-6">
+    <div class="flex-grow p-6 bg-white/40 rounded">
       <div>
         <p class="text-4xl text-center">SPARTAN</p>
-        <p class="text-xl text-center border-b pb-2 border-gray-200">
+        <p class="text-2xl text-center border-b pb-2 border-gray-200">
           System Peringatan Kebakaran Hutan dan Lahan
         </p>
         <div class="text-center mt-4 leading-tight">
-          <small>
+          <div>
             <span
               >{{ idToName[spartanIndex] }},
               {{ penjelasan[spartanIndex] }}</span
             >
-          </small>
+          </div>
         </div>
-        <div class="mt-8">
+        <div class="mt-4">
           <div>Total Titik Panas di Indonesia :</div>
           <div class="flex space-x-4 items-center mt-2">
             <div>
@@ -27,7 +27,7 @@
               />
             </div>
             <div class="flex">
-              <div class="w-24">Rendah</div>
+              <div class="w-20">Rendah</div>
               <div>( {{ totalHotspot.Low }} )</div>
             </div>
           </div>
@@ -39,7 +39,7 @@
               />
             </div>
             <div class="flex">
-              <div class="w-24">Sedang</div>
+              <div class="w-20">Sedang</div>
               <div>( {{ totalHotspot.Middle }} )</div>
             </div>
           </div>
@@ -51,7 +51,7 @@
               />
             </div>
             <div class="flex">
-              <div class="w-24">Tinggi</div>
+              <div class="w-20">Tinggi</div>
               <div>( {{ totalHotspot.High }} )</div>
             </div>
           </div>
@@ -84,6 +84,7 @@ export default {
         Middle: [],
         High: [],
       },
+      flying: null,
       dataLayer: {
         'Hotspot Indonesia': [
           {
@@ -118,28 +119,9 @@ export default {
       setting[obj].forEach((el) => {
         var key = el.key.split('_')[2]
         if (key == 'province') {
-          this.map.flyTo({
-            // These options control the ending camera position: centered at
-            // the target, at zoom level 9, and north up.
-            center: [el.value.latitude, el.value.longitude],
-            zoom: 9,
-            bearing: 0,
-
-            // These options control the flight curve, making it move
-            // slowly and zoom out almost completely before starting
-            // to pan.
-            speed: 0.5, // make the flying slow
-            curve: 1, // change the speed at which it zooms out
-
-            // This can be any easing function: it takes a number between
-            // 0 and 1 and returns another number between 0 and 1.
-            easing: function (t) {
-              return t
-            },
-
-            // this animation is considered essential with respect to prefers-reduced-motion
-            essential: true,
-          })
+          this.flying = el.value
+        } else if (key == 'spartan') {
+          this.spartanIndex = el.value.id
         }
       })
     }
@@ -297,6 +279,31 @@ export default {
       }
       if (this.map.getSource('spartan')) {
         this.map.removeSource('spartan')
+      }
+
+      if (this.flying) {
+        this.map.flyTo({
+            // These options control the ending camera position: centered at
+            // the target, at zoom level 9, and north up.
+            center: [this.flying.longitude, this.flying.latitude],
+            zoom: 5,
+            bearing: 0,
+
+            // These options control the flight curve, making it move
+            // slowly and zoom out almost completely before starting
+            // to pan.
+            speed: 0.5, // make the flying slow
+            curve: 1, // change the speed at which it zooms out
+
+            // This can be any easing function: it takes a number between
+            // 0 and 1 and returns another number between 0 and 1.
+            easing: function (t) {
+              return t
+            },
+
+            // this animation is considered essential with respect to prefers-reduced-motion
+            essential: true,
+          })
       }
 
       setTimeout(() => {
