@@ -62,7 +62,7 @@
 </template>
 
 <script>
-// var axios = require('axios')
+var axios = require('axios')
 var maplibregl = require('maplibre-gl')
 import { penjelasanProduct, idToName } from '../../../utils/helperSpartan.js'
 export default {
@@ -73,6 +73,7 @@ export default {
       penjelasan: penjelasanProduct,
       idToName: idToName,
       map: null,
+      token: null,
       idTemplate: null,
       totalHotspot: {
         Low: 0,
@@ -135,13 +136,13 @@ export default {
         }
         return true
       }
-
+      this.token = await axios.get('https://spartan.bmkg.go.id/api/users/guestlogin')
       var ws = await new WebSocket(`wss://spartan.bmkg.go.id/ws`)
       ws.onopen = function () {
         ws.send(
           JSON.stringify({
             command: 'login',
-            data: self.$cookies.get('datausers').replace('Bearer ', ''),
+            data: self.token.data.user.token,
           })
         )
       }
