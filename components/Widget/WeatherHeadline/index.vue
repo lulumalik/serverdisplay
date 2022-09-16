@@ -127,26 +127,57 @@ export default {
   },
   methods: {
     getData() {
-      var parent = this.$parent.$parent.$parent
-      if (parent.currentId) {
-        this.forecast.length = 0
-        var ndf = parent.obj.properties.widgetndf
-        if (parent.obj.properties.widgetndf) {
-          ndf.forEach((el) => {
-            if (el.key == '_WidgetWeatherHeadline_subdistrict') {
-              // console.log(this.ndflistener[el.value.ndf], 'ea')
-              var datares = this.ndflistener[el.value.ndf]
-              for (var i = 0; i < datares.length; i++) {
-                var comp = datares[i]
+      var parentDisplay = this.$parent.$parent.$parent
+      this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
+      this.allNDF = {}
+      var ndflistener = this.allNDF
+      this.forecast.length = 0
+      if (parentDisplay.production) {
+        var setting = parentDisplay.responseDisplay.properties.allSetting
+        var obj = parentDisplay.obj.idtemplate
+        setting[obj].forEach(async (el) => {
+          var key = el.key.split('_')[2]
+          var key1 = el.key.split('_')[1]
+          if (key == 'subdistrict' && key1 == 'WidgetWeatherHeadline') {
+            const datares = await this.$axios.$get(
+              'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+                el.value.ndf
+            )
+
+            this.$set(ndflistener, el.value.ndf, datares.data)
+
+            if (ndflistener[el.value.ndf].length > 0) {
+              for (var i = 0; i < ndflistener[el.value.ndf].length; i++) {
+                var comp = ndflistener[el.value.ndf][i]
                 if (comp.date.split('T')[1].split(':')[0] == '12') {
                   this.forecast.push(comp)
                   break
                 }
               }
             }
-          })
-        }
+          }
+        })
       }
+      // var parent = this.$parent.$parent.$parent
+      // if (parent.currentId) {
+      //   this.forecast.length = 0
+      //   var ndf = parent.obj.properties.widgetndf
+      //   if (parent.obj.properties.widgetndf) {
+      //     ndf.forEach((el) => {
+      //       if (el.key == '_WidgetWeatherHeadline_subdistrict') {
+      //         // console.log(this.ndflistener[el.value.ndf], 'ea')
+      //         var datares = this.ndflistener[el.value.ndf]
+      //         for (var i = 0; i < datares.length; i++) {
+      //           var comp = datares[i]
+      //           if (comp.date.split('T')[1].split(':')[0] == '12') {
+      //             this.forecast.push(comp)
+      //             break
+      //           }
+      //         }
+      //       }
+      //     })
+      //   }
+      // }
     },
   },
   mounted() {

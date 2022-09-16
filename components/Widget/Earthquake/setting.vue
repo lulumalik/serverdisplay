@@ -22,7 +22,7 @@ export default {
   methods: {
     changeSelected() {
       this.$store.commit('displayWidget/mutationWidget', {
-        key: 'WidgetEarthquake' + '_' + this.idTemplate,
+        key: this.idTemplate + '_WidgetEarthquake',
         value: this.area,
       })
     },
@@ -30,9 +30,7 @@ export default {
   updated() {},
   data() {
     return {
-      area: {
-        latest:true
-      },
+      area: null,
       listArea: [{
         latest: 'Latest Earthquake',
       }],

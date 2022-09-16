@@ -259,6 +259,7 @@ export default {
       }
       var alltemplate = {}
       var allndf = {}
+      // console.log(widgetparse, this.templateAddedList)
       this.templateAddedList.forEach((el, i) => {
         if (widgetparse[el.idtemplate]) {
           alltemplate[i] = this.templateAddedList[i]

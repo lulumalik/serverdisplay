@@ -151,8 +151,8 @@ export default {
       var day = new Date(date).getDay()
       var month = new Date(date).getMonth()
 
-      var dayres;
-      var monthres;
+      var dayres
+      var monthres
       switch (day) {
         case 0:
           dayres = 'Minggu'
@@ -217,9 +217,19 @@ export default {
       }
 
       var dat = date.split(' ').splice(4, 4)[0]
-      var final = dat ? dat.split(':').splice(0,2).join(':') : ''
+      var final = dat ? dat.split(':').splice(0, 2).join(':') : ''
 
-      return dayres + ', ' + new Date(date).getDate() + ' ' + monthres + ' ' +new Date(date).getFullYear() + ' ' + final
+      return (
+        dayres +
+        ', ' +
+        new Date(date).getDate() +
+        ' ' +
+        monthres +
+        ' ' +
+        new Date(date).getFullYear() +
+        ' ' +
+        final
+      )
     },
     returningTimeZone() {
       this.currentDate =
@@ -247,6 +257,11 @@ export default {
       this.$parent.$parent.logos[this.$parent.obj.idtemplate].length = 0
       this.$parent.$parent.logos[this.$parent.obj.idtemplate] = arr
       // $parent.logos[i] = null
+
+      this.$parent.useHeader = false
+      setTimeout(() => {
+        this.$parent.useHeader = true
+      }, 500)
     },
   },
 }
