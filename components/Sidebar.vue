@@ -22,9 +22,9 @@ export default {
                 pathname: 'template',
                 icon: 'SidebarIconTemplate'
             }, {
-                name: 'Logos',
-                path: '/logos',
-                pathname: 'logos',
+                name: 'Assets',
+                path: '/assets',
+                pathname: 'assets',
                 icon: 'SidebarIconLogo'
             }]
         }

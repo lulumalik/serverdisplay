@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div
-      class="bg-white/70 rounded py-3 px-6 flex items-center space-x-8 w-full"
+      class="bg-white/70 rounded-md py-3 px-6 flex items-center space-x-8 w-full"
     >
       <div class="flex-none rounded-full">
         <img
@@ -24,7 +24,7 @@
                 <div>
                   <img class="w-4" src="/weatherheadline/Humidity.svg" />
                 </div>
-                <div>Humidity</div>
+                <div>Kelembapan</div>
               </div>
             </td>
             <td class="font-bold pl-6">: {{ forecast[0].rh }} %</td>
@@ -33,7 +33,7 @@
             <td>
               <div class="flex items-center space-x-3">
                 <div><img class="w-5" src="/weatherheadline/WSpd.svg" /></div>
-                <div class="relative right-1">Wind Speed</div>
+                <div class="relative right-1">Kecepatan Angin</div>
               </div>
             </td>
             <td class="font-bold pl-6">: {{ forecast[0].wSpd }} km/jam</td>
@@ -42,7 +42,7 @@
             <td>
               <div class="flex items-center space-x-3">
                 <div><img class="w-4" src="/weatherheadline/WDir.svg" /></div>
-                <div>Wind Direction</div>
+                <div>Arah Angin</div>
               </div>
             </td>
             <td class="font-bold pl-6">
@@ -72,7 +72,7 @@
                 <div>
                   <img class="w-3" src="/weatherheadline/Temperature.svg" />
                 </div>
-                <div>Max. Temperature</div>
+                <div>Maks. Temperature</div>
               </div>
             </td>
             <td class="font-bold pl-6">
@@ -183,6 +183,9 @@ export default {
   mounted() {
     // console.log('ea')
     this.getData()
+    setInterval(() => {
+      this.getData()
+    }, 60000)
     // if (this.$parent.$parent && this.$parent.$parent.$parent) {
   },
 }

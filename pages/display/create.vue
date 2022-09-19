@@ -219,6 +219,9 @@ export default {
             type: 'success',
             duration: 2000,
           })
+          setTimeout(() => {
+            window.location.href = '/display/create?id=' + res.data.username
+          }, 1000)
         })
     },
     createData(obj) {
@@ -235,6 +238,9 @@ export default {
             type: 'success',
             duration: 2000,
           })
+          setTimeout(() => {
+            window.location.href = '/display/create?id=' + res.data.username
+          }, 1000)
         })
     },
     createWithUpdate() {

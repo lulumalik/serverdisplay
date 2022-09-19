@@ -1,61 +1,65 @@
 <template>
-  <div class="flex space-x-4">
-    <div class="flex-none">
-      <Map ref="map" @mapready="mapReady" class="rounded" style="width: 640px; height: 400px" />
+  <div>
+    <div class="text-center">
+      <p class="text-4xl text-center">SPARTAN</p>
+      <p class="text-2xl text-center border-b pb-2 border-gray-200">
+        System Peringatan Kebakaran Hutan dan Lahan
+      </p>
     </div>
-    <div class="flex-grow p-6 bg-white/40 rounded">
-      <div>
-        <p class="text-4xl text-center">SPARTAN</p>
-        <p class="text-2xl text-center border-b pb-2 border-gray-200">
-          System Peringatan Kebakaran Hutan dan Lahan
-        </p>
-        <div class="text-center mt-4 leading-tight">
+    <div class="relative mt-6">
+      <div
+        class="absolute bottom-8 right-8 bg-white/60 rounded p-4"
+        style="z-index: 1000"
+      >
+        <div class="leading-tight">
+          <span class="uppercase font-bold">{{ spartanIndex }}</span>
+        </div>
+        <div class="mb-3">{{ idToName[spartanIndex] }}</div>
+        <WidgetSpartanLegendOptions :params="spartanIndex" class="mb-4" />
+        <div>Total Titik Panas di Indonesia :</div>
+        <div class="flex space-x-4 items-center mt-2">
           <div>
-            <span
-              >{{ idToName[spartanIndex] }},
-              {{ penjelasan[spartanIndex] }}</span
-            >
+            <img
+              src="https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/hotspot/burn-2.png"
+              alt="low"
+            />
+          </div>
+          <div class="flex">
+            <div class="w-20">Rendah</div>
+            <div>( {{ totalHotspot.Low }} )</div>
           </div>
         </div>
-        <div class="mt-4">
-          <div>Total Titik Panas di Indonesia :</div>
-          <div class="flex space-x-4 items-center mt-2">
-            <div>
-              <img
-                src="https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/hotspot/burn-2.png"
-                alt="low"
-              />
-            </div>
-            <div class="flex">
-              <div class="w-20">Rendah</div>
-              <div>( {{ totalHotspot.Low }} )</div>
-            </div>
+        <div class="flex space-x-4 items-center mt-2">
+          <div>
+            <img
+              src="https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/hotspot/burn-1.png"
+              alt="medium"
+            />
           </div>
-          <div class="flex space-x-4 items-center mt-2">
-            <div>
-              <img
-                src="https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/hotspot/burn-1.png"
-                alt="medium"
-              />
-            </div>
-            <div class="flex">
-              <div class="w-20">Sedang</div>
-              <div>( {{ totalHotspot.Middle }} )</div>
-            </div>
-          </div>
-          <div class="flex space-x-4 items-center mt-2">
-            <div>
-              <img
-                src="https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/hotspot/burn.png"
-                alt="high"
-              />
-            </div>
-            <div class="flex">
-              <div class="w-20">Tinggi</div>
-              <div>( {{ totalHotspot.High }} )</div>
-            </div>
+          <div class="flex">
+            <div class="w-20">Sedang</div>
+            <div>( {{ totalHotspot.Middle }} )</div>
           </div>
         </div>
+        <div class="flex space-x-4 items-center mt-2">
+          <div>
+            <img
+              src="https://spartan.bmkg.go.id/wp-content/plugins/geo-data/dist/hotspot/burn.png"
+              alt="high"
+            />
+          </div>
+          <div class="flex">
+            <div class="w-20">Tinggi</div>
+            <div>( {{ totalHotspot.High }} )</div>
+          </div>
+        </div>
+      </div>
+      <div class="rounded">
+        <Map
+          ref="map"
+          @mapready="mapReady"
+          style="width: 1320px; height: 600px"
+        />
       </div>
     </div>
   </div>
@@ -136,7 +140,9 @@ export default {
         }
         return true
       }
-      this.token = await axios.get('https://spartan.bmkg.go.id/api/users/guestlogin')
+      this.token = await axios.get(
+        'https://spartan.bmkg.go.id/api/users/guestlogin'
+      )
       var ws = await new WebSocket(`wss://spartan.bmkg.go.id/ws`)
       ws.onopen = function () {
         ws.send(
@@ -284,27 +290,27 @@ export default {
 
       if (this.flying) {
         this.map.flyTo({
-            // These options control the ending camera position: centered at
-            // the target, at zoom level 9, and north up.
-            center: [this.flying.longitude, this.flying.latitude],
-            zoom: 5,
-            bearing: 0,
+          // These options control the ending camera position: centered at
+          // the target, at zoom level 9, and north up.
+          center: [this.flying.longitude, this.flying.latitude],
+          zoom: this.flying.zoom || 7,
+          bearing: 0,
 
-            // These options control the flight curve, making it move
-            // slowly and zoom out almost completely before starting
-            // to pan.
-            speed: 0.5, // make the flying slow
-            curve: 1, // change the speed at which it zooms out
+          // These options control the flight curve, making it move
+          // slowly and zoom out almost completely before starting
+          // to pan.
+          speed: 0.5, // make the flying slow
+          curve: 1, // change the speed at which it zooms out
 
-            // This can be any easing function: it takes a number between
-            // 0 and 1 and returns another number between 0 and 1.
-            easing: function (t) {
-              return t
-            },
+          // This can be any easing function: it takes a number between
+          // 0 and 1 and returns another number between 0 and 1.
+          easing: function (t) {
+            return t
+          },
 
-            // this animation is considered essential with respect to prefers-reduced-motion
-            essential: true,
-          })
+          // this animation is considered essential with respect to prefers-reduced-motion
+          essential: true,
+        })
       }
 
       setTimeout(() => {

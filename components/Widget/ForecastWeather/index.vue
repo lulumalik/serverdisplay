@@ -1,20 +1,27 @@
 <template>
   <div>
-    <table class="w-full rounded text-lg">
-      <tr class="bg-sky-500 text-white font-semibold">
-        <td>
-          Time ({{
-            getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
-          }})
+    <table class="w-full rounded-md text-lg">
+      <tr class="text-white font-semibold">
+        <td style="background: #303030" class="rounded-tl-lg">
+          {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
         </td>
-        <td class="text-center" v-for="(f, i) in forecast" :key="i">
+        <td
+          style="background: #303030"
+          :class="i == forecast.length - 1 ? 'rounded-tr-lg' : ''"
+          class="text-center"
+          v-for="(f, i) in forecast"
+          :key="i"
+        >
           {{ returningTimeZone(new Date(f.date)).split(' ').splice(4, 4)[0] }}
         </td>
       </tr>
       <tr v-for="(val, key, ind) in listData" :key="key">
         <td
-          class="bg-sky-400 text-white"
-          :class="ind % 2 == 0 ? 'bg-sky-300/80' : 'bg-sky-400/80'"
+          class="bg-sky-400"
+          :class="[
+            ind % 2 == 0 ? 'bg-gray-300/80' : 'bg-gray-400/80',
+            ind == Object.keys(listData).length - 1 ? 'rounded-bl-lg' : '',
+          ]"
         >
           <div class="whitespace-nowrap">{{ key }}</div>
         </td>
@@ -22,17 +29,35 @@
           class="text-center text-2xl"
           v-for="(f, i) in forecast"
           :key="i"
-          :class="ind % 2 == 0 ? 'bg-sky-100/80' : 'bg-sky-300/80'"
+          :class="[
+            ind % 2 == 0 ? 'bg-gray-100/80' : 'bg-gray-300/80',
+            ,
+            ind == Object.keys(listData).length - 1 && i == forecast.length - 1
+              ? 'rounded-br-lg'
+              : '',
+          ]"
         >
           <div class="whitespace-nowrap">
-            {{
-              key == 'Weather'
-                ? weather_code[f.weather_code]
-                : key == 'Wind Direction'
-                ? dirTo[f[val]]
-                : f[val]
-            }}
-            <small>{{ parseSatuan[key] }}</small>
+            <div
+              v-if="key == 'Arah Angin'"
+              class="relative flex items-center justify-center space-x-2"
+            >
+              <div class="relative">
+                <img src="/weatherheadline/compass.svg" alt="img" />
+                <img src="/weatherheadline/arrow.svg" :style="{transform: 'rotate(' + dirTo[f[val]] + 'deg)'}" alt="img2" class="absolute z-30 top-0 left-0 right-0 mx-auto" />
+              </div>
+              <div>{{ dirTo[f[val]] }} <sup>o</sup></div>
+            </div>
+            <div v-else>
+              {{
+                key == 'Weather'
+                  ? weather_code[f.weather_code]
+                  : key == 'Wind Direction'
+                  ? dirTo[f[val]]
+                  : f[val]
+              }}
+              <small>{{ parseSatuan[key] }}</small>
+            </div>
           </div>
         </td>
       </tr>
@@ -78,18 +103,18 @@ export default {
         },
       ],
       listData: {
-        Weather: 'weather_code',
+        Cuaca: 'weather_code',
         Temperature: 'temp',
-        Humidity: 'rh',
-        'Wind Speed': 'wSpd',
-        'Wind Direction': 'wDir',
+        Kelembapan: 'rh',
+        'Kecepatan Angin': 'wSpd',
+        'Arah Angin': 'wDir',
       },
       parseSatuan: {
-        Weather: '',
+        Cuaca: '',
         Temperature: ' ᵒC',
-        Humidity: ' %',
-        'Wind Speed': ' km/jam',
-        'Wind Direction': ' ᵒ',
+        Kelembapan: ' %',
+        'Kecepatan Angin': ' km/jam',
+        'Arah Angin': ' ᵒ',
       },
     }
   },
@@ -172,6 +197,10 @@ export default {
   },
   mounted() {
     this.getData()
+
+    setInterval(() => {
+      this.getData()
+    }, 60000)
   },
 }
 </script>

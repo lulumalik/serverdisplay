@@ -170,7 +170,7 @@ export default {
       return new File([u8arr], filename, { type: mime })
     },
     deleteLogos(id) {
-      this.$axios.$delete('logo/update/' + id).then(() => {
+      this.$axios.$delete('logo/delete/' + id).then(() => {
         this.$toast.open({
           message: 'Logo saved',
           type: 'success',

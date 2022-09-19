@@ -53,137 +53,186 @@ export const penjelasanProduct = {
     "Total Precipitation 24 Hour": "Presipitasi ditampilkan dalam bentuk akumulasi selama 24 jam terakhir dalam satuan mm/24 jam. Presipitasi secara sederhana bisa dianalogikan sebagai curah hujan yang kategorinya juga merujuk pada Peraturan BMKG bahwa 5-20 mm/24 jam: hujan ringan, 20-50 mm/24 jam: hujan sedang, 50-100 mm/24 jam: hujan lebat, dan 100 mm/24 jam: hujan ekstrem.",
     "FDRS Gambut BRGM": "Model sistem peringatan dini kebakaran (Fire Danger Rating System ~ FDRS) untuk lahan gambut. Indeks kebakaran untuk model FDRS ini dihitung berdasarkan pendekatan hidrometeorologis  menggunakan model modified Keetch-Bryam Drought Index (mKBDI). Pendekatan model ini mengkombinasikan parameter cuaca dan hidrologi dalam menilai bahaya kebakaran (fire hazard). Nilai mKBDI yang diperoleh kemudian dikelompokkan menjadi empat kategori Aman, Siaga, Bahaya dan Ekstrem di tujuh provinsi prioritas restorasi BRGM yaitu : Jambi, Riau, Sumatera Selatan, Kalimantan Barat, Kalimantan Tengah, Kalimantan Selatan dan Papua."
 }
-
 export const province = [{
         "id": "11",
-        "name": "ACEH",
-        "alt_name": "ACEH",
+        "name": "NANGGROE ACEH DARUSSALAM",
+        "alt_name": "NANGGROE ACEH DARUSSALAM",
+        "db_name": ["Aceh"],
         "latitude": 4.36855,
-        "longitude": 97.0253
+        "longitude": 97.0253,
+        "zoom": 7
+    },
+    {
+        "id": "90",
+        "name": "NATIONAL",
+        "alt_name": "NATIONAL",
+        "db_name": ['NATIONAL'],
+        "latitude": -2.5,
+        "longitude": 116,
+        "zoom": 5
     },
     {
         "id": "12",
         "name": "SUMATERA UTARA",
         "alt_name": "SUMATERA UTARA",
-        "latitude": 2.19235,
-        "longitude": 99.38122
+        "db_name": ["Sumatera Utara"],
+        "latitude": 2.1153547,
+        "longitude": 99.5450974,
+        "zoom": 7
     },
     {
         "id": "13",
         "name": "SUMATERA BARAT",
         "alt_name": "SUMATERA BARAT",
+        "db_name": ["Sumatera Barat"],
         "latitude": -1.34225,
-        "longitude": 100.0761
+        "longitude": 100.0761,
+        "zoom": 7
     },
     {
         "id": "14",
         "name": "RIAU",
         "alt_name": "RIAU",
+        "db_name": ["Riau"],
         "latitude": 0.50041,
-        "longitude": 101.54758
+        "longitude": 101.54758,
+        "zoom": 7
     },
     {
         "id": "15",
         "name": "JAMBI",
         "alt_name": "JAMBI",
+        "db_name": ["Jambi"],
         "latitude": -1.61157,
-        "longitude": 102.7797
+        "longitude": 102.7797,
+        "zoom": 8
     },
     {
         "id": "16",
         "name": "SUMATERA SELATAN",
         "alt_name": "SUMATERA SELATAN",
+        "db_name": ["Sumatera Selatan"],
         "latitude": -3.12668,
-        "longitude": 104.09306
+        "longitude": 104.09306,
+        "zoom": 7
     },
     {
         "id": "17",
         "name": "BENGKULU",
         "alt_name": "BENGKULU",
+        "db_name": ["Bengkulu"],
         "latitude": -3.51868,
-        "longitude": 102.53598
+        "longitude": 102.53598,
+        "zoom": 8
     },
     {
         "id": "18",
         "name": "LAMPUNG",
         "alt_name": "LAMPUNG",
+        "db_name": ["Lampung"],
         "latitude": -4.8555,
-        "longitude": 105.0273
+        "longitude": 105.0273,
+        "zoom": 7
     },
     {
         "id": "19",
         "name": "KEPULAUAN BANGKA BELITUNG",
         "alt_name": "KEPULAUAN BANGKA BELITUNG",
-        "latitude": -2.75775,
+        "db_name": ["Kepulauan Bangka Belitung"],
+        "latitude": -2.725775,
         "longitude": 107.58394
     },
     {
         "id": "21",
         "name": "KEPULAUAN RIAU",
         "alt_name": "KEPULAUAN RIAU",
+        "db_name": ["Kepulauan Riau"],
         "latitude": -0.15478,
-        "longitude": 104.58037
+        "longitude": 104.58037,
+        "zoom": 7
     },
     {
         "id": "31",
         "name": "DKI JAKARTA",
         "alt_name": "DKI JAKARTA",
-        "latitude": 6.1745,
-        "longitude": 106.8227
+        "db_name": ["Dki Jakarta"],
+        "latitude": -6.200000,
+        "longitude": 106.816666,
+        "zoom": 10
+    }, {
+        "id": "98",
+        "name": "jabodetabek",
+        "alt_name": "JABODETABEK",
+        "db_name": ["Dki Jakarta", "Jawa Barat", "Banten"],
+        "latitude": -6.3377862468927315,
+        "longitude": 106.76165982945834,
+        "zoom": 9.5
     },
     {
         "id": "32",
         "name": "JAWA BARAT",
         "alt_name": "JAWA BARAT",
+        "db_name": ["Jawa Barat"],
         "latitude": -6.88917,
-        "longitude": 107.64047
+        "longitude": 107.64047,
+        zoom: 9
     },
     {
         "id": "33",
         "name": "JAWA TENGAH",
         "alt_name": "JAWA TENGAH",
+        "db_name": ["Jawa Tengah"],
         "latitude": -7.30324,
         "longitude": 110.00441
     },
     {
         "id": "34",
-        "name": "DI YOGYAKARTA",
-        "alt_name": "DI YOGYAKARTA",
-        "latitude": 7.7956,
-        "longitude": 110.3695
+        "name": "D.I. YOGYAKARTA",
+        "alt_name": "D.I. YOGYAKARTA",
+        "db_name": ["Daerah Istimewa Yogyakarta"],
+        "latitude": -7.7956,
+        "longitude": 110.3695,
+        "zoom": 9
     },
     {
         "id": "35",
         "name": "JAWA TIMUR",
         "alt_name": "JAWA TIMUR",
-        "latitude": -6.96851,
-        "longitude": 113.98005
+        "db_name": ["Jawa Timur"],
+        "latitude": -7.5360639,
+        "longitude": 112.2384017
     },
     {
         "id": "36",
         "name": "BANTEN",
         "alt_name": "BANTEN",
+        "db_name": ["Banten"],
         "latitude": -6.44538,
-        "longitude": 106.13756
+        "longitude": 106.13756,
+        "zoom": 9
     },
     {
         "id": "51",
         "name": "BALI",
         "alt_name": "BALI",
-        "latitude": -8.23566,
-        "longitude": 115.12239
+        "db_name": ["Bali"],
+        "latitude": -8.43566,
+        "longitude": 115.12239,
+        "zoom": 9
     },
     {
         "id": "52",
         "name": "NUSA TENGGARA BARAT",
         "alt_name": "NUSA TENGGARA BARAT",
-        "latitude": -8.12179,
+        "db_name": ["Nusa Tenggara Barat"],
+        "latitude": -8.42179,
         "longitude": 117.63696
     },
     {
         "id": "53",
         "name": "NUSA TENGGARA TIMUR",
         "alt_name": "NUSA TENGGARA TIMUR",
+        "db_name": ["Nusa Tenggara Timur"],
         "latitude": -8.56568,
         "longitude": 120.69786
     },
@@ -191,41 +240,52 @@ export const province = [{
         "id": "61",
         "name": "KALIMANTAN BARAT",
         "alt_name": "KALIMANTAN BARAT",
+        "db_name": ["Kalimantan Barat"],
         "latitude": -0.13224,
-        "longitude": 111.09689
+        "longitude": 111.09689,
+        "zoom": 7
     },
     {
         "id": "62",
         "name": "KALIMANTAN TENGAH",
         "alt_name": "KALIMANTAN TENGAH",
+        "db_name": ["Kalimantan Tengah"],
         "latitude": -1.49958,
-        "longitude": 113.29033
+        "longitude": 113.29033,
+        "zoom": 7
     },
     {
         "id": "63",
         "name": "KALIMANTAN SELATAN",
         "alt_name": "KALIMANTAN SELATAN",
-        "latitude": -2.94348,
-        "longitude": 115.37565
+        "db_name": ["Kalimantan Selatan"],
+        "latitude": -2.74348,
+        "longitude": 115.37565,
+        "zoom": 8
     },
     {
         "id": "64",
         "name": "KALIMANTAN TIMUR",
         "alt_name": "KALIMANTAN TIMUR",
-        "latitude": 0.78844,
-        "longitude": 116.242
+        "db_name": ["Kalimantan Timur"],
+        "latitude": 0.38844,
+        "longitude": 116.242,
+        "zoom": 7
     },
     {
         "id": "65",
         "name": "KALIMANTAN UTARA",
         "alt_name": "KALIMANTAN UTARA",
+        "db_name": ["Kalimantan Utara"],
         "latitude": 2.72594,
-        "longitude": 116.911
+        "longitude": 116.911,
+        "zoom": 7
     },
     {
         "id": "71",
         "name": "SULAWESI UTARA",
         "alt_name": "SULAWESI UTARA",
+        "db_name": ["Sulawesi Utara"],
         "latitude": 0.65557,
         "longitude": 124.09015
     },
@@ -233,27 +293,34 @@ export const province = [{
         "id": "72",
         "name": "SULAWESI TENGAH",
         "alt_name": "SULAWESI TENGAH",
-        "latitude": -1.69378,
-        "longitude": 120.80886
+        "db_name": ["Sulawesi Tengah"],
+        "latitude": -1.39378,
+        "longitude": 120.80886,
+        "zoom": 7
     },
     {
         "id": "73",
         "name": "SULAWESI SELATAN",
         "alt_name": "SULAWESI SELATAN",
+        "db_name": ["Sulawesi Selatan"],
         "latitude": -3.64467,
-        "longitude": 119.94719
+        "longitude": 119.94719,
+        "zoom": 7
     },
     {
         "id": "74",
         "name": "SULAWESI TENGGARA",
         "alt_name": "SULAWESI TENGGARA",
-        "latitude": -3.54912,
-        "longitude": 121.72796
+        "db_name": ["Sulawesi Tenggara"],
+        "latitude": -3.84912,
+        "longitude": 121.72796,
+        "zoom": 8
     },
     {
         "id": "75",
         "name": "GORONTALO",
         "alt_name": "GORONTALO",
+        "db_name": ["Gorontalo"],
         "latitude": 0.71862,
         "longitude": 122.45559
     },
@@ -261,13 +328,15 @@ export const province = [{
         "id": "76",
         "name": "SULAWESI BARAT",
         "alt_name": "SULAWESI BARAT",
-        "latitude": -2.49745,
+        "db_name": ["Sulawesi Barat"],
+        "latitude": -2.29745,
         "longitude": 119.3919
     },
     {
         "id": "81",
         "name": "MALUKU",
         "alt_name": "MALUKU",
+        "db_name": ["Maluku"],
         "latitude": -3.11884,
         "longitude": 129.42078
     },
@@ -275,21 +344,298 @@ export const province = [{
         "id": "82",
         "name": "MALUKU UTARA",
         "alt_name": "MALUKU UTARA",
+        "db_name": ["Maluku Utara"],
         "latitude": 0.63012,
-        "longitude": 127.97202
+        "longitude": 127.97202,
+        "zoom": 7
     },
     {
         "id": "91",
         "name": "PAPUA BARAT",
         "alt_name": "PAPUA BARAT",
-        "latitude": -1.38424,
-        "longitude": 132.90253
+        "db_name": ["Papua Barat"],
+        "latitude": -1.88424,
+        "longitude": 132.90253,
+        "zoom": 7
     },
     {
         "id": "94",
         "name": "PAPUA",
         "alt_name": "PAPUA",
+        "db_name": ["Papua"],
         "latitude": -3.98857,
-        "longitude": 138.34853
+        "longitude": 138.34853,
+        "zoom": 6
+    },
+    {
+        "id": "99",
+        "name": "PAPUA",
+        "alt_name": "PAPUA",
+        "db_name": ["Timor Leste"],
+        "latitude": -3.98857,
+        "longitude": 138.34853,
+        "zoom": 6
     }
 ]
+
+export const legend = {
+    "dBZ": {
+        "var1": "dBZ",
+        "datatype": "only2d"
+    },
+    "dBZ_iso": {
+        "var1": "dBZ",
+        "datatype": "mag",
+        "dimtype": "2dterbalik",
+        "baserunIsDTN": true,
+        "levels": [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65],
+        "iso_skip_value": 1,
+        "sigma": null,
+        "epsilon": 0,
+        "iso_sv": 7,
+        "point": false,
+        "color": [
+            [5, 1, 209, 248, 255],
+            [10, 2, 78, 252, 255],
+            [15, 2, 128, 134, 255],
+            [20, 0, 230, 0, 255],
+            [25, 0, 178, 0, 255],
+            [30, 129, 204, 0, 255],
+            [35, 255, 225, 3, 255],
+            [40, 249, 162, 5, 255],
+            [45, 250, 58, 7, 255],
+            [50, 222, 0, 0, 255],
+            [55, 176, 1, 1, 255],
+            [60, 205, 0, 141, 255],
+            [65, 196, 0, 255, 255]
+        ]
+    },
+    "EH": {
+        "var1": "IR",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [173.15, 233, 63, 51, 255],
+            [193.15, 234, 87, 89, 255],
+            [198.15, 248, 212, 182, 255],
+            [204.15, 246, 194, 140, 255],
+            [211.15, 242, 158, 51, 255],
+            [217.15, 235, 91, 51, 255],
+            [225.15, 206, 155, 41, 255],
+            [232.15, 194, 188, 35, 255],
+            [239.15, 157, 212, 19, 255],
+            [245.15, 132, 242, 1, 255],
+            [252.15, 118, 231, 133, 255],
+            [260.15, 95, 193, 146, 255],
+            [266.15, 68, 175, 251, 255],
+            [273.15, 74, 135, 251, 255],
+            [281.15, 53, 98, 180, 255],
+            [287.15, 16, 72, 128, 255],
+            [294.15, 0, 0, 0, 0]
+        ]
+    },
+
+    "hth": {
+        "var1": "hth",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [0, 0, 255, 1, 255],
+            [0.9, 187, 249, 150, 255],
+            [4.9, 249, 251, 56, 255],
+            [9.9, 227, 155, 9, 255],
+            [19.9, 110, 75, 21, 255],
+            [29.9, 254, 185, 188, 255],
+            [59.9, 176, 28, 28, 255]
+        ]
+    },
+
+    "smoke": {
+        "color": [
+            ['925 mb', 122, 134, 255],
+            ['1000 mb', 237, 229, 133],
+            ['100 m', 244, 136, 142],
+            ['10 m', 239, 106, 179]
+        ]
+    },
+
+    "visibility": {
+        "color": [
+            ['> 8 km', 62, 235, 83],
+            ['4.8 km - 8 km', 3, 193, 217],
+            ['1.6 km - 4.8 km', 243, 221, 47],
+            ['< 1.6 km', 240, 0, 1]
+        ]
+    },
+
+    radar: {
+        color: [
+            // [0, 255, 255, 255],
+            [5, 1, 209, 248],
+            [10, 2, 78, 252],
+            [15, 2, 128, 134],
+            [20, 0, 230, 0],
+            [25, 0, 178, 0],
+            [30, 129, 204, 0],
+            [35, 255, 225, 3],
+            [40, 249, 162, 5],
+            [45, 250, 58, 7],
+            [50, 222, 0, 0],
+            [55, 176, 1, 1],
+            [60, 205, 0, 141],
+            [65, 196, 0, 255],
+        ],
+        satuan: "dbz",
+    },
+
+    "precip": {
+        "var1": "precip",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [5, 4, 253, 3, 255],
+            [20, 254, 254, 10, 255],
+            [50, 255, 158, 0, 255],
+            [100, 253, 0, 2, 255],
+            [150, 240, 20, 190, 255]
+        ]
+    },
+    "BRG": {
+        "var1": "ffmc",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [0.000001, 0, 111, 255, 73],
+            [75, 76, 230, 0, 78],
+            [150, 255, 255, 1, 82],
+            [225, 255, 0, 0, null]
+        ]
+    },
+    "ffmc": {
+        "var1": "ffmc",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [0.000001, 0, 111, 255, 73],
+            [73, 76, 230, 0, 78],
+            [78, 255, 255, 1, 82],
+            [82, 255, 0, 0, null]
+        ]
+    },
+    "bui": {
+        "var1": "bui",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [0.000001, 0, 111, 255, 7],
+            [7, 76, 230, 0, 20],
+            [20, 255, 255, 1, 33],
+            [33, 255, 0, 0, null]
+        ]
+    },
+    "dc": {
+        "var1": "dc",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [0.000001, 0, 111, 255, 141],
+            [141, 76, 230, 0, 261],
+            [261, 255, 255, 1, 350],
+            [350, 255, 0, 0, null]
+        ]
+    },
+    "dmc": {
+        "var1": "dmc",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [0.000001, 0, 111, 255, 5],
+            [5, 76, 230, 0, 15],
+            [15, 255, 255, 1, 29],
+            [29, 255, 0, 0, null]
+        ]
+    },
+    "fwi": {
+        "var1": "fwi",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [0.000001, 0, 111, 255, 2],
+            [2, 76, 230, 0, 7],
+            [7, 255, 255, 1, 13],
+            [13, 255, 0, 0, null]
+        ]
+    },
+    "isi": {
+        "var1": "isi",
+        "datatype": "mag",
+        "baserunIsDTN": true,
+        "color": [
+            [0.000001, 0, 111, 255, 2],
+            [2, 76, 230, 0, 4],
+            [4, 255, 255, 1, 5],
+            [5, 255, 0, 0, null]
+        ]
+    },
+    "HIMA_EH": {
+        color: [
+            // [0, 255, 255, 255],
+            [5, 1, 209, 248],
+            [10, 2, 78, 252],
+            [15, 2, 128, 134],
+            [20, 0, 230, 0],
+            [25, 0, 178, 0],
+            [30, 129, 204, 0],
+            [35, 255, 225, 3],
+            [40, 249, 162, 5],
+            [45, 250, 58, 7],
+            [50, 222, 0, 0],
+            [55, 176, 1, 1],
+            [60, 205, 0, 141],
+            [65, 196, 0, 255],
+
+        ],
+        interval: 1,
+        max: 400,
+        min: 0,
+        transparent: true
+    },
+    'QPE24h': {
+        "color": [
+            [0.1, 0, 0, 199, 255],
+            [1, 0, 121, 255, 255],
+            [2, 50, 200, 255, 255],
+            [5, 120, 235, 255, 255],
+            [7, 255, 255, 255, 255],
+            [9, 255, 247, 192, 255],
+            [10, 255, 22, 0, 255],
+            [12, 255, 115, 0, 255],
+            [15, 255, 63, 0, 255],
+            [20, 200, 0, 0, 255],
+            [30, 150, 0, 0, 255]
+        ],
+        interval: 1,
+        max: 400,
+        min: 0,
+        transparent: true
+    },
+    'QPE1h': {
+        "color": [
+            [0.1, 0, 0, 199, 255],
+            [1, 0, 121, 255, 255],
+            [2, 50, 200, 255, 255],
+            [5, 120, 235, 255, 255],
+            [7, 255, 255, 255, 255],
+            [9, 255, 247, 192, 255],
+            [10, 255, 22, 0, 255],
+            [12, 255, 115, 0, 255],
+            [15, 255, 63, 0, 255],
+            [20, 200, 0, 0, 255],
+            [30, 150, 0, 0, 255]
+        ],
+        interval: 1,
+        max: 400,
+        min: 0,
+        transparent: true
+    },
+}
