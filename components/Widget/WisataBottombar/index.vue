@@ -38,7 +38,7 @@
       >
         <div class="flex-none">
           <img
-            :src="'/Archive/' + forecast[0].weather_code + '.svg'"
+            :src="'/Archive/' + forecast[0].weather_code + '.gif'"
             class="w-24 mx-auto"
             alt="imgdata"
           />
@@ -88,11 +88,11 @@ export default {
         var obj = parentDisplay.obj.idtemplate
         setting[obj].forEach(async (el) => {
           var key = el.key.split('_')[2]
-          if (key == 'subdistrict') {
+          if (key == 'kecamatan') {
             // console.log(this.ndflistener[el.value.ndf], el)
             const datares = await this.$axios.$get(
               'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                el.value.ndf
+                el.value.locationId
             )
 
             self.$set(ndflistener, el.value.ndf, datares.data)
@@ -123,7 +123,7 @@ export default {
         var key = el.key.split('_')[2]
         if (key == 'name') {
           this.name = el.value
-        } else if (key == 'subdistrict') {
+        } else if (key == 'kecamatan') {
           this.forecast.length = 0
           this.getData()
         } else if (key == 'description') {

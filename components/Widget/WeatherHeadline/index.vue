@@ -1,12 +1,12 @@
 <template>
   <div class="w-full">
     <div
-      class="bg-white/70 rounded-md py-3 px-6 flex items-center space-x-8 w-full"
+      class="bg-white/70 rounded-md relative py-3 px-6 flex items-center space-x-8 w-full"
     >
-      <div class="flex-none rounded-full">
+      <div class="flex-none w-32">
         <img
-          :src="'/Archive/' + forecast[0].weather_code + '.svg'"
-          class="w-32"
+          :src="'/Archive/' + forecast[0].weather_code + '.gif'"
+          class="w-56 absolute -left-6 -top-14 z-50"
           alt="imgdata"
         />
       </div>
@@ -138,10 +138,10 @@ export default {
         setting[obj].forEach(async (el) => {
           var key = el.key.split('_')[2]
           var key1 = el.key.split('_')[1]
-          if (key == 'subdistrict' && key1 == 'WidgetWeatherHeadline') {
+          if (key == 'kecamatan' && key1 == 'WidgetWeatherHeadline') {
             const datares = await this.$axios.$get(
               'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                el.value.ndf
+                el.value.locationId
             )
 
             this.$set(ndflistener, el.value.ndf, datares.data)

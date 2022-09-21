@@ -59,7 +59,7 @@
           "
         >
           <img
-            :src="'/Archive/' + w.weather_code + '.svg'"
+            :src="'/Archive/' + w.weather_code + '.gif'"
             class="w-20 mx-auto"
           />
         </div>

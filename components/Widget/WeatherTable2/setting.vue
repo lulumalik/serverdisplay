@@ -1,25 +1,30 @@
 <template>
   <div>
-    <div>Select Area</div>
-    <div class="mt-2">
+    <div>Provinsi</div>
+    <div>
       <v-select
-        label="area"
-        class="p-0 w-full"
-        v-model="area"
+        label="provinsi"
         @option:selected="changeSelected"
-        :options="listKecamatan"
+        v-model="province"
+        :options="$parent.province"
       ></v-select>
+    </div>
+    <div v-if="province">
+      <div class="mt-2 flex items-center">
+        <div class="flex-grow">Kotkab</div>
+      </div>
+      <div>
+        <v-select
+          label="kotkab"
+          @option:selected="changeSelectedKotkab"
+          v-model="kotkab"
+          :options="listKotkab"
+        ></v-select>
+      </div>
     </div>
   </div>
 </template>
-
 <script>
-import {
-  pangkalPinang,
-  belitung,
-  dataStatic,
-  belitungTimur
-} from '../../../utils/listStatic.js'
 export default {
   props: {
     idTemplate: {
@@ -28,47 +33,60 @@ export default {
       },
     },
   },
-  data() {
-    return {
-      area: '',
-      listKecamatan: [
-        {
-          area: 'Belitung',
-          value: belitung,
-        },
-        {
-          area: 'Belitung Timur',
-          value: belitungTimur,
-        },
-        {
-          area: 'Pangkal Pinang',
-          value: pangkalPinang,
-        },
-        {
-          area: 'Wisata Bangka Belitung',
-          value: dataStatic,
-        },
-      ],
-    }
-  },
   methods: {
+    getProvinsi() {
+      this.$axios
+        .get(
+          'https://weather.circlegeo.com/api/cgms/weather/administration/kotkab?_id=' +
+            this.province._id
+        )
+        .then((res) => {
+          this.listKotkab = res.data.data
+          // this.kotkab = this.listKotkab[0]
+        })
+    },
     changeSelected() {
+      // console.log(this.province)
       this.$store.commit('displayWidget/mutationWidget', {
-        key: this.idTemplate + '_WidgetWeatherTable2_arrayNDF',
-        value: this.area,
+        key: this.idTemplate + '_WidgetWeatherTable2_province',
+        value: this.province,
+      })
+      this.getProvinsi()
+    },
+    changeSelectedKotkab() {
+      this.$store.commit('displayWidget/mutationWidget', {
+        key: this.idTemplate + '_WidgetWeatherTable2_kotkab',
+        value: this.kotkab,
       })
     },
   },
-  mounted() {
+  async mounted() {
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWeatherTable2_arrayNDF'
+        this.idTemplate + '_WidgetWeatherTable2_province'
       ]
     ) {
-      this.area =
+      this.province =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWeatherTable2_arrayNDF'
+          this.idTemplate + '_WidgetWeatherTable2_province'
         ]
+    }
+    if (
+      this.$store.state.displayWidget.widgetSaved[
+        this.idTemplate + '_WidgetWeatherTable2_kotkab'
+      ]
+    ) {
+      this.kotkab =
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWeatherTable2_kotkab'
+        ]
+    }
+  },
+  data() {
+    return {
+      province: null,
+      kotkab: null,
+      listKotkab: [],
     }
   },
 }

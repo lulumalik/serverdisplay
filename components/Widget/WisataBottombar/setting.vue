@@ -1,22 +1,39 @@
 <template>
   <div>
-    <div>Province</div>
     <div>
-      <v-select
-        label="name"
-        @option:selected="changeSelected"
-        v-model="province"
-        :options="listProvinsi"
-      ></v-select>
-    </div>
-    <div class="mt-2">Sub District</div>
-    <div>
-      <v-select
-        label="location"
-        @option:selected="changeSelectedSub"
-        v-model="subdistrict"
-        :options="listAll"
-      ></v-select>
+      <div>Provinsi</div>
+      <div>
+        <v-select
+          label="provinsi"
+          @option:selected="changeSelected"
+          v-model="province"
+          :options="$parent.province"
+        ></v-select>
+      </div>
+      <div v-if="province">
+        <div class="mt-2 flex items-center">
+          <div class="flex-grow">Kotkab</div>
+        </div>
+        <div>
+          <v-select
+            label="kotkab"
+            @option:selected="changeSelectedKotkab"
+            v-model="kotkab"
+            :options="listKotkab"
+          ></v-select>
+        </div>
+      </div>
+      <div v-if="kotkab">
+        <div class="mt-2">Kecamatan</div>
+        <div>
+          <v-select
+            label="subdistrict"
+            @option:selected="changeSelectedKecamatan"
+            v-model="kecamatan"
+            :options="listKecamatan"
+          ></v-select>
+        </div>
+      </div>
     </div>
     <div class="mt-2">Name of location</div>
     <div>
@@ -75,7 +92,6 @@
   </div>
 </template>
 <script>
-import { dataStatic, belitung, belitungTimur } from '../../../utils/listStatic.js'
 export default {
   props: {
     idTemplate: {
@@ -85,16 +101,46 @@ export default {
     },
   },
   methods: {
+    getProvinsi() {
+      this.$axios
+        .get(
+          'https://weather.circlegeo.com/api/cgms/weather/administration/kotkab?_id=' +
+            this.province._id
+        )
+        .then((res) => {
+          this.listKotkab = res.data.data
+          // this.kotkab = this.listKotkab[0]
+        })
+    },
+    getKecamatan() {
+      this.$axios
+        .get(
+          'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+            this.kotkab._id
+        )
+        .then((res) => {
+          this.listKecamatan = res.data.data
+        })
+    },
     changeSelected() {
+      // console.log(this.province)
       this.$store.commit('displayWidget/mutationWidget', {
         key: this.idTemplate + '_WidgetWisataBottombar_province',
         value: this.province,
       })
+      this.getProvinsi()
     },
-    changeSelectedSub() {
+    changeSelectedKotkab() {
       this.$store.commit('displayWidget/mutationWidget', {
-        key: this.idTemplate + '_WidgetWisataBottombar_subdistrict',
-        value: this.subdistrict,
+        key: this.idTemplate + '_WidgetWisataBottombar_kotkab',
+        value: this.kotkab,
+      })
+      this.getKecamatan()
+    },
+    changeSelectedKecamatan() {
+      this.$store.commit('displayWidget/mutationWidget', {
+        key: this.idTemplate + '_WidgetWisataBottombar_kecamatan',
+        value: this.kecamatan,
       })
     },
     changeDesc() {
@@ -141,13 +187,25 @@ export default {
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWisataBottombar_subdistrict'
+        this.idTemplate + '_WidgetWisataBottombar_kotkab'
       ]
     ) {
-      this.subdistrict =
+      this.kotkab =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_subdistrict'
+          this.idTemplate + '_WidgetWisataBottombar_kotkab'
         ]
+      this.getProvinsi()
+    }
+    if (
+      this.$store.state.displayWidget.widgetSaved[
+        this.idTemplate + '_WidgetWisataBottombar_kecamatan'
+      ]
+    ) {
+      this.kecamatan =
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWisataBottombar_kecamatan'
+        ]
+      this.getKecamatan()
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
@@ -202,23 +260,16 @@ export default {
   },
   data() {
     return {
-      province: '',
-      subdistrict: '',
+      province: null,
+      kotkab: null,
+      kecamatan: null,
       desc: '',
       name: '',
       color: '#000000',
       backgroundColor: '#ffffff',
       img: '',
-      listProvinsi: [
-        {
-          name: 'Kepulauan Bangka Belitung',
-        },
-      ],
-      listWisata: dataStatic,
-      listBelitung: belitung,
-      listBelitungTimur: belitungTimur, 
-      listAll:[...belitung, ...belitungTimur, ...dataStatic],
-
+      listKotkab: [],
+      listKecamatan: [],
     }
   },
 }

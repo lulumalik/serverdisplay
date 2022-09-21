@@ -40,7 +40,6 @@ export default {
 
       var parentDisplay = this.$parent.$parent.$parent
       this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
-        console.log(parentDisplay)
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate

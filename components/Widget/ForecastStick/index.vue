@@ -59,8 +59,8 @@
             "
           >
             <img
-              :src="'/Archive/' + w.weather_code + '.svg'"
-              class="w-20 mx-auto"
+              :src="'/Archive/' + w.weather_code + '.gif'"
+              class="w-44 mx-auto"
             />
           </div>
           <div class="p-6 bg-white rounded-b-3xl">
@@ -111,7 +111,7 @@ import { weather_code, dirTo, parseNameDir } from '../../../utils/helperNDF.js'
 export default {
   data() {
     return {
-      allNDF:{},
+      allNDF: {},
       forecast: [
         {
           _id: '62e1d18fe1ec873f27342d0b',
@@ -202,29 +202,25 @@ export default {
         var ndflistener = this.allNDF
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
-        // console.log(setting[obj])
-        setting[obj].forEach(async (el) => {
+
+        for (var i = 0; i < setting[obj].length; i++) {
+          var el = setting[obj][i]
           var key = el.key.split('_')[2]
-          if (key == 'subdistrict') {
+          if (key == 'kecamatan') {
             const datares = await this.$axios.$get(
               'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                el.value.ndf
+                el.value.locationId
             )
-
             this.$set(ndflistener, el.value.ndf, datares.data)
-            // ndflistener[el.value.ndf] = datares.data
-
             if (ndflistener[el.value.ndf].length > 0) {
               for (var i = 0; i < 3; i++) {
                 var comp = ndflistener[el.value.ndf][i]
-                // if (comp.date.split('T')[1].split(':')[0] == '12') {
                 this.forecast.push(comp)
-                
-                // }
               }
             }
+            break;
           }
-        })
+        }
       }
     },
   },

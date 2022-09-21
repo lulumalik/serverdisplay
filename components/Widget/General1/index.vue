@@ -28,7 +28,7 @@
           "
         >
           <div>
-            <img :src="'/Archive/' + weather.weather_code +'.svg'" class="w-28 mx-auto" alt="cerah" />
+            <img :src="'/Archive/' + weather.weather_code +'.gif'" class="w-28 mx-auto" alt="cerah" />
             <div class="font-bold text-white mt-1 text-center text-lg">{{weather_code[weather.weather_code]}}</div>
           </div>
         </div>

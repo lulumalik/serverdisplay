@@ -39,7 +39,7 @@
       >
         <div class="flex-none">
           <img
-            :src="'/Archive/' + forecast[0].weather_code + '.svg'"
+            :src="'/Archive/' + forecast[0].weather_code + '.gif'"
             class="w-24 mx-auto"
             alt="imgdata"
           />

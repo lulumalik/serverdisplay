@@ -50,10 +50,8 @@
             </div>
             <div v-else>
               {{
-                key == 'Weather'
+                key == 'Cuaca'
                   ? weather_code[f.weather_code]
-                  : key == 'Wind Direction'
-                  ? dirTo[f[val]]
                   : f[val]
               }}
               <small>{{ parseSatuan[key] }}</small>
@@ -160,10 +158,10 @@ export default {
         setting[obj].forEach(async (el) => {
           var key = el.key.split('_')[2]
           var key1 = el.key.split('_')[1]
-          if (key == 'subdistrict' && key1 == 'WidgetForecastWeather') {
+          if (key == 'kecamatan' && key1 == 'WidgetForecastWeather') {
             const datares = await this.$axios.$get(
               'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                el.value.ndf
+                el.value.locationId
             )
 
             this.$set(ndflistener, el.value.ndf, datares.data)
@@ -177,22 +175,6 @@ export default {
           }
         })
       }
-      // var parent = this.$parent.$parent.$parent
-      // if (parent.currentId) {
-      //   this.forecast.length = 0
-      //   var ndf = parent.obj.properties.widgetndf
-      //   if (parent.obj.properties.widgetndf) {
-      //     ndf.forEach((el) => {
-      //       if (el.key == '_WidgetForecastWeather_subdistrict') {
-      //         var datares = this.ndflistener[el.value.ndf]
-      //         for (var i = 0; i < 3; i++) {
-      //           var comp = datares[i]
-      //           this.forecast.push(comp)
-      //         }
-      //       }
-      //     })
-      //   }
-      // }
     },
   },
   mounted() {

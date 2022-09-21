@@ -38,7 +38,8 @@ export default {
   data() {
     return {
       selected: null,
-      waitingSelected:false
+      waitingSelected:false,
+      province: [],
     }
   },
   computed: {
@@ -57,6 +58,10 @@ export default {
         this.waitingSelected = true
       }, 300);
     }
+  },
+  async mounted() {
+    var res = await this.$axios.get('https://weather.circlegeo.com/api/cgms/weather/province')
+    this.province = res.data.data
   },
   methods: {
     isEmpty(obj) {

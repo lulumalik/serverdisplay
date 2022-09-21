@@ -32,14 +32,14 @@
         class="text-white"
       >
         <td class="px-6">
-          {{ b.location.location }}
+          {{ b.location.subdistrict }}
         </td>
         <td class="text-center font-semibold px-2 py-4">
           <div class="flex items-center justify-center space-x-2">
-            <div class="w-14">
+            <div class="w-16 relative">
               <img
-                :src="'/Archive/' + b.data.weather_code + '.svg'"
-                class="w-10"
+                :src="'/Archive/' + b.data.weather_code + '.gif'"
+                class="w-32 absolute left-0 -top-8"
               />
             </div>
             <div class="w-56 text-left">
@@ -112,12 +112,10 @@ export default {
 
         this.forecast.length = 0
         this.allNDF = {}
-
-        this.area = setting[obj][0].value.area
-        // console.log(setting[obj][0].value.value)
-        var allndf = []
-        setting[obj][0].value.value.forEach((el) => {
-          allndf.push(el.ndf)
+        this.area = setting[obj][1].value.kotkab
+        var res2 = await this.$axios.get('https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' + setting[obj][1].value._id )
+        var allndf = res2.data.data.map((a) => {
+          return a.locationId
         })
         const ndf2 = await this.$axios.$post(
           'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
@@ -134,8 +132,8 @@ export default {
           this.allNDF[el.location.locationId].push(el)
         })
 
-        setting[obj][0].value.value.forEach((el) => {
-          var datares = this.allNDF[el.ndf]
+        res2.data.data.forEach((el) => {
+          var datares = this.allNDF[el.locationId]
           if (datares && datares.length > 0) {
             this.forecast.push({
               location: el,
