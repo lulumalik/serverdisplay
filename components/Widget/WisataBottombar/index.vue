@@ -33,13 +33,13 @@
         </div>
       </div>
       <div
-        class="w-3/12 flex mx-auto space-x-4 items-center"
+        class="w-3/12 flex mx-auto space-x-4 relative items-center"
         v-if="forecast.length > 0"
       >
-        <div class="flex-none">
+        <div class="flex-none w-28">
           <img
             :src="'/Archive/' + forecast[0].weather_code + '.gif'"
-            class="w-24 mx-auto"
+            class="w-44 mx-auto absolute -left-44 -top-12 right-0"
             alt="imgdata"
           />
         </div>
@@ -47,7 +47,7 @@
           <div class="text-6xl text-left" style="font-weight: 200 !important">
             <div>{{ forecast[0].temp }}<sup>o</sup>C</div>
           </div>
-          <div class="relative text-lg left-5">
+          <div class="relative text-lg left-3">
             <div class="">{{ weather_code[forecast[0].weather_code] }}</div>
           </div>
         </div>
