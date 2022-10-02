@@ -69,7 +69,7 @@ export default {
       img: '',
       backgroundnize: {},
       allNDF: {},
-      idTemplate: null 
+      idTemplate: null,
     }
   },
   computed: {
@@ -87,24 +87,27 @@ export default {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
         setting[obj].forEach(async (el) => {
-          var key = el.key.split('_')[2]
-          if (key == 'kecamatan') {
-            // console.log(this.ndflistener[el.value.ndf], el)
-            const datares = await this.$axios.$get(
-              'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                el.value.locationId
-            )
+          var comp = el.key.split('_')[1]
+          if (comp == 'WidgetWisataBottombar') {
+            var key = el.key.split('_')[2]
+            if (key == 'kecamatan') {
+              // console.log(this.ndflistener[el.value.ndf], el)
+              const datares = await this.$axios.$get(
+                'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+                  el.value.locationId
+              )
 
-            self.$set(ndflistener, el.value.ndf, datares.data)
-            // ndflistener[el.value.ndf] = datares.data
+              self.$set(ndflistener, el.value.ndf, datares.data)
+              // ndflistener[el.value.ndf] = datares.data
 
-            if (ndflistener[el.value.ndf].length > 0) {
-              for (var i = 0; i < ndflistener[el.value.ndf].length; i++) {
-                var comp = ndflistener[el.value.ndf][i]
-                // if (comp.date.split('T')[1].split(':')[0] == '12') {
-                this.forecast.push(comp)
-                break
-                // }
+              if (ndflistener[el.value.ndf].length > 0) {
+                for (var i = 0; i < ndflistener[el.value.ndf].length; i++) {
+                  var comp = ndflistener[el.value.ndf][i]
+                  // if (comp.date.split('T')[1].split(':')[0] == '12') {
+                  this.forecast.push(comp)
+                  break
+                  // }
+                }
               }
             }
           }
@@ -120,26 +123,29 @@ export default {
       var setting = parentDisplay.responseDisplay.properties.allSetting
       var obj = parentDisplay.obj.idtemplate
       setting[obj].forEach((el) => {
-        var key = el.key.split('_')[2]
-        if (key == 'name') {
-          this.name = el.value
-        } else if (key == 'kecamatan') {
-          this.forecast.length = 0
-          this.getData()
-        } else if (key == 'description') {
-          this.desc = el.value
-        } else if (key == 'color') {
-          this.color = el.value
-        } else if (key == 'background') {
-          this.backgroundColor = el.value
-        } else if (key == 'img') {
-          this.img = el.value
-          this.backgroundnize = {
-            'background-image': 'url(' + this.img + ')',
-            'background-size': 'cover',
-            'background-position': 'center',
-            'background-repeat': 'no-repeat',
-            height: '100%',
+        var comp = el.key.split('_')[1]
+        if (comp == 'WidgetWisataBottombar') {
+          var key = el.key.split('_')[2]
+          if (key == 'name') {
+            this.name = el.value
+          } else if (key == 'kecamatan') {
+            this.forecast.length = 0
+            this.getData()
+          } else if (key == 'description') {
+            this.desc = el.value
+          } else if (key == 'color') {
+            this.color = el.value
+          } else if (key == 'background') {
+            this.backgroundColor = el.value
+          } else if (key == 'img') {
+            this.img = el.value
+            this.backgroundnize = {
+              'background-image': 'url(' + this.img + ')',
+              'background-size': 'cover',
+              'background-position': 'center',
+              'background-repeat': 'no-repeat',
+              height: '100%',
+            }
           }
         }
       })
@@ -149,7 +155,6 @@ export default {
         this.getData()
       }, 3600000)
     } else {
-      
       if (
         this.$store.state.displayWidget.widgetSaved[
           this.idTemplate + '_WidgetWisataBottombar_description'

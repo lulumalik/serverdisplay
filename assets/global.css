@@ -3,10 +3,11 @@ html {
     /* Local */
 }
 
-@font-face {
+
+/* @font-face {
     font-family: pristina;
     src: url(./PRISTINA.TTF);
-}
+} */
 
 .form-input {
     box-shadow: 0 0 0 1px #ccc;

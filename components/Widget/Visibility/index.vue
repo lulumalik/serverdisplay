@@ -95,35 +95,39 @@ export default {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
         setting[obj].forEach(async (el) => {
-          var key = el.key.split('_')[2]
-          if (key == 'bandara') {
-            const datares = await this.$axios.$get(
-              'https://rami.bmkg.go.id/api/siam/code/current_or_latest/metar?icaoId=' +
-                el.value['Kode ']
-            )
-            // console.log(datares)
-            var keys = Object.keys(datares.data)[0]
-            var obj = datares.data[keys]
+          var comp = el.key.split('_')[1]
+          if (comp == 'WidgetVisibility') {
+            var key = el.key.split('_')[2]
+            if (key == 'bandara') {
+              const datares = await this.$axios.$get(
+                'https://rami.bmkg.go.id/api/siam/code/current_or_latest/metar?icaoId=' +
+                  el.value['Kode ']
+              )
+              // console.log(datares)
+              var keys = Object.keys(datares.data)[0]
+              var obj = datares.data[keys]
 
-            if (obj.parsed && obj.parsed.cavok) {
-              this.indikator = '#3eeb53'
-            } else {
-              if (obj.parsed && obj.parsed.visibility) {
-                this.meters = obj.parsed.visibility.meters
-                if (obj.parsed.visibility.meters > 8000) {
-                  this.indikator = '#3eeb53'
-                } else if (
-                  obj.parsed.visibility.meters <= 8000 &&
-                  obj.parsed.visibility.meters > 4800
-                ) {
-                  this.indikator = '#03c1d9'
-                } else if (
-                  obj.parsed.visibility.meters <= 4800 &&
-                  obj.parsed.visibility.meters > 1600
-                ) {
-                  this.indikator = '#f3dd2f'
-                } else if (obj.parsed.visibility.meters <= 1600) {
-                  this.indikator = '#f34f2f'
+              this.meters = obj.parsed.visibility.meters
+              if (obj.parsed && obj.parsed.cavok) {
+                this.indikator = '#3eeb53'
+              } else {
+                if (obj.parsed && obj.parsed.visibility) {
+                  this.meters = obj.parsed.visibility.meters
+                  if (obj.parsed.visibility.meters > 8000) {
+                    this.indikator = '#3eeb53'
+                  } else if (
+                    obj.parsed.visibility.meters <= 8000 &&
+                    obj.parsed.visibility.meters > 4800
+                  ) {
+                    this.indikator = '#03c1d9'
+                  } else if (
+                    obj.parsed.visibility.meters <= 4800 &&
+                    obj.parsed.visibility.meters > 1600
+                  ) {
+                    this.indikator = '#f3dd2f'
+                  } else if (obj.parsed.visibility.meters <= 1600) {
+                    this.indikator = '#f34f2f'
+                  }
                 }
               }
             }
@@ -140,26 +144,29 @@ export default {
       var setting = parentDisplay.responseDisplay.properties.allSetting
       var obj = parentDisplay.obj.idtemplate
       setting[obj].forEach((el) => {
-        var key = el.key.split('_')[2]
-        if (key == 'name') {
-          this.name = el.value
-        } else if (key == 'bandara') {
-          this.forecast.length = 0
-          this.getData()
-        } else if (key == 'description') {
-          this.desc = el.value
-        } else if (key == 'color') {
-          this.color = el.value
-        } else if (key == 'background') {
-          this.backgroundColor = el.value
-        } else if (key == 'img') {
-          this.img = el.value
-          this.backgroundnize = {
-            'background-image': 'url(' + this.img + ')',
-            'background-size': 'cover',
-            'background-position': 'center',
-            'background-repeat': 'no-repeat',
-            height: '100%',
+        var comp = el.key.split('_')[1]
+        if (comp == 'WidgetVisibility') {
+          var key = el.key.split('_')[2]
+          if (key == 'name') {
+            this.name = el.value
+          } else if (key == 'bandara') {
+            this.forecast.length = 0
+            this.getData()
+          } else if (key == 'description') {
+            this.desc = el.value
+          } else if (key == 'color') {
+            this.color = el.value
+          } else if (key == 'background') {
+            this.backgroundColor = el.value
+          } else if (key == 'img') {
+            this.img = el.value
+            this.backgroundnize = {
+              'background-image': 'url(' + this.img + ')',
+              'background-size': 'cover',
+              'background-position': 'center',
+              'background-repeat': 'no-repeat',
+              height: '100%',
+            }
           }
         }
       })

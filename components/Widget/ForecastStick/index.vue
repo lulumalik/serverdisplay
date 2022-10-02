@@ -41,7 +41,10 @@
       </div> -->
       <div class="flex space-x-4 text-gray-700" v-if="forecast.length > 0">
         <div v-for="(w, i) in forecast" :key="i">
-          <div class="mb-4 font-bold text-2xl text-center">
+          <div
+            class="mb-4 font-bold text-2xl text-center"
+            :class="currentDate >= 18 ? 'text-white' : 'text-black'"
+          >
             <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
             {{ returningTimeZone(new Date(w.date)) }}
             {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
@@ -89,7 +92,7 @@
               <div class="w-6">
                 <img
                   src="/svg/dir.svg"
-                  class="w-4"
+                  class="w-5 relative right-0.5"
                   :style="{
                     transform: 'rotate(' + dirTo[w.wDir] + 'deg)',
                   }"
@@ -112,6 +115,7 @@ export default {
   data() {
     return {
       allNDF: {},
+      currentDate: new Date().getHours(),
       forecast: [
         {
           _id: '62e1d18fe1ec873f27342d0b',
@@ -196,6 +200,7 @@ export default {
     },
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
+      this.currentDate = new Date().getHours()
       if (parentDisplay.production) {
         this.forecast.length = 0
         this.allNDF = {}
@@ -206,19 +211,22 @@ export default {
         for (var i = 0; i < setting[obj].length; i++) {
           var el = setting[obj][i]
           var key = el.key.split('_')[2]
-          if (key == 'kecamatan') {
-            const datares = await this.$axios.$get(
-              'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                el.value.locationId
-            )
-            this.$set(ndflistener, el.value.ndf, datares.data)
-            if (ndflistener[el.value.ndf].length > 0) {
-              for (var i = 0; i < 3; i++) {
-                var comp = ndflistener[el.value.ndf][i]
-                this.forecast.push(comp)
+          var comp = el.key.split('_')[1]
+          if (comp == 'WidgetForecastStick') {
+            if (key == 'kecamatan') {
+              const datares = await this.$axios.$get(
+                'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+                  el.value.locationId
+              )
+              this.$set(ndflistener, el.value.ndf, datares.data)
+              if (ndflistener[el.value.ndf].length > 0) {
+                for (var i = 0; i < 3; i++) {
+                  var comp = ndflistener[el.value.ndf][i]
+                  this.forecast.push(comp)
+                }
               }
+              break
             }
-            break;
           }
         }
       }

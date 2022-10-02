@@ -18,31 +18,31 @@
         />
       </div>
       <div class="uppercase flex-grow text-xl bg-white/80 rounded-r-md pl-2 pr-6 py-6">
-        <div class="bg-sky-500 text-xl rounded-md text-white p-4 text-center">
+        <div class="bg-blue-900/80 text-xl rounded-md text-white p-4 text-center">
           <div>Informasi gempa bumi terakhir {{ datagempa.Tanggal }}</div>
           <div></div>
         </div>
         <table class="mt-4">
           <tr>
-            <td class="text-sky-400 pt-4">Lokasi</td>
+            <td class="pt-4">Lokasi</td>
             <td class="pl-2 pt-4">
               : {{ datagempa.Lintang || '-' }} , {{ datagempa.Bujur || '-' }}
             </td>
           </tr>
           <tr>
-            <td class="text-sky-400 pt-4">Kedalaman</td>
+            <td class="pt-4">Kedalaman</td>
             <td class="pl-2 pt-4">: {{ datagempa.Kedalaman || '-' }}</td>
           </tr>
           <tr>
-            <td class="text-sky-400 pt-4">Magnitude</td>
+            <td class="pt-4">Magnitude</td>
             <td class="pl-2 pt-4">: {{ datagempa.Magnitude || '-' }}</td>
           </tr>
           <tr>
-            <td class="text-sky-400 pt-4">Koordinat</td>
+            <td class="pt-4">Koordinat</td>
             <td class="pl-2 pt-4">: {{ datagempa.Coordinates || '-' }}</td>
           </tr>
           <tr>
-            <td class="text-sky-400 pt-4">Jam</td>
+            <td class="pt-4">Jam</td>
             <td class="pl-2 pt-4">: {{ datagempa.Jam || '-' }}</td>
           </tr>
         </table>

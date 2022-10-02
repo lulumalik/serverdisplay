@@ -1,7 +1,17 @@
 <template>
   <div class="w-full">
     <div
-      class="bg-white/70 rounded-md relative py-3 px-6 flex items-center space-x-8 w-full"
+      class="
+        bg-white/70
+        rounded-md
+        relative
+        py-5
+        px-6
+        flex
+        items-center
+        space-x-8
+        w-full
+      "
     >
       <div class="flex-none w-32">
         <img
@@ -31,12 +41,12 @@
           </tr>
           <tr>
             <td>
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center space-x-3 mt-2">
                 <div><img class="w-5" src="/weatherheadline/WSpd.svg" /></div>
                 <div class="relative right-1">Kecepatan Angin</div>
               </div>
             </td>
-            <td class="font-bold pl-6">: {{ forecast[0].wSpd }} km/jam</td>
+            <td class="font-bold pl-6"><div class="mt-2">: {{ forecast[0].wSpd }} km/jam</div></td>
           </tr>
           <tr>
             <td>
@@ -46,7 +56,20 @@
               </div>
             </td>
             <td class="font-bold pl-6">
-              : {{ dirTo[forecast[0].wDir] }}<sup>o</sup>
+              
+              <div class="flex space-x-2 items-center">
+                <div>:</div>
+                <div class="relative">
+                  <img src="/weatherheadline/compass.svg" alt="img" />
+                  <img
+                    src="/weatherheadline/arrow.svg"
+                    :style="{ transform: 'rotate(' + dirTo[forecast[0].wDir] + 'deg)' }"
+                    alt="img2"
+                    class="absolute z-30 top-0 left-0 right-0 mx-auto"
+                  />
+                </div>
+                <div>{{ dirTo[forecast[0].wDir] }}<sup>o</sup></div>
+              </div>
             </td>
           </tr>
         </table>
@@ -68,7 +91,7 @@
           </tr>
           <tr>
             <td>
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center space-x-3 mt-2">
                 <div>
                   <img class="w-3" src="/weatherheadline/Temperature.svg" />
                 </div>
@@ -76,7 +99,7 @@
               </div>
             </td>
             <td class="font-bold pl-6">
-              : {{ forecast[0].maxTemp }} <sup>o</sup>C
+             <div class="mt-2"> : {{ forecast[0].maxTemp }} <sup>o</sup>C</div>
             </td>
           </tr>
         </table>

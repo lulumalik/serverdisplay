@@ -53,6 +53,60 @@ export const penjelasanProduct = {
     "Total Precipitation 24 Hour": "Presipitasi ditampilkan dalam bentuk akumulasi selama 24 jam terakhir dalam satuan mm/24 jam. Presipitasi secara sederhana bisa dianalogikan sebagai curah hujan yang kategorinya juga merujuk pada Peraturan BMKG bahwa 5-20 mm/24 jam: hujan ringan, 20-50 mm/24 jam: hujan sedang, 50-100 mm/24 jam: hujan lebat, dan 100 mm/24 jam: hujan ekstrem.",
     "FDRS Gambut BRGM": "Model sistem peringatan dini kebakaran (Fire Danger Rating System ~ FDRS) untuk lahan gambut. Indeks kebakaran untuk model FDRS ini dihitung berdasarkan pendekatan hidrometeorologis  menggunakan model modified Keetch-Bryam Drought Index (mKBDI). Pendekatan model ini mengkombinasikan parameter cuaca dan hidrologi dalam menilai bahaya kebakaran (fire hazard). Nilai mKBDI yang diperoleh kemudian dikelompokkan menjadi empat kategori Aman, Siaga, Bahaya dan Ekstrem di tujuh provinsi prioritas restorasi BRGM yaitu : Jambi, Riau, Sumatera Selatan, Kalimantan Barat, Kalimantan Tengah, Kalimantan Selatan dan Papua."
 }
+
+export const hari2 = [
+    { key: 'obs', name: 'Observasi' },
+    { key: '00', name: 'Prediksi H+0' },
+    { key: '01', name: 'Prediksi H+1' },
+    { key: '02', name: 'Prediksi H+2' },
+    { key: '03', name: 'Prediksi H+3' },
+    { key: '04', name: 'Prediksi H+4' },
+    { key: '05', name: 'Prediksi H+5' },
+    { key: '06', name: 'Prediksi H+6' },
+    { key: '07', name: 'Prediksi H+7' },
+]
+
+export const code = [
+    { key: '01_aceh', name: "NANGGROE ACEH DARUSSALAM" },
+    { key: '02_sumut', name: "SUMATERA UTARA" },
+    { key: '03_sumbar', name: "SUMATERA BARAT" },
+    { key: '04_riau', name: "RIAU" },
+    { key: '05_kepri', name: "KEPULAUAN RIAU" },
+    { key: '06_jambi', name: "JAMBI" },
+    { key: '07_bengkulu', name: "BENGKULU" },
+    { key: '08_sumsel', name: "SUMATERA SELATAN" },
+    { key: '09_babel', name: "KEPULAUAN BANGKA BELITUNG" },
+    { key: '10_lampung', name: "LAMPUNG" },
+    { key: '11_banten', name: "BANTEN" },
+    { key: '12_dkijakarta', name: "DKI JAKARTA" },
+    { key: '13_jabar', name: "JAWA BARAT" },
+    { key: '14_jateng', name: "JAWA TENGAH" },
+    { key: '15_jatim', name: "JAWA TIMUR" },
+    { key: '16_yogya', name: "D.I. YOGYAKARTA" },
+    { key: '17_bali', name: "BALI" },
+    { key: '18_ntb', name: "NUSA TENGGARA BARAT" },
+    { key: '19_ntt', name: "NUSA TENGGARA TIMUR" },
+    { key: '20_kalbar', name: "KALIMANTAN BARAT" },
+    { key: '21_kalsel', name: "KALIMANTAN SELATAN" },
+    { key: '22_kalteng', name: "KALIMANTAN TENGAH" },
+    { key: '23_kaltim', name: "KALIMANTAN TIMUR" },
+    { key: '24_kalatara', name: "KALIMANTAN UTARA" },
+    { key: '25_gorontalo', name: "GORONTALO" },
+    { key: '26_sulbar', name: "SULAWESI BARAT" },
+    { key: '27_sulsel', name: "SULAWESI SELATAN" },
+    { key: '28_sultra', name: "SULAWESI TENGGARA" },
+    { key: '29_sulteng', name: "SULAWESI TENGAH" },
+    { key: '30_sulut', name: "SULAWESI UTARA" },
+    { key: '31_maluku', name: "MALUKU" },
+    { key: '32_malut', name: "MALUKU UTARA" },
+    { key: '33_pabar', name: "PAPUA BARAT" },
+    { key: '34_papua', name: "PAPUA" },
+    { key: '35_asean', name: "ASEAN" },
+    { key: '36_indonesia', name: "INDONESIA" },
+    { key: '37_sumatera', name: "SUMATERA" },
+    { key: '38_kalimantan', name: "KALIMANTAN" }
+]
+
 export const province = [{
         "id": "11",
         "name": "NANGGROE ACEH DARUSSALAM",

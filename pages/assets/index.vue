@@ -67,7 +67,8 @@
                 &times;
               </button>
               <img
-                class="w-24 max-h-44"
+                @click="copyimage(img.url)"
+                style="max-width:240px;""
                 :src="$axios.defaults.baseURL + img.url.split('/api/')[1]"
                 alt="img"
               />
@@ -99,7 +100,7 @@
                 "
                 @click="creating"
               >
-                Upload Logo
+                Upload Assets
               </button>
             </div>
           </div>
@@ -142,6 +143,23 @@ export default {
   },
   middleware: ['checkLogin'],
   methods: {
+    copyimage(url) {
+      var self = this
+      var str = this.$axios.defaults.baseURL + url.split('/api/')[1]
+      navigator.clipboard.writeText(str).then(
+        function () {
+          // console.log('Async: Copying to clipboard was successful!')
+          self.$toast.open({
+            message: 'Image has been copied',
+            type: 'success',
+            duration: 2000,
+          })
+        },
+        function (err) {
+          console.error('Async: Could not copy text: ', err)
+        }
+      )
+    },
     creating() {
       document.getElementById('fileUpload').click()
     },

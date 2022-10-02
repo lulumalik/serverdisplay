@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-4">
+    <div class="mb-4" :class="currentDate >= 18 ? 'text-white' : 'text-black'">
       <div class="font-bold text-6xl text-center">
         {{ area }}
       </div>
@@ -17,41 +17,38 @@
         {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
       </div>
     </div>
-    <table class="w-full text-2xl mt-6">
-      <tr style="background: #303030" class="text-white">
-        <th class="text-left"><div class="pl-2">Nama Lokasi</div></th>
-        <th class="text-center">Cuaca</th>
-        <th class="text-center">Angin</th>
-        <th class="text-center">Suhu</th>
-        <th class="text-center">Kelembaban</th>
+    <table class="w-full text-2xl mx-auto mt-6">
+      <tr class="text-white bg-black/80">
+        <th class="text-3xl text-left"><div class="pl-2">Nama Lokasi</div></th>
+        <th class="text-3xl text-center">Cuaca</th>
+        <th class="text-3xl text-center">Angin</th>
+        <th class="text-3xl text-center">Suhu</th>
+        <th class="text-3xl text-center">Kelembaban</th>
       </tr>
-      <tr
-        v-for="(b, i) in forecast"
-        :key="i"
-        style="background: rgba(48, 48, 48, 0.4)"
-        class="text-white"
-      >
-        <td class="px-6">
-          {{ b.location.subdistrict }}
+      <tr v-for="(b, i) in forecast" :key="i" class="text-white bg-black/60">
+        <td>
+          <div class="text-3xl">
+            <b>{{ b.location.subdistrict }}</b>
+          </div>
         </td>
         <td class="text-center font-semibold px-2 py-4">
           <div class="flex items-center justify-center space-x-2">
-            <div class="w-16 relative">
+            <div class="w-24 relative">
               <img
                 :src="'/Archive/' + b.data.weather_code + '.gif'"
-                class="w-32 absolute left-0 -top-8"
+                class="w-32 absolute left-0 -top-14"
               />
             </div>
-            <div class="w-56 text-left">
+            <div class="w-56 text-3xl text-left">
               {{ weather_code[b.data.weather_code] }}
             </div>
           </div>
         </td>
-        <td class="text-center font-semibold">{{ b.data.wSpd }} km/jam</td>
+        <td class="text-center font-semibold"><div class="text-3xl">{{ b.data.wSpd }} km/jam</div></td>
         <td class="text-center font-semibold">
-          {{ b.data.temp }} <sup>o</sup>C
+          <div class=text-3xl>{{ b.data.temp }} <sup>o</sup>C</div>
         </td>
-        <td class="text-center font-semibold">{{ b.data.rh }} %</td>
+        <td class="text-center font-semibold"><div class="text-3xl">{{ b.data.rh }} %</div></td>
       </tr>
     </table>
   </div>
@@ -65,6 +62,7 @@ export default {
       forecast: [],
       area: '',
       allNDF: {},
+      currentDate: new Date().getHours(),
     }
   },
   computed: {
@@ -106,6 +104,7 @@ export default {
     },
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
+      this.currentDate = new Date().getHours()
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
@@ -113,7 +112,10 @@ export default {
         this.forecast.length = 0
         this.allNDF = {}
         this.area = setting[obj][1].value.kotkab
-        var res2 = await this.$axios.get('https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' + setting[obj][1].value._id )
+        var res2 = await this.$axios.get(
+          'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+            setting[obj][1].value._id
+        )
         var allndf = res2.data.data.map((a) => {
           return a.locationId
         })
@@ -149,6 +151,13 @@ export default {
 
 <style scoped>
 th {
-  padding: 15px !important;
+  padding: 25px !important;
+}
+td {
+  white-space: nowrap;
+  padding-left: 35px;
+  padding-right: 35px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 </style>

@@ -44,13 +44,50 @@ export default {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
         setting[obj].forEach((el) => {
-        //   var key = el.key.split('_')[2]
-        // console.log(el)
-        this.location = el.value.name
-        //   if (key == 'area') {
-        //     console.log(el.value)
-        //   }
+          this.location = el.value.name
+          this.testImage(
+            'https://signature.bmkg.go.id/storage/output/public-impact/' +
+              this.location +
+              '/' +
+              this.year +
+              '/' +
+              this.getZero(this.month) +
+              '/' +
+              this.getZero(this.day) +
+              '/00.png'
+          )
         })
+      }
+    },
+    testImage(URL) {
+      var tester = new Image()
+      tester.onload = this.imageFound
+      tester.onerror = this.imageNotFound
+      tester.src = URL
+    },
+    imageFound() {
+      var parent = this.$parent.$parent.$parent
+      if (parent.production) {
+        // parent.errorImage['MaritimWarning'] =false
+        // parent.spliceSlide()
+      }
+    },
+
+    imageNotFound(e) {
+      var parent = this.$parent.$parent.$parent
+      if (parent.production) {
+        // parent.errorImage['MaritimWarning'] =false
+        parent.spliceSlide(
+          'https://signature.bmkg.go.id/storage/output/public-impact/' +
+            this.location +
+            '/' +
+            this.year +
+            '/' +
+            this.getZero(this.month) +
+            '/' +
+            this.getZero(this.day) +
+            '/00.png'
+        )
       }
     },
   },
