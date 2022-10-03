@@ -26,7 +26,7 @@
             relative
           "
         >
-          <div class="mb-6 flex space-x-6 absolute top-4 right-4">
+          <!-- <div class="mb-6 flex space-x-6 absolute top-4 right-4">
             <div class="relative">
               <input
                 type="text"
@@ -49,29 +49,67 @@
                 </svg>
               </div>
             </div>
-          </div>
-          <div class="mt-12 flex flex-wrap space-x-6" style="height: 85%">
-            <!-- <DisplayList :templateDB="templateDB" /> -->
-            <div v-for="(img, i) in templateDB" :key="i" class="relative">
-              <button
-                @click="deleteLogos(img._id)"
-                class="
-                  text-red-500
-                  font-bold
-                  absolute
-                  -right-3
-                  -top-2
-                  cursor-pointer
-                "
+          </div> -->
+          <div style="height: 85%">
+            <div class="mt-12 grid grid-cols-6 gap-4">
+              <!-- <DisplayList :templateDB="templateDB" /> -->
+              <div
+                v-for="(img, i) in templateDB"
+                :key="i"
+                class="relative"
+                style="width: 200px; height: 200px"
               >
-                &times;
-              </button>
-              <img
-                @click="copyimage(img.url)"
-                style="max-width:240px;""
-                :src="$axios.defaults.baseURL + img.url.split('/api/')[1]"
-                alt="img"
-              />
+                <button
+                  @click="deleteLogos(img._id)"
+                  class="
+                    text-red-500
+                    font-bold
+                    absolute
+                    -right-6
+                    -top-2
+                    text-xl
+                    cursor-pointer
+                  "
+                >
+                  &times;
+                </button>
+                <div
+                  @click="copyimage(img.url)"
+                  class="rounded-md border-4 border-white shadow-md cursor-pointer"
+                  style="width: 200px; height: 200px; background-size: cover"
+                  :style="{
+                    backgroundImage:
+                      'url(' +
+                      $axios.defaults.baseURL +
+                      img.url.split('/api/')[1] +
+                      ')',
+                  }"
+                ></div>
+                <button
+                  @click="copyimage(img.url)"
+                  class="
+                    text-sky-400
+                    absolute
+                    bg-white
+                    rounded-lg
+                    bottom-2
+                    left-2
+                    cursor-pointer
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M21 2h-19v19h-2v-21h21v2zm3 2v20h-20v-20h20zm-2 2h-1.93c-.669 0-1.293.334-1.664.891l-1.406 2.109h-6l-1.406-2.109c-.371-.557-.995-.891-1.664-.891h-1.93v16h16v-16zm-3 6h-10v1h10v-1zm0 3h-10v1h10v-1zm0 3h-10v1h10v-1z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
           <div class="text-right flex justify-end w-full">

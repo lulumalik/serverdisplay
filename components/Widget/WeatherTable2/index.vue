@@ -17,21 +17,21 @@
         {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
       </div>
     </div>
-    <table class="w-full text-2xl mx-auto mt-6">
-      <tr class="text-white bg-black/80">
-        <th class="text-3xl text-left"><div class="pl-2">Nama Lokasi</div></th>
-        <th class="text-3xl text-center">Cuaca</th>
-        <th class="text-3xl text-center">Angin</th>
-        <th class="text-3xl text-center">Suhu</th>
-        <th class="text-3xl text-center">Kelembaban</th>
+    <table class="w-full text-2xl mx-auto relative right-12 mt-6">
+      <tr class="text-white">
+        <th class="text-3xl bg-black/80 rounded-tl-lg text-left"><div class="pl-2">Nama Lokasi</div></th>
+        <th class="text-3xl bg-black/80 text-center">Cuaca</th>
+        <th class="text-3xl bg-black/80 text-center">Angin</th>
+        <th class="text-3xl bg-black/80 text-center">Suhu</th>
+        <th class="text-3xl bg-black/80 rounded-tr-lg text-center">Kelembaban</th>
       </tr>
-      <tr v-for="(b, i) in forecast" :key="i" class="text-white bg-black/60">
-        <td>
+      <tr v-for="(b, i) in forecast" :key="i" class="text-white">
+        <td class="bg-black/60" :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''">
           <div class="text-3xl">
             <b>{{ b.location.subdistrict }}</b>
           </div>
         </td>
-        <td class="text-center font-semibold px-2 py-4">
+        <td class="text-center bg-black/60 font-semibold px-2 py-4">
           <div class="flex items-center justify-center space-x-2">
             <div class="w-24 relative">
               <img
@@ -44,11 +44,11 @@
             </div>
           </div>
         </td>
-        <td class="text-center font-semibold"><div class="text-3xl">{{ b.data.wSpd }} km/jam</div></td>
-        <td class="text-center font-semibold">
+        <td class="text-center bg-black/60 font-semibold"><div class="text-3xl">{{ b.data.wSpd }} km/jam</div></td>
+        <td class="text-center bg-black/60 font-semibold">
           <div class=text-3xl>{{ b.data.temp }} <sup>o</sup>C</div>
         </td>
-        <td class="text-center font-semibold"><div class="text-3xl">{{ b.data.rh }} %</div></td>
+        <td :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''" class="text-center bg-black/60 font-semibold"><div class="text-3xl">{{ b.data.rh }} %</div></td>
       </tr>
     </table>
   </div>

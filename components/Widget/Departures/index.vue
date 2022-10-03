@@ -1,71 +1,79 @@
 <template>
   <div class="from-sky-100 flex justify-center items-center">
     <div class="flex items-start space-x-4 w-full">
-      <div
-        class="
-          bg-white/70
-          shadow-md
-          px-12
-          rounded-md
-          shadow-md
-          w-full
-          pt-4
-          pb-12
-        "
-      >
-        <div>
-          <div class="text-black px-6 py-3 font-semibold text-center text-4xl">
-            Keberangkatan
+      <div class="w-full">
+        <div >
+          <div class="rounded-md bg-white/70 shadow-md">
+            <div
+              class="text-black px-6 py-3 font-semibold text-center text-4xl"
+            >
+              Keberangkatan
+            </div>
+            <div class="flex pb-6">
+              <div
+                class="
+                  flex-grow
+                  text-black
+                  font-thin
+                  text-center
+                  font-semibold
+                  text-2xl
+                  truncate
+                "
+              >
+                {{ result.tagname }}
+              </div>
+            </div>
           </div>
           <div
-            class="h-80 w-full relative bg-gray-100 rounded-md shadow-md"
-            :style="{backgroundImage : 'url(' + url + ')', backgroundSize: 'cover'}"
+            class="h-80 w-full mt-6 border-4 border-white shadow-md relative bg-gray-100 rounded-md shadow-md"
+            :style="{
+              backgroundImage: 'url(' + url + ')',
+              backgroundSize: 'cover',
+            }"
           ></div>
-          <div class="pt-3">
+          <div class="py-4">
             <div
               class="
                 font-bold
                 flex-none
-                text-2xl
+                text-3xl
                 flex
                 items-center
                 text-gray-700
+                bg-white/70
+                p-4
+                shadow-md
+                rounded-md
               "
             >
               <div class="flex-grow text-center">{{ result.weather }}</div>
             </div>
           </div>
-          <div class="flex pt-3 pb-6">
-            <div
-              class="
-                flex-grow
-                text-black
-                font-thin
-                text-center
-                font-semibold
-                text-2xl
-                truncate
-              "
-            >
-              {{ result.tagname }}
-            </div>
-          </div>
         </div>
         <div
-          class="flex justify-center text-2xl border-t-2 pt-6 border-gray-300"
+          class="flex justify-center text-2xl bg-white/70 rounded px-12 py-4 rounded-md shadow-md"
         >
           <div class="flex-grow">
-            <div>
-              <b class="text-gray-700">Suhu</b> {{ result.temperature
-              }}<sup>o</sup>C
+            <div class="font-bold flex space-x-4">
+              <div class="text-gray-700 font-semibold">Suhu</div>
+              <div>{{ result.temperature }}<sup>o</sup>C</div>
             </div>
-            <div class="mt-2"><b class="text-gray-700">Jarak Pandang</b></div>
-            <div class="mt-2">{{ result.visibility }} meters</div>
+            <div class="mt-0.5">
+              <div class="text-gray-700 font-semibold">Jarak Pandang</div>
+            </div>
+            <div class="font-bold mt-0.5">
+              {{ result.visibility }} kilometers
+            </div>
           </div>
           <div class="flex-grow">
             <div class="text-gray-700"><b>Angin</b></div>
-            <div class="mt-2">(dari) {{ result.windDirection }},</div>
-            <div class="mt-2">{{ result.windSpeed }} km/jam</div>
+            <div class="mt-0.5 font-semibold">
+              (dari) {{ result.windDirection }},
+            </div>
+            <div class="mt-0.5 font-semibold">
+              {{ result.windSpeed }} km/jam
+            </div>
           </div>
         </div>
       </div>

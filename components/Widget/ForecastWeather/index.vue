@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="w-full rounded-md text-lg">
+    <table class="w-full rounded-md text-lg shadow-md">
       <tr class="text-white font-semibold">
         <td style="background: #303030" class="rounded-tl-lg">
           {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}

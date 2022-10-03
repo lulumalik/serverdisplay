@@ -35,16 +35,13 @@
       <div class="w-3/12 flex mx-auto space-x-4 relative items-center">
         <div class="flex-grow" :style="{ color: color }">
           <div class="text-6xl text-left" style="font-weight: 200 !important">
-            <div class="text-xl">Visibility</div>
-            <div class="flex space-x-2 items-end">
-              <div class="relative">
-                {{ commify(meters) }}
-                <div
-                  class="w-4 h-4 absolute top-0 -right-6 rounded-full"
-                  :style="{ background: indikator }"
-                ></div>
+            <div class="text-xl font-semibold">Visibility</div>
+            <div class="flex space-x-2 items-center">
+              <div class="relative font-semibold" >
+                <!-- :style="{color: indikator}" -->
+                {{ commify(meters) }} 
               </div>
-              <div class="text-xl">meters</div>
+              <div class="text-4xl font-thin">Kilometers</div>
             </div>
           </div>
         </div>
@@ -77,14 +74,7 @@ export default {
   },
   methods: {
     commify(n) {
-      var parts = n.toString().split('.')
-      const numberPart = parts[0]
-      const decimalPart = parts[1]
-      const thousands = /\B(?=(\d{3})+(?!\d))/g
-      return (
-        numberPart.replace(thousands, '.') +
-        (decimalPart ? '.' + decimalPart : '')
-      )
+      return n / 1000
     },
     async getData() {
       var self = this

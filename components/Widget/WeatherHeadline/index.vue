@@ -3,7 +3,7 @@
     <div
       class="
         bg-white/70
-        rounded-md
+        rounded-lg
         relative
         py-5
         px-6
@@ -11,12 +11,13 @@
         items-center
         space-x-8
         w-full
+        shadow-md
       "
     >
       <div class="flex-none w-32">
         <img
           :src="'/Archive/' + forecast[0].weather_code + '.gif'"
-          class="w-56 absolute -left-6 -top-14 z-50"
+          class="w-56 absolute -left-6 -top-10 z-50"
           alt="imgdata"
         />
       </div>

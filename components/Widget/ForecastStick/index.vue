@@ -42,7 +42,7 @@
       <div class="flex space-x-4 text-gray-700" v-if="forecast.length > 0">
         <div v-for="(w, i) in forecast" :key="i">
           <div
-            class="mb-4 font-bold text-2xl text-center"
+            class="mb-3 font-bold text-2xl text-center"
             :class="currentDate >= 18 ? 'text-white' : 'text-black'"
           >
             <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
@@ -53,6 +53,7 @@
             class="
               rounded-t-3xl
               border-4 border-white
+              shadow-md
               flex
               items-center
               justify-center
@@ -66,7 +67,7 @@
               class="w-44 mx-auto"
             />
           </div>
-          <div class="p-6 bg-white rounded-b-3xl">
+          <div class="p-6 bg-white rounded-b-3xl shadow-md">
             <div class="font-semibold text-center">
               {{ weather_code[w.weather_code] }}
             </div>

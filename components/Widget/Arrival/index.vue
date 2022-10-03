@@ -8,7 +8,7 @@
     >
       <div>
         <div
-          class="bg-gray-300/70 shadow-md w-56 h-56 rounded-md"
+          class="bg-gray-300/70 border-4 border-white shadow-md w-56 h-56 rounded-md"
           :style="{
             backgroundImage: 'url(' + val.url + ')',
             backgroundSize: 'cover',
@@ -27,11 +27,11 @@
         <div>
           <div class="text-xl">
             <div class="mt-2 font-bold">{{ val.weather }}</div>
-            <div>
+            <div class="font-semibold">
               Angin: (dari) {{ val.windDirection }}, {{ val.windSpeed }} km/jam
             </div>
-            <div>Jarak Pandang: {{ val.visibility || '-' }} meters</div>
-            <div>Suhu: {{ val.temperature }} Derajat</div>
+            <div class="font-semibold">Jarak Pandang: {{ val.visibility || '-' }} Kilometers</div>
+            <div class="font-semibold">Suhu: {{ val.temperature }} <sup>o</sup>C</div>
           </div>
         </div>
       </div>

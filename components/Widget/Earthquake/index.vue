@@ -1,9 +1,8 @@
 <template>
   <div>
-    <div class="flex">
+    <div class="flex space-x-6">
       <div
         class="
-          bg-white/80
           flex flex-grow
           items-center
           justify-center
@@ -13,16 +12,17 @@
       >
         <img
           style="max-width: 520px"
+          class="rounded-lg shadow-lg"
           :src="'https://ews.bmkg.go.id/tews/data/' + datagempa.Shakemap"
           alt="gempa"
         />
       </div>
-      <div class="uppercase flex-grow text-xl bg-white/80 rounded-r-md pl-2 pr-6 py-6">
+      <div class="uppercase flex-grow text-xl bg-white/80 rounded-lg shadow-md px-6 py-6">
         <div class="bg-blue-900/80 text-xl rounded-md text-white p-4 text-center">
           <div>Informasi gempa bumi terakhir {{ datagempa.Tanggal }}</div>
           <div></div>
         </div>
-        <table class="mt-4">
+        <table class="mx-12 my-6 font-semibold">
           <tr>
             <td class="pt-4">Lokasi</td>
             <td class="pl-2 pt-4">
@@ -39,16 +39,16 @@
           </tr>
           <tr>
             <td class="pt-4">Koordinat</td>
-            <td class="pl-2 pt-4">: {{ datagempa.Coordinates || '-' }}</td>
+            <td class="pl-2 pt-4">: {{ datagempa.Coordinates && datagempa.Coordinates.split(',').join(', ') || '-' }}</td>
           </tr>
           <tr>
             <td class="pt-4">Jam</td>
             <td class="pl-2 pt-4">: {{ datagempa.Jam || '-' }}</td>
           </tr>
         </table>
-        <hr class="border-gray-300 my-8" />
-        <div class="w-full" :class="datagempa.Wilayah ? '' : 'mt-16 pt-1.5'">
-          <p class="mt-2.5">{{ datagempa.Dirasakan }}</p>
+        <hr class="border-gray-300 my-8 " />
+        <div class="w-full mx-12 py-4 font-semibold" :class="datagempa.Wilayah ? '' : 'mt-16'">
+          <p class="mt-2.5">Gempa terasa di wilayah {{ datagempa.Dirasakan }}</p>
           <p class="mt-2.5">{{ datagempa.Wilayah || '-' }}</p>
           <p class="mt-2.5">
             {{ datagempa.Potensi || '-' }}
