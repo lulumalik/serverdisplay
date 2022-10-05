@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="map" class="h-full w-full"></div>
+    <div id="map" class="h-full w-full rounded-md"></div>
   </div>
 </template>
 

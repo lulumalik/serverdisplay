@@ -1,7 +1,7 @@
 <template>
-  <div style="height: calc(100vh - 300px)">
+  <div >
     <div class="text-xl mb-4 font-bold text-sky-500">Template</div>
-    <div class="flex items-center flex-wrap">
+    <div class="flex items-start flex-wrap overflow-auto" style="height: calc(100vh - 320px)">
       <div
         v-for="(db, i) in filterByCategory"
         :key="i"
@@ -102,7 +102,7 @@ export default {
           : this.$parent.selectedCategory
               .toLowerCase()
               .split(' ')
-              .every((v) => db.category.name.toLowerCase().includes(v))
+              .every((v) => db.category && db.category.name.toLowerCase().includes(v))
         // return db.category.name == this.$parent.selectedCategory
       })
     },

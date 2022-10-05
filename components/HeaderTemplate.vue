@@ -40,6 +40,7 @@
         <div v-for="(l, i) in 3" :key="i">
           <div
             v-if="
+            $parent.$parent.logos &&
               $parent.$parent.logos[$parent.obj.idtemplate] &&
               $parent.$parent.logos[$parent.obj.idtemplate][l]
             "

@@ -163,7 +163,8 @@ export default {
   async mounted() {
     const res1 = await this.$axios.$get('template')
     if (this.$route.query.id) {
-      const res = await this.$axios.$get('display/find/' + this.$route.query.id)
+      try {
+        const res = await this.$axios.$get('display/find/' + this.$route.query.id)
       this.allfind = res.data
       this.templateDB = res1.data
       // this.templateDB = this.getDifference(alltemplate, res.data.template)
@@ -194,6 +195,9 @@ export default {
           })
         }
       })
+      } catch(e) {
+        window.open('/display', '_self')
+      }
     } else {
       this.templateDB = res1.data
     }

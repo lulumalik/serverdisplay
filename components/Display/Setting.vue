@@ -36,24 +36,24 @@
             </div>
             <div>Running text</div>
           </label>
+          <div>
+            <v-select
+              label="name"
+              @option:selected="changeFooter"
+              v-model="runningtextData"
+              :options="listGempa"
+            ></v-select>
+          </div>
           <label class="flex mt-2 space-x-2">
             <div>
               <input
                 type="checkbox"
-                v-model="useVideo"
+                v-model="$parent.$parent.useVideo"
                 class="text-xs p-1.5 rounded"
               />
             </div>
             <div>Background Dynamic</div>
           </label>
-          <div v-show="useVideo">
-            <v-select
-              label="location"
-              @option:selected="changeSelected"
-              v-model="subdistrict"
-              :options="listKecamatan"
-            ></v-select>
-          </div>
         </div>
       </div>
     </div>
@@ -75,6 +75,7 @@
 </template>
 
 <script>
+var xml = require('txml')
 import { dataStatic, belitung, belitungTimur } from '../../utils/listStatic.js'
 export default {
   data() {
@@ -82,31 +83,40 @@ export default {
       showpopup: false,
       useVideo: false,
       subdistrict: '',
-      listKecamatan: [...belitung, ...belitungTimur, ...dataStatic],
+      runningtextData: null,
+      listGempa: [],
     }
   },
-  watch: {
-    useVideo(val) {
-      if (!val) {
-        this.$parent.$parent.useVideo = false
-      }  else {
-        this.$parent.$parent.useVideo = this.subdistrict
-      }
-    },
-    '$parent.$parent.useVideo': {
-      handler(val) {
-        // console.log(val, 'set')
-        if (val) {
-        this.useVideo = true
-        this.subdistrict = val
-        }
-      },
-      deep:true
+  mounted() {
+    
+    this.$axios
+      .post('https://sena.circlegeo.com/api/sena/research/forward', {
+        url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
+      })
+      .then((res) => {
+        if (this.$parent.$parent.useFooter) {
+      this.runningtextData = this.$parent.$parent.useFooter
     }
+        const json = xml.parse(res.data)
+        var dataparsed = json[0].children[0].children
+        var index = json[0].children[0].children.length - 1
+        var listParsedArray = dataparsed[index].children
+        // console.log(listParsedArray)
+        this.listGempa.length = 0
+        listParsedArray.forEach((item) => {
+          // this.runningText.push(item.text)
+          // if (item.children[0].children[0].includes('CBB')) {
+          this.listGempa.push({
+            name: item.children[3].children[0],
+            id: item.children[0].children[0],
+          })
+          // }
+        })
+      })
   },
   methods: {
-    changeSelected() {
-      this.$parent.$parent.useVideo = this.subdistrict
+    changeFooter(val) {
+      this.$parent.$parent.useFooter = val
     },
   },
 }

@@ -48,33 +48,40 @@
           </svg>
         </button>
       </div> -->
-    <div class="flex-grow" style="background: rgba(0, 0, 0, 0.5) !important">
-      <marquee-text
-        :repeat="3"
-        :duration="100"
-        class="p-2 text-white"
-        v-if="runningText.length > 0"
-      >
-        <div class="flex space-x-4 text-xl">
-          <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" />
-          {{ runningText.join(', ') }}
+    <div class="flex-grow" >
+      <div >
+        <div
+          class="p-2 text-white para"
+          id="para1"
+          v-if="runningText.length > 0"
+        >
+          <div class="flex space-x-4 text-xl">
+            <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" />
+            {{ runningText.join(', ') }}
+          </div>
         </div>
-      </marquee-text>
-      <marquee-text :repeat="3" :duration="20" class="p-2 text-white" v-else>
-        <div class="flex space-x-4 text-xl">
-          <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" />
-          {{
-            'Badan Meteorologi Klimatologi dan Geofisika - Cepat Tepat Akurat Luas dan Mudah Dipahami, Web: https://www.bmkg.go.id, Twitter: InfoBMKG, Instagram: @infobmkg, YouTube: InfoBMKG, Call Center: BMKG 196'
-          }}
+        <div class="p-2 text-white para" v-else id="para1">
+          <div class="flex space-x-4 text-xl">
+            <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" />
+            <div>
+              Badan Meteorologi Klimatologi dan Geofisika - Cepat Tepat Akurat Luas dan Mudah Dipahami, Web: https://www.bmkg.go.id, Twitter: InfoBMKG, Instagram: @infobmkg, YouTube: InfoBMKG, Call Center: BMKG 196</div>
+          </div>
         </div>
-      </marquee-text>
-      <!-- <div v-else>
-          Running Text
-        </div> -->
+      </div>
     </div>
   </div>
   <!-- </div> -->
 </template>
+
+<style>
+.para {
+  color: white;
+  font-weight: 400;
+  white-space: nowrap;
+  clear: both;
+  float: left;
+}
+</style>
 
 <script>
 const xml = require('txml')
@@ -88,9 +95,22 @@ export default {
   mounted() {
     //
     this.getRunningText()
+
+    var element = document.getElementById('para1')
+    let elementWidth = element.offsetWidth
+    let parentWidth = element.parentElement.offsetWidth
+    let flag = 0
+    setInterval(() => {
+      element.style.marginLeft = --flag + 'px'
+
+      if (elementWidth == -flag) {
+        flag = parentWidth
+      }
+    }, 10)
+
     this.interval = setInterval(() => {
       this.getRunningText()
-    },1800000)
+    }, 1800000)
   },
   destroyed() {
     clearTimeout(this.interval)
@@ -99,30 +119,35 @@ export default {
     return {
       showPopup: false,
       runningText: [],
-      interval: null
+      interval: null,
     }
   },
   methods: {
     getRunningText() {
       this.$axios
-      .post('https://sena.circlegeo.com/api/sena/research/forward', {
-        url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
-      })
-      .then((res) => {
-        const json = xml.parse(res.data)
-        var dataparsed = json[0].children[0].children
-        var index = json[0].children[0].children.length - 1
-        var listParsedArray = dataparsed[index].children
-        this.runningText.length = 0
-        // console.log(listParsedArray)
-        listParsedArray.forEach((item) => {
-          // this.runningText.push(item.text)
-          if (item.children[0].children[0].includes('CBB')) {
-            this.runningText.push(item.children[4].children[0])
-          }
+        .post('https://sena.circlegeo.com/api/sena/research/forward', {
+          url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
         })
-      })
-    }
-  }
+        .then((res) => {
+          const json = xml.parse(res.data)
+          var id = 'CBB'
+          if (this.$parent.useFooter) {
+            var split = this.$parent.useFooter.id.split('')
+            id = split[0] + split[1] + split[2]
+          }
+          var dataparsed = json[0].children[0].children
+          var index = json[0].children[0].children.length - 1
+          var listParsedArray = dataparsed[index].children
+          this.runningText.length = 0
+          // console.log(listParsedArray)
+          listParsedArray.forEach((item) => {
+            // this.runningText.push(item.text)
+            if (item.children[0].children[0].includes(id)) {
+              this.runningText.push(item.children[4].children[0])
+            }
+          })
+        })
+    },
+  },
 }
 </script>

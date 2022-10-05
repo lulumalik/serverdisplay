@@ -65,8 +65,8 @@
                     text-red-500
                     font-bold
                     absolute
-                    -right-6
-                    -top-2
+                    right-4
+                    top-2
                     text-xl
                     cursor-pointer
                   "
