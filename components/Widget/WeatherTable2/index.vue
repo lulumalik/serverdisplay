@@ -17,40 +17,104 @@
         {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
       </div>
     </div>
-    <table class="w-full text-2xl mx-auto relative right-12 mt-6">
-      <tr class="text-white">
-        <th class="text-3xl bg-black/80 rounded-tl-lg text-left"><div class="pl-2">Nama Lokasi</div></th>
-        <th class="text-3xl bg-black/80 text-center">Cuaca</th>
-        <th class="text-3xl bg-black/80 text-center">Angin</th>
-        <th class="text-3xl bg-black/80 text-center">Suhu</th>
-        <th class="text-3xl bg-black/80 rounded-tr-lg text-center">Kelembaban</th>
-      </tr>
-      <tr v-for="(b, i) in forecast" :key="i" class="text-white">
-        <td class="bg-black/60" :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''">
-          <div class="text-3xl">
-            <b>{{ b.location.subdistrict }}</b>
-          </div>
-        </td>
-        <td class="text-center bg-black/60 font-semibold px-2 py-4">
-          <div class="flex items-center justify-center space-x-2">
-            <div class="w-24 relative">
-              <img
-                :src="'/Archive/' + b.data.weather_code + '.gif'"
-                class="w-32 absolute left-0 -top-14"
-              />
+    <div class="flex space-x-4 justify-center">
+      <table class="w-full text-2xl mx-auto relative right-12 mt-6">
+        <tr class="text-white">
+          <th class="text-3xl bg-black/80 rounded-tl-lg text-left">
+            <div class="pl-2">Nama Lokasi</div>
+          </th>
+          <th class="text-3xl bg-black/80 text-center">Cuaca</th>
+          <th class="text-3xl bg-black/80 text-center">Angin</th>
+          <th class="text-3xl bg-black/80 text-center">Suhu</th>
+          <th class="text-3xl bg-black/80 rounded-tr-lg text-center">
+            Kelembaban
+          </th>
+        </tr>
+        <tr v-for="(b, i) in forecast" :key="i" class="text-white">
+          <td
+            class="bg-black/60"
+            :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''"
+          >
+            <div class="text-3xl">
+              <b>{{ b.location.subdistrict }}</b>
             </div>
-            <div class="w-56 text-3xl text-left">
-              {{ weather_code[b.data.weather_code] }}
+          </td>
+          <td class="text-center bg-black/60 font-semibold px-2 py-4">
+            <div class="flex items-center justify-center space-x-2">
+              <div class="w-24 relative">
+                <img
+                  :src="'/Archive/' + b.data.weather_code + '.gif'"
+                  class="w-32 absolute left-0 -top-14"
+                />
+              </div>
+              <div class="w-56 text-3xl text-left">
+                {{ weather_code[b.data.weather_code] }}
+              </div>
             </div>
-          </div>
-        </td>
-        <td class="text-center bg-black/60 font-semibold"><div class="text-3xl">{{ b.data.wSpd }} km/jam</div></td>
-        <td class="text-center bg-black/60 font-semibold">
-          <div class=text-3xl>{{ b.data.temp }} <sup>o</sup>C</div>
-        </td>
-        <td :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''" class="text-center bg-black/60 font-semibold"><div class="text-3xl">{{ b.data.rh }} %</div></td>
-      </tr>
-    </table>
+          </td>
+          <td class="text-center bg-black/60 font-semibold">
+            <div class="text-3xl">{{ b.data.wSpd }} km/jam</div>
+          </td>
+          <td class="text-center bg-black/60 font-semibold">
+            <div class="text-3xl">{{ b.data.temp }} <sup>o</sup>C</div>
+          </td>
+          <td
+            :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''"
+            class="text-center bg-black/60 font-semibold"
+          >
+            <div class="text-3xl">{{ b.data.rh }} %</div>
+          </td>
+        </tr>
+      </table>
+      <table class="w-full text-2xl mx-auto relative right-12 mt-6" v-if="forecast2.length > 0">
+        <tr class="text-white">
+          <th class="text-3xl bg-black/80 rounded-tl-lg text-left">
+            <div class="pl-2">Nama Lokasi</div>
+          </th>
+          <th class="text-3xl bg-black/80 text-center">Cuaca</th>
+          <th class="text-3xl bg-black/80 text-center">Angin</th>
+          <th class="text-3xl bg-black/80 text-center">Suhu</th>
+          <th class="text-3xl bg-black/80 rounded-tr-lg text-center">
+            Kelembaban
+          </th>
+        </tr>
+        <tr v-for="(b, i) in forecast2" :key="i" class="text-white">
+          <td
+            class="bg-black/60"
+            :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''"
+          >
+            <div class="text-3xl">
+              <b>{{ b.location.subdistrict }}</b>
+            </div>
+          </td>
+          <td class="text-center bg-black/60 font-semibold px-2 py-4">
+            <div class="flex items-center justify-center space-x-2">
+              <div class="w-24 relative">
+                <img
+                  :src="'/Archive/' + b.data.weather_code + '.gif'"
+                  class="w-32 absolute left-0 -top-14"
+                />
+              </div>
+              <div class="w-56 text-3xl text-left">
+                {{ weather_code[b.data.weather_code] }}
+              </div>
+            </div>
+          </td>
+          <td class="text-center bg-black/60 font-semibold">
+            <div class="text-3xl">{{ b.data.wSpd }} km/jam</div>
+          </td>
+          <td class="text-center bg-black/60 font-semibold">
+            <div class="text-3xl">{{ b.data.temp }} <sup>o</sup>C</div>
+          </td>
+          <td
+            :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''"
+            class="text-center bg-black/60 font-semibold"
+          >
+            <div class="text-3xl">{{ b.data.rh }} %</div>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -60,6 +124,7 @@ export default {
   data() {
     return {
       forecast: [],
+      forecast2: [],
       area: '',
       allNDF: {},
       currentDate: new Date().getHours(),
@@ -110,6 +175,8 @@ export default {
         var obj = parentDisplay.obj.idtemplate
 
         this.forecast.length = 0
+        this.forecast2.length = 0
+
         this.allNDF = {}
         this.area = setting[obj][1].value.kotkab
         var res2 = await this.$axios.get(
@@ -134,13 +201,20 @@ export default {
           this.allNDF[el.location.locationId].push(el)
         })
 
-        res2.data.data.forEach((el) => {
+        res2.data.data.forEach((el, i) => {
           var datares = this.allNDF[el.locationId]
           if (datares && datares.length > 0) {
-            this.forecast.push({
-              location: el,
-              data: datares[0],
-            })
+            if (i <= 10) {
+              this.forecast.push({
+                location: el,
+                data: datares[0],
+              })
+            } else {
+              this.forecast2.push({
+                location: el,
+                data: datares[0],
+              })
+            }
           }
         })
       }

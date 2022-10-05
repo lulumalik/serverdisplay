@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex space-x-6">
+    <div class="flex">
       <div
         class="
           flex flex-grow
@@ -18,7 +18,7 @@
         />
       </div>
       <div class="uppercase flex-grow text-xl bg-white/80 rounded-lg shadow-md px-6 py-6">
-        <div class="bg-blue-900/80 text-xl rounded-md text-white p-4 text-center">
+        <div class="bg-blue-900/80 text-2xl rounded-md text-white p-4 text-center">
           <div>Informasi gempa bumi terakhir {{ datagempa.Tanggal }}</div>
           <div></div>
         </div>

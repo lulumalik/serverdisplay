@@ -17,7 +17,7 @@
       </tr>
       <tr v-for="(val, key, ind) in listData" :key="key">
         <td
-          class="bg-sky-400"
+          class="bg-sky-400 text-2xl"
           :class="[
             ind % 2 == 0 ? 'bg-gray-300/80' : 'bg-gray-400/80',
             ind == Object.keys(listData).length - 1 ? 'rounded-bl-lg' : '',
@@ -102,14 +102,14 @@ export default {
       ],
       listData: {
         Cuaca: 'weather_code',
-        Temperature: 'temp',
+        Temperatur: 'temp',
         Kelembapan: 'rh',
         'Kecepatan Angin': 'wSpd',
         'Arah Angin': 'wDir',
       },
       parseSatuan: {
         Cuaca: '',
-        Temperature: ' ᵒC',
+        Temperatur: ' ᵒC',
         Kelembapan: ' %',
         'Kecepatan Angin': ' km/jam',
         'Arah Angin': ' ᵒ',

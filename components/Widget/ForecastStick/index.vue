@@ -57,7 +57,7 @@
               flex
               items-center
               justify-center
-              bg-sky-400
+              bg-blue-800
               w-44
               h-36
             "

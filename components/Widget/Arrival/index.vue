@@ -1,49 +1,86 @@
 <template>
-  <div>
-    <div
-      class="flex items-start space-x-4 justify-start"
-      v-for="(val, i) in bandaras"
-      :key="i"
-      :class="i >= 1 ? 'mt-3.5' : ''"
-    >
-      <div>
-        <div
-          class="bg-gray-300/70 border-4 border-white shadow-md w-56 h-56 rounded-md"
-          :style="{
-            backgroundImage: 'url(' + val.url + ')',
-            backgroundSize: 'cover',
-          }"
-        ></div>
-      </div>
+  <div class="overflow-auto" style="height:768px;">
+    <VueSlickCarousel v-bind="settings">
+      <template #prevArrow="arrowOption">
+        <div></div>
+      </template>
+      <template #nextArrow="arrowOption">
+        <div></div>
+      </template>
+
       <div
-        style="width:500px;"
-        class="bg-white/70 rounded-md shadow-md p-6 h-56 text-gray-800"
+        class=""
+        v-for="(val, i) in bandaras"
+        :key="i"
+        :class="i >= 1 ? 'mt-3.5' : ''"
       >
-        <div class="mb-2">
-          <div class="text-3xl">
-            <b>{{ val.tagname }}</b>
-          </div>
-        </div>
         <div>
-          <div class="text-xl">
-            <div class="mt-2 font-bold">{{ val.weather }}</div>
-            <div class="font-semibold">
-              Angin: (dari) {{ val.windDirection }}, {{ val.windSpeed }} km/jam
+          <div
+            class="
+              bg-gray-300/70
+              relative
+              z-20
+              shadow-md
+              w-full
+              h-56
+              rounded-md
+            "
+            :style="{
+              backgroundImage: 'url(' + val.url + ')',
+              backgroundSize: 'cover',
+            }"
+          ></div>
+        </div>
+        <div
+          style="width: 100px !important"
+          class="bg-white/70 rounded-b-md relative z-10 bottom-2 shadow-md p-6 h-56 text-gray-800"
+        >
+          <div class="mb-2">
+            <div class="text-3xl">
+              <b>{{ val.tagname }}</b>
             </div>
-            <div class="font-semibold">Jarak Pandang: {{ val.visibility || '-' }} Kilometers</div>
-            <div class="font-semibold">Suhu: {{ val.temperature }} <sup>o</sup>C</div>
+          </div>
+          <div>
+            <div class="text-xl">
+              <div class="mt-2 font-bold">{{ val.weather }}</div>
+              <div class="font-semibold">
+                Angin: (dari) {{ val.windDirection }},
+                {{ val.windSpeed }} km/jam
+              </div>
+              <div class="font-semibold">
+                Jarak Pandang: {{ val.visibility || '-' }} Kilometers
+              </div>
+              <div class="font-semibold">
+                Suhu: {{ val.temperature }} <sup>o</sup>C
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </VueSlickCarousel>
   </div>
 </template>
 
 <script>
+import VueSlickCarousel from 'vue-slick-carousel'
 const xml = require('txml')
 export default {
+  components: {
+    VueSlickCarousel,
+  },
   data() {
     return {
+      settings: {
+        dots: false,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        vertical: true,
+        verticalSwiping: true,
+        autoplay: true,
+        speed: 1000,
+        autoplaySpeed: 5000,
+      },
       bandaras: [
         {
           name: 'Bandara Internasional Soekarno-Hatta',
