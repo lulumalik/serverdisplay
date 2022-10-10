@@ -2,7 +2,7 @@
   <div class="from-sky-100 flex justify-center items-center">
     <div class="flex items-start space-x-4 w-full">
       <div class="w-full">
-        <div >
+        <div>
           <div class="rounded-md bg-white/70 shadow-md">
             <div
               class="text-black px-6 py-3 font-semibold text-center text-4xl"
@@ -26,53 +26,85 @@
             </div>
           </div>
           <div
-            class="h-80 w-full mt-6 border-4 border-white shadow-md relative bg-gray-100 rounded-md shadow-md"
+            class="
+              h-80
+              w-full
+              mt-6
+              border-4 border-white
+              shadow-md
+              relative
+              bg-gray-100
+              rounded-md
+              shadow-md
+            "
             :style="{
               backgroundImage: 'url(' + url + ')',
               backgroundSize: 'cover',
             }"
-          ></div>
-          <div class="py-4">
-            <div
-              class="
-                font-bold
-                flex-none
-                text-3xl
-                flex
-                items-center
-                text-gray-700
-                bg-white/70
-                p-4
-                shadow-md
-                rounded-md
-              "
-            >
-              <div class="flex-grow text-center">{{ result.weather }}</div>
+          >
+            <div class="absolute bottom-0 w-full">
+              <div
+                class="
+                  font-bold
+                  flex-none
+                  text-3xl
+                  flex
+                  items-center
+                  text-gray-700
+                  bg-white/70
+                  p-4
+                  shadow-md
+                  rounded-t-lg
+                "
+              >
+                <div class="flex-grow text-center">{{ result.weather }}</div>
+              </div>
             </div>
           </div>
         </div>
         <div
-          class="flex justify-center text-2xl bg-white/70 rounded px-12 py-4 rounded-md shadow-md"
+          class="
+            flex
+            mt-6
+            justify-center
+            text-2xl
+            bg-white/70
+            rounded
+            px-12
+            py-8
+            rounded-md
+            shadow-md
+          "
         >
           <div class="flex-grow">
             <div class="font-bold flex space-x-4">
-              <div class="text-gray-700 font-semibold">Suhu</div>
-              <div>{{ result.temperature }}<sup>o</sup>C</div>
+              <div class="font-semibold flex items-center space-x-3">
+                <div class="ml-2">
+                  <img class="w-4" src="/weatherheadline/Temperature.svg" />
+                </div>
+                <div>Temperatur</div>
+              </div>
             </div>
-            <div class="mt-0.5">
-              <div class="text-gray-700 font-semibold">Jarak Pandang</div>
+            <div class="mt-2 flex space-x-2 items-center">
+              <div><img class="w-8" src="/weatherheadline/eye.svg" /></div>
+              <div class="font-semibold">Jarak Pandang</div>
             </div>
-            <div class="font-bold mt-0.5">
-              {{ result.visibility }} kilometers
+
+            <div class="text-gray-700 mt-2 flex items-center space-x-4">
+              <div class="ml-2">
+                <img class="w-4" src="/weatherheadline/WDir.svg" />
+              </div>
+              <div><b>Angin</b></div>
             </div>
           </div>
           <div class="flex-grow">
-            <div class="text-gray-700"><b>Angin</b></div>
-            <div class="mt-0.5 font-semibold">
-              (dari) {{ result.windDirection }},
+            <div class="font-bold text-2xl">
+              {{ result.temperature }}<sup>o</sup>C
             </div>
+            <div class="font-bold mt-2">{{ result.visibility }} kilometers</div>
+            <div class="mt-2 font-semibold">{{ result.windSpeed }} km/jam</div>
             <div class="mt-0.5 font-semibold">
-              {{ result.windSpeed }} km/jam
+              dari {{ result.windDirection }}
             </div>
           </div>
         </div>

@@ -1,63 +1,102 @@
 <template>
-  <div class="overflow-auto" style="height:768px;">
-    <VueSlickCarousel v-bind="settings">
-      <template #prevArrow="arrowOption">
-        <div></div>
-      </template>
-      <template #nextArrow="arrowOption">
-        <div></div>
-      </template>
-
-      <div
-        class=""
-        v-for="(val, i) in bandaras"
-        :key="i"
-        :class="i >= 1 ? 'mt-3.5' : ''"
-      >
-        <div>
-          <div
-            class="
-              bg-gray-300/70
-              relative
-              z-20
-              shadow-md
-              w-full
-              h-56
-              rounded-md
-            "
-            :style="{
-              backgroundImage: 'url(' + val.url + ')',
-              backgroundSize: 'cover',
-            }"
-          ></div>
-        </div>
-        <div
-          style="width: 100px !important"
-          class="bg-white/70 rounded-b-md relative z-10 bottom-2 shadow-md p-6 h-56 text-gray-800"
-        >
-          <div class="mb-2">
-            <div class="text-3xl">
-              <b>{{ val.tagname }}</b>
-            </div>
-          </div>
-          <div>
-            <div class="text-xl">
-              <div class="mt-2 font-bold">{{ val.weather }}</div>
-              <div class="font-semibold">
-                Angin: (dari) {{ val.windDirection }},
-                {{ val.windSpeed }} km/jam
-              </div>
-              <div class="font-semibold">
-                Jarak Pandang: {{ val.visibility || '-' }} Kilometers
-              </div>
-              <div class="font-semibold">
-                Suhu: {{ val.temperature }} <sup>o</sup>C
-              </div>
-            </div>
-          </div>
-        </div>
+  <div>
+    <div class="rounded-md bg-white/70 shadow-md">
+      <div class="text-black px-6 py-3 font-semibold text-center text-4xl">
+        Tujuan
       </div>
-    </VueSlickCarousel>
+    </div>
+    <div class="overflow-auto mt-6" style="height: 610px">
+      <VueSlickCarousel v-bind="settings">
+        <template #prevArrow="arrowOption">
+          <div></div>
+        </template>
+        <template #nextArrow="arrowOption">
+          <div></div>
+        </template>
+
+        <div
+          class=""
+          v-for="(val, i) in bandaras"
+          :key="i"
+          :class="i >= 1 ? 'mt-3.5' : ''"
+        >
+          <div>
+            <div
+              class="
+                bg-gray-300/70
+                relative
+                z-20
+                shadow-md
+                w-full
+                h-64
+                rounded-md
+              "
+              :style="{
+                backgroundImage: 'url(' + val.url + ')',
+                backgroundSize: 'cover',
+              }"
+            ></div>
+          </div>
+          <div
+            style="width: 100px !important"
+            class="
+              bg-white/70
+              rounded-b-md
+              relative
+              z-10
+              bottom-2
+              shadow-md
+              p-6
+              h-64
+              text-gray-800
+            "
+          >
+            <div class="mb-2">
+              <div class="text-3xl">
+                <b>{{ val.tagname }}</b>
+              </div>
+            </div>
+            <div>
+              <div class="text-xl">
+                <div class="mt-2 text-2xl font-bold">{{ val.weather }}</div>
+                <div class="font-semibold flex w-full mt-4">
+                  <div class="flex space-x-4 items-center w-1/2">
+                    <div class="ml-2">
+                      <img class="w-4" src="/weatherheadline/WDir.svg" />
+                    </div>
+                    <div>Angin</div>
+                  </div>
+                  <div class="w-1/2">
+                    {{ val.windSpeed }} km/jam , dari {{ val.windDirection }}
+                  </div>
+                </div>
+                <div class="font-semibold flex w-full mt-1.5">
+                  <div class="flex items-center space-x-3 w-1/2">
+                    <img class="w-6 ml-1" src="/weatherheadline/eye.svg" />
+                    <div>Jarak Pandang</div>
+                  </div>
+                  <div class="w-1/2">
+                    {{ val.visibility || '-' }} Kilometers
+                  </div>
+                </div>
+                <div class="font-semibold flex w-full mt-1.5">
+                  <div class="flex items-center space-x-4 w-1/2">
+                    <div class="ml-2">
+                      <img
+                        class="w-3.5"
+                        src="/weatherheadline/Temperature.svg"
+                      />
+                    </div>
+                    <div>Temperatur</div>
+                  </div>
+                  <div class="w-1/2">{{ val.temperature }} <sup>o</sup>C</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </VueSlickCarousel>
+    </div>
   </div>
 </template>
 

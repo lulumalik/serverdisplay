@@ -39,21 +39,46 @@
           <div>
             <v-select
               label="name"
+              :disabled="!$parent.$parent.useFooter"
               @option:selected="changeFooter"
               v-model="runningtextData"
               :options="listGempa"
             ></v-select>
           </div>
-          <label class="flex mt-2 space-x-2">
-            <div>
+          <div class="mt-4">
+            <!-- <div>
               <input
                 type="checkbox"
                 v-model="$parent.$parent.useVideo"
                 class="text-xs p-1.5 rounded"
               />
+            </div> -->
+            <div>Background</div>
+            <div class="flex space-x-4 mt-2">
+              <label class="text-center flex-grow">
+                <input
+                  type="radio"
+                  :value="true"
+                  v-model="$parent.$parent.useVideo"
+                />
+                <div>Dynamic</div>
+              </label>
+              <label class="text-center flex-grow">
+                <input
+                  type="radio"
+                  :value="false"
+                  v-model="$parent.$parent.useVideo"
+                />
+                <div>Static</div>
+              </label>
             </div>
-            <div>Background Dynamic</div>
-          </label>
+            <div v-if="!$parent.$parent.useVideo" class="mt-3">
+              <div>image url</div>
+              <div>
+                <input type="text" class="border border-gray-300 px-2 py-1 rounded w-full" v-model="$parent.$parent.backgroundStatic" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -88,15 +113,14 @@ export default {
     }
   },
   mounted() {
-    
     this.$axios
       .post('https://sena.circlegeo.com/api/sena/research/forward', {
         url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
       })
       .then((res) => {
         if (this.$parent.$parent.useFooter) {
-      this.runningtextData = this.$parent.$parent.useFooter
-    }
+          this.runningtextData = this.$parent.$parent.useFooter
+        }
         const json = xml.parse(res.data)
         var dataparsed = json[0].children[0].children
         var index = json[0].children[0].children.length - 1

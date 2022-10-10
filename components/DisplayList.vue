@@ -106,7 +106,9 @@ export default {
     },
     copytext(text) {
       var self = this
-      navigator.clipboard.writeText(text).then(
+      // $axios.defaults.baseURL + db.preview.split('/api/')[1]
+      var url = this.$axios.defaults.baseURL.split('/api/')[0] + '/g/' + text
+      navigator.clipboard.writeText(url).then(
         function () {
           // console.log('Async: Copying to clipboard was successful!')
           self.$toast.open({

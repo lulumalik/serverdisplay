@@ -1,12 +1,15 @@
 <template>
-  <div class="overflow-hidden h-screen w-screen relative">
+  <div
+    class="overflow-hidden h-screen w-screen relative"
+    :style="{ backgroundImage: 'url(' + backgroundStatic + ')', backgroundSize: 'cover' }"
+  >
     <client-only>
       <div
         class="h-full w-full overflow-hidden fixed left-0"
         style="z-index: 0"
         v-if="
           responseDisplay.properties &&
-          responseDisplay.properties.video !== null
+          responseDisplay.properties.video
         "
       >
         <BackgroundVideo />
@@ -77,6 +80,7 @@ export default {
       scaleX: 1,
       scaleY: 1,
       background: [],
+      backgroundStatic: null,
       widget: [],
       layoutDB: {},
       allNDF: {},
@@ -215,32 +219,36 @@ export default {
           arr.push(alltemplate[key])
         }
       }
+      console.log(this.responseDisplay.properties.video)
+      if (this.responseDisplay.properties.backgroundStatic && !this.responseDisplay.properties.video ) {
+        this.backgroundStatic = this.responseDisplay.properties.backgroundStatic
+      }
 
       res.data.template.forEach(async (el, i) => {
         // console.log(el.properties.widgetndf)
-        if (el.backgroundImage) {
-          this.background[i] = {
-            'background-image':
-              'url(' +
-              this.$axios.defaults.baseURL +
-              el.backgroundImage.replace('/api/', '') +
-              ')',
-            'background-size': 'initial',
-            width: '100%',
-            height: '100%',
-          }
-        } else {
-          // console.log(el.properties.video)
-          if (el.properties.video) {
-            this.background[i] = {
-              backgroundColor: 'transparent',
-            }
-          } else {
-            this.background[i] = {
-              backgroundColor: 'transparent' //el.properties.background,
-            }
-          }
+        // if (el.backgroundImage) {
+        //   this.background[i] = {
+        //     'background-image':
+        //       'url(' +
+        //       this.$axios.defaults.baseURL +
+        //       el.backgroundImage.replace('/api/', '') +
+        //       ')',
+        //     'background-size': 'initial',
+        //     width: '100%',
+        //     height: '100%',
+        //   }
+        // } else {
+        // console.log(el.properties.video)
+        // if (el.properties.video) {
+        //   this.background[i] = {
+        //     backgroundColor: 'transparent',
+        //   }
+        // } else {
+        this.background[i] = {
+          backgroundColor: 'transparent', //el.properties.background,
         }
+        // }
+        // }
       })
 
       this.$emit('finishloading', true)
