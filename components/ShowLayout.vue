@@ -15,7 +15,7 @@
         :style="{
           transform: 'scale(' + scaleinner + ')',
         }" -->
-    <div :class="useHeader ? 'top-28' : ''" class="baseBrowser relative mx-auto">
+    <div :class="useHeader ? 'top-32' : ''" class="baseBrowser relative mx-auto">
       <div
         style="transform-origin: top center"
         :style="{

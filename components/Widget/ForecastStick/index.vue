@@ -57,7 +57,7 @@
               flex
               items-center
               justify-center
-              bg-blue-800
+              bg-gradient-to-b from-indigo-500 to-blue-800
               w-44
               h-36
             "

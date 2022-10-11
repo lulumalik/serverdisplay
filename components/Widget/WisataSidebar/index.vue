@@ -25,21 +25,21 @@
       :style="{ background: backgroundColor }"
     >
       <div class="w-full" :style="{ color: color }">
-        <div class="font-bold text-5xl">
+        <div class="font-bold text-6xl">
           {{ name !== '' ? name : 'No Name of location' }}
         </div>
         <hr class="w-32 mt-3" style="border-color: #b6b6b6" />
-        <div class="text-sm mt-3 w-11/12">
+        <div class="text-xl mt-3 w-11/12">
           {{ desc !== '' ? desc : 'No Data' }}
         </div>
         <div
-          class="w-full flex mx-auto space-x-12 mt-12 relative items-center"
+          class="w-full flex mx-auto space-x-12 mt-16 relative items-center"
           v-if="forecast.length > 0"
         >
           <div class="flex-none w-28">
             <img
               :src="'/Archive/' + forecast[0].weather_code + '.gif'"
-              class="w-44 mx-auto absolute -left-44 -top-12 right-0"
+              class="w-44 mx-auto absolute -left-56 -top-12 right-0"
               alt="imgdata"
             />
           </div>
@@ -47,7 +47,7 @@
             <div class="text-6xl text-left" style="font-weight: 200 !important">
               <div>{{ forecast[0].temp }}<sup>o</sup>C</div>
             </div>
-            <div class="relative text-lg left-3">
+            <div class="relative text-lg uppercase text-left">
               <div class="">{{ weather_code[forecast[0].weather_code] }}</div>
             </div>
           </div>

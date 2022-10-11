@@ -4,7 +4,7 @@
       <div class="font-bold text-6xl text-center">
         {{ area }}
       </div>
-      <div class="text-4xl text-center mt-3" v-if="forecast.length > 0">
+      <div class="text-5xl text-center mt-3" v-if="forecast.length > 0">
         <!-- {{forecast[0].data.date}} -->
         {{
           returningTimeZone(new Date(forecast[0].data.date))

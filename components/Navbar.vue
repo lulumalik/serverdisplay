@@ -19,12 +19,37 @@
       >
         Create Display
       </button>
+      <button
+        @click="logout"
+        class="
+          bg-red-500
+          border
+          shadow
+          px-6
+          py-2
+          text-white
+          font-semibold
+          rounded
+          text-xs
+        "
+      >
+        Logout
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    logout() {
+      this.$cookies.remove("users")
+      setTimeout(() => {
+        this.$router.push("/")
+      }, 1000)
+    }
+  }
+}
 </script>
 
 <style>

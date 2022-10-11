@@ -4,7 +4,7 @@
       <div class="flex-grow flex items-center space-x-4">
         <img src="/bmkg.png" alt="bmkg" class="w-20" />
         <div class="flex-grow">
-          <div class="text-2xl font-semibold" :class="new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'" >
+          <div style="font-size:27px" class="font-semibold" :class="new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'" >
             BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA
           </div>
           <div class="text-xl mt-2 kaushan" :class="new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'">
