@@ -2,65 +2,110 @@
   <div>
     <client-only>
       <div class="flex space-x-4 relative">
-        <div class="w-7/12 relative">
-        <div class="font-bold absolute top-0 z-50 text-3xl px-12 py-6 bg-white/60 rounded-b-md w-full">
-          Peta Perairan Maritim
-        </div>
-          <Map
+        <div class="w-6/12 relative">
+          <div
+            class="
+              font-bold
+              absolute
+              top-0
+              z-50
+              text-3xl
+              px-12
+              py-6
+              bg-white/60
+              rounded-b-md
+              w-full
+            "
+          >
+            Peta Penyebrangan Maritim
+          </div>
+          <MapPenyebrangan
             style="height: 800px"
-            class="w-full rounded-md shadow-md border-2 border-white"
+            class="w-full rounded-md relative shadow-md border-2 border-white"
             ref="map"
             @mapready="getData"
           />
-        </div>
-        <div class="w-5/12 bg-white/70 rounded-md p-6">
-          <div v-html="showData.berlaku" class="text-lg"></div>
-          <div class="pt-3">
-            <div class="text-2xl font-semibold">Peringatan</div>
-            <div class="mt-1 text-xl" v-html="showData.remark"></div>
-          </div>
-          <div class="pt-3">
-            <div class="text-2xl font-semibold">Kondisi Sinoptik</div>
-            <div class="text-xl" v-html="showData.kondisi_cuaca"></div>
-          </div>
-          <div class="text-2xl pt-6">
-            <div class="font-semibold">Prakiraan Area Pelayanan</div>
+
             <div
-              v-if="showData && showData.cuaca"
-              class="flex mt-1 items-start justify-center space-x-12 mt-6"
+              class="absolute bottom-6 bg-white/40 w-full rounded-lg p-4 left-0 mx-4"
             >
-              <div class="text-center">
-                <div class="text-2xl font-semibold">Cuaca</div>
-                <div>
-                  <img
-                    :src="showData.cuaca.icon"
-                    class="w-28 relative right-6"
-                  />
-                </div>
-                <div class="text-xl">{{ showData.cuaca.name }}</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-semibold">Gelombang</div>
-                <div class="text-6xl h-28 flex items-center">
-                  {{ showData.gelombang.name }}
-                </div>
-                <div class="text-xl">
-                  {{ showData.gelombang.gelombang_min }} -
-                  {{ showData.gelombang.gelombang_max }} m
+              <div v-for="(data, i) in showData" :key="i">
+                <div v-if="changing == i">
+                  <div class="text-2xl font-semibold flex space-x-4">
+                    <img
+                      class="w-8"
+                      :src="
+                        '/maritim/' + (i == 0 ? 'DEPARTURE.png' : 'ARRIVAL.png')
+                      "
+                      :alt="'images' + i"
+                    />
+                    <div>Pelabuhan {{ data.name }}</div>
+                  </div>
+                  <div class="mt-4">
+                    <div class="text-2xl font-bold">Angin</div>
+                    <div class="text-3xl">
+                      <div>
+                        {{ data.data[0].wind_speed_min }} knot -
+                        {{ data.data[0].wind_speed_max }} knot
+                      </div>
+                      <div>
+                        {{ data.data[0].wind_from }} ke
+                        {{ data.data[0].wind_to }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex space-x-4 text-xl mt-2">
+                    <div class="flex-grow">
+                      <div class="text-2xl font-bold">Kategori Ombak</div>
+                      <div class="text-3xl flex items-end">
+                        {{ data.data[0].wave_cat }}
+                      </div>
+                    </div>
+                    <div class="flex-grow">
+                      <div class="text-2xl font-bold">Jarak Pandang</div>
+                      <div class="text-3xl flex items-end">
+                        {{ data.data[0].visibility }} <small>KM</small>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div v-if="showData && showData.cuaca" class="text-center mt-6">
-              <div class="text-2xl font-semibold">Angin</div>
-              <div class="h-28 flex justify-center items-center">
-                <span class="text-6xl"
-                  >{{ showData.angin_from }} - {{ showData.angin_to }}</span
-                >
-                <span class="text-2xl"><sup>KTS</sup></span>
+        </div>
+        <div class="w-6/12 bg-white/70 rounded-md p-6">
+          <div
+            v-for="(data, i) in showData"
+            :class="i == 0 ? '' : 'mt-4 border-t-2 pt-4 border-gray-800'"
+            :key="i"
+          >
+            <div class="flex items-end relative">
+              <div class="flex space-x-2 text-2xl flex-grow font-semibold">
+                <img
+                  class="w-8"
+                  :src="
+                    '/maritim/' + (i == 0 ? 'DEPARTURE.png' : 'ARRIVAL.png')
+                  "
+                  :alt="'images' + i"
+                />
+                <div>{{ data.name }}</div>
               </div>
-              <div class="text-xl">
-                {{ showData.angin.from.name }} - {{ showData.angin.to.name }}
+              <div class="absolute right-0 top-3">
+                <div>{{ data.latitude }} , {{ data.longitude }}</div>
               </div>
+            </div>
+            <div class="text-xl">
+              <div class="flex space-x-2 mt-3">
+                <div>Valid From</div>
+                <div>
+                  {{ data.data[0].valid_from }} - {{ data.data[0].valid_to }}
+                </div>
+              </div>
+              <div class="mt-3 font-bold text-2xl text-blue-500">
+                {{ data.data[0].weather }}
+              </div>
+              <small v-html="data.data[0].weather_desc"></small>
+              <div class="mt-3 font-bold text-2xl text-red-500">Warning</div>
+              <small v-html="data.data[0].warning_desc"></small>
             </div>
           </div>
         </div>
@@ -70,12 +115,27 @@
 </template>
 
 <script>
+import VueSlickCarousel from 'vue-slick-carousel'
 var maplibregl = require('maplibre-gl')
 export default {
   data() {
     return {
-      showData: {},
+      showData: [],
+      settings: {
+        dots: false,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        speed: 1000,
+        autoplaySpeed: 3000,
+      },
+
+      changing: 0,
     }
+  },
+  components: {
+    VueSlickCarousel,
   },
   methods: {
     async getData() {
@@ -84,83 +144,135 @@ export default {
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
-        var result = {}
+        var result = []
+        this.showData.length = 0
         setting[obj].map((el) => {
           // console.log(el)
           var key = el.key.split('_')[1]
-          if (key == 'WidgetMaritimPerairan') {
+          if (key == 'WidgetMaritimPenyebrangan') {
             // arr.push(el)
-            result = el
+            result.push(el)
           }
         })
-        // console.log(arr)
-        // https://maritim.bmkg.go.id/geojson-update/T.json
-        this.$axios
-          .post('https://sena.circlegeo.com/api/sena/research/forward', {
-            url:
-              'https://maritim.bmkg.go.id/geojson-update/' +
-              result.value.id.split('.')[0] +
-              '.json',
-          })
-          .then((res) => {
-            var features = []
-            res.data.features.forEach((el) => {
-              if (el.properties.WP_1 == result.value.id) {
-                el.properties.color = 'rgb(83,211,116)'
-                features.push(el)
-              } else {
-                el.properties.color = 'rgba(0,0,0,0.2)'
-                features.push(el)
-              }
-            })
-            var geojson = {
-              type: 'FeatureCollection',
-              features: features,
-            }
-            var map = this.$refs['map'].map
-            map.addSource('maritim', {
-              type: 'geojson',
-              data: geojson,
-            })
-            // console.log(geojson)
-            map.addLayer({
-              id: 'maritim',
-              type: 'fill',
-              source: 'maritim',
-              paint: {
-                'fill-color': ['get', 'color'],
-                'fill-opacity': 0.8,
+
+        var map = this.$refs['map'].map
+
+        var geojson = {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'LineString',
+                coordinates: [
+                  [result[0].value.coor[1], result[0].value.coor[0]],
+                  [result[1].value.coor[1], result[1].value.coor[0]],
+                ],
               },
-            })
-            // maplibre
-            for (var i = 0; i < geojson.features.length; i++) {
-              if (geojson.features[i].properties.WP_1 == result.value.id) {
-                var coordinates = geojson.features[i].geometry.coordinates[0]
-                var bounds = coordinates.reduce(function (bounds, coord) {
-                  return bounds.extend(coord)
-                }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]))
-                map.fitBounds(bounds, {
-                  padding: 20,
-                })
-              }
+            },
+          ],
+        }
+
+        var geojsonDeparture = {
+          type: 'FeatureCollection',
+          features: [],
+        }
+        var geojsonArrival = {
+          type: 'FeatureCollection',
+          features: [],
+        }
+        geojsonDeparture.features.push({
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [result[0].value.coor[1], result[0].value.coor[0]],
+          },
+        })
+        geojsonArrival.features.push({
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [result[1].value.coor[1], result[1].value.coor[0]],
+          },
+        })
+
+        result.forEach(async (el, i) => {
+          const res = await this.$axios.post(
+            'https://sena.circlegeo.com/api/sena/research/forward',
+            {
+              url:
+                'https://maritim.bmkg.go.id/public_api/pelabuhan/' +
+                el.value.name,
             }
+          )
+          this.showData.push(res.data)
+        })
+
+        map.loadImage('/maritim/DEPARTURE1.png', function (error, image) {
+          if (error) throw error
+          map.addImage('departure', image)
+          map.addSource('departure', {
+            type: 'geojson',
+            data: geojsonDeparture,
           })
-        this.$axios
-          .post('https://sena.circlegeo.com/api/sena/research/forward', {
-            url:
-              'https://maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=' +
-              result.value.id +
-              '&hari=1',
+          map.addLayer({
+            id: 'departure',
+            type: 'symbol',
+            source: 'departure',
+            layout: {
+              'icon-image': 'departure',
+              'icon-size': 0.15,
+            },
           })
-          .then((res) => {
-            // console.log(res)
-            this.showData = res.data
+        })
+
+        map.loadImage('/maritim/ARRIVAL1.png', function (error, image) {
+          if (error) throw error
+          map.addImage('arrival', image)
+          map.addSource('arrival', {
+            type: 'geojson',
+            data: geojsonArrival,
           })
+          map.addLayer({
+            id: 'arrival',
+            type: 'symbol',
+            source: 'arrival',
+            layout: {
+              'icon-image': 'arrival',
+              'icon-size': 0.15,
+            },
+          })
+        })
+        // bounds
+        var bounds = new maplibregl.LngLatBounds()
+        geojson.features.forEach(function (feature) {
+          if (feature.geometry.type === 'Point') {
+            bounds.extend(feature.geometry.coordinates)
+          } else if (feature.geometry.type === 'LineString') {
+            feature.geometry.coordinates.forEach(function (coord) {
+              bounds.extend(coord)
+            })
+          }
+        })
+        map.fitBounds(bounds, {
+          padding: { top: 150, bottom: 400, left: 200, right: 200 },
+        })
       }
     },
   },
   mounted() {
     // this.getData()
+    var self = this
+    setInterval(() => {
+      if (self.changing == 0) {
+        self.changing = 1
+      } else {
+        self.changing = 0
+      }
+    }, 7000)
     setInterval(() => {
       this.getData()
     }, 3600000)

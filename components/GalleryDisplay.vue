@@ -211,7 +211,7 @@ export default {
                     arr.push(alltemplate[key]);
                 }
             }
-            console.log(this.responseDisplay.properties.video);
+            // console.log(this.responseDisplay.properties.video);
             if (this.responseDisplay.properties.backgroundStatic && !this.responseDisplay.properties.video) {
                 this.backgroundStatic = this.responseDisplay.properties.backgroundStatic;
             }

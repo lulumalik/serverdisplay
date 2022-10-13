@@ -1,61 +1,88 @@
 <template>
+  <div>
+    <div>From</div>
     <div>
-      <div>Select Wilpel</div>
-      <div>
-        <v-select
-          label="name"
-          @option:selected="changeSelected"
-          v-model="wilpel"
-          :options="wilpelList"
-        ></v-select>
-      </div>
+      <v-select
+        label="portname"
+        @option:selected="changeSelected"
+        v-model="wilpel"
+        :options="wilpelList"
+      ></v-select>
     </div>
-  </template>
+    <div class="mt-3">To</div>
+    <div>
+      <v-select
+        label="portname"
+        @option:selected="changeSelected2"
+        v-model="wilpel2"
+        :options="wilpelList"
+      ></v-select>
+    </div>
+  </div>
+</template>
   
   <script>
-  export default {
-    props: {
-      idTemplate: {
-        default: () => {
-          return ''
-        },
+export default {
+  props: {
+    idTemplate: {
+      default: () => {
+        return ''
       },
     },
-    data() {
-      return {
-        wilpelList: [],
-        wilpel: null,
-      }
+  },
+  data() {
+    return {
+      wilpelList: [],
+      wilpel: null,
+      wilpel2: null,
+    }
+  },
+  methods: {
+    changeSelected() {
+      this.$store.commit('displayWidget/mutationWidget', {
+        key: this.idTemplate + '_WidgetMaritimPenyebrangan_from',
+        value: this.wilpel,
+      })
     },
-    methods: {
-      changeSelected() {
-        this.$store.commit('displayWidget/mutationWidget', {
-          key: this.idTemplate + '_WidgetMaritimPerairan_wilpel',
-          value: this.wilpel,
-        })
-      },
+    changeSelected2() {
+      this.$store.commit('displayWidget/mutationWidget', {
+        key: this.idTemplate + '_WidgetMaritimPenyebrangan_to',
+        value: this.wilpel2,
+      })
     },
-    mounted() {
-      this.$axios
-        .post('https://sena.circlegeo.com/api/sena/research/forward', {
-          url: 'https://maritim.bmkg.go.id/ajax_home/select_data/pelayanan',
-        })
-        .then((res) => {
-          // console.log(json)
-        //   console.log(res)
-        this.wilpelList = res.data
+  },
+  mounted() {
+    this.wilpelList = []
+    this.$axios
+      .post('https://sena.circlegeo.com/api/sena/research/forward', {
+        url: 'https://maritim.bmkg.go.id/public_api/pelabuhan_list',
+      })
+      .then((res) => {
+        // console.log(json)
+        console.log(res)
+        this.wilpelList = res.data.files
         //   this.airportList = result
-        })
-      if (
+      })
+    if (
+      this.$store.state.displayWidget.widgetSaved[
+        this.idTemplate + '_WidgetMaritimPenyebrangan_from'
+      ]
+    ) {
+      this.wilpel =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetMaritimPerairan_wilpel'
+          this.idTemplate + '_WidgetMaritimPenyebrangan_from'
         ]
-      ) {
-        this.wilpel =
-          this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetMaritimPerairan_wilpel'
-          ]
-      }
-    },
-  }
-  </script>
+    }
+    if (
+      this.$store.state.displayWidget.widgetSaved[
+        this.idTemplate + '_WidgetMaritimPenyebrangan_to'
+      ]
+    ) {
+      this.wilpel2 =
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetMaritimPenyebrangan_to'
+        ]
+    }
+  },
+}
+</script>

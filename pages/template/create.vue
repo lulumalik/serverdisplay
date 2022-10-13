@@ -235,6 +235,7 @@
             <div class="w-3/12 p-4">
               <div class="text-left flex justify-start items-center space-x-3">
                 <button
+                  v-if="!isRoled"
                   @click="savingTemplate(false)"
                   class="
                     bg-blue-200
@@ -250,7 +251,7 @@
                 >
                   {{ saving ? 'Saving ...' : 'Save' }}
                 </button>
-                <div class="text-xs" v-if="$route.query.id">Or</div>
+                <div class="text-xs" v-if="$route.query.id && !isRoled">Or</div>
                 <button
                   v-if="$route.query.id"
                   @click="savingTemplate(true)"
@@ -342,6 +343,7 @@ export default {
       logos: [null, null, null],
       scale: 1,
       scaleinner: 1,
+      isRoled:null
     }
   },
   computed: {
@@ -372,7 +374,6 @@ export default {
         var obj = this.templateDB.find(
           (data) => data._id == this.$route.query.id
         )
-        // console.log(obj)
         this.templateDBSelected(obj)
       }
     })
@@ -477,6 +478,7 @@ export default {
     },
     templateDBSelected(obj) {
       this.rerender = true
+      this.isRoled = obj.role
       this.selectedTemplate = obj.component.layout.name
       this.selectedCategory = obj.category.name
       this.backgroundColor = obj.properties.background

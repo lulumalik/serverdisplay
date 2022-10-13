@@ -8,10 +8,12 @@
     <div class="overflow-auto mt-6" style="height: 610px">
       <VueSlickCarousel v-bind="settings">
         <template #prevArrow="arrowOption">
-          <div></div>
+          <div v-show="false">{{arrowOption}}</div>
         </template>
         <template #nextArrow="arrowOption">
-          <div></div>
+          <div v-show="false">
+            {{arrowOption}}
+          </div>
         </template>
 
         <div
@@ -177,7 +179,7 @@ export default {
                     var dewPoint = el3.children[14].children[0]
                     var pressure = el3.children[15].children[0]
                     var symbol = el3.children[16].children[0]
-                    console.log(tagname)
+                    // console.log(tagname)
                     self.bandaras.push({
                       url: el2.url,
                       tagname,

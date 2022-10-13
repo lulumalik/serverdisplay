@@ -14,7 +14,11 @@
           />
         </div>
         <div class="w-5/12 bg-white/70 rounded-md p-6">
-          <div v-html="showData.berlaku" class="text-lg"></div>
+          <div v-if="!showData" class="text-center">
+            Tidak ada data di temukan
+          </div>
+          <div v-else>
+            <div v-html="showData.berlaku" class="text-lg"></div>
           <div class="pt-3">
             <div class="text-2xl font-semibold">Peringatan</div>
             <div class="mt-1 text-xl" v-html="showData.remark"></div>
@@ -30,38 +34,39 @@
               class="flex mt-1 items-start justify-center space-x-12 mt-6"
             >
               <div class="text-center">
-                <div class="text-2xl font-semibold">Cuaca</div>
+                <div class="text-4xl font-semibold">Cuaca</div>
                 <div>
                   <img
                     :src="showData.cuaca.icon"
-                    class="w-28 relative right-6"
+                    class="w-28 mx-auto"
                   />
                 </div>
-                <div class="text-xl">{{ showData.cuaca.name }}</div>
+                <div class="text-3xl font-semibold">{{ showData.cuaca.name }}</div>
               </div>
               <div class="text-center">
-                <div class="text-2xl font-semibold">Gelombang</div>
+                <div class="text-4xl font-semibold">Gelombang</div>
                 <div class="text-6xl h-28 flex items-center">
                   {{ showData.gelombang.name }}
                 </div>
-                <div class="text-xl">
+                <div class="text-3xl font-semibold">
                   {{ showData.gelombang.gelombang_min }} -
                   {{ showData.gelombang.gelombang_max }} m
                 </div>
               </div>
             </div>
             <div v-if="showData && showData.cuaca" class="text-center mt-6">
-              <div class="text-2xl font-semibold">Angin</div>
+              <div class="text-4xl font-semibold">Angin</div>
               <div class="h-28 flex justify-center items-center">
                 <span class="text-6xl"
                   >{{ showData.angin_from }} - {{ showData.angin_to }}</span
                 >
-                <span class="text-2xl"><sup>KTS</sup></span>
+                <span class="text-3xl"><sup>KTS</sup></span>
               </div>
-              <div class="text-xl">
+              <div class="text-3xl font-semibold">
                 {{ showData.angin.from.name }} - {{ showData.angin.to.name }}
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>
@@ -74,7 +79,7 @@ var maplibregl = require('maplibre-gl')
 export default {
   data() {
     return {
-      showData: {},
+      showData: null,
     }
   },
   methods: {
@@ -140,7 +145,7 @@ export default {
                   return bounds.extend(coord)
                 }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]))
                 map.fitBounds(bounds, {
-                  padding: 20,
+                  padding: 100,
                 })
               }
             }
@@ -159,7 +164,7 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
     // this.getData()
     setInterval(() => {
       this.getData()
