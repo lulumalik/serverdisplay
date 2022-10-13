@@ -235,7 +235,7 @@
             <div class="w-3/12 p-4">
               <div class="text-left flex justify-start items-center space-x-3">
                 <button
-                  v-if="!isRoled"
+                  v-if="isRoled == currentRole"
                   @click="savingTemplate(false)"
                   class="
                     bg-blue-200
@@ -251,7 +251,7 @@
                 >
                   {{ saving ? 'Saving ...' : 'Save' }}
                 </button>
-                <div class="text-xs" v-if="$route.query.id && !isRoled">Or</div>
+                <div class="text-xs" v-if="$route.query.id && isRoled == currentRole">Or</div>
                 <button
                   v-if="$route.query.id"
                   @click="savingTemplate(true)"
@@ -319,6 +319,7 @@
 </template>
 
 <script>
+import jwtdecode from 'jwt-decode'
 import html2canvas from 'html2canvas'
 export default {
   middleware: ['checkLogin'],
@@ -343,7 +344,8 @@ export default {
       logos: [null, null, null],
       scale: 1,
       scaleinner: 1,
-      isRoled:null
+      isRoled:null,
+      currentRole: ''
     }
   },
   computed: {
@@ -478,7 +480,8 @@ export default {
     },
     templateDBSelected(obj) {
       this.rerender = true
-      this.isRoled = obj.role
+      this.isRoled = obj.user
+      this.currentRole = jwtdecode(this.$cookies.get('users')).id
       this.selectedTemplate = obj.component.layout.name
       this.selectedCategory = obj.category.name
       this.backgroundColor = obj.properties.background

@@ -47,17 +47,9 @@
             />
           </div>
         </div>
-        <div class="flex-grow">
+        <div class="flex-grow" v-if="currentUser == (allfind.owner && allfind.owner._id)" >
           <!--  -->
-          <label class="flex items-center space-x-3 mb-2">
-            <input
-              type="checkbox"
-              :disabled="true"
-              v-model="secretCode"
-              class="text-xs p-0.5 rounded"
-            />
-            <div class="text-xs">Secret code</div>
-          </label>
+         <!-- {{currentUser}} {{allfind.owner}} -->
           <div
             type="submit"
             class="
@@ -131,6 +123,7 @@
 </template>
 
 <script>
+import jwtdecode from 'jwt-decode'
 export default {
   data() {
     return {
@@ -147,6 +140,7 @@ export default {
       useFooter: true,
       useVideo: null,
       backgroundStatic: null,
+      currentUser: null
     }
   },
   middleware: ['checkLogin'],
@@ -165,6 +159,7 @@ export default {
     const res1 = await this.$axios.$get('template')
     if (this.$route.query.id) {
       try {
+        this.currentUser = jwtdecode(this.$cookies.get('users')).id
         const res = await this.$axios.$get('display/find/' + this.$route.query.id)
       this.allfind = res.data
       this.templateDB = res1.data
@@ -198,7 +193,8 @@ export default {
         }
       })
       } catch(e) {
-        window.open('/display', '_self')
+        console.log(e)
+        // window.open('/display', '_self')
       }
     } else {
       this.templateDB = res1.data
