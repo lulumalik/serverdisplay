@@ -1,87 +1,120 @@
 <template>
   <div>
     <client-only>
-      <div class="flex space-x-4 relative">
-        <div class="w-7/12 relative">
-        <div class="font-bold absolute top-0 z-50 text-3xl px-12 py-6 bg-white/60 rounded-b-md w-full">
-          Peta Perairan Maritim
-        </div>
-          <Map
-            style="height: 800px"
-            class="w-full rounded-md shadow-md border-2 border-white"
-            ref="map"
-            @mapready="getData"
-          />
-        </div>
-        <div class="w-5/12 bg-white/70 rounded-md p-6">
-          <div v-if="!showData" class="text-center">
-            Tidak ada data di temukan
-          </div>
-          <div v-else>
-            <div v-html="showData.berlaku" class="text-lg"></div>
-          <div class="pt-3">
-            <div class="text-2xl font-semibold">Peringatan</div>
-            <div class="mt-1 text-xl" v-html="showData.remark"></div>
-          </div>
-          <div class="pt-3">
-            <div class="text-2xl font-semibold">Kondisi Sinoptik</div>
-            <div class="text-xl" v-html="showData.kondisi_cuaca"></div>
-          </div>
-          <div class="text-2xl pt-6">
-            <div class="font-semibold">Prakiraan Area Pelayanan</div>
-            <div
-              v-if="showData && showData.cuaca"
-              class="flex mt-1 items-start justify-center space-x-12 mt-6"
-            >
-              <div class="text-center">
-                <div class="text-4xl font-semibold">Cuaca</div>
-                <div>
-                  <img
-                    :src="showData.cuaca.icon"
-                    class="w-28 mx-auto"
-                  />
-                </div>
-                <div class="text-3xl font-semibold">{{ showData.cuaca.name }}</div>
-              </div>
-              <div class="text-center">
-                <div class="text-4xl font-semibold">Gelombang</div>
-                <div class="text-6xl h-28 flex items-center">
-                  {{ showData.gelombang.name }}
-                </div>
-                <div class="text-3xl font-semibold">
-                  {{ showData.gelombang.gelombang_min }} -
-                  {{ showData.gelombang.gelombang_max }} m
-                </div>
-              </div>
+      <div class="text-6xl mb-6 font-bold text-center" :class="currentDate >= 18 ? 'text-white' : 'text-black'">{{showData && showData.value && showData.value.name}}</div>
+      <div class="w-full overflow-hidden bg-black/60" style="height: 730px !important">
+        <VueSlickCarousel
+          v-bind="settings"
+          v-if="Object.keys(listperairan).length > 0"
+        >
+          <template #prevArrow="arrowOption">
+            <div v-show="false">{{ arrowOption }}</div>
+          </template>
+          <template #nextArrow="arrowOption">
+            <div v-show="false">
+              {{ arrowOption }}
             </div>
-            <div v-if="showData && showData.cuaca" class="text-center mt-6">
-              <div class="text-4xl font-semibold">Angin</div>
-              <div class="h-28 flex justify-center items-center">
-                <span class="text-6xl"
-                  >{{ showData.angin_from }} - {{ showData.angin_to }}</span
+          </template>
+          <div v-for="(l, i) in listperairan" :key="i" >
+            <table class="w-full">
+              <tr>
+                <td
+                  colspan="5"
+                  class="text-left rounded-t-md bg-black text-2xl text-white"
                 >
-                <span class="text-3xl"><sup>KTS</sup></span>
-              </div>
-              <div class="text-3xl font-semibold">
-                {{ showData.angin.from.name }} - {{ showData.angin.to.name }}
-              </div>
-            </div>
+                  <div>{{ i.split('_')[1] }}</div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-white text-2xl">Waktu</td>
+                <td class="text-white text-2xl">Cuaca</td>
+                <td class="text-white text-2xl">Gelombang</td>
+                <td class="text-white text-2xl">Angin</td>
+                <td class="text-white text-2xl">Arah Angin</td>
+              </tr>
+              <tr
+                v-for="(forecast, index) in l"
+                v-show="index < 2"
+                :key="index"
+              >
+                <td
+                  class="text-white text-2xl"
+                  :class="index == 1 ? 'rounded-bl-md' : ''"
+                >
+                  {{ forecast.time_desc }}
+                </td>
+                <td
+                  class="text-white text-2xl"
+                >
+                  {{ forecast.weather || '-' }}
+                </td>
+                <td
+                  class="text-white text-2xl"
+                >
+                  <div>{{ forecast.wave_desc || '-' }}</div>
+                </td>
+                <td
+                  class="text-white text-2xl"
+                >
+                  <div class="flex">
+                    <div>{{ forecast.wind_speed_min || '-' }}</div>
+                    <div>-</div>
+                    <div>{{ forecast.wind_speed_max || '-' }} knots</div>
+                  </div>
+                </td>
+                <td
+                  class="text-white text-2xl"
+                  :class="index == 1 ? 'rounded-br-md' : ''"
+                >
+                  <div>{{ forecast.wind_from || '-' }}</div>
+                </td>
+              </tr>
+            </table>
           </div>
-          </div>
-        </div>
+        </VueSlickCarousel>
       </div>
     </client-only>
   </div>
 </template>
 
+<style scoped>
+td {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+table {
+  border-radius: 15px;
+}
+</style>
+
 <script>
-var maplibregl = require('maplibre-gl')
+import VueSlickCarousel from 'vue-slick-carousel'
+
 export default {
   data() {
     return {
       showData: null,
+      listperairan: {},
+      currentDate: new Date().getHours(),
+      settings: {
+        dots: false,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        vertical: true,
+        verticalSwiping: true,
+        autoplay: true,
+        speed: 1000,
+        autoplaySpeed: 4000,
+      },
     }
   },
+  components: {
+    VueSlickCarousel,
+  },
+
   methods: {
     async getData() {
       var self = this
@@ -90,6 +123,8 @@ export default {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj.idtemplate
         var result = {}
+
+      this.currentDate = new Date().getHours()
         setting[obj].map((el) => {
           // console.log(el)
           var key = el.key.split('_')[1]
@@ -98,6 +133,7 @@ export default {
             result = el
           }
         })
+        this.showData = result
         // console.log(arr)
         // https://maritim.bmkg.go.id/geojson-update/T.json
         this.$axios
@@ -108,64 +144,32 @@ export default {
               '.json',
           })
           .then((res) => {
-            var features = []
             res.data.features.forEach((el) => {
-              if (el.properties.WP_1 == result.value.id) {
-                el.properties.color = 'rgb(83,211,116)'
-                features.push(el)
-              } else {
-                el.properties.color = 'rgba(0,0,0,0.2)'
-                features.push(el)
-              }
+              self.$set(
+                self.listperairan,
+                el.properties.WP_1 + '_' + el.properties.WP_IMM,
+                []
+              )
             })
-            var geojson = {
-              type: 'FeatureCollection',
-              features: features,
-            }
-            var map = this.$refs['map'].map
-            map.addSource('maritim', {
-              type: 'geojson',
-              data: geojson,
-            })
-            // console.log(geojson)
-            map.addLayer({
-              id: 'maritim',
-              type: 'fill',
-              source: 'maritim',
-              paint: {
-                'fill-color': ['get', 'color'],
-                'fill-opacity': 0.8,
-              },
-            })
-            // maplibre
-            for (var i = 0; i < geojson.features.length; i++) {
-              if (geojson.features[i].properties.WP_1 == result.value.id) {
-                var coordinates = geojson.features[i].geometry.coordinates[0]
-                var bounds = coordinates.reduce(function (bounds, coord) {
-                  return bounds.extend(coord)
-                }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]))
-                map.fitBounds(bounds, {
-                  padding: 100,
+
+            Object.keys(self.listperairan).forEach((el) => {
+              this.$axios
+                .post('https://sena.circlegeo.com/api/sena/research/forward', {
+                  url:
+                    'https://maritim.bmkg.go.id/public_api/perairan/' +
+                    el.split(' ').join('%20') +
+                    '.json',
                 })
-              }
-            }
-          })
-        this.$axios
-          .post('https://sena.circlegeo.com/api/sena/research/forward', {
-            url:
-              'https://maritim.bmkg.go.id/ajax/bindpopup_pelayanan?kode=' +
-              result.value.id +
-              '&hari=1',
-          })
-          .then((res) => {
-            // console.log(res)
-            this.showData = res.data
+                .then((res) => {
+                  self.$set(self.listperairan, el, res.data.data)
+                })
+            })
           })
       }
     },
   },
   async mounted() {
-    // this.getData()
+    this.getData()
     setInterval(() => {
       this.getData()
     }, 3600000)

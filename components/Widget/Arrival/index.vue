@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="rounded-md bg-white/70 shadow-md">
-      <div class="text-black px-6 py-3 font-semibold text-center text-4xl">
+    <div class="rounded-md bg-black/70 text-white shadow-md">
+      <div class="text-white px-6 py-3 font-semibold text-center text-4xl">
         Tujuan
       </div>
     </div>
@@ -17,54 +17,36 @@
         </template>
 
         <div
-          class=""
+          class="flex space-x-4 mt-3.5"
           v-for="(val, i) in bandaras"
           :key="i"
-          :class="i >= 1 ? 'mt-3.5' : ''"
         >
-          <div>
-            <div
-              class="
-                bg-gray-300/70
-                relative
-                z-20
-                shadow-md
-                w-full
-                h-64
-                rounded-md
-              "
-              :style="{
-                backgroundImage: 'url(' + val.url + ')',
-                backgroundSize: 'cover',
-              }"
-            ></div>
-          </div>
           <div
             style="width: 100px !important"
             class="
-              bg-white/70
-              rounded-b-md
-              relative
+              bg-black/70 text-white
+              rounded-md
               z-10
-              bottom-2
               shadow-md
               p-6
               h-64
-              text-gray-800
+              
             "
           >
-            <div class="mb-2">
-              <div class="text-3xl">
+            <div class="mb-2 flex space-x-4">
+              <div class="text-3xl truncate">
                 <b>{{ val.tagname }}</b>
               </div>
             </div>
             <div>
               <div class="text-xl">
-                <div class="mt-2 text-2xl font-bold">{{ val.weather }}</div>
+                <div class="mt-2 text-2xl font-bold flex items-center space-x-4">
+                  <img :src="'/departures/' + val.symbol + '.png'" class="w-12" />
+                  <div>{{ val.weather }}</div></div>
                 <div class="font-semibold flex w-full mt-4">
                   <div class="flex space-x-4 items-center w-1/2">
                     <div class="ml-2">
-                      <img class="w-4" src="/weatherheadline/WDir.svg" />
+                      <img class="w-4" src="/weatherheadlineWhite/WDir.svg" />
                     </div>
                     <div>Angin</div>
                   </div>
@@ -74,7 +56,7 @@
                 </div>
                 <div class="font-semibold flex w-full mt-1.5">
                   <div class="flex items-center space-x-3 w-1/2">
-                    <img class="w-6 ml-1" src="/weatherheadline/eye.svg" />
+                    <img class="w-6 ml-1" src="/weatherheadlineWhite/eye.svg" />
                     <div>Jarak Pandang</div>
                   </div>
                   <div class="w-1/2">
@@ -86,10 +68,10 @@
                     <div class="ml-2">
                       <img
                         class="w-3.5"
-                        src="/weatherheadline/Temperature.svg"
+                        src="/weatherheadlineWhite/Temperature.svg"
                       />
                     </div>
-                    <div>Temperatur</div>
+                    <div>Suhu</div>
                   </div>
                   <div class="w-1/2">{{ val.temperature }} <sup>o</sup>C</div>
                 </div>

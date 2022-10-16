@@ -10,7 +10,7 @@
           :options="airportList"
         ></v-select>
       </div>
-      <div class="mt-2">Image Url</div>
+      <!-- <div class="mt-2">Image Url</div>
       <div>
         <input
           type="text"
@@ -19,7 +19,7 @@
           v-model="airport.url"
           placeholder="url"
         />
-      </div>
+      </div> -->
     </div>
     <div
       @click="listedAirport.push({})"

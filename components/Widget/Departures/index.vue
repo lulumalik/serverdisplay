@@ -1,11 +1,11 @@
 <template>
-  <div class="from-sky-100 flex justify-center items-center">
+  <div class="rounded-md bg-black/70 text-white shadow-md flex justify-center items-center">
     <div class="flex items-start space-x-4 w-full">
       <div class="w-full">
         <div>
-          <div class="rounded-md bg-white/70 shadow-md">
+          <div>
             <div
-              class="text-black px-6 py-3 font-semibold text-center text-4xl"
+              class=" px-6 pb-3 pt-6 font-semibold text-center text-4xl"
             >
               Keberangkatan
             </div>
@@ -13,7 +13,6 @@
               <div
                 class="
                   flex-grow
-                  text-black
                   font-thin
                   text-center
                   font-semibold
@@ -30,31 +29,25 @@
               h-80
               w-full
               mt-6
-              border-4 border-white
-              shadow-md
               relative
-              bg-gray-100
-              rounded-md
-              shadow-md
+              flex
+              items-center
+              justify-center
             "
-            :style="{
-              backgroundImage: 'url(' + url + ')',
-              backgroundSize: 'cover',
-            }"
           >
-            <div class="absolute bottom-0 w-full">
+            <div>
+              <div>
+                <img :src="'/departures/' + result.symbol + '.png'" class="w-44" />
+              </div>
               <div
                 class="
                   font-bold
                   flex-none
-                  text-3xl
+                  text-4xl
                   flex
+                  mt-3
                   items-center
-                  text-gray-700
-                  bg-white/70
-                  p-4
-                  shadow-md
-                  rounded-t-lg
+                  text-white
                 "
               >
                 <div class="flex-grow text-center">{{ result.weather }}</div>
@@ -68,31 +61,30 @@
             mt-6
             justify-center
             text-2xl
-            bg-white/70
-            rounded
             px-12
-            py-8
+            pb-8
+            px-8
+            pt-0
             rounded-md
-            shadow-md
           "
         >
           <div class="flex-grow">
             <div class="font-bold flex space-x-4">
               <div class="font-semibold flex items-center space-x-3">
                 <div class="ml-2">
-                  <img class="w-4" src="/weatherheadline/Temperature.svg" />
+                  <img class="w-4" src="/weatherheadlineWhite/Temperature.svg" />
                 </div>
-                <div>Temperatur</div>
+                <div class="pl-1">Suhu</div>
               </div>
             </div>
-            <div class="mt-2 flex space-x-2 items-center">
-              <div><img class="w-8" src="/weatherheadline/eye.svg" /></div>
+            <div class="mt-4 flex space-x-2 items-center">
+              <div><img class="w-8" src="/weatherheadlineWhite/eye.svg" /></div>
               <div class="font-semibold">Jarak Pandang</div>
             </div>
 
-            <div class="text-gray-700 mt-2 flex items-center space-x-4">
+            <div class="text-white mt-4 flex items-center space-x-4">
               <div class="ml-2">
-                <img class="w-4" src="/weatherheadline/WDir.svg" />
+                <img class="w-4" src="/weatherheadlineWhite/WDir.svg" />
               </div>
               <div><b>Angin</b></div>
             </div>
@@ -101,9 +93,9 @@
             <div class="font-bold text-2xl">
               {{ result.temperature }}<sup>o</sup>C
             </div>
-            <div class="font-bold mt-2">{{ result.visibility }} kilometers</div>
-            <div class="mt-2 font-semibold">{{ result.windSpeed }} km/jam</div>
-            <div class="mt-0.5 font-semibold">
+            <div class="font-bold mt-4">{{ result.visibility }} kilometers</div>
+            <div class="mt-4 font-semibold">{{ result.windSpeed }} km/jam</div>
+            <div class="mt-1.5 font-semibold">
               dari {{ result.windDirection }}
             </div>
           </div>

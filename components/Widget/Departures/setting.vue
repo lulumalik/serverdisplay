@@ -9,7 +9,7 @@
         :options="airportList"
       ></v-select>
     </div>
-    <div class="mt-2">Image Url</div>
+    <!-- <div class="mt-2">Image Url</div>
     <div>
       <input
         type="text"
@@ -18,7 +18,7 @@
         v-model="url"
         placeholder="url"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -56,12 +56,12 @@ export default {
         value: this.airportSelected,
       })
     },
-    changeName() {
-      this.$store.commit('displayWidget/mutationWidget', {
-        key: this.idTemplate + '_WidgetDepartures_url',
-        value: this.url,
-      })
-    },
+    // changeName() {
+    //   this.$store.commit('displayWidget/mutationWidget', {
+    //     key: this.idTemplate + '_WidgetDepartures_url',
+    //     value: this.url,
+    //   })
+    // },
   },
   mounted() {
     this.$axios
@@ -90,16 +90,16 @@ export default {
           this.idTemplate + '_WidgetDepartures_airport'
         ]
     }
-    if (
-      this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetDepartures_url'
-      ]
-    ) {
-      this.url =
-        this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetDepartures_url'
-        ]
-    }
+    // if (
+    //   this.$store.state.displayWidget.widgetSaved[
+    //     this.idTemplate + '_WidgetDepartures_url'
+    //   ]
+    // ) {
+    //   this.url =
+    //     this.$store.state.displayWidget.widgetSaved[
+    //       this.idTemplate + '_WidgetDepartures_url'
+    //     ]
+    // }
   },
 }
 </script>

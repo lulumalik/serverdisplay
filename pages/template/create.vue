@@ -235,7 +235,7 @@
             <div class="w-3/12 p-4">
               <div class="text-left flex justify-start items-center space-x-3">
                 <button
-                  v-if="isRoled == currentRole"
+                  v-if="$route.query.id ? isRoled == currentRole : true"
                   @click="savingTemplate(false)"
                   class="
                     bg-blue-200

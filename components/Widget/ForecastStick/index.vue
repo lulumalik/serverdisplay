@@ -95,7 +95,7 @@
                   src="/svg/dir.svg"
                   class="w-5 relative right-0.5"
                   :style="{
-                    transform: 'rotate(' + dirTo[w.wDir] + 'deg)',
+                    transform: 'rotate(' + parseInt(dirTo[w.wDir] - 180) + 'deg)',
                   }"
                 />
               </div>

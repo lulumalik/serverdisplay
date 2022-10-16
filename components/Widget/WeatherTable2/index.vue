@@ -233,5 +233,6 @@ td {
   padding-right: 35px;
   padding-top: 20px;
   padding-bottom: 20px;
+  border:0.1px solid rgba(0,0,0,0.1);
 }
 </style>

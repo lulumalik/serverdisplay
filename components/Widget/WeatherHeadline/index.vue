@@ -17,11 +17,11 @@
       <div class="flex-none w-32">
         <img
           :src="'/Archive/' + forecast[0].weather_code + '.gif'"
-          class="w-56 absolute -left-6 -top-10 z-50"
+          class="w-56 absolute left-0 -top-10 z-50"
           alt="imgdata"
         />
       </div>
-      <div class="font-bold flex-grow">
+      <div class="font-bold flex-grow pl-14">
         <div class="uppercase text-4xl">
           {{ weather_code[forecast[0].weather_code] }}
         </div>
@@ -83,7 +83,7 @@
                 <div>
                   <img class="w-3" src="/weatherheadline/Temperature.svg" />
                 </div>
-                <div>Min. Temperature</div>
+                <div>Min. Suhu</div>
               </div>
             </td>
             <td class="font-bold pl-6">
@@ -96,7 +96,7 @@
                 <div>
                   <img class="w-3" src="/weatherheadline/Temperature.svg" />
                 </div>
-                <div>Maks. Temperature</div>
+                <div>Maks. Suhu</div>
               </div>
             </td>
             <td class="font-bold pl-6">

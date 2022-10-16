@@ -27,6 +27,21 @@
         })
         this.map.on('load', () => {
           this.$emit('mapready', true)
+          // 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          this.map.addSource('satellite', {
+            type: 'raster',
+            tiles: [
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+            ],
+            tileSize: 256,
+          })
+          this.map.addLayer({
+            id: 'satellite',
+            type: 'raster',
+            source: 'satellite',
+            minzoom: 0,
+            maxzoom: 22,
+          })
           // Insert the layer beneath any symbol layer.
         })
       })

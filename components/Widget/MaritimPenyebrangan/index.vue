@@ -25,52 +25,6 @@
             ref="map"
             @mapready="getData"
           />
-
-            <div
-              class="absolute bottom-6 bg-white/40 w-full rounded-lg p-4 left-0 mx-4"
-            >
-              <div v-for="(data, i) in showData" :key="i">
-                <div v-if="changing == i">
-                  <div class="text-2xl font-semibold flex space-x-4">
-                    <img
-                      class="w-8"
-                      :src="
-                        '/maritim/' + (i == 0 ? 'DEPARTURE.png' : 'ARRIVAL.png')
-                      "
-                      :alt="'images' + i"
-                    />
-                    <div>Pelabuhan {{ data.name }}</div>
-                  </div>
-                  <div class="mt-4">
-                    <div class="text-2xl font-bold">Angin</div>
-                    <div class="text-3xl">
-                      <div>
-                        {{ data.data[0].wind_speed_min }} knot -
-                        {{ data.data[0].wind_speed_max }} knot
-                      </div>
-                      <div>
-                        {{ data.data[0].wind_from }} ke
-                        {{ data.data[0].wind_to }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex space-x-4 text-xl mt-2">
-                    <div class="flex-grow">
-                      <div class="text-2xl font-bold">Kategori Ombak</div>
-                      <div class="text-3xl flex items-end">
-                        {{ data.data[0].wave_cat }}
-                      </div>
-                    </div>
-                    <div class="flex-grow">
-                      <div class="text-2xl font-bold">Jarak Pandang</div>
-                      <div class="text-3xl flex items-end">
-                        {{ data.data[0].visibility }} <small>KM</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
         </div>
         <div class="w-6/12 bg-white/70 rounded-md p-6">
           <div
@@ -87,25 +41,87 @@
                   "
                   :alt="'images' + i"
                 />
-                <div>{{ data.name }}</div>
-              </div>
-              <div class="absolute right-0 top-3">
-                <div>{{ data.latitude }} , {{ data.longitude }}</div>
+                <div class="flex w-full">
+                  <div class="flex-grow">{{ data.name }}</div>
+                  <div class="flex-none font-bold text-2xl text-blue-500">
+                    {{ data.data[0].weather }}
+                  </div>
+                </div>
               </div>
             </div>
             <div class="text-xl">
               <div class="flex space-x-2 mt-3">
-                <div>Valid From</div>
-                <div>
-                  {{ data.data[0].valid_from }} - {{ data.data[0].valid_to }}
+                <div>Berlaku</div>
+                <div v-if="data.data[0]">
+                  {{ new Date(returningTimeZone(new Date(data.data[0].valid_from))
+                      ).toLocaleDateString("id")}}
+                  {{
+                    returningTimeZone(new Date(data.data[0].valid_from))
+                      .split(' ')
+                      .splice(4, 4)[0]
+                      .split(':')
+                      .splice(0, 2)
+                      .join(':')
+                  }}
+                  
+                  -
+                  {{ new Date(returningTimeZone(new Date(data.data[0].valid_to))
+                      ).toLocaleDateString("id")}}
+                  {{
+                    returningTimeZone(new Date(data.data[0].valid_to))
+                      .split(' ')
+                      .splice(4, 4)[0]
+                      .split(':')
+                      .splice(0, 2)
+                      .join(':')
+                  }}
+                  {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
                 </div>
               </div>
-              <div class="mt-3 font-bold text-2xl text-blue-500">
-                {{ data.data[0].weather }}
-              </div>
-              <small v-html="data.data[0].weather_desc"></small>
               <div class="mt-3 font-bold text-2xl text-red-500">Warning</div>
-              <small v-html="data.data[0].warning_desc"></small>
+              <div
+                class="leading-tight"
+                v-html="data.data[0].warning_desc"
+              ></div>
+            </div>
+            <div class="flex space-x-4 mt-3">
+              <div class="mt-2">
+                <div class="text-2xl font-bold flex items-center space-x-2">
+                  <div>
+                    <img src="/general3/wind.svg" class="w-8" />
+                  </div>
+                  <div>Angin</div>
+                </div>
+                <div class="text-3xl mt-2">
+                  <div>
+                    {{ data.data[0].wind_speed_min }} knots -
+                    {{ data.data[0].wind_speed_max }} knots
+                  </div>
+                  <div>
+                    {{ data.data[0].wind_from }} ke
+                    {{ data.data[0].wind_to }}
+                  </div>
+                </div>
+              </div>
+              <div class="flex space-x-4 text-xl mt-2">
+                <div class="flex-grow">
+                  <div class="text-2xl font-bold flex items-center space-x-2">
+                    <div>
+                      <img src="/weatherheadline/wave.svg" class="w-8" />
+                    </div>
+                    <div>Gelombang</div>
+                  </div>
+                  <div class="text-3xl flex items-end mt-2">
+                    {{ data.data[0].wave_desc }}
+                  </div>
+                </div>
+                <!-- <div class="flex-grow">
+                  <div class="text-2xl font-bold">Jarak Pandang</div>
+                  <div class="text-3xl flex items-end">
+                    {{ data.data[0].visibility }} <small>KM</small>
+                  </div>
+                </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -130,14 +146,32 @@ export default {
         speed: 1000,
         autoplaySpeed: 3000,
       },
-
-      changing: 0,
     }
   },
   components: {
     VueSlickCarousel,
   },
+  computed: {
+    getTimeZone() {
+      var date = new Date().getTimezoneOffset()
+      if (date == -420) {
+        return 7
+      } else if (date == -480) {
+        return 6
+      } else if (date == -540) {
+        return 5
+      }
+    },
+  },
   methods: {
+    returningTimeZone(date) {
+      return (
+        date.toString().split(' ').splice(0, 5).join(' ') +
+        ' GMT+0' +
+        this.getTimeZone +
+        '00'
+      )
+    },
     async getData() {
       var self = this
       var parentDisplay = this.$parent.$parent.$parent
@@ -225,6 +259,7 @@ export default {
             layout: {
               'icon-image': 'departure',
               'icon-size': 0.15,
+              'icon-offset': [0, -10],
             },
           })
         })
@@ -243,6 +278,7 @@ export default {
             layout: {
               'icon-image': 'arrival',
               'icon-size': 0.15,
+              'icon-offset': [0, -10],
             },
           })
         })
@@ -258,7 +294,7 @@ export default {
           }
         })
         map.fitBounds(bounds, {
-          padding: { top: 150, bottom: 400, left: 200, right: 200 },
+          padding: { top: 150, bottom: 150, left: 200, right: 200 },
         })
       }
     },
@@ -266,13 +302,7 @@ export default {
   mounted() {
     // this.getData()
     var self = this
-    setInterval(() => {
-      if (self.changing == 0) {
-        self.changing = 1
-      } else {
-        self.changing = 0
-      }
-    }, 7000)
+
     setInterval(() => {
       this.getData()
     }, 3600000)

@@ -3,7 +3,7 @@
     <table class="w-full rounded-md text-lg shadow-md">
       <tr class="text-white font-semibold">
         <td style="background: #303030" class="rounded-tl-lg">
-          {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+          Parameter
         </td>
         <td
           style="background: #303030"
@@ -12,7 +12,7 @@
           v-for="(f, i) in forecast"
           :key="i"
         >
-          {{ returningTimeZone(new Date(f.date)).split(' ').splice(4, 4)[0] }}
+          {{ getSecondOnly(returningTimeZone(new Date(f.date)).split(' ').splice(4, 4)[0]) }} {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
         </td>
       </tr>
       <tr v-for="(val, key, ind) in listData" :key="key">
@@ -102,14 +102,14 @@ export default {
       ],
       listData: {
         Cuaca: 'weather_code',
-        Temperatur: 'temp',
+        Suhu: 'temp',
         Kelembapan: 'rh',
         'Kecepatan Angin': 'wSpd',
         'Arah Angin': 'wDir',
       },
       parseSatuan: {
         Cuaca: '',
-        Temperatur: ' ᵒC',
+        Suhu: ' ᵒC',
         Kelembapan: ' %',
         'Kecepatan Angin': ' km/jam',
         'Arah Angin': ' ᵒ',
@@ -138,6 +138,11 @@ export default {
     },
   },
   methods: {
+    getSecondOnly(val) {
+      if (val) {
+        return val.split(':')[0] + ':' + val.split(':')[1]
+      }
+    },
     returningTimeZone(date) {
       return (
         date.toString().split(' ').splice(0, 5).join(' ') +

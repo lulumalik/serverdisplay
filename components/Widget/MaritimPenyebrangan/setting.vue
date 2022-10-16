@@ -59,7 +59,6 @@ export default {
       })
       .then((res) => {
         // console.log(json)
-        console.log(res)
         this.wilpelList = res.data.files
         //   this.airportList = result
       })
