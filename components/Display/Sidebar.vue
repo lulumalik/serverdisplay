@@ -1,6 +1,6 @@
 <template>
   <div class="pl-6 pr-3 py-4">
-    <div class="text-sm w-32">Pick Template</div>
+    <div class="text-sm w-44">Pick Template</div>
     <div style="height: calc(100vh - 250px)" class="overflow-auto">
       <div
         v-for="(db, i) in $parent.templateDB"
@@ -8,12 +8,13 @@
         class="
           rounded
           px-4
-          w-32
-          h-24
+          w-44
+          h-32
           flex
           items-center
           justify-center
           shadow
+          rounded
           cursor-pointer
           relative
           my-3
@@ -25,7 +26,7 @@
           :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
           class="absolute w-full h-full z-10"
         />
-        <p class="truncate relative z-20">
+        <p class="line-clamp-2 bg-white rounded px-2 py-1 text-center relative z-20">
           {{ db.name }}
         </p>
         <img

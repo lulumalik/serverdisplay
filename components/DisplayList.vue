@@ -8,7 +8,7 @@
         class="
           rounded
           px-4
-          w-64
+          w-auto
           h-32
           flex
           items-center
@@ -17,6 +17,7 @@
           cursor-pointer
           relative
           m-3
+          px-12
         "
         :class="
           $parent.templateDBSelected == db._id

@@ -86,6 +86,7 @@ export default {
                 },
             },
         },
+        plugins: [require('@tailwindcss/line-clamp')],
         variants: {},
         // plugins: [require('@tailwindcss/custom-forms')],
         purge: {

@@ -9,6 +9,10 @@ html {
     src: url(./PRISTINA.TTF);
 } */
 
+body::-webkit-scrollbar {
+    width: 0px !important;
+}
+
 .form-input {
     box-shadow: 0 0 0 1px #ccc;
     border-radius: 3px;
