@@ -9,7 +9,7 @@ html {
     src: url(./PRISTINA.TTF);
 } */
 
-body::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 0px !important;
 }
 
