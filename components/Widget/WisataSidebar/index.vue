@@ -86,7 +86,7 @@ export default {
         this.allNDF = {}
         var ndflistener = this.allNDF
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
+        var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
         setting[obj].forEach(async (el) => {
           var comp = el.key.split('_')[1]
           if (comp == 'WidgetWisataSidebar') {
@@ -122,7 +122,7 @@ export default {
 
     if (parentDisplay.production) {
       var setting = parentDisplay.responseDisplay.properties.allSetting
-      var obj = parentDisplay.obj.idtemplate
+      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
       setting[obj].forEach((el) => {
         var comp = el.key.split('_')[1]
         if (comp == 'WidgetWisataSidebar') {

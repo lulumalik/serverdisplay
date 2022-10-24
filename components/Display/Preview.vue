@@ -36,6 +36,35 @@
       >
         -
       </button>
+
+      <button
+        @click="reloadPreview"
+        class="
+          w-6
+          h-6
+          rounded
+          mt-2
+          flex
+          justify-center
+          items-center
+          text-xs
+          bg-sky-400
+          text-white
+          hover:bg-sky-300
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="#fff"
+            d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2.527 7.708c.741-.444 1.6-.708 2.527-.708 2.757 0 5 2.243 5 5h2c0-3.86-3.141-7-7-7-1.336 0-2.58.385-3.641 1.038l-1.359-2.038-1.719 6h5.719l-1.527-2.292zm5.054 8.584c-.741.444-1.6.708-2.527.708-2.757 0-5-2.243-5-5h-2c0 3.86 3.141 7 7 7 1.336 0 2.58-.385 3.641-1.038l1.359 2.038 1.719-6h-5.719l1.527 2.292z"
+          />
+        </svg>
+      </button>
     </div>
     <div class="text-sm">
       <div class="flex items-center">
@@ -144,7 +173,14 @@
         </div>
         <div class="my-2">Display Pages</div>
         <div class="overflow-x-auto overflow-y-hidden">
-          <draggable class="grid gap-x-4" :style="{'grid-template-columns': `repeat(${$parent.templateAddedList.length}, minmax(0, 1fr))`, width: $parent.templateAddedList.length * 14 + '0px'}" :list="$parent.templateAddedList">
+          <draggable
+            class="grid gap-x-4"
+            :style="{
+              'grid-template-columns': `repeat(${$parent.templateAddedList.length}, minmax(0, 1fr))`,
+              width: $parent.templateAddedList.length * 14 + '0px',
+            }"
+            :list="$parent.templateAddedList"
+          >
             <div
               v-for="(db, i) in $parent.templateAddedList"
               :key="i"
@@ -165,7 +201,7 @@
                   ? 'border-2 border-sky-500'
                   : ''
               "
-              style="height:90px;width:140px"
+              style="height: 90px; width: 140px"
             >
               <button
                 class="
@@ -234,7 +270,7 @@ export default {
       widget: [],
       width: 1366,
       height: 768,
-      logos:{}
+      logos: {},
     }
   },
   async mounted() {
@@ -254,6 +290,18 @@ export default {
     }, 1000)
   },
   methods: {
+    reloadPreview() {
+      var objParsed = this.objData
+      var selected = this.$parent.selectedTemplateID
+
+      this.$parent.selectedTemplateID = null
+      this.objData = null
+
+      setTimeout(() => {
+        this.$parent.selectedTemplateID = selected
+        this.objData = objParsed
+      }, 1000)
+    },
     getBackground(el) {
       var background = {}
       if (el.backgroundImage) {

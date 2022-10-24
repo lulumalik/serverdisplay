@@ -83,7 +83,7 @@ export default {
         this.allNDF = {}
         var ndflistener = this.allNDF
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
+        var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
         setting[obj].forEach(async (el) => {
           var comp = el.key.split('_')[1]
           if (comp == 'WidgetVisibility') {
@@ -132,7 +132,7 @@ export default {
 
     if (parentDisplay.production) {
       var setting = parentDisplay.responseDisplay.properties.allSetting
-      var obj = parentDisplay.obj.idtemplate
+      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
       setting[obj].forEach((el) => {
         var comp = el.key.split('_')[1]
         if (comp == 'WidgetVisibility') {
@@ -168,52 +168,52 @@ export default {
     } else {
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_description'
+          this.idTemplate + '_WidgetWidgetVisibility_description'
         ]
       ) {
         this.desc =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_description'
+            this.idTemplate + '_WidgetWidgetVisibility_description'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_name'
+          this.idTemplate + '_WidgetWidgetVisibility_name'
         ]
       ) {
         this.name =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_name'
+            this.idTemplate + '_WidgetWidgetVisibility_name'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_color'
+          this.idTemplate + '_WidgetWidgetVisibility_color'
         ]
       ) {
         this.color =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_color'
+            this.idTemplate + '_WidgetWidgetVisibility_color'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_background'
+          this.idTemplate + '_WidgetWidgetVisibility_background'
         ]
       ) {
         this.backgroundColor =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_background'
+            this.idTemplate + '_WidgetWidgetVisibility_background'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_img'
+          this.idTemplate + '_WidgetWidgetVisibility_img'
         ]
       ) {
         this.img =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_img'
+            this.idTemplate + '_WidgetWidgetVisibility_img'
           ]
       }
     }

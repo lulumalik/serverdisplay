@@ -57,7 +57,9 @@
               flex
               items-center
               justify-center
-              bg-gradient-to-b from-indigo-500 to-blue-800
+              bg-gradient-to-b
+              from-indigo-500
+              to-blue-800
               w-44
               h-36
             "
@@ -95,7 +97,8 @@
                   src="/svg/dir.svg"
                   class="w-5 relative right-0.5"
                   :style="{
-                    transform: 'rotate(' + parseInt(dirTo[w.wDir] - 180) + 'deg)',
+                    transform:
+                      'rotate(' + parseInt(dirTo[w.wDir] - 180) + 'deg)',
                   }"
                 />
               </div>
@@ -202,12 +205,13 @@ export default {
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
       this.currentDate = new Date().getHours()
+      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
+
+      this.allNDF = {}
+      var ndflistener = this.allNDF
       if (parentDisplay.production) {
-        this.forecast.length = 0
-        this.allNDF = {}
-        var ndflistener = this.allNDF
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
+        this.forecast.length = 0
 
         for (var i = 0; i < setting[obj].length; i++) {
           var el = setting[obj][i]
@@ -227,6 +231,31 @@ export default {
                 }
               }
               break
+            }
+          }
+        }
+      } else {
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            obj + '_WidgetForecastStick_kecamatan'
+          ]
+        ) {
+          this.forecast.length = 0
+          var el =
+            this.$store.state.displayWidget.widgetSaved[
+              obj + '_WidgetForecastStick_kecamatan'
+            ]
+          const datares = await this.$axios.$get(
+            'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+              el.locationId
+          )
+
+          this.$set(ndflistener, el.locationId, datares.data)
+
+          if (ndflistener[el.locationId].length > 0) {
+            for (var i = 0; i < 3; i++) {
+              var comp = ndflistener[el.locationId][i]
+              this.forecast.push(comp)
             }
           }
         }

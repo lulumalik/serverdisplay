@@ -66,7 +66,10 @@
           </td>
         </tr>
       </table>
-      <table class="w-full text-2xl mx-auto relative right-12 mt-6" v-if="forecast2.length > 0">
+      <table
+        class="w-full text-2xl mx-auto relative right-12 mt-6"
+        v-if="forecast2.length > 0"
+      >
         <tr class="text-white">
           <th class="text-3xl bg-black/80 rounded-tl-lg text-left">
             <div class="pl-2">Nama Lokasi</div>
@@ -127,6 +130,7 @@ export default {
       forecast2: [],
       area: '',
       allNDF: {},
+      idTemplate: null,
       currentDate: new Date().getHours(),
     }
   },
@@ -170,53 +174,111 @@ export default {
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
       this.currentDate = new Date().getHours()
+      this.idTemplate = parentDisplay.obj.idtemplate
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
+        var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
 
         this.forecast.length = 0
         this.forecast2.length = 0
+        setting[obj].forEach(async (el) => {
+          var key = el.key.split('_')[2]
+          var key1 = el.key.split('_')[1]
+          if (key == 'kotkab' && key1 == 'WidgetWeatherTable2') {
+            this.allNDF = {}
+            this.area = el.value.kotkab
+            var res2 = await this.$axios.get(
+              'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+                el.value._id
+            )
+            var allndf = res2.data.data.map((a) => {
+              return a.locationId
+            })
+            const ndf2 = await this.$axios.$post(
+              'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
+              {
+                location: allndf,
+                date: new Date().toISOString(),
+              }
+            )
 
-        this.allNDF = {}
-        this.area = setting[obj][1].value.kotkab
-        var res2 = await this.$axios.get(
-          'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
-            setting[obj][1].value._id
-        )
-        var allndf = res2.data.data.map((a) => {
-          return a.locationId
-        })
-        const ndf2 = await this.$axios.$post(
-          'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
-          {
-            location: allndf,
-            date: new Date().toISOString(),
+            ndf2.data.forEach((el) => {
+              if (!this.allNDF[el.location.locationId]) {
+                this.allNDF[el.location.locationId] = []
+              }
+              this.allNDF[el.location.locationId].push(el)
+            })
+
+            res2.data.data.forEach((el, i) => {
+              var datares = this.allNDF[el.locationId]
+              if (datares && datares.length > 0) {
+                if (i <= 10) {
+                  this.forecast.push({
+                    location: el,
+                    data: datares[0],
+                  })
+                } else {
+                  this.forecast2.push({
+                    location: el,
+                    data: datares[0],
+                  })
+                }
+              }
+            })
           }
-        )
-
-        ndf2.data.forEach((el) => {
-          if (!this.allNDF[el.location.locationId]) {
-            this.allNDF[el.location.locationId] = []
-          }
-          this.allNDF[el.location.locationId].push(el)
         })
+      } else {
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetWeatherTable2_kotkab'
+          ]
+        ) {
+          var el =
+            this.$store.state.displayWidget.widgetSaved[
+              this.idTemplate + '_WidgetWeatherTable2_kotkab'
+            ]
 
-        res2.data.data.forEach((el, i) => {
-          var datares = this.allNDF[el.locationId]
-          if (datares && datares.length > 0) {
-            if (i <= 10) {
-              this.forecast.push({
-                location: el,
-                data: datares[0],
-              })
-            } else {
-              this.forecast2.push({
-                location: el,
-                data: datares[0],
-              })
+          this.allNDF = {}
+          this.area = el.kotkab
+          var res2 = await this.$axios.get(
+            'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+              el._id
+          )
+          var allndf = res2.data.data.map((a) => {
+            return a.locationId
+          })
+          const ndf2 = await this.$axios.$post(
+            'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
+            {
+              location: allndf,
+              date: new Date().toISOString(),
             }
-          }
-        })
+          )
+
+          ndf2.data.forEach((el) => {
+            if (!this.allNDF[el.location.locationId]) {
+              this.allNDF[el.location.locationId] = []
+            }
+            this.allNDF[el.location.locationId].push(el)
+          })
+
+          res2.data.data.forEach((el, i) => {
+            var datares = this.allNDF[el.locationId]
+            if (datares && datares.length > 0) {
+              if (i <= 10) {
+                this.forecast.push({
+                  location: el,
+                  data: datares[0],
+                })
+              } else {
+                this.forecast2.push({
+                  location: el,
+                  data: datares[0],
+                })
+              }
+            }
+          })
+        }
       }
     },
   },
@@ -233,6 +295,6 @@ td {
   padding-right: 35px;
   padding-top: 20px;
   padding-bottom: 20px;
-  border:0.1px solid rgba(0,0,0,0.1);
+  border: 0.1px solid rgba(0, 0, 0, 0.1);
 }
 </style>

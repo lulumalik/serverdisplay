@@ -27,9 +27,9 @@ export default {
   mounted() {
     var parentDisplay = this.$parent.$parent.$parent
     this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
+    var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
     if (parentDisplay.production) {
       var setting = parentDisplay.responseDisplay.properties.allSetting
-      var obj = parentDisplay.obj.idtemplate
       for (var i = 0; i < setting[obj].length; i++) {
         var el = setting[obj][i]
         var comp = el.key.split('_')[1]
@@ -43,6 +43,34 @@ export default {
             this.day = el.value.key
           }
         }
+      }
+    } else {
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetSpartan_spartan'
+        ]
+      ) {
+        this.spartan = this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetSpartan_spartan'
+        ].id
+      }
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetSpartan_province'
+        ]
+      ) {
+        this.province = this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetSpartan_province'
+        ].key
+      }
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetSpartan_day'
+        ]
+      ) {
+        this.day = this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetSpartan_day'
+        ].key
       }
     }
   },

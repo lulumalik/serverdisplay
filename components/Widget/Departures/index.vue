@@ -1,12 +1,20 @@
 <template>
-  <div class="rounded-md bg-black/70 text-white shadow-md flex justify-center items-center">
+  <div
+    class="
+      rounded-md
+      bg-black/70
+      text-white
+      shadow-md
+      flex
+      justify-center
+      items-center
+    "
+  >
     <div class="flex items-start space-x-4 w-full">
       <div class="w-full">
         <div>
           <div>
-            <div
-              class=" px-6 pb-3 pt-6 font-semibold text-center text-4xl"
-            >
+            <div class="px-6 pb-3 pt-6 font-semibold text-center text-4xl">
               Keberangkatan
             </div>
             <div class="flex pb-6">
@@ -25,19 +33,14 @@
             </div>
           </div>
           <div
-            class="
-              h-80
-              w-full
-              mt-6
-              relative
-              flex
-              items-center
-              justify-center
-            "
+            class="h-80 w-full mt-6 relative flex items-center justify-center"
           >
             <div>
               <div>
-                <img :src="'/departures/' + result.symbol + '.png'" class="w-44" />
+                <img
+                  :src="'/departures/' + result.symbol + '.png'"
+                  class="w-44 mx-auto"
+                />
               </div>
               <div
                 class="
@@ -72,7 +75,10 @@
             <div class="font-bold flex space-x-4">
               <div class="font-semibold flex items-center space-x-3">
                 <div class="ml-2">
-                  <img class="w-4" src="/weatherheadlineWhite/Temperature.svg" />
+                  <img
+                    class="w-4"
+                    src="/weatherheadlineWhite/Temperature.svg"
+                  />
                 </div>
                 <div class="pl-1">Suhu</div>
               </div>
@@ -114,17 +120,18 @@ export default {
       indikator: '',
       result: {},
       url: '',
+      idTemplate: null,
     }
   },
   methods: {
     async getData() {
+      var self = this
       var parentDisplay = this.$parent.$parent.$parent
+      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
+      this.idTemplate = obj
       if (parentDisplay.production) {
-        this.allNDF = {}
-        var self = this
-        var ndflistener = this.allNDF
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
+
         // console.log(setting[obj])
         var arr = []
         setting[obj].map((el) => {
@@ -188,6 +195,64 @@ export default {
             this.url = el.value
           }
         })
+      } else {
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetDepartures_airport'
+          ]
+        ) {
+          var el =
+            this.$store.state.displayWidget.widgetSaved[
+              this.idTemplate + '_WidgetDepartures_airport'
+            ]
+          this.$axios
+            .post('https://sena.circlegeo.com/api/sena/research/forward', {
+              url: 'http://aviation.bmkg.go.id/latest/observation.xml.php',
+            })
+            .then((res) => {
+              const json = xml.parse(res.data)
+              json[1].children.forEach((el2) => {
+                var icaoId = el2.children[0].children[0]
+                // console.log(el.value, icaoId)
+                if (el.icaoid == icaoId) {
+                  var tagname = el2.children[1].children[0]
+                  var latitude = el2.children[2].children[0]
+                  var longitude = el2.children[3].children[0]
+                  var elevation = el2.children[4].children[0]
+                  var observationTime = el2.children[5].children[0]
+                  var time_zone = el2.children[6].children[0]
+                  var windDirection = el2.children[7].children[0]
+                  var windSpeed = el2.children[8].children[0]
+                  var windSpeedMax = el2.children[9].children[0]
+                  var visibility = el2.children[10].children[0]
+                  var weather = el2.children[12].children[0]
+                  var temperature = el2.children[13].children[0]
+                  var dewPoint = el2.children[14].children[0]
+                  var pressure = el2.children[15].children[0]
+                  var symbol = el2.children[16].children[0]
+
+                  self.result = {
+                    tagname,
+                    latitude,
+                    longitude,
+                    elevation,
+                    observationTime,
+                    time_zone,
+                    windDirection,
+                    windSpeed,
+                    windSpeedMax,
+                    visibility,
+                    weather,
+                    temperature,
+                    dewPoint,
+                    pressure,
+                    symbol,
+                  }
+                }
+              })
+            })
+          // console.log(el)
+        }
       }
     },
   },

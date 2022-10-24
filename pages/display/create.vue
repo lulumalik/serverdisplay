@@ -1,8 +1,7 @@
 <template>
   <div class="bg-gray-200 h-screen">
     <client-only>
-
-    <Navbar class="w-full sticky top-0" style="z-index: 1000" />
+      <Navbar class="w-full sticky top-0" style="z-index: 1000" />
       <form class="text-sm px-6 pt-4 flex items-end space-x-4">
         <div class="flex-grow">
           <div class="flex items-center">
@@ -47,9 +46,12 @@
             />
           </div>
         </div>
-        <div class="flex-grow" v-if="currentUser == (allfind.owner && allfind.owner._id)" >
+        <div
+          class="flex-grow"
+          v-if="currentUser == (allfind.owner && allfind.owner._id)"
+        >
           <!--  -->
-         <!-- {{currentUser}} {{allfind.owner}} -->
+          <!-- {{currentUser}} {{allfind.owner}} -->
           <div
             type="submit"
             class="
@@ -140,7 +142,7 @@ export default {
       useFooter: true,
       useVideo: null,
       backgroundStatic: null,
-      currentUser: null
+      currentUser: null,
     }
   },
   middleware: ['checkLogin'],
@@ -160,39 +162,41 @@ export default {
     if (this.$route.query.id) {
       try {
         this.currentUser = jwtdecode(this.$cookies.get('users')).id
-        const res = await this.$axios.$get('display/find/' + this.$route.query.id)
-      this.allfind = res.data
-      this.templateDB = res1.data
-      // this.templateDB = this.getDifference(alltemplate, res.data.template)
-      var arr = []
-      for (var key in res.data.properties.allTemplate) {
-        arr.push(res.data.properties.allTemplate[key])
-      }
-      this.templateAddedList = arr
-      var listSetting = res.data.properties.allSetting
-      this.displayID = res.data.username
-      this.displayName = res.data.name
-      // console.log(res.data)
-      this.useFooter = res.data.properties.footer
-      this.getDisplayLocation = res.data.location.name
-      // console.log(res.data)
-      this.useVideo = res.data.properties.video
-      this.backgroundStatic = res.data.properties.backgroundStatic
-      this.$refs['preview'].logos = res.data.properties.allLogo
-      this.$refs['preview'].times = res.data.properties.delay
-      this.$refs['preview'].width = res.data.properties.width || 1366
-      this.$refs['preview'].height = res.data.properties.height || 768
-      this.templateAddedList.forEach((el) => {
-        if (listSetting[el.idtemplate]) {
-          listSetting[el.idtemplate].forEach((l) => {
-            this.$store.commit('displayWidget/mutationWidget', {
-              key: l.key,
-              value: l.value,
-            })
-          })
+        const res = await this.$axios.$get(
+          'display/find/' + this.$route.query.id
+        )
+        this.allfind = res.data
+        this.templateDB = res1.data
+        // this.templateDB = this.getDifference(alltemplate, res.data.template)
+        var arr = []
+        for (var key in res.data.properties.allTemplate) {
+          arr.push(res.data.properties.allTemplate[key])
         }
-      })
-      } catch(e) {
+        this.templateAddedList = arr
+        var listSetting = res.data.properties.allSetting
+        this.displayID = res.data.username
+        this.displayName = res.data.name
+        // console.log(res.data)
+        this.useFooter = res.data.properties.footer
+        this.getDisplayLocation = res.data.location.name
+        // console.log(res.data)
+        this.useVideo = res.data.properties.video
+        this.backgroundStatic = res.data.properties.backgroundStatic
+        this.$refs['preview'].logos = res.data.properties.allLogo
+        this.$refs['preview'].times = res.data.properties.delay
+        this.$refs['preview'].width = res.data.properties.width || 1366
+        this.$refs['preview'].height = res.data.properties.height || 768
+        this.templateAddedList.forEach((el) => {
+          if (listSetting[el.idtemplate]) {
+            listSetting[el.idtemplate].forEach((l) => {
+              this.$store.commit('displayWidget/mutationWidget', {
+                key: l.key,
+                value: l.value,
+              })
+            })
+          }
+        })
+      } catch (e) {
         console.log(e)
         // window.open('/display', '_self')
       }
@@ -211,39 +215,72 @@ export default {
         })
       })
     },
-    updateData(obj) {
-      this.$axios
-        .$put('display/update/' + this.allfind._id, obj)
-        .then((res) => {
+    async updateData(obj) {
+      try {
+        const res = await this.$axios.$put(
+          'display/update/' + this.allfind._id,
+          obj
+        )
+        this.saving = false
+        this.$toast.open({
+          message: 'Display saved',
+          type: 'success',
+          duration: 2000,
+        })
+        setTimeout(() => {
+          window.location.href = '/display/create?id=' + res.data.username
+        }, 1000)
+      } catch (error) {
+        if (error.response.data.message.code == 11000) {
           this.saving = false
           this.$toast.open({
-            message: 'Display saved',
-            type: 'success',
+            message: 'Display id already taken',
+            type: 'error',
             duration: 2000,
           })
-          setTimeout(() => {
-            window.location.href = '/display/create?id=' + res.data.username
-          }, 1000)
-        })
+        } else {
+          this.saving = false
+          this.$toast.open({
+            message: 'Display not saved, try again',
+            type: 'error',
+            duration: 2000,
+          })
+        }
+      }
     },
-    createData(obj) {
-      this.$axios
-        .$post(
+    async createData(obj) {
+      try {
+        const res = await this.$axios.$post(
           'display/create?generateSecret' +
             (this.secretCode ? '=true' : '=false'),
           obj
         )
-        .then((res) => {
+        this.saving = false
+        this.$toast.open({
+          message: 'Display saved',
+          type: 'success',
+          duration: 2000,
+        })
+        setTimeout(() => {
+          window.location.href = '/display/create?id=' + res.data.username
+        }, 1000)
+      } catch (error) {
+        if (error.response.data.message.code == 11000) {
           this.saving = false
           this.$toast.open({
-            message: 'Display saved',
-            type: 'success',
+            message: 'Display id already taken',
+            type: 'error',
             duration: 2000,
           })
-          setTimeout(() => {
-            window.location.href = '/display/create?id=' + res.data.username
-          }, 1000)
-        })
+        } else {
+          this.saving = false
+          this.$toast.open({
+            message: 'Display not saved try again',
+            type: 'error',
+            duration: 2000,
+          })
+        }
+      }
     },
     createWithUpdate() {
       this.updateAndCreateDisplay('create')

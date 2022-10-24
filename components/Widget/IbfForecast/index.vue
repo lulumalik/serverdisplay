@@ -42,7 +42,7 @@ export default {
       this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
+        var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
         setting[obj].forEach((el) => {
           this.location = el.value.name
           this.testImage(

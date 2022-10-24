@@ -2,9 +2,7 @@
   <div>
     <table class="w-full rounded-md text-lg shadow-md">
       <tr class="text-white font-semibold">
-        <td style="background: #303030" class="rounded-tl-lg">
-          Parameter
-        </td>
+        <td style="background: #303030" class="rounded-tl-lg">Parameter</td>
         <td
           style="background: #303030"
           :class="i == forecast.length - 1 ? 'rounded-tr-lg' : ''"
@@ -12,7 +10,12 @@
           v-for="(f, i) in forecast"
           :key="i"
         >
-          {{ getSecondOnly(returningTimeZone(new Date(f.date)).split(' ').splice(4, 4)[0]) }} {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+          {{
+            getSecondOnly(
+              returningTimeZone(new Date(f.date)).split(' ').splice(4, 4)[0]
+            )
+          }}
+          {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
         </td>
       </tr>
       <tr v-for="(val, key, ind) in listData" :key="key">
@@ -44,16 +47,17 @@
             >
               <div class="relative">
                 <img src="/weatherheadline/compass.svg" alt="img" />
-                <img src="/weatherheadline/arrow.svg" :style="{transform: 'rotate(' + dirTo[f[val]] + 'deg)'}" alt="img2" class="absolute z-30 top-0 left-0 right-0 mx-auto" />
+                <img
+                  src="/weatherheadline/arrow.svg"
+                  :style="{ transform: 'rotate(' + dirTo[f[val]] + 'deg)' }"
+                  alt="img2"
+                  class="absolute z-30 top-0 left-0 right-0 mx-auto"
+                />
               </div>
               <div>{{ dirTo[f[val]] }} <sup>o</sup></div>
             </div>
             <div v-else>
-              {{
-                key == 'Cuaca'
-                  ? weather_code[f.weather_code]
-                  : f[val]
-              }}
+              {{ key == 'Cuaca' ? weather_code[f.weather_code] : f[val] }}
               <small>{{ parseSatuan[key] }}</small>
             </div>
           </div>
@@ -68,6 +72,7 @@ import { weather_code, dirTo, parseNameDir } from '../../../utils/helperNDF.js'
 export default {
   data() {
     return {
+      idTemplate: null,
       forecast: [
         {
           _id: '62e1d18fe1ec873f27342d0b',
@@ -151,15 +156,15 @@ export default {
         '00'
       )
     },
-    getData() {
+    async getData() {
       var parentDisplay = this.$parent.$parent.$parent
       this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
       this.allNDF = {}
       var ndflistener = this.allNDF
-      this.forecast.length = 0
       if (parentDisplay.production) {
+        this.forecast.length = 0
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
+        var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
         setting[obj].forEach(async (el) => {
           var key = el.key.split('_')[2]
           var key1 = el.key.split('_')[1]
@@ -179,6 +184,32 @@ export default {
             }
           }
         })
+      } else {
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetForecastWeather_kecamatan'
+          ]
+        ) {
+          var el =
+            this.$store.state.displayWidget.widgetSaved[
+              this.idTemplate + '_WidgetForecastWeather_kecamatan'
+            ]
+
+          this.forecast.length = 0
+          const datares = await this.$axios.$get(
+            'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+              el.locationId
+          )
+
+          this.$set(ndflistener, el.locationId, datares.data)
+
+          if (ndflistener[el.locationId].length > 0) {
+            for (var i = 0; i < 3; i++) {
+              var comp = ndflistener[el.locationId][i]
+              this.forecast.push(comp)
+            }
+          }
+        }
       }
     },
   },

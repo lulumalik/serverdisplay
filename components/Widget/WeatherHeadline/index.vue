@@ -47,7 +47,9 @@
                 <div class="relative right-1">Kecepatan Angin</div>
               </div>
             </td>
-            <td class="font-bold pl-6"><div class="mt-2">: {{ forecast[0].wSpd }} km/jam</div></td>
+            <td class="font-bold pl-6">
+              <div class="mt-2">: {{ forecast[0].wSpd }} km/jam</div>
+            </td>
           </tr>
           <tr>
             <td>
@@ -57,14 +59,15 @@
               </div>
             </td>
             <td class="font-bold pl-6">
-              
               <div class="flex space-x-2 items-center">
                 <div>:</div>
                 <div class="relative">
                   <img src="/weatherheadline/compass.svg" alt="img" />
                   <img
                     src="/weatherheadline/arrow.svg"
-                    :style="{ transform: 'rotate(' + dirTo[forecast[0].wDir] + 'deg)' }"
+                    :style="{
+                      transform: 'rotate(' + dirTo[forecast[0].wDir] + 'deg)',
+                    }"
                     alt="img2"
                     class="absolute z-30 top-0 left-0 right-0 mx-auto"
                   />
@@ -100,7 +103,7 @@
               </div>
             </td>
             <td class="font-bold pl-6">
-             <div class="mt-2"> : {{ forecast[0].maxTemp }} <sup>o</sup>C</div>
+              <div class="mt-2">: {{ forecast[0].maxTemp }} <sup>o</sup>C</div>
             </td>
           </tr>
         </table>
@@ -150,7 +153,7 @@ export default {
     },
   },
   methods: {
-    getData() {
+    async getData() {
       var parentDisplay = this.$parent.$parent.$parent
       this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
       this.allNDF = {}
@@ -158,7 +161,7 @@ export default {
       this.forecast.length = 0
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
+        var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
         setting[obj].forEach(async (el) => {
           var key = el.key.split('_')[2]
           var key1 = el.key.split('_')[1]
@@ -181,27 +184,34 @@ export default {
             }
           }
         })
+      } else {
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetWeatherHeadline_kecamatan'
+          ]
+        ) {
+          var el =
+            this.$store.state.displayWidget.widgetSaved[
+              this.idTemplate + '_WidgetWeatherHeadline_kecamatan'
+            ]
+          const datares = await this.$axios.$get(
+            'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+              el.locationId
+          )
+
+          this.$set(ndflistener, el.locationId, datares.data)
+
+          if (ndflistener[el.locationId].length > 0) {
+            for (var i = 0; i < ndflistener[el.locationId].length; i++) {
+              var comp = ndflistener[el.locationId][i]
+              if (comp.date.split('T')[1].split(':')[0] == '12') {
+                this.forecast.push(comp)
+                break
+              }
+            }
+          }
+        }
       }
-      // var parent = this.$parent.$parent.$parent
-      // if (parent.currentId) {
-      //   this.forecast.length = 0
-      //   var ndf = parent.obj.properties.widgetndf
-      //   if (parent.obj.properties.widgetndf) {
-      //     ndf.forEach((el) => {
-      //       if (el.key == '_WidgetWeatherHeadline_subdistrict') {
-      //         // console.log(this.ndflistener[el.value.ndf], 'ea')
-      //         var datares = this.ndflistener[el.value.ndf]
-      //         for (var i = 0; i < datares.length; i++) {
-      //           var comp = datares[i]
-      //           if (comp.date.split('T')[1].split(':')[0] == '12') {
-      //             this.forecast.push(comp)
-      //             break
-      //           }
-      //         }
-      //       }
-      //     })
-      //   }
-      // }
     },
   },
   mounted() {

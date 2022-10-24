@@ -48,7 +48,7 @@ export default {
       if (parentDisplay.production) {
 
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
+        var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
         this.selected.area = setting[obj][0].value
         this.$axios.get('https://pusmar.id/api21/modelrun').then((res) => {
           this.allModel = res.data

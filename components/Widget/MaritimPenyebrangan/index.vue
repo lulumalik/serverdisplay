@@ -53,8 +53,11 @@
               <div class="flex space-x-2 mt-3">
                 <div>Berlaku</div>
                 <div v-if="data.data[0]">
-                  {{ new Date(returningTimeZone(new Date(data.data[0].valid_from))
-                      ).toLocaleDateString("id")}}
+                  {{
+                    new Date(
+                      returningTimeZone(new Date(data.data[0].valid_from))
+                    ).toLocaleDateString('id')
+                  }}
                   {{
                     returningTimeZone(new Date(data.data[0].valid_from))
                       .split(' ')
@@ -63,10 +66,13 @@
                       .splice(0, 2)
                       .join(':')
                   }}
-                  
+
                   -
-                  {{ new Date(returningTimeZone(new Date(data.data[0].valid_to))
-                      ).toLocaleDateString("id")}}
+                  {{
+                    new Date(
+                      returningTimeZone(new Date(data.data[0].valid_to))
+                    ).toLocaleDateString('id')
+                  }}
                   {{
                     returningTimeZone(new Date(data.data[0].valid_to))
                       .split(' ')
@@ -75,7 +81,9 @@
                       .splice(0, 2)
                       .join(':')
                   }}
-                  {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+                  {{
+                    getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+                  }}
                 </div>
               </div>
               <div class="mt-3 font-bold text-2xl text-red-500">Warning</div>
@@ -175,9 +183,10 @@ export default {
     async getData() {
       var self = this
       var parentDisplay = this.$parent.$parent.$parent
+
+      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
         var result = []
         this.showData.length = 0
         setting[obj].map((el) => {
@@ -188,115 +197,150 @@ export default {
             result.push(el)
           }
         })
-
-        var map = this.$refs['map'].map
-
-        var geojson = {
-          type: 'FeatureCollection',
-          features: [
-            {
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'LineString',
-                coordinates: [
-                  [result[0].value.coor[1], result[0].value.coor[0]],
-                  [result[1].value.coor[1], result[1].value.coor[0]],
-                ],
-              },
-            },
-          ],
-        }
-
-        var geojsonDeparture = {
-          type: 'FeatureCollection',
-          features: [],
-        }
-        var geojsonArrival = {
-          type: 'FeatureCollection',
-          features: [],
-        }
-        geojsonDeparture.features.push({
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [result[0].value.coor[1], result[0].value.coor[0]],
-          },
-        })
-        geojsonArrival.features.push({
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [result[1].value.coor[1], result[1].value.coor[0]],
-          },
-        })
-
-        result.forEach(async (el, i) => {
-          const res = await this.$axios.post(
-            'https://sena.circlegeo.com/api/sena/research/forward',
-            {
-              url:
-                'https://maritim.bmkg.go.id/public_api/pelabuhan/' +
-                el.value.name,
-            }
-          )
-          this.showData.push(res.data)
-        })
-
-        map.loadImage('/maritim/DEPARTURE1.png', function (error, image) {
-          if (error) throw error
-          map.addImage('departure', image)
-          map.addSource('departure', {
-            type: 'geojson',
-            data: geojsonDeparture,
-          })
-          map.addLayer({
-            id: 'departure',
-            type: 'symbol',
-            source: 'departure',
-            layout: {
-              'icon-image': 'departure',
-              'icon-size': 0.15,
-              'icon-offset': [0, -10],
-            },
-          })
-        })
-
-        map.loadImage('/maritim/ARRIVAL1.png', function (error, image) {
-          if (error) throw error
-          map.addImage('arrival', image)
-          map.addSource('arrival', {
-            type: 'geojson',
-            data: geojsonArrival,
-          })
-          map.addLayer({
-            id: 'arrival',
-            type: 'symbol',
-            source: 'arrival',
-            layout: {
-              'icon-image': 'arrival',
-              'icon-size': 0.15,
-              'icon-offset': [0, -10],
-            },
-          })
-        })
-        // bounds
-        var bounds = new maplibregl.LngLatBounds()
-        geojson.features.forEach(function (feature) {
-          if (feature.geometry.type === 'Point') {
-            bounds.extend(feature.geometry.coordinates)
-          } else if (feature.geometry.type === 'LineString') {
-            feature.geometry.coordinates.forEach(function (coord) {
-              bounds.extend(coord)
-            })
+        this.initialMap(result)
+      } else {
+        var from = null
+        var to = null
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            obj + '_WidgetMaritimPenyebrangan_from'
+          ]
+        ) {
+          from = {
+            value: this.$store.state.displayWidget.widgetSaved[
+              obj + '_WidgetMaritimPenyebrangan_from'
+            ]
           }
-        })
-        map.fitBounds(bounds, {
-          padding: { top: 150, bottom: 150, left: 200, right: 200 },
-        })
+        }
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            obj + '_WidgetMaritimPenyebrangan_to'
+          ]
+        ) {
+          to = {
+            value: this.$store.state.displayWidget.widgetSaved[
+              obj + '_WidgetMaritimPenyebrangan_to'
+            ]
+          }
+        }
+        if (from && to) {
+          var result = []
+          this.showData.length = 0
+          result[0] = from
+          result[1] = to
+          this.initialMap(result)
+        }
       }
+    },
+    initialMap(result) {
+      var self = this
+      var map = this.$refs['map'].map
+
+      var geojson = {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [result[0].value.coor[1], result[0].value.coor[0]],
+                [result[1].value.coor[1], result[1].value.coor[0]],
+              ],
+            },
+          },
+        ],
+      }
+
+      var geojsonDeparture = {
+        type: 'FeatureCollection',
+        features: [],
+      }
+      var geojsonArrival = {
+        type: 'FeatureCollection',
+        features: [],
+      }
+      geojsonDeparture.features.push({
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Point',
+          coordinates: [result[0].value.coor[1], result[0].value.coor[0]],
+        },
+      })
+      geojsonArrival.features.push({
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Point',
+          coordinates: [result[1].value.coor[1], result[1].value.coor[0]],
+        },
+      })
+
+      result.forEach(async (el, i) => {
+        const res = await this.$axios.post(
+          'https://sena.circlegeo.com/api/sena/research/forward',
+          {
+            url:
+              'https://maritim.bmkg.go.id/public_api/pelabuhan/' +
+              el.value.name,
+          }
+        )
+        this.showData.push(res.data)
+      })
+
+      map.loadImage('/maritim/DEPARTURE1.png', function (error, image) {
+        if (error) throw error
+        map.addImage('departure', image)
+        map.addSource('departure', {
+          type: 'geojson',
+          data: geojsonDeparture,
+        })
+        map.addLayer({
+          id: 'departure',
+          type: 'symbol',
+          source: 'departure',
+          layout: {
+            'icon-image': 'departure',
+            'icon-size': 0.15,
+            'icon-offset': [0, -10],
+          },
+        })
+      })
+
+      map.loadImage('/maritim/ARRIVAL1.png', function (error, image) {
+        if (error) throw error
+        map.addImage('arrival', image)
+        map.addSource('arrival', {
+          type: 'geojson',
+          data: geojsonArrival,
+        })
+        map.addLayer({
+          id: 'arrival',
+          type: 'symbol',
+          source: 'arrival',
+          layout: {
+            'icon-image': 'arrival',
+            'icon-size': 0.15,
+            'icon-offset': [0, -10],
+          },
+        })
+      })
+      // bounds
+      var bounds = new maplibregl.LngLatBounds()
+      geojson.features.forEach(function (feature) {
+        if (feature.geometry.type === 'Point') {
+          bounds.extend(feature.geometry.coordinates)
+        } else if (feature.geometry.type === 'LineString') {
+          feature.geometry.coordinates.forEach(function (coord) {
+            bounds.extend(coord)
+          })
+        }
+      })
+      map.fitBounds(bounds, {
+        padding: { top: 150, bottom: 150, left: 200, right: 200 },
+      })
     },
   },
   mounted() {

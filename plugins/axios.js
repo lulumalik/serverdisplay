@@ -8,21 +8,21 @@ export default function({ $axios, redirect, app, store }) {
         checkToken(app, store, config);
     });
 
-    $axios.onError(async(error) => {
-        console.log(error)
-            // var response =
-            //   error.response && error.response.data && error.response.data.error;
-            // store.commit("users/mutationUsers", {
-            //   key: "errorResponse",
-            //   value: response || "Something went wrong",
-            // });
-            // store.commit("map/mutationData", {
-            //   key: "seriesInfo",
-            //   value: error.response || "Something went wrong.",
-            // });
-            // if (response == "Bad token") {
-            //   app.$cookies.remove('users')
-            //   redirect("/");
-            // }
-    });
+    // $axios.onError(async(error) => {
+    // console.log(error)
+    // var response =
+    //   error.response && error.response.data && error.response.data.error;
+    // store.commit("users/mutationUsers", {
+    //   key: "errorResponse",
+    //   value: response || "Something went wrong",
+    // });
+    // store.commit("map/mutationData", {
+    //   key: "seriesInfo",
+    //   value: error.response || "Something went wrong.",
+    // });
+    // if (response == "Bad token") {
+    //   app.$cookies.remove('users')
+    //   redirect("/");
+    // }
+    // });
 }

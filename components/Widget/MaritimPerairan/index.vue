@@ -1,8 +1,16 @@
 <template>
   <div>
     <client-only>
-      <div class="text-6xl mb-6 font-bold text-center" :class="currentDate >= 18 ? 'text-white' : 'text-black'">{{showData && showData.value && showData.value.name}}</div>
-      <div class="w-full overflow-hidden bg-black/60" style="height: 730px !important">
+      <div
+        class="text-6xl mb-6 font-bold text-center"
+        :class="currentDate >= 18 ? 'text-white' : 'text-black'"
+      >
+        {{ showData && showData.value && showData.value.name }}
+      </div>
+      <div
+        class="w-full overflow-hidden bg-black/60"
+        style="height: 730px !important"
+      >
         <VueSlickCarousel
           v-bind="settings"
           v-if="Object.keys(listperairan).length > 0"
@@ -15,7 +23,7 @@
               {{ arrowOption }}
             </div>
           </template>
-          <div v-for="(l, i) in listperairan" :key="i" >
+          <div v-for="(l, i) in listperairan" :key="i">
             <table class="w-full">
               <tr>
                 <td
@@ -43,19 +51,13 @@
                 >
                   {{ forecast.time_desc }}
                 </td>
-                <td
-                  class="text-white text-2xl"
-                >
+                <td class="text-white text-2xl">
                   {{ forecast.weather || '-' }}
                 </td>
-                <td
-                  class="text-white text-2xl"
-                >
+                <td class="text-white text-2xl">
                   <div>{{ forecast.wave_desc || '-' }}</div>
                 </td>
-                <td
-                  class="text-white text-2xl"
-                >
+                <td class="text-white text-2xl">
                   <div class="flex">
                     <div>{{ forecast.wind_speed_min || '-' }}</div>
                     <div>-</div>
@@ -119,12 +121,13 @@ export default {
     async getData() {
       var self = this
       var parentDisplay = this.$parent.$parent.$parent
+      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
+
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
         var result = {}
 
-      this.currentDate = new Date().getHours()
+        this.currentDate = new Date().getHours()
         setting[obj].map((el) => {
           // console.log(el)
           var key = el.key.split('_')[1]
@@ -165,6 +168,52 @@ export default {
                 })
             })
           })
+      } else {
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            obj + '_WidgetMaritimPerairan_wilpel'
+          ]
+        ) {
+          var data =
+            this.$store.state.displayWidget.widgetSaved[
+              obj + '_WidgetMaritimPerairan_wilpel'
+            ]
+          // console.log(el)
+          this.showData = {
+            value: data
+          }
+        // console.log(arr)
+        // https://maritim.bmkg.go.id/geojson-update/T.json
+        this.$axios
+          .post('https://sena.circlegeo.com/api/sena/research/forward', {
+            url:
+              'https://maritim.bmkg.go.id/geojson-update/' +
+              data.id.split('.')[0] +
+              '.json',
+          })
+          .then((res) => {
+            res.data.features.forEach((el) => {
+              self.$set(
+                self.listperairan,
+                el.properties.WP_1 + '_' + el.properties.WP_IMM,
+                []
+              )
+            })
+
+            Object.keys(self.listperairan).forEach((el) => {
+              this.$axios
+                .post('https://sena.circlegeo.com/api/sena/research/forward', {
+                  url:
+                    'https://maritim.bmkg.go.id/public_api/perairan/' +
+                    el.split(' ').join('%20') +
+                    '.json',
+                })
+                .then((res) => {
+                  self.$set(self.listperairan, el, res.data.data)
+                })
+            })
+          })
+        }
       }
     },
   },

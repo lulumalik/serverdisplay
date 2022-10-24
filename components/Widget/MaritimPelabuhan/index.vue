@@ -17,7 +17,7 @@
         <table class="w-full">
           <tr>
             <td class="text-left rounded-tl-md bg-black text-2xl text-white">
-              Valid 
+              Valid
             </td>
             <td class="text-left bg-black text-2xl text-white">Cuaca</td>
             <td class="text-left bg-black text-2xl text-white">Angin</td>
@@ -56,7 +56,9 @@
                     .splice(0, 2)
                     .join(':')
                 }}
-                {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+                {{
+                  getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+                }}
               </td>
               <td class="text-left bg-black/70 text-2xl text-white">
                 {{ data.weather }}
@@ -67,19 +69,21 @@
               <td class="text-left bg-black/70 text-2xl text-white">
                 {{ data.wind_from }}
               </td>
-              <td
-                class="text-left  bg-black/70 text-2xl text-white"
-              >
+              <td class="text-left bg-black/70 text-2xl text-white">
                 {{ data.wave_desc }}
               </td>
             </tr>
             <tr>
-                <td colspan="5" :class="i == 1 ? 'rounded-b-md' : ''" class="text-left bg-black/70 text-2xl text-white">
-                   <div class="flex space-x-2 text-2xl">
-                    <div>Warning </div>
-                    <div v-html="data.warning_desc"></div>
-                   </div>
-                </td>
+              <td
+                colspan="5"
+                :class="i == 1 ? 'rounded-b-md' : ''"
+                class="text-left bg-black/70 text-2xl text-white"
+              >
+                <div class="flex space-x-2 text-2xl">
+                  <div>Warning</div>
+                  <div v-html="data.warning_desc"></div>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -140,9 +144,10 @@ export default {
     async getData() {
       var self = this
       var parentDisplay = this.$parent.$parent.$parent
+
+      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj.idtemplate
         var result = {}
 
         this.currentDate = new Date().getHours()
@@ -167,6 +172,33 @@ export default {
           .then((res) => {
             self.listpelabuhan = res.data.data
           })
+      } else {
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            obj + '_WidgetMaritimPelabuhan_port'
+          ]
+        ) {
+          var el =
+            this.$store.state.displayWidget.widgetSaved[
+              obj + '_WidgetMaritimPelabuhan_port'
+            ]
+
+          this.showData = {
+            value: el
+          }
+          this.listpelabuhan.length = 0
+          // console.log(arr)
+          this.$axios
+            .post('https://sena.circlegeo.com/api/sena/research/forward', {
+              url:
+                'https://maritim.bmkg.go.id/public_api/pelabuhan/' +
+                el.name.split('.')[0] +
+                '.json',
+            })
+            .then((res) => {
+              self.listpelabuhan = res.data.data
+            })
+        }
       }
     },
   },
