@@ -1,11 +1,14 @@
 <template>
   <div>
     <div class="rounded-md bg-black/70 text-white shadow-md">
-      <div class="text-white px-6 py-3 font-semibold text-center text-4xl">
+      <div class="text-white px-6 py-3.5 font-semibold text-center text-5xl">
         Tujuan
       </div>
     </div>
-    <div class="overflow-auto mt-6" style="height: 610px">
+    <div
+      class="overflow-auto mt-6"
+      style="height: 610px"
+    >
       <VueSlickCarousel v-bind="settings">
         <template #prevArrow="arrowOption">
           <div v-show="false">{{ arrowOption }}</div>
@@ -32,9 +35,7 @@
             </div>
             <div>
               <div class="text-xl">
-                <div
-                  class="mt-2 text-2xl font-bold flex items-center space-x-4"
-                >
+                <div class="mt-2 text-2xl font-bold flex items-center space-x-4">
                   <img
                     :src="'/departures/' + val.symbol + '.png'"
                     class="w-12"
@@ -44,17 +45,23 @@
                 <div class="font-semibold flex w-full mt-4">
                   <div class="flex space-x-4 items-center w-1/2">
                     <div class="ml-2">
-                      <img class="w-4" src="/weatherheadlineWhite/WDir.svg" />
+                      <img
+                        class="w-4"
+                        src="/weatherheadlineWhite/WDir.svg"
+                      />
                     </div>
                     <div>Angin</div>
                   </div>
                   <div class="w-1/2">
-                    {{ val.windSpeed }} km/jam , dari {{ val.windDirection }}
+                    {{ parseFloat(val.windSpeed) ? val.windSpeed + 'km/jam dari ' + val.windDirection : val.windSpeed }}
                   </div>
                 </div>
                 <div class="font-semibold flex w-full mt-1.5">
                   <div class="flex items-center space-x-3 w-1/2">
-                    <img class="w-6 ml-1" src="/weatherheadlineWhite/eye.svg" />
+                    <img
+                      class="w-6 ml-1"
+                      src="/weatherheadlineWhite/eye.svg"
+                    />
                     <div>Jarak Pandang</div>
                   </div>
                   <div class="w-1/2">
@@ -126,7 +133,7 @@ export default {
         this.bandaras.length = 0
         this.allNDF = {}
         var setting = parentDisplay.responseDisplay.properties.allSetting
-      
+
         var arr = []
         setting[obj].map((el) => {
           // console.log(el)

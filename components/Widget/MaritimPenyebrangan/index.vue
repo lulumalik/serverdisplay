@@ -1,10 +1,9 @@
 <template>
   <div>
     <client-only>
-      <div class="flex space-x-4 relative">
-        <div class="w-6/12 relative">
-          <div
-            class="
+      <div class="flex space-x-4 w-full relative">
+        <div class="w-full relative">
+          <div class="
               font-bold
               absolute
               top-0
@@ -15,44 +14,45 @@
               bg-white/60
               rounded-b-md
               w-full
-            "
-          >
+            ">
             Peta Penyebrangan Maritim
           </div>
           <MapPenyebrangan
-            style="height: 800px"
-            class="w-full rounded-md relative shadow-md border-2 border-white"
+            v-if="idtemplate"
+            style="height: 650px;width:800px;"
+            class="rounded-md relative shadow-md border-2 border-white"
             ref="map"
+            :idMap="'mapPenyebrangan' + idtemplate"
             @mapready="getData"
           />
         </div>
-        <div class="w-6/12 bg-white/70 rounded-md p-6">
+        <div class="w-full bg-white/70 rounded-md p-6">
           <div
             v-for="(data, i) in showData"
-            :class="i == 0 ? '' : 'mt-4 border-t-2 pt-4 border-gray-800'"
+            :class="i == 0 ? '' : 'mt-4 border-t-2 border-dashed pt-4 border-gray-800'"
             :key="i"
           >
             <div class="flex items-end relative">
-              <div class="flex space-x-2 text-2xl flex-grow font-semibold">
-                <img
-                  class="w-8"
-                  :src="
-                    '/maritim/' + (i == 0 ? 'DEPARTURE.png' : 'ARRIVAL.png')
-                  "
-                  :alt="'images' + i"
-                />
+              <div class="flex space-x-2 text-3xl flex-grow font-semibold">
                 <div class="flex w-full">
                   <div class="flex-grow">{{ data.name }}</div>
-                  <div class="flex-none font-bold text-2xl text-blue-500">
-                    {{ data.data[0].weather }}
-                  </div>
                 </div>
               </div>
             </div>
             <div class="text-xl">
-              <div class="flex space-x-2 mt-3">
-                <div>Berlaku</div>
-                <div v-if="data.data[0]">
+              <div class="flex-none relative pl-6 flex space-x-4 mt-2 font-bold text-2xl">
+                <img
+                  class="w-16 absolute -left-4 -top-4"
+                  :src="'/Archive/' + weather_codeParsed[data.data[0].weather] + '.gif'"
+                />
+                <div>
+                  {{ data.data[0].weather }}</div>
+              </div>
+              <div class="mt-0.5">
+                <div
+                  v-if="data.data[0]"
+                  class="text-2xl"
+                >
                   {{
                     new Date(
                       returningTimeZone(new Date(data.data[0].valid_from))
@@ -88,15 +88,18 @@
               </div>
               <div class="mt-3 font-bold text-2xl text-red-500">Warning</div>
               <div
-                class="leading-tight"
+                class="leading-tight h-32 bg-white/40 p-4 rounded overflow-hidden"
                 v-html="data.data[0].warning_desc"
               ></div>
             </div>
-            <div class="flex space-x-4 mt-3">
+            <!-- <div class="flex space-x-4 mt-3">
               <div class="mt-2">
                 <div class="text-2xl font-bold flex items-center space-x-2">
                   <div>
-                    <img src="/general3/wind.svg" class="w-8" />
+                    <img
+                      src="/general3/wind.svg"
+                      class="w-8"
+                    />
                   </div>
                   <div>Angin</div>
                 </div>
@@ -115,7 +118,10 @@
                 <div class="flex-grow">
                   <div class="text-2xl font-bold flex items-center space-x-2">
                     <div>
-                      <img src="/weatherheadline/wave.svg" class="w-8" />
+                      <img
+                        src="/weatherheadline/wave.svg"
+                        class="w-8"
+                      />
                     </div>
                     <div>Gelombang</div>
                   </div>
@@ -123,14 +129,8 @@
                     {{ data.data[0].wave_desc }}
                   </div>
                 </div>
-                <!-- <div class="flex-grow">
-                  <div class="text-2xl font-bold">Jarak Pandang</div>
-                  <div class="text-3xl flex items-end">
-                    {{ data.data[0].visibility }} <small>KM</small>
-                  </div>
-                </div> -->
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -141,10 +141,14 @@
 <script>
 import VueSlickCarousel from 'vue-slick-carousel'
 var maplibregl = require('maplibre-gl')
+import { weather_parsed } from '../../../utils/helperNDF.js'
 export default {
   data() {
     return {
       showData: [],
+      idtemplate: null,
+      loc1: null,
+      loc2: null,
       settings: {
         dots: false,
         infinite: true,
@@ -160,6 +164,9 @@ export default {
     VueSlickCarousel,
   },
   computed: {
+    weather_codeParsed() {
+      return weather_parsed
+    },
     getTimeZone() {
       var date = new Date().getTimezoneOffset()
       if (date == -420) {
@@ -184,50 +191,69 @@ export default {
       var self = this
       var parentDisplay = this.$parent.$parent.$parent
 
-      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
+      this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
-        var result = []
+        var result = {}
         this.showData.length = 0
-        setting[obj].map((el) => {
+        setting[self.idtemplate].map((el) => {
           // console.log(el)
           var key = el.key.split('_')[1]
+          var key2 = el.key.split('_')[2]
           if (key == 'WidgetMaritimPenyebrangan') {
             // arr.push(el)
-            result.push(el)
+            // console.log(el)
+            if (key2 == 'from') {
+              result['from'] = el.value
+            } else if (key2 == 'to') {
+              result['to'] = el.value
+            }
+            // result.push(el)
           }
         })
-        this.initialMap(result)
+
+        var resultArr = []
+
+        resultArr.push({
+          value: result.from,
+        })
+        resultArr.push({
+          value: result.to,
+        })
+
+        this.initialMap(resultArr)
       } else {
         var from = null
         var to = null
         if (
           this.$store.state.displayWidget.widgetSaved[
-            obj + '_WidgetMaritimPenyebrangan_from'
+            self.idtemplate + '_WidgetMaritimPenyebrangan_from'
           ]
         ) {
           from = {
-            value: this.$store.state.displayWidget.widgetSaved[
-              obj + '_WidgetMaritimPenyebrangan_from'
-            ]
+            value:
+              this.$store.state.displayWidget.widgetSaved[
+                self.idtemplate + '_WidgetMaritimPenyebrangan_from'
+              ],
           }
         }
         if (
           this.$store.state.displayWidget.widgetSaved[
-            obj + '_WidgetMaritimPenyebrangan_to'
+            self.idtemplate + '_WidgetMaritimPenyebrangan_to'
           ]
         ) {
           to = {
-            value: this.$store.state.displayWidget.widgetSaved[
-              obj + '_WidgetMaritimPenyebrangan_to'
-            ]
+            value:
+              this.$store.state.displayWidget.widgetSaved[
+                self.idtemplate + '_WidgetMaritimPenyebrangan_to'
+              ],
           }
         }
         if (from && to) {
           var result = []
           this.showData.length = 0
-          result[0] = from
-          result[1] = to
+          result.push(from)
+          result.push(to)
           this.initialMap(result)
         }
       }
@@ -235,6 +261,30 @@ export default {
     initialMap(result) {
       var self = this
       var map = this.$refs['map'].map
+
+      if (this.loc1) {
+        this.loc1.remove()
+      }
+
+      if (this.loc2) {
+        this.loc2.remove()
+      }
+
+      if (map.getSource('departure')) {
+        map.removeSource('departure')
+      }
+
+      if (map.getLayer('departure')) {
+        map.removeLayer('departure')
+      }
+
+      if (map.getSource('arrival')) {
+        map.removeSource('arrival')
+      }
+
+      if (map.getLayer('arrival')) {
+        map.removeLayer('arrival')
+      }
 
       var geojson = {
         type: 'FeatureCollection',
@@ -288,6 +338,53 @@ export default {
           }
         )
         this.showData.push(res.data)
+        var el = document.createElement('div')
+        el.className = 'rounded-lg p-3'
+        el.style.background = 'rgba(255,255,255, 0.7)'
+        // angin
+        var div2 = document.createElement('div')
+        div2.className = 'text-2xl font-bold'
+        div2.innerHTML = `<div>
+            <div class="flex space-x-4"> <img
+                      src="/general3/wind.svg"
+                      class="w-8"
+                    /> <div>Angin</div></div>
+            <div>${res.data.data[0].wind_speed_min} - ${res.data.data[0].wind_speed_max} Knots</div>
+          </div>`
+        // Gelombang
+        var div3 = document.createElement('div')
+        div3.className = 'text-2xl font-bold mt-2'
+        div3.innerHTML = `<div>
+            <div class="flex space-x-4">
+                      <img
+                        src="/weatherheadline/wave.svg"
+                        class="w-8"
+                      />
+                    <div>Gelombang</div></div>
+            <div>${res.data.data[0].wave_desc}</div>
+          </div>`
+
+        el.appendChild(div2)
+        el.appendChild(div3)
+
+        var el2 = document.createElement('div')
+        el2.className = 'rounded-lg px-4 py-1 text-2xl font-bold'
+        el2.style.background = 'rgba(255,255,255, 0.7)'
+        el2.innerHTML = `<div>${res.data.name}</div>`
+
+        self.loc1 = new maplibregl.Marker(el2, {
+          offset: [0, 30],
+        })
+          .setLngLat([result[i].value.coor[1], result[i].value.coor[0]])
+          .addTo(map)
+
+        // marker
+        self.loc2 = new maplibregl.Marker(el, {
+          offset: [-180, -80],
+        })
+          .setLngLat([result[i].value.coor[1], result[i].value.coor[0]])
+          .addTo(map)
+        // cuaca
       })
 
       map.loadImage('/maritim/DEPARTURE1.png', function (error, image) {
@@ -303,8 +400,9 @@ export default {
           source: 'departure',
           layout: {
             'icon-image': 'departure',
-            'icon-size': 0.15,
-            'icon-offset': [0, -10],
+            'icon-size': 0.3,
+            'icon-overlap': 'always',
+            'icon-offset': [0, -250],
           },
         })
       })
@@ -322,8 +420,9 @@ export default {
           source: 'arrival',
           layout: {
             'icon-image': 'arrival',
-            'icon-size': 0.15,
-            'icon-offset': [0, -10],
+            'icon-size': 0.3,
+            'icon-overlap': 'always',
+            'icon-offset': [0, -250],
           },
         })
       })
@@ -339,13 +438,16 @@ export default {
         }
       })
       map.fitBounds(bounds, {
-        padding: { top: 150, bottom: 150, left: 200, right: 200 },
+        padding: { top: 270, bottom: 100, left: 200, right: 200 },
       })
     },
   },
   mounted() {
     // this.getData()
     var self = this
+
+    var parentDisplay = this.$parent.$parent.$parent
+    this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
 
     setInterval(() => {
       this.getData()

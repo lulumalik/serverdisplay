@@ -39,8 +39,14 @@
           }}
         </div>
       </div> -->
-      <div class="flex space-x-4 text-gray-700" v-if="forecast.length > 0">
-        <div v-for="(w, i) in forecast" :key="i">
+      <div
+        class="flex space-x-4 text-gray-700"
+        v-if="forecast.length > 0"
+      >
+        <div
+          v-for="(w, i) in forecast"
+          :key="i"
+        >
           <div
             class="mb-3 font-bold text-2xl text-center"
             :class="currentDate >= 18 ? 'text-white' : 'text-black'"
@@ -49,8 +55,7 @@
             {{ returningTimeZone(new Date(w.date)) }}
             {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
           </div>
-          <div
-            class="
+          <div class="
               rounded-t-3xl
               border-4 border-white
               shadow-md
@@ -62,8 +67,7 @@
               to-blue-800
               w-44
               h-36
-            "
-          >
+            ">
             <img
               :src="'/Archive/' + w.weather_code + '.gif'"
               class="w-44 mx-auto"
@@ -75,19 +79,28 @@
             </div>
             <div class="flex space-x-4 items-center mt-8">
               <div class="w-6">
-                <img src="/svg/temp.svg" class="w-4" />
+                <img
+                  src="/svg/temp.svg"
+                  class="w-4"
+                />
               </div>
               <div>{{ w.temp }} <sup>o</sup>C</div>
             </div>
             <div class="flex space-x-4 items-center mt-4">
               <div class="w-6">
-                <img src="/svg/precip.svg" class="w-4" />
+                <img
+                  src="/svg/precip.svg"
+                  class="w-4"
+                />
               </div>
               <div>{{ w.rh }} %</div>
             </div>
             <div class="flex space-x-4 items-center mt-4">
               <div class="w-6">
-                <img src="/svg/wind.svg" class="w-6 relative right-1" />
+                <img
+                  src="/svg/wind.svg"
+                  class="w-6 relative right-1"
+                />
               </div>
               <div>{{ w.wSpd }} km/jam</div>
             </div>
@@ -225,7 +238,7 @@ export default {
               )
               this.$set(ndflistener, el.value.ndf, datares.data)
               if (ndflistener[el.value.ndf].length > 0) {
-                for (var i = 0; i < 3; i++) {
+                for (var i = 0; i < 5; i++) {
                   var comp = ndflistener[el.value.ndf][i]
                   this.forecast.push(comp)
                 }
@@ -253,7 +266,7 @@ export default {
           this.$set(ndflistener, el.locationId, datares.data)
 
           if (ndflistener[el.locationId].length > 0) {
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < 5; i++) {
               var comp = ndflistener[el.locationId][i]
               this.forecast.push(comp)
             }

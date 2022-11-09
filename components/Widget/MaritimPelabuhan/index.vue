@@ -1,48 +1,41 @@
 <template>
   <div>
     <client-only>
-      <div
-        class="text-6xl mb-12 font-bold text-center"
-        :class="currentDate >= 18 ? 'text-white' : 'text-black'"
-      >
-        {{ showData && showData.value && showData.value.portname }}
-      </div>
       <div>
-        <!-- <div>
-            Warning
+        <div class="relative">
+          <div
+            class="text-4xl absolute bg-white/70 text-black left-3 top-3 p-8 rounded-lg font-bold text-center"
+            style="z-index:1000"
+          >
+            {{ showData && showData.value && showData.value.portname }}
+          </div>
+          <MapPenyebrangan
+            v-if="idtemplate"
+            style="height: 240px;width:100%;"
+            class="rounded-md relative shadow-md border-2 border-white"
+            ref="map2"
+            :idMap="'mapPelabuhan' + idtemplate"
+            @mapready="getData"
+          />
         </div>
-        <div>
-            {{data.warning_desc}}
-        </div> -->
-        <table class="w-full">
+        <table class="w-full mt-4">
           <tr>
-            <td class="text-left rounded-tl-md bg-black text-2xl text-white">
+            <td class="text-left rounded-tl-md bg-black text-3xl text-white">
               Valid
             </td>
-            <td class="text-left bg-black text-2xl text-white">Cuaca</td>
-            <td class="text-left bg-black text-2xl text-white">Angin</td>
-            <td class="text-left bg-black text-2xl text-white">Arah Angin</td>
-            <td class="text-left rounded-tr-md bg-black text-2xl text-white">
+            <td class="text-left bg-black text-3xl text-white">Cuaca</td>
+            <td class="text-left bg-black text-3xl text-white">Angin</td>
+            <td class="text-left bg-black text-3xl text-white">Arah Angin</td>
+            <td class="text-left rounded-tr-md bg-black text-3xl text-white">
               Gelombang
             </td>
           </tr>
-          <tbody v-for="(data, i) in listpelabuhan" :key="i">
+          <tbody
+            v-for="(data, i) in listpelabuhan"
+            :key="i"
+          >
             <tr>
-              <td class="text-left bg-black/70 text-2xl text-white">
-                <!-- {{
-                  new Date(
-                    returningTimeZone(new Date(data.valid_from))
-                  ).toLocaleDateString('id')
-                }}
-                {{
-                  returningTimeZone(new Date(data.valid_from))
-                    .split(' ')
-                    .splice(4, 4)[0]
-                    .split(':')
-                    .splice(0, 2)
-                    .join(':')
-                }}
-                - -->
+              <td class="text-left bg-black/70 text-3xl text-white">
                 {{
                   new Date(
                     returningTimeZone(new Date(data.valid_to))
@@ -60,16 +53,16 @@
                   getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
                 }}
               </td>
-              <td class="text-left bg-black/70 text-2xl text-white">
+              <td class="text-left bg-black/70 text-3xl text-white">
                 {{ data.weather }}
               </td>
-              <td class="text-left bg-black/70 text-2xl text-white">
+              <td class="text-left bg-black/70 text-3xl text-white">
                 {{ data.wind_speed_min }} - {{ data.wind_speed_max }} Knots
               </td>
-              <td class="text-left bg-black/70 text-2xl text-white">
+              <td class="text-left bg-black/70 text-3xl text-white">
                 {{ data.wind_from }}
               </td>
-              <td class="text-left bg-black/70 text-2xl text-white">
+              <td class="text-left bg-black/70 text-3xl text-white">
                 {{ data.wave_desc }}
               </td>
             </tr>
@@ -77,11 +70,14 @@
               <td
                 colspan="5"
                 :class="i == 1 ? 'rounded-b-md' : ''"
-                class="text-left bg-black/70 text-2xl text-white"
+                class="text-left bg-black/70 text-3xl text-white"
               >
-                <div class="flex space-x-2 text-2xl">
+                <div class="flex space-x-2 text-3xl">
                   <div>Warning</div>
-                  <div v-html="data.warning_desc"></div>
+                  <div
+                    class="h-20"
+                    v-html="data.warning_desc"
+                  ></div>
                 </div>
               </td>
             </tr>
@@ -105,11 +101,14 @@ table {
 </style>
   
   <script>
+var maplibregl = require('maplibre-gl')
 import VueSlickCarousel from 'vue-slick-carousel'
 
 export default {
   data() {
     return {
+      loc1: null,
+      idtemplate: null,
       showData: null,
       listpelabuhan: [],
       currentDate: new Date().getHours(),
@@ -141,17 +140,44 @@ export default {
         '00'
       )
     },
+    initialMap(obj) {
+      var self = this
+      var map = this.$refs['map2'].map
+
+      if (this.loc1) {
+        this.loc1.remove()
+      }
+      // marker
+      var el = document.createElement('div')
+      el.style.width = '90px'
+      el.style.height = '95px'
+      el.style.backgroundImage = 'url(/defaultMarker.png)'
+
+      self.loc1 = new maplibregl.Marker(el, {
+        color: '#000',
+        draggable: false,
+        offset: [0, -50],
+      })
+        .setLngLat([obj.longitude, obj.latitude])
+        .addTo(map)
+
+      map.flyTo({
+        center: [obj.longitude, obj.latitude],
+        zoom: 10,
+        essential: true,
+      })
+    },
     async getData() {
       var self = this
-      var parentDisplay = this.$parent.$parent.$parent
 
-      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
+      var parentDisplay = this.$parent.$parent.$parent
+      this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var result = {}
 
         this.currentDate = new Date().getHours()
-        setting[obj].map((el) => {
+        setting[self.idtemplate].map((el) => {
           // console.log(el)
           var key = el.key.split('_')[1]
           if (key == 'WidgetMaritimPelabuhan') {
@@ -171,20 +197,21 @@ export default {
           })
           .then((res) => {
             self.listpelabuhan = res.data.data
+            self.initialMap(res.data)
           })
       } else {
         if (
           this.$store.state.displayWidget.widgetSaved[
-            obj + '_WidgetMaritimPelabuhan_port'
+            self.idtemplate + '_WidgetMaritimPelabuhan_port'
           ]
         ) {
           var el =
             this.$store.state.displayWidget.widgetSaved[
-              obj + '_WidgetMaritimPelabuhan_port'
+              self.idtemplate + '_WidgetMaritimPelabuhan_port'
             ]
 
           this.showData = {
-            value: el
+            value: el,
           }
           this.listpelabuhan.length = 0
           // console.log(arr)
@@ -197,13 +224,18 @@ export default {
             })
             .then((res) => {
               self.listpelabuhan = res.data.data
+              self.initialMap(res.data)
             })
         }
       }
     },
   },
   async mounted() {
-    this.getData()
+    // this.getData()
+
+    var parentDisplay = this.$parent.$parent.$parent
+    this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
+
     setInterval(() => {
       this.getData()
     }, 3600000)

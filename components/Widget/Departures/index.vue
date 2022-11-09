@@ -1,6 +1,5 @@
 <template>
-  <div
-    class="
+  <div class="
       rounded-md
       bg-black/70
       text-white
@@ -8,69 +7,63 @@
       flex
       justify-center
       items-center
-    "
-  >
+    ">
     <div class="flex items-start space-x-4 w-full">
       <div class="w-full">
         <div>
           <div>
-            <div class="px-6 pb-3 pt-6 font-semibold text-center text-4xl">
+            <div class="px-6 pb-3 pt-6 font-semibold text-center text-5xl">
               Keberangkatan
             </div>
-            <div class="flex pb-6">
-              <div
-                class="
+            <div class="flex pb-6 px-6 mt-6 justify-center">
+              <div class="
                   flex-grow
                   font-thin
                   text-center
                   font-semibold
-                  text-2xl
-                  truncate
-                "
-              >
+                  text-5xl
+                ">
                 {{ result.tagname }}
               </div>
             </div>
           </div>
-          <div
-            class="h-80 w-full mt-6 relative flex items-center justify-center"
-          >
-            <div>
+          <div class="h-80 w-full relative flex items-center justify-center">
+            <div class="flex space-x-8">
               <div>
                 <img
                   :src="'/departures/' + result.symbol + '.png'"
-                  class="w-44 mx-auto"
+                  class="w-64 mx-auto"
                 />
               </div>
-              <div
-                class="
+              <div class="
                   font-bold
                   flex-none
-                  text-4xl
+                  text-5xl
                   flex
-                  mt-3
                   items-center
                   text-white
-                "
-              >
-                <div class="flex-grow text-center">{{ result.weather }}</div>
+                ">
+                <div class="flex-grow text-left">
+                  <div>{{ result.weather }}</div>
+                  <div class="text-lg mt-6">Waktu Valid</div>
+                  <div class="text-xl">{{ result.observationTime }} {{ result.time_zone}}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div
-          class="
+        <div class="
             flex
-            mt-6
             justify-center
             text-2xl
             px-12
-            pb-8
+            pb-0
             px-8
             pt-0
+            relative
+            bottom-8
             rounded-md
-          "
-        >
+          ">
           <div class="flex-grow">
             <div class="font-bold flex space-x-4">
               <div class="font-semibold flex items-center space-x-3">
@@ -84,13 +77,19 @@
               </div>
             </div>
             <div class="mt-4 flex space-x-2 items-center">
-              <div><img class="w-8" src="/weatherheadlineWhite/eye.svg" /></div>
+              <div><img
+                  class="w-8"
+                  src="/weatherheadlineWhite/eye.svg"
+                /></div>
               <div class="font-semibold">Jarak Pandang</div>
             </div>
 
             <div class="text-white mt-4 flex items-center space-x-4">
               <div class="ml-2">
-                <img class="w-4" src="/weatherheadlineWhite/WDir.svg" />
+                <img
+                  class="w-4"
+                  src="/weatherheadlineWhite/WDir.svg"
+                />
               </div>
               <div><b>Angin</b></div>
             </div>
@@ -122,6 +121,18 @@ export default {
       url: '',
       idTemplate: null,
     }
+  },
+  computed: {
+    getTimeZone() {
+      var date = new Date().getTimezoneOffset()
+      if (date == -420) {
+        return 7
+      } else if (date == -480) {
+        return 6
+      } else if (date == -540) {
+        return 5
+      }
+    },
   },
   methods: {
     async getData() {

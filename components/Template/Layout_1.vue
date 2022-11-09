@@ -13,7 +13,10 @@
       >
         <component :is="item.component" />
       </div>
-      <div v-if="list1.length == 0" class="w-full">
+      <div
+        v-if="list1.length == 0"
+        class="w-full"
+      >
         <div
           class="
             border-2
@@ -29,7 +32,10 @@
         >
           <div>Drop Widget Here.</div>
         </div>
-        <div v-else class="h-80 w-full"></div>
+        <div
+          v-else
+          class="h-80 w-full"
+        ></div>
       </div>
     </draggable>
   </div>

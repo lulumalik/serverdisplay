@@ -32,6 +32,11 @@
           class="absolute w-full h-full z-10"
         />
         <div class="text-center">
+          <div
+            class="h-3 w-3 rounded-full absolute right-4 top-4"
+            :style="{ background: db.status ? '#00ff00' : '#ff0000'}"
+          >
+          </div>
           <p class="uppercase text-xl z-20">
             {{ db.username }}
           </p>
@@ -56,9 +61,11 @@
             />
           </svg>
         </div>
-        <div 
+        <div
           @click="$parent.editing()"
-          v-if="$parent.templateDBSelected == db._id" class="bg-blue-500 w-5 h-5 absolute bottom-2.5 left-12 z-30 cursor-pointer rounded-full flex items-center justify-center">
+          v-if="$parent.templateDBSelected == db._id"
+          class="bg-blue-500 w-5 h-5 absolute bottom-2.5 left-12 z-30 cursor-pointer rounded-full flex items-center justify-center"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="12"
@@ -90,12 +97,29 @@
 </template>
 
 <script>
+// import { io } from 'socket.io-client'
 export default {
   props: {
     templateDB: {
       type: Array,
       default: () => [],
     },
+  },
+  mounted() {
+    // process.nextTick(() => {
+    //   const socket = io(this.$axios.defaults.baseURL.split('api')[0], {
+    //     reconnectionDelayMax: 10000,
+    //   })
+    //   socket.connect()
+    //   socket.on('auth_request', (data) => {
+    //     console.log(data, ' auth  request')
+    //   })
+    //   setTimeout(() => {
+    //     socket.emit('auth', {
+    //       display_id: 'ea',
+    //     })
+    //   }, 1000)
+    // })
   },
   methods: {
     clickTemplate(db) {

@@ -1,10 +1,16 @@
 <template>
   <div>
-    <div class="mb-4" :class="currentDate >= 18 ? 'text-white' : 'text-black'">
+    <div
+      class="mb-4"
+      :class="currentDate >= 18 ? 'text-white' : 'text-black'"
+    >
       <div class="font-bold text-6xl text-center">
         {{ area }}
       </div>
-      <div class="text-5xl text-center mt-3" v-if="forecast.length > 0">
+      <div
+        class="text-5xl text-center mt-3"
+        v-if="forecast.length > 0"
+      >
         <!-- {{forecast[0].data.date}} -->
         {{
           returningTimeZone(new Date(forecast[0].data.date))
@@ -18,7 +24,7 @@
       </div>
     </div>
     <div class="flex space-x-4 justify-center">
-      <table class="w-full text-2xl mx-auto relative right-12 mt-6">
+      <table class="w-full text-2xl mx-auto mt-6">
         <tr class="text-white">
           <th class="text-3xl bg-black/80 rounded-tl-lg text-left">
             <div class="pl-2">Nama Lokasi</div>
@@ -30,21 +36,31 @@
             Kelembaban
           </th>
         </tr>
-        <tr v-for="(b, i) in forecast" :key="i" class="text-white">
+        <tr
+          v-for="(b, i) in forecast"
+          :key="i"
+          class="text-white"
+        >
           <td
             class="bg-black/60"
             :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''"
           >
-            <div class="text-3xl">
+            <div
+              class="text-3xl"
+              :style="{width:forecast2.length == 0 ? '600px' : 'auto'}"
+            >
               <b>{{ b.location.subdistrict }}</b>
             </div>
           </td>
           <td class="text-center bg-black/60 font-semibold px-2 py-4">
-            <div class="flex items-center justify-center space-x-2">
-              <div class="w-24 relative">
+            <div
+              class="flex items-center justify-center space-x-2"
+              :style="{width:forecast2.length == 0 ? '500px' : 'auto'}"
+            >
+              <div class="w-32 relative">
                 <img
                   :src="'/Archive/' + b.data.weather_code + '.gif'"
-                  class="w-32 absolute left-0 -top-14"
+                  class="w-32 absolute left-0 -top-16 pb-3"
                 />
               </div>
               <div class="w-56 text-3xl text-left">
@@ -53,21 +69,30 @@
             </div>
           </td>
           <td class="text-center bg-black/60 font-semibold">
-            <div class="text-3xl">{{ b.data.wSpd }} km/jam</div>
+            <div
+              class="text-3xl"
+              :style="{width:forecast2.length == 0 ? '300px' : 'auto'}"
+            >{{ b.data.wSpd }} km/jam</div>
           </td>
           <td class="text-center bg-black/60 font-semibold">
-            <div class="text-3xl">{{ b.data.temp }} <sup>o</sup>C</div>
+            <div
+              class="text-3xl"
+              :style="{width:forecast2.length == 0 ? '100px' : 'auto'}"
+            >{{ b.data.temp }} <sup>o</sup>C</div>
           </td>
           <td
             :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''"
             class="text-center bg-black/60 font-semibold"
           >
-            <div class="text-3xl">{{ b.data.rh }} %</div>
+            <div
+              class="text-3xl"
+              :style="{width:forecast2.length == 0 ? '300px' : 'auto'}"
+            >{{ b.data.rh }} %</div>
           </td>
         </tr>
       </table>
       <table
-        class="w-full text-2xl mx-auto relative right-12 mt-6"
+        class="w-full text-2xl mx-auto mt-6"
         v-if="forecast2.length > 0"
       >
         <tr class="text-white">
@@ -81,21 +106,31 @@
             Kelembaban
           </th>
         </tr>
-        <tr v-for="(b, i) in forecast2" :key="i" class="text-white">
+        <tr
+          v-for="(b, i) in forecast2"
+          :key="i"
+          class="text-white"
+        >
           <td
             class="bg-black/60"
             :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''"
           >
-            <div class="text-3xl">
+            <div
+              class="text-3xl"
+              :style="{width:forecast2.length == 0 ? '600px' : 'auto'}"
+            >
               <b>{{ b.location.subdistrict }}</b>
             </div>
           </td>
           <td class="text-center bg-black/60 font-semibold px-2 py-4">
-            <div class="flex items-center justify-center space-x-2">
-              <div class="w-24 relative">
+            <div
+              class="flex items-center justify-center space-x-2"
+              :style="{width:forecast2.length == 0 ? '500px' : 'auto'}"
+            >
+              <div class="w-32 relative">
                 <img
                   :src="'/Archive/' + b.data.weather_code + '.gif'"
-                  class="w-32 absolute left-0 -top-14"
+                  class="w-32 absolute left-0 -top-16 pb-3"
                 />
               </div>
               <div class="w-56 text-3xl text-left">
@@ -104,16 +139,25 @@
             </div>
           </td>
           <td class="text-center bg-black/60 font-semibold">
-            <div class="text-3xl">{{ b.data.wSpd }} km/jam</div>
+            <div
+              class="text-3xl"
+              :style="{width:forecast2.length == 0 ? '300px' : 'auto'}"
+            >{{ b.data.wSpd }} km/jam</div>
           </td>
           <td class="text-center bg-black/60 font-semibold">
-            <div class="text-3xl">{{ b.data.temp }} <sup>o</sup>C</div>
+            <div
+              class="text-3xl"
+              :style="{width:forecast2.length == 0 ? '100px' : 'auto'}"
+            >{{ b.data.temp }} <sup>o</sup>C</div>
           </td>
           <td
             :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''"
             class="text-center bg-black/60 font-semibold"
           >
-            <div class="text-3xl">{{ b.data.rh }} %</div>
+            <div
+              class="text-3xl"
+              :style="{width:forecast2.length == 0 ? '300px' : 'auto'}"
+            >{{ b.data.rh }} %</div>
           </td>
         </tr>
       </table>
@@ -265,7 +309,7 @@ export default {
           res2.data.data.forEach((el, i) => {
             var datares = this.allNDF[el.locationId]
             if (datares && datares.length > 0) {
-              if (i <= 10) {
+              if (i <= 12) {
                 this.forecast.push({
                   location: el,
                   data: datares[0],
@@ -288,6 +332,7 @@ export default {
 <style scoped>
 th {
   padding: 25px !important;
+  height: 30px !important;
 }
 td {
   white-space: nowrap;

@@ -30,6 +30,16 @@
             <div>
               <input
                 type="checkbox"
+                v-model="$parent.$parent.status"
+                class="text-xs p-1.5 rounded"
+              />
+            </div>
+            <div>Turn {{$parent.$parent.status ? 'Off' : 'On'}} Display</div>
+          </label>
+          <label class="flex space-x-2">
+            <div>
+              <input
+                type="checkbox"
                 v-model="$parent.$parent.useFooter"
                 class="text-xs p-1.5 rounded"
               />
@@ -72,10 +82,17 @@
                 <div>Static</div>
               </label>
             </div>
-            <div v-if="!$parent.$parent.useVideo" class="mt-3">
+            <div
+              v-if="!$parent.$parent.useVideo"
+              class="mt-3"
+            >
               <div>image url</div>
               <div>
-                <input type="text" class="border border-gray-300 px-2 py-1 rounded w-full" v-model="$parent.$parent.backgroundStatic" />
+                <input
+                  type="text"
+                  class="border border-gray-300 px-2 py-1 rounded w-full"
+                  v-model="$parent.$parent.backgroundStatic"
+                />
               </div>
             </div>
           </div>

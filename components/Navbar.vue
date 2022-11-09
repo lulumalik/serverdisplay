@@ -1,7 +1,14 @@
 <template>
   <div class="py-2 px-6 bg-white flex w-full items-center shadow-md">
-    <div class="flex-grow flex items-center space-x-4 cursor-pointer" @click="$router.push('/display')">
-      <img src="/bmkg.png" alt="bmkg" class="w-10" />
+    <div
+      class="flex-grow flex items-center space-x-4 cursor-pointer"
+      @click="$router.push('/display')"
+    >
+      <img
+        src="/bmkg.png"
+        alt="bmkg"
+        class="w-10"
+      />
       <div class="flex-grow">
         <div
           style="font-size: 22px"
@@ -9,15 +16,16 @@
         >
           BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA
         </div>
-        <div
-          class="text-xs kaushan"
-        >
+        <div class="text-xs kaushan">
           Cepat, Tepat, Akurat, Luas, dan Mudah Dipahami
         </div>
       </div>
     </div>
     <div class="flex space-x-4 items-center">
-      <DisplaySetting v-if="$route.name == 'display-create'" />
+      <DisplaySetting
+        class="relative top-1"
+        v-if="$route.name == 'display-create'"
+      />
       <button
         v-else
         @click="$router.push('/display/create')"

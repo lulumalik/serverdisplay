@@ -1,6 +1,9 @@
 <template>
-  <div class="relative" :class="!production ? 'border-2 border-white' : ''">
-    <ChooseLogo v-if="chooseLogo" />
+  <div
+    class="relative"
+    :class="!production ? 'border-2 border-white' : ''"
+  >
+    <!-- <ChooseLogo v-if="chooseLogo" /> -->
     <HeaderTemplate
       ref="header"
       :class="
@@ -11,17 +14,16 @@
       v-if="useHeader"
       :nodrag="$route.name == 'display-create' ? false : true"
     />
-           <!-- style="transform-origin: top center"
-        :style="{
-          transform: 'scale(' + scaleinner + ')',
-        }" -->
-    <div :class="useHeader ? 'top-32' : ''" class="baseBrowser relative mx-auto">
+    <div
+      :class="useHeader ? 'top-32' : ''"
+      class="baseBrowser relative mx-auto"
+    >
       <div
         style="transform-origin: top center"
         :style="{
           transform: 'scale(' + scaleinner + ')',
         }"
-        class=""
+        class="w-full"
       >
         <div class="mx-auto w-full h-full">
           <component
@@ -41,15 +43,15 @@
 <script>
 export default {
   props: {
-    responseDisplay:{
+    responseDisplay: {
       default: () => {
         return {}
       },
     },
     displayName: {
       default: () => {
-        return '-';
-      }
+        return '-'
+      },
     },
     production: {
       default: () => {
@@ -64,22 +66,22 @@ export default {
     indexLoop: {
       default: () => {
         return 0
-      }
+      },
     },
     location: {
       default: () => {
         return false
-      }
+      },
     },
     widgetDB: {
       default: () => {
         return []
-      }
+      },
     },
     layoutDB: {
       default: () => {
         return {}
-      }
+      },
     },
   },
   data() {
@@ -98,7 +100,7 @@ export default {
       listTemplate: {},
       widget: [],
       currentId: null,
-      chooseLogo:false,
+      chooseLogo: false,
     }
   },
   async mounted() {
@@ -110,7 +112,7 @@ export default {
       // console.log()
       this.$emit('splice', {
         id: this.obj.idtemplate,
-        hide: url
+        hide: url,
       })
     },
     getComp(obj) {
@@ -130,15 +132,15 @@ export default {
         : this.$axios.defaults.baseURL + obj.backgroundImage.split('/api/')[1]
       this.$emit('background', {
         bg: this.backgroundColor,
-        i: this.indexLoop
+        i: this.indexLoop,
       })
 
       this.scaleinner = obj.properties.scale
-      this.$emit('scale' , {
+      this.$emit('scale', {
         scale: obj.properties.scale,
-        i: this.indexLoop
+        i: this.indexLoop,
       })
-      
+
       this.templatename = obj.name
 
       if (obj.properties.footer) {

@@ -1,15 +1,33 @@
 <template>
-  <div>
+  <div class="flex space-x-4">
     <client-only>
-      <div
-        class="text-6xl mb-6 font-bold text-center"
-        :class="currentDate >= 18 ? 'text-white' : 'text-black'"
-      >
-        {{ showData && showData.value && showData.value.name }}
+      <div class="w-9/12 relative">
+        <div class="
+              font-bold
+              absolute
+              top-0
+              z-50
+              text-3xl
+              px-4
+              py-6
+              bg-white
+              rounded-md
+              w-full
+            ">
+          Peta Perairan {{ showData && showData.value && showData.value.name }}
+        </div>
+        <MapPenyebrangan
+          v-if="idtemplate"
+          style="height: 650px;width:100%;"
+          class="rounded-md relative shadow-md border-2 border-white"
+          ref="map"
+          :idMap="'mapPerairan' + idtemplate"
+          @mapready="getData"
+        />
       </div>
       <div
         class="w-full overflow-hidden bg-black/60"
-        style="height: 730px !important"
+        style="height: 650px !important"
       >
         <VueSlickCarousel
           v-bind="settings"
@@ -23,7 +41,10 @@
               {{ arrowOption }}
             </div>
           </template>
-          <div v-for="(l, i) in listperairan" :key="i">
+          <div
+            v-for="(l, i) in listperairan"
+            :key="i"
+          >
             <table class="w-full">
               <tr>
                 <td
@@ -81,10 +102,10 @@
 
 <style scoped>
 td {
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 table {
   border-radius: 15px;
@@ -92,14 +113,19 @@ table {
 </style>
 
 <script>
+var maplibregl = require('maplibre-gl')
 import VueSlickCarousel from 'vue-slick-carousel'
+const turf = require('turf')
 
 export default {
   data() {
     return {
       showData: null,
       listperairan: {},
+      idtemplate: null,
       currentDate: new Date().getHours(),
+      allGeojson: null,
+      marker: {},
       settings: {
         dots: false,
         infinite: true,
@@ -118,17 +144,99 @@ export default {
   },
 
   methods: {
+    initialMap(geojson) {
+      var self = this
+      var map = this.$refs['map'].map
+
+      if (map.getSource('perairan')) {
+        map.removeSource('perairan')
+      }
+
+      if (map.getLayer('outline')) {
+        map.removeLayer('outline')
+      }
+
+      if (map.getLayer('perairan')) {
+        map.removeLayer('perairan')
+      }
+
+      for (var key in this.marker) {
+        if (this.marker.hasOwnProperty(key)) {
+          this.marker[key].remove()
+        }
+      }
+
+      map.addSource('perairan', {
+        type: 'geojson',
+        data: geojson,
+      })
+
+      map.addLayer({
+        id: 'perairan',
+        type: 'fill',
+        source: 'perairan',
+        paint: {
+          'fill-color': '#088',
+          'fill-opacity': 0.8,
+        },
+      })
+      map.addLayer({
+        id: 'outline',
+        type: 'line',
+        source: 'perairan',
+        layout: {},
+        paint: {
+          'line-color': '#fff',
+          'line-width': 2,
+        },
+      })
+
+      // zoom to geojson
+      var bounds = new maplibregl.LngLatBounds()
+      geojson.features.forEach(function (feature, i) {
+        // if (feature.geometry.type === 'Point') {
+        //   bounds.extend(feature.geometry.coordinates)
+        // } else if (feature.geometry.type === 'LineString') {
+        // console.log(feature.geometry.coordinates[0])
+        // console.log(feature.properties)
+
+        // console.log(turf.center(feature.geometry))
+        // var coordinates = turf.center(feature.geometry).geometry.coordinates
+        // var element = document.createElement('div')
+        // element.className = 'px-3 py-1 rounded-md bg-black/60 text-white'
+        // element.innerHTML = feature.properties.WP_IMM
+        // element.style.fontSize = '20px'
+        // // marker
+        // self.marker[feature.properties.WP_IMM] = new maplibregl.Marker(
+        //   element,
+        //   {
+        //     offset: [0, i % 2 == 0 ? -20 : 20],
+        //   }
+        // )
+        //   .setLngLat(coordinates)
+        //   .addTo(map)
+
+        feature.geometry.coordinates[0].forEach(function (coord) {
+          bounds.extend(coord)
+        })
+
+        // }
+      })
+      map.fitBounds(bounds, {
+        padding: { top: 100, bottom: 50, left: 0, right: 0 },
+      })
+    },
     async getData() {
       var self = this
       var parentDisplay = this.$parent.$parent.$parent
-      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
+      this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
 
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var result = {}
 
         this.currentDate = new Date().getHours()
-        setting[obj].map((el) => {
+        setting[self.idtemplate].map((el) => {
           // console.log(el)
           var key = el.key.split('_')[1]
           if (key == 'WidgetMaritimPerairan') {
@@ -147,6 +255,7 @@ export default {
               '.json',
           })
           .then((res) => {
+            this.initialMap(res.data)
             res.data.features.forEach((el) => {
               self.$set(
                 self.listperairan,
@@ -171,54 +280,59 @@ export default {
       } else {
         if (
           this.$store.state.displayWidget.widgetSaved[
-            obj + '_WidgetMaritimPerairan_wilpel'
+            self.idtemplate + '_WidgetMaritimPerairan_wilpel'
           ]
         ) {
           var data =
             this.$store.state.displayWidget.widgetSaved[
-              obj + '_WidgetMaritimPerairan_wilpel'
+              self.idtemplate + '_WidgetMaritimPerairan_wilpel'
             ]
           // console.log(el)
           this.showData = {
-            value: data
+            value: data,
           }
-        // console.log(arr)
-        // https://maritim.bmkg.go.id/geojson-update/T.json
-        this.$axios
-          .post('https://sena.circlegeo.com/api/sena/research/forward', {
-            url:
-              'https://maritim.bmkg.go.id/geojson-update/' +
-              data.id.split('.')[0] +
-              '.json',
-          })
-          .then((res) => {
-            res.data.features.forEach((el) => {
-              self.$set(
-                self.listperairan,
-                el.properties.WP_1 + '_' + el.properties.WP_IMM,
-                []
-              )
+          // console.log(arr)
+          // https://maritim.bmkg.go.id/geojson-update/T.json
+          this.$axios
+            .post('https://sena.circlegeo.com/api/sena/research/forward', {
+              url:
+                'https://maritim.bmkg.go.id/geojson-update/' +
+                data.id.split('.')[0] +
+                '.json',
             })
+            .then((res) => {
+              this.initialMap(res.data)
+              res.data.features.forEach((el) => {
+                self.$set(
+                  self.listperairan,
+                  el.properties.WP_1 + '_' + el.properties.WP_IMM,
+                  []
+                )
+              })
 
-            Object.keys(self.listperairan).forEach((el) => {
-              this.$axios
-                .post('https://sena.circlegeo.com/api/sena/research/forward', {
-                  url:
-                    'https://maritim.bmkg.go.id/public_api/perairan/' +
-                    el.split(' ').join('%20') +
-                    '.json',
-                })
-                .then((res) => {
-                  self.$set(self.listperairan, el, res.data.data)
-                })
+              Object.keys(self.listperairan).forEach((el) => {
+                this.$axios
+                  .post(
+                    'https://sena.circlegeo.com/api/sena/research/forward',
+                    {
+                      url:
+                        'https://maritim.bmkg.go.id/public_api/perairan/' +
+                        el.split(' ').join('%20') +
+                        '.json',
+                    }
+                  )
+                  .then((res) => {
+                    self.$set(self.listperairan, el, res.data.data)
+                  })
+              })
             })
-          })
         }
       }
     },
   },
   async mounted() {
-    this.getData()
+    var parentDisplay = this.$parent.$parent.$parent
+    this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
     setInterval(() => {
       this.getData()
     }, 3600000)

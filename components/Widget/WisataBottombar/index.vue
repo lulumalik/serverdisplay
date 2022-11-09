@@ -23,12 +23,18 @@
       "
       :style="{ background: backgroundColor }"
     >
-      <div class="w-9/12" :style="{ color: color }">
+      <div
+        class="w-9/12"
+        :style="{ color: color }"
+      >
         <div class="font-bold text-5xl">
           {{ name !== '' ? name : 'No Name of location' }}
         </div>
-        <hr class="w-32 mt-3" style="border-color: #b6b6b6" />
-        <div class="text-sm mt-3 w-11/12">
+        <hr
+          class="w-32 mt-3"
+          style="border-color: #b6b6b6"
+        />
+        <div class="text-lg mt-3 w-11/12 line-clamp">
           {{ desc !== '' ? desc : 'No Data' }}
         </div>
       </div>
@@ -43,8 +49,14 @@
             alt="imgdata"
           />
         </div>
-        <div class="flex-grow" :style="{ color: color }">
-          <div class="text-6xl text-left" style="font-weight: 200 !important">
+        <div
+          class="flex-grow"
+          :style="{ color: color }"
+        >
+          <div
+            class="text-6xl text-left"
+            style="font-weight: 200 !important"
+          >
             <div>{{ forecast[0].temp }}<sup>o</sup>C</div>
           </div>
           <div class="relative text-lg left-3">

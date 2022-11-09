@@ -3,45 +3,71 @@
     &nbsp;
     <div
       :style="backgroundnize"
-      class="fixed -top-24 w-full left-0"
+      class="fixed -top-24 w-full -left-6"
       style="z-index: -1"
     ></div>
     <!-- <img :src="img" class="fixed -top-24 w-full left-0" style="z-index: -1" /> -->
-    <div
-      class="
-        rounded-tr-full
-        pt-10
-        pb-12
-        pr-12
-        pl-24
-        w-full
+    <div class="
         absolute
         -bottom-4
         left-0
         flex
         items-center
-      "
-      :style="{ background: backgroundColor }"
-    >
-      <div class="w-9/12" :style="{ color: color }">
+        space-x-6
+      ">
+      <div
+        class="w-8/12 
+        pt-8
+        pb-12
+        pr-12
+        pl-12
+        w-full rounded-xl
+        h-60
+         "
+        :style="{ color: color, background: 'rgb(' + hexToRgb(backgroundColor).join(',') + ')' }"
+      >
         <div class="font-bold text-5xl">
           {{ name !== '' ? name : 'No Name of location' }}
         </div>
-        <hr class="w-32 mt-3" style="border-color: #b6b6b6" />
-        <div class="text-sm mt-3 w-11/12">
+        <hr
+          class="w-32 mt-3"
+          style="border-color: #b6b6b6"
+        />
+        <p class="text-3xl mt-3 line-clamp w-11/12">
           {{ desc !== '' ? desc : 'No Data' }}
-        </div>
+        </p>
       </div>
-      <div class="w-3/12 flex mx-auto space-x-4 relative items-center">
-        <div class="flex-grow" :style="{ color: color }">
-          <div class="text-6xl text-left" style="font-weight: 200 !important">
-            <div class="text-xl font-semibold">Visibility</div>
-            <div class="flex space-x-2 items-center">
-              <div class="relative font-semibold" >
+      <div
+        class="w-4/12 h-60 flex mx-auto rounded-xl 
+        pt-8
+        pb-8
+        pr-12
+        pl-12
+        w-full space-x-4 relative"
+        :style="{ color: color, background: 'rgb(' + hexToRgb(backgroundColor).join(',') + ')' }"
+      >
+        <div
+          class="flex-grow"
+          :style="{ color: color }"
+        >
+          <div
+            class=" text-left"
+            style="font-weight: 200 !important"
+          >
+            <div class="text-5xl font-semibold flex space-x-4 items-center">
+              <div>Visibility</div>
+            </div>
+
+            <hr
+              class="w-32 mt-3"
+              style="border-color: #b6b6b6"
+            />
+            <div class="flex space-x-3 mt-4 items-center">
+              <div class=" font-semibold text-8xl ">
                 <!-- :style="{color: indikator}" -->
-                {{ commify(meters) }} 
+                {{ commify(meters) }}
               </div>
-              <div class="text-4xl font-thin">Kilometers</div>
+              <div class="text-6xl font-thin">Kilometers</div>
             </div>
           </div>
         </div>
@@ -75,6 +101,17 @@ export default {
   methods: {
     commify(n) {
       return n / 1000
+    },
+    hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result
+        ? [
+            parseInt(result[1], 16),
+            parseInt(result[2], 16),
+            parseInt(result[3], 16),
+            0.8,
+          ]
+        : null
     },
     async getData() {
       var self = this
@@ -155,7 +192,8 @@ export default {
               'background-size': 'cover',
               'background-position': 'center',
               'background-repeat': 'no-repeat',
-              height: '100%',
+              height: '100vh',
+              width: '100vw',
             }
           }
         }
@@ -168,52 +206,52 @@ export default {
     } else {
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWidgetVisibility_description'
+          this.idTemplate + '_WidgetVisibility_description'
         ]
       ) {
         this.desc =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWidgetVisibility_description'
+            this.idTemplate + '_WidgetVisibility_description'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWidgetVisibility_name'
+          this.idTemplate + '_WidgetVisibility_name'
         ]
       ) {
         this.name =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWidgetVisibility_name'
+            this.idTemplate + '_WidgetVisibility_name'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWidgetVisibility_color'
+          this.idTemplate + '_WidgetVisibility_color'
         ]
       ) {
         this.color =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWidgetVisibility_color'
+            this.idTemplate + '_WidgetVisibility_color'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWidgetVisibility_background'
+          this.idTemplate + '_WidgetVisibility_background'
         ]
       ) {
         this.backgroundColor =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWidgetVisibility_background'
+            this.idTemplate + '_WidgetVisibility_background'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWidgetVisibility_img'
+          this.idTemplate + '_WidgetVisibility_img'
         ]
       ) {
         this.img =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWidgetVisibility_img'
+            this.idTemplate + '_WidgetVisibility_img'
           ]
       }
     }

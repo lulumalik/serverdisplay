@@ -15,6 +15,23 @@ export const weather_code = {
     97: 'Hujan Petir',
 }
 
+export const weather_parsed = {
+    'Cerah': 0,
+    'Cerah Berawan': 1,
+    'Cerah Berawan': 2,
+    'Berawan': 3,
+    'Berawan Tebal': 4,
+    'Udara Kabur': 5,
+    'Asap': 10,
+    'Kabut': 45,
+    'Hujan Ringan': 60,
+    'Hujan Sedang': 61,
+    'Hujan Lebat': 63,
+    'Hujan Lokal': 80,
+    'Hujan Petir': 95,
+    'Hujan Petir': 97,
+}
+
 export const weather_video = {
     0: ''
 }

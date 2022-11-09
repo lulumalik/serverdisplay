@@ -1,17 +1,18 @@
 <template>
   <div>
-    <div class="flex">
+    <div class="flex space-x-4">
       <div
         class="
           flex flex-grow
           items-center
           justify-center
           overflow-hidden
+          rounded-lg
         "
         v-if="datagempa.Shakemap"
       >
         <img
-          style="max-width: 520px"
+          style="max-width: 580px"
           class="rounded-lg shadow-lg"
           :src="'https://ews.bmkg.go.id/tews/data/' + datagempa.Shakemap"
           alt="gempa"
@@ -47,7 +48,10 @@
           </tr>
         </table>
         <hr class="border-gray-300 my-8 " />
-        <div class="w-full mx-12 py-4 font-semibold" :class="datagempa.Wilayah ? '' : 'mt-16'">
+        <div
+          class="w-full mx-12 py-4 font-semibold"
+          :class="datagempa.Wilayah ? '' : 'mt-16'"
+        >
           <p class="mt-2.5">Gempa terasa di wilayah {{ datagempa.Dirasakan }}</p>
           <p class="mt-2.5">{{ datagempa.Wilayah || '-' }}</p>
           <p class="mt-2.5">
@@ -75,17 +79,17 @@ export default {
         .then((res) => {
           this.datagempa = res.data.Infogempa.gempa
         })
-    }
+    },
   },
   mounted() {
     if (this.$parent.$parent && this.$parent.$parent.$parent) {
       var parent = this.$parent.$parent.$parent
       // if (parent.currentId) {
-        this.getData()
+      this.getData()
 
-        setInterval(() => {
-          this.getData()
-        }, 3600000) // dua menit
+      setInterval(() => {
+        this.getData()
+      }, 3600000) // dua menit
     }
   },
 }

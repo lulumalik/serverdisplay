@@ -1,7 +1,10 @@
 <template>
   <div class="bg-gray-200 h-screen">
     <client-only>
-      <Navbar class="w-full sticky top-0" style="z-index: 1000" />
+      <Navbar
+        class="w-full sticky top-0"
+        style="z-index: 1000"
+      />
       <form class="text-sm px-6 pt-4 flex items-end space-x-4">
         <div class="flex-grow">
           <div class="flex items-center">
@@ -17,7 +20,10 @@
               required
             />
             <div class="absolute -top-5 right-0">
-              <small class="text-red-500" v-if="getDisplayIDSpaces">
+              <small
+                class="text-red-500"
+                v-if="getDisplayIDSpaces"
+              >
                 no spaces allowed
               </small>
             </div>
@@ -69,7 +75,10 @@
             {{ saving ? 'Saving Display...' : 'Update and Refresh Display' }}
           </div>
         </div>
-        <div class="flex-grow" v-if="$route.query.id">
+        <div
+          class="flex-grow"
+          v-if="$route.query.id"
+        >
           <div
             type="submit"
             class="
@@ -117,7 +126,10 @@
     <client-only>
       <div class="flex w-full">
         <DisplaySidebar class="flex-none" />
-        <DisplayPreview ref="preview" class="flex-grow h-full overflow-auto" />
+        <DisplayPreview
+          ref="preview"
+          class="flex-grow h-full overflow-auto"
+        />
         <DisplayWidgetOption class="flex-none" />
       </div>
     </client-only>
@@ -143,6 +155,7 @@ export default {
       useVideo: null,
       backgroundStatic: null,
       currentUser: null,
+      status: true,
     }
   },
   middleware: ['checkLogin'],
@@ -177,6 +190,7 @@ export default {
         this.displayID = res.data.username
         this.displayName = res.data.name
         // console.log(res.data)
+        this.status = res.data.status
         this.useFooter = res.data.properties.footer
         this.getDisplayLocation = res.data.location.name
         // console.log(res.data)
@@ -322,6 +336,7 @@ export default {
           },
         },
         template: this.templateAddedList,
+        status: this.status,
         properties: {
           delay: parseFloat(this.$refs['preview'].times) || 60,
           width: this.$refs['preview'].width,
