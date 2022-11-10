@@ -69,7 +69,7 @@
                 <input
                   type="radio"
                   :value="true"
-                  v-model="$parent.$parent.useVideo"
+                  v-model="isUseVideo"
                 />
                 <div>Dynamic</div>
               </label>
@@ -77,7 +77,7 @@
                 <input
                   type="radio"
                   :value="false"
-                  v-model="$parent.$parent.useVideo"
+                  v-model="isUseVideo"
                 />
                 <div>Static</div>
               </label>
@@ -93,6 +93,51 @@
                   class="border border-gray-300 px-2 py-1 rounded w-full"
                   v-model="$parent.$parent.backgroundStatic"
                 />
+              </div>
+            </div>
+          </div>
+          <div
+            class="mt-4 rounded w-full text-white py-2 text-center"
+            :class="$parent.$parent.useVideo ? 'bg-green-500' : 'bg-red-500 '"
+            v-if="$parent.$parent.useVideo"
+          >
+            {{$parent.$parent.useVideo ? 'You already choose ' + $parent.$parent.useVideo.subdistrict  : 'Choose Weather Location'}}
+          </div>
+          <div
+            v-if="$parent.$parent.useVideo"
+            class="mt-4"
+          >
+            <div>Provinsi</div>
+            <div>
+              <v-select
+                label="provinsi"
+                @option:selected="changeSelected"
+                v-model="province"
+                :options="provinceList"
+              ></v-select>
+            </div>
+            <div v-if="province">
+              <div class="mt-2 flex items-center">
+                <div class="flex-grow">Kotkab</div>
+              </div>
+              <div>
+                <v-select
+                  label="kotkab"
+                  @option:selected="changeSelectedKotkab"
+                  v-model="kotkab"
+                  :options="listKotkab"
+                ></v-select>
+              </div>
+            </div>
+            <div v-if="kotkab">
+              <div class="mt-2">Kecamatan</div>
+              <div>
+                <v-select
+                  label="subdistrict"
+                  @option:selected="changeSelectedKecamatan"
+                  v-model="$parent.$parent.useVideo"
+                  :options="listKecamatan"
+                ></v-select>
               </div>
             </div>
           </div>
@@ -127,9 +172,25 @@ export default {
       subdistrict: '',
       runningtextData: null,
       listGempa: [],
+      province: null,
+      provinceList: [],
+      kotkab: null,
+      listKotkab: [],
+      listKecamatan: [],
+      isUseVideo: false,
     }
   },
   mounted() {
+    this.$axios
+      .get('https://weather.circlegeo.com/api/cgms/weather/province')
+      .then((res) => {
+        this.provinceList = res.data.data
+        if (this.$parent.$parent.useVideo) {
+          this.isUseVideo = true
+        } else {
+          this.isUseVideo = false
+        }
+      })
     this.$axios
       .post('https://sena.circlegeo.com/api/sena/research/forward', {
         url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
@@ -158,6 +219,38 @@ export default {
   methods: {
     changeFooter(val) {
       this.$parent.$parent.useFooter = val
+    },
+    getProvinsi() {
+      this.$axios
+        .get(
+          'https://weather.circlegeo.com/api/cgms/weather/administration/kotkab?_id=' +
+            this.province._id
+        )
+        .then((res) => {
+          this.listKotkab = res.data.data
+          // this.kotkab = this.listKotkab[0]
+        })
+    },
+    getKecamatan() {
+      this.$axios
+        .get(
+          'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+            this.kotkab._id
+        )
+        .then((res) => {
+          this.listKecamatan = res.data.data
+        })
+    },
+    changeSelected() {
+      // console.log(this.province)
+      this.getProvinsi()
+    },
+    changeSelectedKotkab() {
+      this.getKecamatan()
+    },
+    changeSelectedKecamatan() {
+      //
+      // this.$parent.$parent.useVideo =
     },
   },
 }
