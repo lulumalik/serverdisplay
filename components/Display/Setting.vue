@@ -180,6 +180,13 @@ export default {
       isUseVideo: false,
     }
   },
+  watch: {
+    isUseVideo(val) {
+      if (!val) {
+        this.$parent.$parent.useVideo = false
+      }
+    },
+  },
   mounted() {
     this.$axios
       .get('https://weather.circlegeo.com/api/cgms/weather/province')
