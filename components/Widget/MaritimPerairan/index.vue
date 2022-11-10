@@ -3,18 +3,17 @@
     <client-only>
       <div class="w-9/12 relative">
         <div class="
-              font-bold
               absolute
               top-0
               z-50
               text-3xl
               px-4
-              py-6
+              py-2
               bg-white
               rounded-md
               w-full
             ">
-          Peta Perairan {{ showData && showData.value && showData.value.name }}
+          Peta {{ showData && showData.value && showData.value.name }}
         </div>
         <MapPenyebrangan
           v-if="idtemplate"
@@ -194,28 +193,6 @@ export default {
       // zoom to geojson
       var bounds = new maplibregl.LngLatBounds()
       geojson.features.forEach(function (feature, i) {
-        // if (feature.geometry.type === 'Point') {
-        //   bounds.extend(feature.geometry.coordinates)
-        // } else if (feature.geometry.type === 'LineString') {
-        // console.log(feature.geometry.coordinates[0])
-        // console.log(feature.properties)
-
-        // console.log(turf.center(feature.geometry))
-        // var coordinates = turf.center(feature.geometry).geometry.coordinates
-        // var element = document.createElement('div')
-        // element.className = 'px-3 py-1 rounded-md bg-black/60 text-white'
-        // element.innerHTML = feature.properties.WP_IMM
-        // element.style.fontSize = '20px'
-        // // marker
-        // self.marker[feature.properties.WP_IMM] = new maplibregl.Marker(
-        //   element,
-        //   {
-        //     offset: [0, i % 2 == 0 ? -20 : 20],
-        //   }
-        // )
-        //   .setLngLat(coordinates)
-        //   .addTo(map)
-
         feature.geometry.coordinates[0].forEach(function (coord) {
           bounds.extend(coord)
         })
@@ -223,7 +200,7 @@ export default {
         // }
       })
       map.fitBounds(bounds, {
-        padding: { top: 100, bottom: 50, left: 0, right: 0 },
+        padding: { top: 80, bottom: 150, left: 0, right: 0 },
       })
     },
     async getData() {

@@ -70,6 +70,8 @@ export default {
         this.$store.state.displayWidget.widgetSaved[
           this.idTemplate + '_WidgetWeatherTable2_province'
         ]
+
+      this.getProvinsi()
     }
     if (
       this.$store.state.displayWidget.widgetSaved[

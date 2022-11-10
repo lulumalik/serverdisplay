@@ -256,7 +256,7 @@ export default {
             res2.data.data.forEach((el, i) => {
               var datares = this.allNDF[el.locationId]
               if (datares && datares.length > 0) {
-                if (i <= 10) {
+                if (i <= 12) {
                   this.forecast.push({
                     location: el,
                     data: datares[0],

@@ -29,7 +29,7 @@
         <div class="w-full bg-white/70 rounded-md p-6">
           <div
             v-for="(data, i) in showData"
-            :class="i == 0 ? '' : 'mt-4 border-t-2 border-dashed pt-4 border-gray-800'"
+            :class="i == 0 ? '' : 'mt-4 border-t-2 border-dashed pt-2 border-gray-800'"
             :key="i"
           >
             <div class="flex items-end relative">
@@ -86,9 +86,9 @@
                   }}
                 </div>
               </div>
-              <div class="mt-3 font-bold text-2xl text-red-500">Warning</div>
+              <div class="mt-1 font-bold text-2xl text-red-500">Warning</div>
               <div
-                class="leading-tight h-32 bg-white/40 p-4 rounded overflow-hidden"
+                class="leading-tight h-36 bg-white/40 px-4 py-2 rounded overflow-hidden"
                 v-html="data.data[0].warning_desc"
               ></div>
             </div>
@@ -149,6 +149,8 @@ export default {
       idtemplate: null,
       loc1: null,
       loc2: null,
+      positionfrom: null,
+      positionto: null,
       settings: {
         dots: false,
         infinite: true,
@@ -207,6 +209,10 @@ export default {
               result['from'] = el.value
             } else if (key2 == 'to') {
               result['to'] = el.value
+            } else if (key2 == 'positionto') {
+              self.positionto = el.value
+            } else if (key2 == 'positionfrom') {
+              self.positionfrom = el.value
             }
             // result.push(el)
           }
@@ -237,6 +243,28 @@ export default {
               ],
           }
         }
+        // positionfrom
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            this.idtemplate + '_WidgetMaritimPenyebrangan_positionfrom'
+          ]
+        ) {
+          this.positionfrom =
+            this.$store.state.displayWidget.widgetSaved[
+              this.idtemplate + '_WidgetMaritimPenyebrangan_positionfrom'
+            ]
+        }
+        if (
+          this.$store.state.displayWidget.widgetSaved[
+            this.idtemplate + '_WidgetMaritimPenyebrangan_positionto'
+          ]
+        ) {
+          this.positionto =
+            this.$store.state.displayWidget.widgetSaved[
+              this.idtemplate + '_WidgetMaritimPenyebrangan_positionto'
+            ]
+        }
+
         if (
           this.$store.state.displayWidget.widgetSaved[
             self.idtemplate + '_WidgetMaritimPenyebrangan_to'
@@ -379,8 +407,18 @@ export default {
           .addTo(map)
 
         // marker
+        var offseting
+        if (i == 0) {
+          self.positionfrom.value == 'left'
+            ? (offseting = [-180, -80])
+            : (offseting = [180, -80])
+        } else if (i == 1) {
+          self.positionto.value == 'left'
+            ? (offseting = [-180, -80])
+            : (offseting = [180, -80])
+        }
         self.loc2 = new maplibregl.Marker(el, {
-          offset: [-180, -80],
+          offset: offseting,
         })
           .setLngLat([result[i].value.coor[1], result[i].value.coor[0]])
           .addTo(map)
@@ -438,7 +476,7 @@ export default {
         }
       })
       map.fitBounds(bounds, {
-        padding: { top: 270, bottom: 100, left: 200, right: 200 },
+        padding: { top: 270, bottom: 100, left: 140, right: 140 },
       })
     },
   },
