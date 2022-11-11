@@ -156,6 +156,7 @@ export default {
       backgroundStatic: null,
       currentUser: null,
       status: true,
+      showSetting: false,
     }
   },
   middleware: ['checkLogin'],
@@ -174,6 +175,7 @@ export default {
     const res1 = await this.$axios.$get('template')
     if (this.$route.query.id) {
       try {
+        this.showSetting = false
         this.currentUser = jwtdecode(this.$cookies.get('users')).id
         const res = await this.$axios.$get(
           'display/find/' + this.$route.query.id
@@ -193,7 +195,6 @@ export default {
         this.status = res.data.status
         this.useFooter = res.data.properties.footer
         this.getDisplayLocation = res.data.location.name
-        // console.log(res.data)
         this.useVideo = res.data.properties.video
         this.backgroundStatic = res.data.properties.backgroundStatic
         this.$refs['preview'].logos = res.data.properties.allLogo
@@ -210,6 +211,7 @@ export default {
             })
           }
         })
+        this.showSetting = true
       } catch (e) {
         console.log(e)
         // window.open('/display', '_self')

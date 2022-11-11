@@ -25,12 +25,9 @@ export default {
   mounted() {
     process.nextTick(async () => {
       this.getVideo()
-      this.intervalGet = setInterval(() => {
-        this.getVideo()
-      }, 300000)
 
       this.interval = setInterval(() => {
-        this.countint()
+        this.getVideo()
       }, 60000)
     })
   },

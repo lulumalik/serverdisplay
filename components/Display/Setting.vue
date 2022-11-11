@@ -63,7 +63,7 @@
                 class="text-xs p-1.5 rounded"
               />
             </div> -->
-            <div>Background</div>
+            <div>Background {{isUseVideo}}</div>
             <div class="flex space-x-4 mt-2">
               <label class="text-center flex-grow">
                 <input
@@ -83,7 +83,7 @@
               </label>
             </div>
             <div
-              v-if="!$parent.$parent.useVideo"
+              v-if="!isUseVideo"
               class="mt-3"
             >
               <div>image url</div>
@@ -99,12 +99,12 @@
           <div
             class="mt-4 rounded w-full text-white py-2 text-center"
             :class="$parent.$parent.useVideo ? 'bg-green-500' : 'bg-red-500 '"
-            v-if="$parent.$parent.useVideo"
+            v-if="$parent.$parent.useVideo && isUseVideo"
           >
             {{$parent.$parent.useVideo ? 'You already choose ' + $parent.$parent.useVideo.subdistrict  : 'Choose Weather Location'}}
           </div>
           <div
-            v-if="$parent.$parent.useVideo"
+            v-if="isUseVideo"
             class="mt-4"
           >
             <div>Provinsi</div>
@@ -192,6 +192,7 @@ export default {
       .get('https://weather.circlegeo.com/api/cgms/weather/province')
       .then((res) => {
         this.provinceList = res.data.data
+        // alert(this.$parent.$parent.useVideo)
         if (this.$parent.$parent.useVideo) {
           this.isUseVideo = true
         } else {

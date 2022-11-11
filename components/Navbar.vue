@@ -24,7 +24,7 @@
     <div class="flex space-x-4 items-center">
       <DisplaySetting
         class="relative top-1"
-        v-if="$route.name == 'display-create'"
+        v-if="$route.name == 'display-create' && $parent.showSetting"
       />
       <button
         v-else
