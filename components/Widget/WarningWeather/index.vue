@@ -8,32 +8,26 @@
     </div>
     <div v-else class="flex justify-center space-x-4">
       <div>
-        <img
-          style="width: 450px"
-          :src="
-            'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
-            year +
-            '/' +
-            getZero(month) +
-            '/' +
-            getZero(day) +
-            '/infografis.jpg'
-          "
-        />
+        <img style="width: 450px" :src="
+          'https://warningcuaca.bmkg.go.id/infografis/'+ area + '/' +
+          year +
+          '/' +
+          getZero(month) +
+          '/' +
+          getZero(day) +
+          '/infografis.jpg'
+        " />
       </div>
       <div>
-        <img
-          style="width: 450px"
-          :src="
-            'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
-            year +
-            '/' +
-            getZero(month) +
-            '/' +
-            getZero(day) +
-            '/infografis_text.jpg'
-          "
-        />
+        <img style="width: 450px" :src="
+          'https://warningcuaca.bmkg.go.id/infografis/'+ area + '/' +
+          year +
+          '/' +
+          getZero(month) +
+          '/' +
+          getZero(day) +
+          '/infografis_text.jpg'
+        " />
       </div>
     </div>
   </div>
@@ -47,6 +41,8 @@ export default {
       month: new Date().getMonth() + 1,
       day: new Date().getDate(),
       shownotfound: false,
+      area: 'CJK',
+      idTemplate:null
     }
   },
   methods: {
@@ -72,54 +68,48 @@ export default {
       if (parent.production) {
         // parent.errorImage['MaritimWarning'] =false
         parent.spliceSlide('https://warningcuaca.bmkg.go.id/infografis/CBB/' +
-        this.year +
-        '/' +
-        this.getZero(this.month) +
-        '/' +
-        this.getZero(this.day) +
-        '/infografis.jpg')
+          this.year +
+          '/' +
+          this.getZero(this.month) +
+          '/' +
+          this.getZero(this.day) +
+          '/infografis.jpg')
       }
     },
   },
   mounted() {
+    var parentDisplay = this.$parent.$parent.$parent
+      this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
+
+    if (
+      this.$store.state.displayWidget.widgetSaved[
+      this.idTemplate + '_WidgetWarningWeather_area'
+      ]
+    ) {
+      this.area = this.$store.state.displayWidget.widgetSaved[
+        this.idTemplate + '_WidgetWarningWeather_area'
+      ].area
+    }
     this.testImage(
-      'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
+      'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
+      this.year +
+      '/' +
+      this.getZero(this.month) +
+      '/' +
+      this.getZero(this.day) +
+      '/infografis.jpg'
+    )
+
+    setInterval(() => {
+      this.testImage(
+        'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
         this.year +
         '/' +
         this.getZero(this.month) +
         '/' +
         this.getZero(this.day) +
         '/infografis.jpg'
-    )
-    // this.testImage(
-    //   'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
-    //     this.year +
-    //     '/' +
-    //     this.getZero(this.month) +
-    //     '/' +
-    //     this.getZero(this.day) +
-    //     '/infografis_text.jpg'
-    // )
-
-    setInterval(() => {
-      this.testImage(
-        'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
-          this.year +
-          '/' +
-          this.getZero(this.month) +
-          '/' +
-          this.getZero(this.day) +
-          '/infografis.jpg'
       )
-      // this.testImage(
-      //   'https://warningcuaca.bmkg.go.id/infografis/CBB/' +
-      //     this.year +
-      //     '/' +
-      //     this.getZero(this.month) +
-      //     '/' +
-      //     this.getZero(this.day) +
-      //     '/infografis_text.jpg'
-      // )
     }, 60000)
   },
 }
