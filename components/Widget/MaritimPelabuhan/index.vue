@@ -3,104 +3,91 @@
     <client-only>
       <div>
         <div class="relative">
-          <div
-            class="text-4xl absolute bg-white/70 text-black left-3 top-3 p-8 rounded-lg font-bold text-center"
-            style="z-index:1000"
-          >
+          <div class="text-4xl absolute bg-white/70 text-black left-3 top-3 p-8 rounded-lg font-bold text-center"
+            style="z-index:1000">
             {{ showData && showData.value && showData.value.portname }}
           </div>
-          <MapPenyebrangan
-            v-if="idtemplate"
-            style="height: 240px;width:100%;"
-            class="rounded-md relative shadow-md border-2 border-white"
-            ref="map2"
-            :idMap="'mapPelabuhan' + idtemplate"
-            @mapready="getData"
-          />
+          <MapPenyebrangan v-if="idtemplate" style="height: 240px;width:100%;"
+            class="rounded-md relative shadow-md border-2 border-white" ref="map2" :idMap="'mapPelabuhan' + idtemplate"
+            @mapready="getData" />
         </div>
-        <table class="w-full mt-4">
-          <tr>
-            <td class="text-left rounded-tl-md bg-black text-3xl text-white">
-              Valid
-            </td>
-            <td class="text-left bg-black text-3xl text-white">Cuaca</td>
-            <td class="text-left bg-black text-3xl text-white">Angin</td>
-            <td class="text-left bg-black text-3xl text-white">Arah Angin</td>
-            <td class="text-left rounded-tr-md bg-black text-3xl text-white">
-              Gelombang
-            </td>
-          </tr>
-          <tbody
-            v-for="(data, i) in listpelabuhan"
-            :key="i"
-          >
+        <div class="flex space-x-4">
+          <table class="w-full mt-4" v-for="(data, i) in listpelabuhan" :key="i">
             <tr>
-              <td class="text-left bg-black/70 text-3xl text-white">
-                {{
-                  new Date(
-                    returningTimeZone(new Date(data.valid_to))
-                  ).toLocaleDateString('id')
-                }}
-                {{
-                  returningTimeZone(new Date(data.valid_to))
-                    .split(' ')
-                    .splice(4, 4)[0]
-                    .split(':')
-                    .splice(0, 2)
-                    .join(':')
-                }}
-                {{
-                  getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
-                }}
+              <td class="text-left rounded-tl-md bg-black text-xl text-white">
+                Valid
               </td>
-              <td class="text-left bg-black/70 text-3xl text-white">
-                {{ data.weather }}
-              </td>
-              <td class="text-left bg-black/70 text-3xl text-white">
-                {{ data.wind_speed_min }} - {{ data.wind_speed_max }} Knots
-              </td>
-              <td class="text-left bg-black/70 text-3xl text-white">
-                {{ data.wind_from }}
-              </td>
-              <td class="text-left bg-black/70 text-3xl text-white">
-                {{ data.wave_desc }}
+              <td class="text-left bg-black text-xl text-white">Cuaca</td>
+              <td class="text-left bg-black text-xl text-white">Angin</td>
+              <td class="text-left bg-black text-xl text-white">Arah Angin</td>
+              <td class="text-left rounded-tr-md bg-black text-xl text-white">
+                Gelombang
               </td>
             </tr>
-            <tr>
-              <td
-                colspan="5"
-                :class="i == 1 ? 'rounded-b-md' : ''"
-                class="text-left bg-black/70 text-3xl text-white"
-              >
-                <div class="flex space-x-2 text-3xl">
-                  <div>Warning</div>
-                  <div
-                    class="h-20"
-                    v-html="data.warning_desc"
-                  ></div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr>
+                <td class="text-left bg-black/70 text-xl text-white">
+                  {{
+                      new Date(
+                        returningTimeZone(new Date(data.valid_to))
+                      ).toLocaleDateString('id')
+                  }}
+                  {{
+                      returningTimeZone(new Date(data.valid_to))
+                        .split(' ')
+                        .splice(4, 4)[0]
+                        .split(':')
+                        .splice(0, 2)
+                        .join(':')
+                  }}
+                  {{
+                      getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+                  }}
+                </td>
+                <td class="text-left bg-black/70 text-xl text-white">
+                  {{ data.weather }}
+                </td>
+                <td class="text-left bg-black/70 text-xl text-white">
+                  {{ data.wind_speed_min }} - {{ data.wind_speed_max }} Knots
+                </td>
+                <td class="text-left bg-black/70 text-xl text-white">
+                  {{ data.wind_from }}
+                </td>
+                <td class="text-left bg-black/70 text-xl text-white">
+                  {{ data.wave_desc }}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5" :class="i == 1 ? 'rounded-b-md' : ''" class="text-left bg-black/70 text-xl text-white">
+                  <div class="text-2xl">
+                    <div class="text-red-500">Warning</div>
+                    <div :class="data.warning_desc.length > 12 ? '' : 'h-32'" v-html="data.warning_desc"></div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </client-only>
   </div>
 </template>
   
-  <style scoped>
+<style scoped>
 td {
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 12px;
   padding-bottom: 12px;
+  border: 1px solid white;
 }
+
 table {
   border-radius: 15px;
 }
 </style>
   
-  <script>
+<script>
 var maplibregl = require('maplibre-gl')
 import VueSlickCarousel from 'vue-slick-carousel'
 
@@ -202,12 +189,12 @@ export default {
       } else {
         if (
           this.$store.state.displayWidget.widgetSaved[
-            self.idtemplate + '_WidgetMaritimPelabuhan_port'
+          self.idtemplate + '_WidgetMaritimPelabuhan_port'
           ]
         ) {
           var el =
             this.$store.state.displayWidget.widgetSaved[
-              self.idtemplate + '_WidgetMaritimPelabuhan_port'
+            self.idtemplate + '_WidgetMaritimPelabuhan_port'
             ]
 
           this.showData = {

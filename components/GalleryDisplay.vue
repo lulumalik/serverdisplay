@@ -17,7 +17,7 @@
           responseDisplay.properties.video
         "
         >
-          <BackgroundVideo />
+          <BackgroundVideo @hujan="isHujan = $event" />
         </div>
         <carousel
           v-if="templates.length > 0"
@@ -46,6 +46,7 @@
                 :widgetDB="widget"
                 :layoutDB="layoutDB"
                 style="transform-origin: 0 0"
+                :isHujan="isHujan"
                 :production="true"
                 :indexLoop="i"
                 :location="location"
@@ -99,6 +100,7 @@ export default {
       timeoutgetdata: null,
       getDataAgain: false,
       logos: {},
+      isHujan: false,
     }
   },
   async mounted() {

@@ -8,26 +8,10 @@
     </div>
     <div v-else class="flex justify-center space-x-4">
       <div>
-        <img style="width: 450px" :src="
-          'https://warningcuaca.bmkg.go.id/infografis/'+ area + '/' +
-          year +
-          '/' +
-          getZero(month) +
-          '/' +
-          getZero(day) +
-          '/infografis.jpg'
-        " />
+        <img style="width: 450px" :src="warningURL" />
       </div>
       <div>
-        <img style="width: 450px" :src="
-          'https://warningcuaca.bmkg.go.id/infografis/'+ area + '/' +
-          year +
-          '/' +
-          getZero(month) +
-          '/' +
-          getZero(day) +
-          '/infografis_text.jpg'
-        " />
+        <img style="width: 450px" :src="warningURL" />
       </div>
     </div>
   </div>
@@ -42,7 +26,14 @@ export default {
       day: new Date().getDate(),
       shownotfound: false,
       area: 'CJK',
-      idTemplate:null
+      idTemplate:null,
+      warningURL:  'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
+          this.year +
+          '/' +
+          this.getZero(this.month) +
+          '/' +
+          this.getZero(this.day) +
+          '/infografis.jpg'
     }
   },
   methods: {
@@ -67,6 +58,7 @@ export default {
       var parent = this.$parent.$parent.$parent
       if (parent.production) {
         // parent.errorImage['MaritimWarning'] =false
+
         parent.spliceSlide('https://warningcuaca.bmkg.go.id/infografis/CBB/' +
           this.year +
           '/' +
@@ -90,26 +82,25 @@ export default {
         this.idTemplate + '_WidgetWarningWeather_area'
       ].area
     }
-    this.testImage(
-      'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
-      this.year +
-      '/' +
-      this.getZero(this.month) +
-      '/' +
-      this.getZero(this.day) +
-      '/infografis.jpg'
-    )
+    this.warningURL = 'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
+          this.year +
+          '/' +
+          this.getZero(this.month) +
+          '/' +
+          this.getZero(this.day) +
+          '/infografis.jpg'
+    this.testImage(this.warningURL)
 
     setInterval(() => {
-      this.testImage(
-        'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
-        this.year +
-        '/' +
-        this.getZero(this.month) +
-        '/' +
-        this.getZero(this.day) +
-        '/infografis.jpg'
-      )
+      this.warningURL = 'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
+          this.year +
+          '/' +
+          this.getZero(this.month) +
+          '/' +
+          this.getZero(this.day) +
+          '/infografis.jpg'
+          
+      this.testImage(this.warningURL)
     }, 60000)
   },
 }

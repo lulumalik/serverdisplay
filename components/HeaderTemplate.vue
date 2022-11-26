@@ -4,14 +4,14 @@
       <div class="flex-grow flex items-center space-x-4">
         <img src="/bmkg.png" alt="bmkg" class="w-20" />
         <div class="flex-grow">
-          <div style="font-size:27px" class="font-semibold" :class="new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'" >
+          <div style="font-size:27px" class="font-semibold" :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'" >
             BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA
           </div>
-          <div class="text-xl mt-2 kaushan" :class="new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'">
+          <div class="text-xl mt-2 kaushan" :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'">
             Cepat, Tepat, Akurat, Luas, dan Mudah Dipahami
           </div>
         </div>
-        <div class="flex-none font-thin pr-4" :class="new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'" v-if="nodrag">
+        <div class="flex-none font-thin pr-4" :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'" v-if="nodrag">
           <div class="flex items-center justify-end">
             <div class="ml-2 font-bold text-3xl">
               {{ $parent.location ? $parent.location.name : '-' }}
@@ -20,7 +20,7 @@
           <div
             class="text-2xl mt-1 flex items-center font-semibold justify-end"
           >
-            <div class="ml-2" :class="new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'">
+            <div class="ml-2" :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 ? 'text-white' : 'text-black'">
               {{
                 deleteSecond(
                   new Date(currentDate)

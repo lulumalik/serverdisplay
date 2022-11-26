@@ -105,6 +105,7 @@ td {
   padding-right: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
+  border: 1px solid white;
 }
 table {
   border-radius: 15px;

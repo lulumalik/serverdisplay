@@ -43,6 +43,10 @@
 <script>
 export default {
   props: {
+    isHujan: {
+      type: Boolean,
+      default: false,
+    },
     responseDisplay: {
       default: () => {
         return {}

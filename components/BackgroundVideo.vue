@@ -49,12 +49,17 @@ export default {
         this.dynamicWeather.weather_code >= 60 &&
         this.dynamicWeather.weather_code <= 80
       ) {
+        this.$emit('hujan', true)
         this.source = '/video/hujan.mp4'
         return
       } else if (this.dynamicWeather.weather_code > 80) {
+
+        this.$emit('hujan', true)
         this.source = '/video/hujan_petir.mp4'
         return
       }
+
+      this.$emit('hujan', false)
       if (hour >= 0 && hour < 5) {
         this.source = '/video/berawan_malam.mp4'
       } else if (hour >= 5 && hour < 10) {

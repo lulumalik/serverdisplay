@@ -39,22 +39,8 @@
           }}
         </div>
       </div> -->
-      <div
-        class="flex space-x-4 text-gray-700"
-        v-if="forecast.length > 0"
-      >
-        <div
-          v-for="(w, i) in forecast"
-          :key="i"
-        >
-          <div
-            class="mb-3 font-bold text-2xl text-center"
-            :class="currentDate >= 18 ? 'text-white' : 'text-black'"
-          >
-            <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
-            {{ returningTimeZone(new Date(w.date)) }}
-            {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
-          </div>
+      <div class="flex space-x-4 text-gray-700" v-if="forecast.length > 0">
+        <div v-for="(w, i) in forecast" :key="i">
           <div class="
               rounded-t-3xl
               border-4 border-white
@@ -68,52 +54,42 @@
               w-44
               h-36
             ">
-            <img
-              :src="'/Archive/' + w.weather_code + '.gif'"
-              class="w-44 mx-auto"
-            />
+            <img :src="'/Archive/' + w.weather_code + '.gif'" class="w-44 mx-auto" />
           </div>
           <div class="p-6 bg-white rounded-b-3xl shadow-md">
+
             <div class="font-semibold text-center">
               {{ weather_code[w.weather_code] }}
             </div>
+            <div class="mb-3 font-bold text-xl text-center text-black">
+              <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
+              {{ returningTimeZone(new Date(w.date)) }}
+              {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+            </div>
             <div class="flex space-x-4 items-center mt-8">
               <div class="w-6">
-                <img
-                  src="/svg/temp.svg"
-                  class="w-4"
-                />
+                <img src="/svg/temp.svg" class="w-4" />
               </div>
               <div>{{ w.temp }} <sup>o</sup>C</div>
             </div>
             <div class="flex space-x-4 items-center mt-4">
               <div class="w-6">
-                <img
-                  src="/svg/precip.svg"
-                  class="w-4"
-                />
+                <img src="/svg/precip.svg" class="w-4" />
               </div>
               <div>{{ w.rh }} %</div>
             </div>
             <div class="flex space-x-4 items-center mt-4">
               <div class="w-6">
-                <img
-                  src="/svg/wind.svg"
-                  class="w-6 relative right-1"
-                />
+                <img src="/svg/wind.svg" class="w-6 relative right-1" />
               </div>
               <div>{{ w.wSpd }} km/jam</div>
             </div>
             <div class="flex space-x-4 items-center mt-4">
               <div class="w-6">
-                <img
-                  src="/svg/dir.svg"
-                  class="w-5 relative right-0.5"
-                  :style="{
-                    transform:
-                      'rotate(' + parseInt(dirTo[w.wDir] - 180) + 'deg)',
-                  }"
-                />
+                <img src="/svg/dir.svg" class="w-5 relative right-0.5" :style="{
+                  transform:
+                    'rotate(' + parseInt(dirTo[w.wDir] - 180) + 'deg)',
+                }" />
               </div>
               <div>
                 {{ parseNameDir[w.wDir] }}
@@ -234,7 +210,7 @@ export default {
             if (key == 'kecamatan') {
               const datares = await this.$axios.$get(
                 'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                  el.value.locationId
+                el.value.locationId
               )
               this.$set(ndflistener, el.value.ndf, datares.data)
               if (ndflistener[el.value.ndf].length > 0) {
@@ -250,17 +226,17 @@ export default {
       } else {
         if (
           this.$store.state.displayWidget.widgetSaved[
-            obj + '_WidgetForecastStick_kecamatan'
+          obj + '_WidgetForecastStick_kecamatan'
           ]
         ) {
           this.forecast.length = 0
           var el =
             this.$store.state.displayWidget.widgetSaved[
-              obj + '_WidgetForecastStick_kecamatan'
+            obj + '_WidgetForecastStick_kecamatan'
             ]
           const datares = await this.$axios.$get(
             'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-              el.locationId
+            el.locationId
           )
 
           this.$set(ndflistener, el.locationId, datares.data)

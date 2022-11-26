@@ -1,96 +1,113 @@
 <template>
   <div>
     <client-only>
-      <div class="flex space-x-4 w-full relative">
+      <div class=" w-full relative">
         <div class="w-full relative">
           <div class="
-              font-bold
               absolute
               top-0
+              right-0
+              w-72
               z-50
-              text-3xl
-              px-12
+              h-full
+              px-6
               py-6
               bg-white/60
               rounded-b-md
               w-full
             ">
-            Peta Penyebrangan Maritim
-          </div>
-          <MapPenyebrangan
-            v-if="idtemplate"
-            style="height: 650px;width:800px;"
-            class="rounded-md relative shadow-md border-2 border-white"
-            ref="map"
-            :idMap="'mapPenyebrangan' + idtemplate"
-            @mapready="getData"
-          />
-        </div>
-        <div class="w-full bg-white/70 rounded-md p-6">
-          <div
-            v-for="(data, i) in showData"
-            :class="i == 0 ? '' : 'mt-4 border-t-2 border-dashed pt-2 border-gray-800'"
-            :key="i"
-          >
-            <div class="flex items-end relative">
-              <div class="flex space-x-2 text-3xl flex-grow font-semibold">
-                <div class="flex w-full">
-                  <div class="flex-grow">{{ data.name }}</div>
-                </div>
-              </div>
+            <div class="text-3xl font-bold">Peta Penyebrangan Maritim</div>
+            <div class="text-xl mt-2 mb-1">Berlaku Mulai</div>
+            <div class="text-xl font-semibold" v-if="showData.length > 0 && showData[0] && showData[0].data">
+              <!-- {{showData[0].data[0].valid_from}} -->
+              {{
+                  new Date(
+                    returningTimeZone(new Date(showData[0].data[0].valid_from))
+                  ).toLocaleDateString('id')
+              }}
+              {{
+                  returningTimeZone(new Date(showData[0].data[0].valid_from))
+                    .split(' ')
+                    .splice(4, 4)[0]
+                    .split(':')
+                    .splice(0, 2)
+                    .join(':')
+              }}
+              {{
+                  getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+              }}
             </div>
-            <div class="text-xl">
-              <div class="flex-none relative pl-6 flex space-x-4 mt-2 font-bold text-2xl">
-                <img
-                  class="w-16 absolute -left-4 -top-4"
-                  :src="'/Archive/' + weather_codeParsed[data.data[0].weather] + '.gif'"
-                />
-                <div>
-                  {{ data.data[0].weather }}</div>
-              </div>
-              <div class="mt-0.5">
-                <div
-                  v-if="data.data[0]"
-                  class="text-2xl"
-                >
-                  {{
-                    new Date(
-                      returningTimeZone(new Date(data.data[0].valid_from))
-                    ).toLocaleDateString('id')
-                  }}
-                  {{
-                    returningTimeZone(new Date(data.data[0].valid_from))
-                      .split(' ')
-                      .splice(4, 4)[0]
-                      .split(':')
-                      .splice(0, 2)
-                      .join(':')
-                  }}
+            <div class="text-xl my-1">Sampai Dengan</div>
+            <div v-if="showData.length > 0 && showData[0] && showData[0].data" class="text-xl font-semibold">{{
+                new Date(
+                  returningTimeZone(new Date(showData[0].data[0].valid_to))
+                ).toLocaleDateString('id')
+            }}
+              {{
+                  returningTimeZone(new Date(showData[0].data[0].valid_to))
+                    .split(' ')
+                    .splice(4, 4)[0]
+                    .split(':')
+                    .splice(0, 2)
+                    .join(':')
+              }}
+              {{
+                  getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+              }}
+            </div>
+          </div>
+          <MapPenyebrangan v-if="idtemplate" style="height: 280px;width:100%;"
+            class="rounded-md relative shadow-md border-2 border-white" ref="map"
+            :idMap="'mapPenyebrangan' + idtemplate" @mapready="getData" />
+        </div>
+        <div class="w-full bg-white/70 rounded-md p-6 mt-2 flex space-x-3">
+          <div v-for="(data, i) in showData" :class="i == 0 ? '' : 'border-l border-dashed pl-4 border-gray-800'"
+            :key="i" class="flex-grow ">
+            <div>
+              <div class="flex space-x-4">
+                <div class="flex-grow">
+                  <div class="flex items-end relative">
+                    <div class="flex space-x-2 text-3xl flex-grow font-semibold">
+                      <div class="flex w-full">
+                        <div class="flex-grow">{{ data.name }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-xl">
+                    <div class="flex-none relative flex items-center space-x-4 mt-2 font-bold text-2xl">
+                      <div class="bg-white rounded-full border border-gray-300 shadow-md w-12 h-12"><img
+                          class="w-16 absolute -left-2 -top-2"
+                          :src="'/Archive/' + weather_codeParsed[data.data[0].weather] + '.gif'" /></div>
+                      <div>
+                        {{ data.data[0].weather }}</div>
+                    </div>
+                  </div>
 
-                  -
-                  {{
-                    new Date(
-                      returningTimeZone(new Date(data.data[0].valid_to))
-                    ).toLocaleDateString('id')
-                  }}
-                  {{
-                    returningTimeZone(new Date(data.data[0].valid_to))
-                      .split(' ')
-                      .splice(4, 4)[0]
-                      .split(':')
-                      .splice(0, 2)
-                      .join(':')
-                  }}
-                  {{
-                    getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
-                  }}
+                  <div class="mt-6 font-bold text-2xl text-red-500">Warning</div>
                 </div>
+
+                <div v-if="data.data[0]" class="flex-none">
+                  <div class="shadow bg-white/20 px-3 py-1.5 rounded">
+                    <div class="flex space-x-4 ">
+                      <img src="/weatherheadline/wave.svg" class="w-6 " />
+                      <div class="text-2xl">Gelombang</div>
+                    </div>
+                    <div class="text-2xl">{{ data.data[0].wave_desc }}</div>
+                  </div>
+                  <div class="shadow bg-white/20 px-3 py-1.5 mt-2 rounded">
+                    <div class="flex space-x-4"> <img src="/general3/wind.svg" class="w-6" />
+                      <div class="text-2xl">Angin</div>
+                    </div>
+                    <div class="text-2xl">{{ data.data[0].wind_speed_min }} - {{ data.data[0].wind_speed_max }} Knots
+                    </div>
+                  </div>
+                </div>
+
+
               </div>
-              <div class="mt-1 font-bold text-2xl text-red-500">Warning</div>
-              <div
-                class="leading-tight h-36 bg-white/40 px-4 py-2 rounded overflow-hidden"
-                v-html="data.data[0].warning_desc"
-              ></div>
+
+              <div class="leading-tight h-36 bg-white/40 px-4 py-2 mt-2 rounded overflow-hidden"
+                v-html="data.data[0].warning_desc"></div>
             </div>
             <!-- <div class="flex space-x-4 mt-3">
               <div class="mt-2">
@@ -233,47 +250,47 @@ export default {
         var to = null
         if (
           this.$store.state.displayWidget.widgetSaved[
-            self.idtemplate + '_WidgetMaritimPenyebrangan_from'
+          self.idtemplate + '_WidgetMaritimPenyebrangan_from'
           ]
         ) {
           from = {
             value:
               this.$store.state.displayWidget.widgetSaved[
-                self.idtemplate + '_WidgetMaritimPenyebrangan_from'
+              self.idtemplate + '_WidgetMaritimPenyebrangan_from'
               ],
           }
         }
         // positionfrom
         if (
           this.$store.state.displayWidget.widgetSaved[
-            this.idtemplate + '_WidgetMaritimPenyebrangan_positionfrom'
+          this.idtemplate + '_WidgetMaritimPenyebrangan_positionfrom'
           ]
         ) {
           this.positionfrom =
             this.$store.state.displayWidget.widgetSaved[
-              this.idtemplate + '_WidgetMaritimPenyebrangan_positionfrom'
+            this.idtemplate + '_WidgetMaritimPenyebrangan_positionfrom'
             ]
         }
         if (
           this.$store.state.displayWidget.widgetSaved[
-            this.idtemplate + '_WidgetMaritimPenyebrangan_positionto'
+          this.idtemplate + '_WidgetMaritimPenyebrangan_positionto'
           ]
         ) {
           this.positionto =
             this.$store.state.displayWidget.widgetSaved[
-              this.idtemplate + '_WidgetMaritimPenyebrangan_positionto'
+            this.idtemplate + '_WidgetMaritimPenyebrangan_positionto'
             ]
         }
 
         if (
           this.$store.state.displayWidget.widgetSaved[
-            self.idtemplate + '_WidgetMaritimPenyebrangan_to'
+          self.idtemplate + '_WidgetMaritimPenyebrangan_to'
           ]
         ) {
           to = {
             value:
               this.$store.state.displayWidget.widgetSaved[
-                self.idtemplate + '_WidgetMaritimPenyebrangan_to'
+              self.idtemplate + '_WidgetMaritimPenyebrangan_to'
               ],
           }
         }
@@ -366,37 +383,37 @@ export default {
           }
         )
         this.showData.push(res.data)
-        var el = document.createElement('div')
-        el.className = 'rounded-lg p-3'
-        el.style.background = 'rgba(255,255,255, 0.7)'
+        // var el = document.createElement('div')
+        // el.className = 'rounded-lg p-3'
+        // el.style.background = 'rgba(255,255,255, 0.7)'
         // angin
-        var div2 = document.createElement('div')
-        div2.className = 'text-2xl font-bold'
-        div2.innerHTML = `<div>
-            <div class="flex space-x-4"> <img
-                      src="/general3/wind.svg"
-                      class="w-8"
-                    /> <div>Angin</div></div>
-            <div>${res.data.data[0].wind_speed_min} - ${res.data.data[0].wind_speed_max} Knots</div>
-          </div>`
+        // var div2 = document.createElement('div')
+        // div2.className = 'text-2xl font-bold'
+        // div2.innerHTML = `<div>
+        //     <div class="flex space-x-4"> <img
+        //               src="/general3/wind.svg"
+        //               class="w-8"
+        //             /> <div>Angin</div></div>
+        //     <div>${res.data.data[0].wind_speed_min} - ${res.data.data[0].wind_speed_max} Knots</div>
+        //   </div>`
         // Gelombang
-        var div3 = document.createElement('div')
-        div3.className = 'text-2xl font-bold mt-2'
-        div3.innerHTML = `<div>
-            <div class="flex space-x-4">
-                      <img
-                        src="/weatherheadline/wave.svg"
-                        class="w-8"
-                      />
-                    <div>Gelombang</div></div>
-            <div>${res.data.data[0].wave_desc}</div>
-          </div>`
+        // var div3 = document.createElement('div')
+        // div3.className = 'text-2xl font-bold mt-2'
+        // div3.innerHTML = `<div>
+        //     <div class="flex space-x-4">
+        //               <img
+        //                 src="/weatherheadline/wave.svg"
+        //                 class="w-8"
+        //               />
+        //             <div>Gelombang</div></div>
+        //     <div>${res.data.data[0].wave_desc}</div>
+        //   </div>`
 
-        el.appendChild(div2)
-        el.appendChild(div3)
+        // el.appendChild(div2)
+        // el.appendChild(div3)
 
         var el2 = document.createElement('div')
-        el2.className = 'rounded-lg px-4 py-1 text-2xl font-bold'
+        el2.className = 'rounded-lg px-4 py-1 text-xl font-bold'
         el2.style.background = 'rgba(255,255,255, 0.7)'
         el2.innerHTML = `<div>${res.data.name}</div>`
 
@@ -407,21 +424,21 @@ export default {
           .addTo(map)
 
         // marker
-        var offseting
-        if (i == 0) {
-          self.positionfrom.value == 'left'
-            ? (offseting = [-180, -80])
-            : (offseting = [180, -80])
-        } else if (i == 1) {
-          self.positionto.value == 'left'
-            ? (offseting = [-180, -80])
-            : (offseting = [180, -80])
-        }
-        self.loc2 = new maplibregl.Marker(el, {
-          offset: offseting,
-        })
-          .setLngLat([result[i].value.coor[1], result[i].value.coor[0]])
-          .addTo(map)
+        // var offseting
+        // if (i == 0) {
+        //   self.positionfrom.value == 'left'
+        //     ? (offseting = [-180, -80])
+        //     : (offseting = [180, -80])
+        // } else if (i == 1) {
+        //   self.positionto.value == 'left'
+        //     ? (offseting = [-180, -80])
+        //     : (offseting = [180, -80])
+        // }
+        // self.loc2 = new maplibregl.Marker(el, {
+        //   offset: offseting,
+        // })
+        //   .setLngLat([result[i].value.coor[1], result[i].value.coor[0]])
+        //   .addTo(map)
         // cuaca
       })
 
@@ -438,7 +455,7 @@ export default {
           source: 'departure',
           layout: {
             'icon-image': 'departure',
-            'icon-size': 0.3,
+            'icon-size': 0.18,
             'icon-overlap': 'always',
             'icon-offset': [0, -250],
           },
@@ -458,7 +475,7 @@ export default {
           source: 'arrival',
           layout: {
             'icon-image': 'arrival',
-            'icon-size': 0.3,
+            'icon-size': 0.18,
             'icon-overlap': 'always',
             'icon-offset': [0, -250],
           },
@@ -476,7 +493,7 @@ export default {
         }
       })
       map.fitBounds(bounds, {
-        padding: { top: 270, bottom: 100, left: 140, right: 140 },
+        padding: { top: 120, bottom: 70, left: 20, right: 200 },
       })
     },
   },
