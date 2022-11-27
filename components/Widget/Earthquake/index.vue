@@ -1,13 +1,14 @@
 <template>
   <div>
-    <div class="flex space-x-4">
+    <div class="grid grid-cols-2">
       <div
         class="
-          flex flex-grow
+          flex flex-none
           items-center
           justify-center
           overflow-hidden
           rounded-lg
+          w-full
         "
         v-if="datagempa.Shakemap"
       >
@@ -23,7 +24,7 @@
           <div>Informasi gempa bumi terakhir {{ datagempa.Tanggal }}</div>
           <div></div>
         </div>
-        <table class="mx-12 my-6 font-semibold">
+        <table class="mx-3 my-6 font-semibold">
           <tr>
             <td class="pt-4">Lokasi</td>
             <td class="pl-2 pt-4">
@@ -47,12 +48,13 @@
             <td class="pl-2 pt-4">: {{ datagempa.Jam || '-' }}</td>
           </tr>
         </table>
-        <hr class="border-gray-300 my-8 " />
+        <hr class="border-gray-300 my-6 " />
         <div
-          class="w-full mx-12 py-4 font-semibold"
+          class="w-full mx-3 py-4 font-semibold"
           :class="datagempa.Wilayah ? '' : 'mt-16'"
         >
-          <p class="mt-2.5">Gempa terasa di wilayah {{ datagempa.Dirasakan }}</p>
+          <div class="mt-2.5">Gempa terasa di wilayah</div>
+          <p class="mt-2.5">{{ datagempa.Dirasakan }}</p>
           <p class="mt-2.5">{{ datagempa.Wilayah || '-' }}</p>
           <p class="mt-2.5">
             {{ datagempa.Potensi || '-' }}
