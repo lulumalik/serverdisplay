@@ -4,11 +4,11 @@
       class="mb-4"
       :class="currentDate >= 18 ? 'text-white' : 'text-black'"
     >
-      <div class="font-bold text-6xl text-center">
+      <div class="font-bold text-6xl text-center stroke_white">
         {{ area }}
       </div>
       <div
-        class="text-5xl text-center mt-3"
+        class="text-5xl text-center mt-3 stroke_white font-bold"
         v-if="forecast.length > 0"
       >
         <!-- {{forecast[0].data.date}} -->
@@ -341,5 +341,10 @@ td {
   padding-top: 20px;
   padding-bottom: 20px;
   border: 0.1px solid rgba(0, 0, 0, 0.1);
+}
+.stroke_white {
+  -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: white;
 }
 </style>
