@@ -34,7 +34,7 @@
                     &nbsp;
                     <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-8 -top-2" />
                   </div>
-                  <div class="w-56 text-3xl font-semibold pl-20 text-left">
+                  <div class="w-64 text-3xl font-semibold pl-20 text-left">
                     {{ weather_code[b.data.weather_code] }}
                   </div>
                 </div>
@@ -302,7 +302,7 @@ td {
   bottom: 0;
   width: 0;
   height: 0;
-  border-left: 35px solid #fff;
+  border-left: 35px solid rgba(255, 255, 255, 0.8);
   z-index: 1000;
   border-top: 75px solid transparent;
   border-bottom: 75px solid transparent;

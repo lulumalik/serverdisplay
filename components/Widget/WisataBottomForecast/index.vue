@@ -28,17 +28,17 @@
         <div v-for="(f, i) in forecast" :key="i" class="relative px-6" :class="(i == forecast.length - 1 ) ? '' : 'border-r border-gray-200'">
           <div class="flex-none w-28">
             <img :src="'/Archive/' + f.weather_code + '.gif'"
-              class="w-40 mx-auto absolute -top-14 right-0" style="left: -200px" alt="imgdata" />
+              class="w-36 mx-auto absolute -top-12 right-0" style="left: -200px" alt="imgdata" />
           </div>
           <div class="flex-grow" :style="{ color: color }">
-            <div class="text-xl relative left-3 text-left" style="font-weight: 200 !important">
+            <div class="text-xl relative left-4 text-left" style="font-weight: 200 !important">
               <div>{{ returningTimeZone(new Date(f.date)).split(' ')
               .splice(4, 4)[0]
               .split(':')
               .splice(0, 2)
               .join(':')}} {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }} </div>
             </div>
-            <div class="text-lg relative left-3">
+            <div class="text-lg relative left-4 whitespace-nowrap">
               <div class="">{{ weather_code[f.weather_code] }}</div>
             </div>
           </div>

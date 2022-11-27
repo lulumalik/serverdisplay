@@ -3,48 +3,46 @@
 
     <!-- {{listWisata}} -->
     <div class="grid grid-cols-2 w-full gap-4">
-      <div
-        v-for="data in 4"
-        :key="data"
-        class="rounded-md p-8 shadow-md"
-        :style="{background: listWisata['img' + data] ? 'url(' + listWisata['img' + data] + ')' : 'rgba(255,255,255,0.7)', backgroundSize: 'cover' }"
-      >
-        <div class="bg-white/70 rounded-lg px-3 py-2">
-          <div class="text-4xl">{{listWisata['name' + data] }}</div>
+      <div v-for="data in 4" :key="data" class="rounded-md p-8 shadow-md "
+        :style="{ background: listWisata['img' + data] ? 'url(' + listWisata['img' + data] + ')' : 'rgba(255,255,255,0.7)', backgroundSize: 'cover' }">
+        <div class=" rounded-lg px-3 py-2 stroke_white">
+          <div class="text-4xl font-bold">{{ listWisata['name' + data] }}</div>
         </div>
-        <div
-          class="flex space-x-4"
-          v-if="listWisata['kecamatan' + data] && listWisata['kecamatan' + data].length > 0"
-        >
-          <div
-            v-for="i in 2"
-            :key="i"
-          >
-
-            <div
-              :class="i == 1 ? 'border-t-2 border-gray-200' : ''"
-              class="text-4xl mt-6 pt-7  mb-3"
-            ><span class="py-1 px-3 rounded-lg bg-white/70">{{returningTimeZone(new Date(listWisata['kecamatan' + data][i].date)).split(' ')
-              .splice(4, 4)[0]
-              .split(':')
-              .splice(0, 2)
-              .join(':')}} {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}</span></div>
+        <div class="flex space-x-4 w-full" v-if="listWisata['kecamatan' + data] && listWisata['kecamatan' + data].length > 0">
+          <div>
+            <div class="text-4xl mt-6 pt-7 stroke_white mb-3 font-bold"><span
+                class="py-1 px-3 rounded-lg">{{ returningTimeZone(new Date(listWisata['kecamatan' +
+                    data][0].date)).split(' ')
+                    .splice(4, 4)[0]
+                    .split(':')
+                    .splice(0, 2)
+                    .join(':')
+                }} {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}</span></div>
             <!-- <div class="flex items-center mb-3">
               <div class="flex-none text-xl">Kecepatan <br> Angin</div>
-              <div class="flex-grow text-right text-4xl">{{listWisata['kecamatan' + data][i].wSpd}} Knots</div>
+              <div class="flex-grow text-right text-4xl">{{listWisata['kecamatan' + data][0].wSpd}} Knots</div>
             </div> -->
-            <div class="flex space-x-2 items-end ">
+            <div class="flex items-end bg-white/80 px-4 py-2 w-full leading-tight rounded-lg space-x-4 items-end">
               <div class="text-2xl">
-                <div class="flex-grow relative w-32 h-20 bg-white/70 flex items-center rounded-lg px-3">
+                <div class="flex-grow relative w-32 h-20  flex items-center rounded-lg px-3">
                   &nbsp;
-                  <img
-                    :src="'/Archive/' + listWisata['kecamatan' + data][i].weather_code + '.gif'"
-                    class="w-32 absolute right-1 -top-6"
-                    alt="imgdata"
-                  />
+                  <img :src="'/Archive/' + listWisata['kecamatan' + data][0].weather_code + '.gif'"
+                    class="w-32 absolute right-1 -top-6" alt="imgdata" />
                 </div>
               </div>
-              <div class="text-6xl bg-white/70 px-3 py-1 h-20 flex items-center justify-center rounded-lg">{{listWisata['kecamatan' + data][i].temp}}<sup>o</sup>C</div>
+              <div class="w-44 text-3xl font-bold">
+                {{weather_code[listWisata['kecamatan' + data][0].weather_code]}}
+              </div>
+              <div class="flex-grow">
+                <div class=" text-2xl ">Suhu</div>
+                <div class="text-4xl font-bold flex items-center justify-center rounded-lg">
+                {{ listWisata['kecamatan' + data][0].temp }}<sup>o</sup>C</div>
+              </div>
+              <div class="flex-grow">
+                <div class=" text-2xl ">Kelembapan</div>
+                <div class="text-4xl font-bold flex items-center justify-center rounded-lg">
+                {{ listWisata['kecamatan' + data][0].rh }}%</div>
+              </div>
             </div>
           </div>
         </div>
@@ -103,7 +101,7 @@
   </div>
 </template>
     
-    <script>
+<script>
 import { weather_code } from '../../../utils/helperNDF.js'
 export default {
   data() {
@@ -146,11 +144,11 @@ export default {
       var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
       return result
         ? [
-            parseInt(result[1], 16),
-            parseInt(result[2], 16),
-            parseInt(result[3], 16),
-            0.8,
-          ]
+          parseInt(result[1], 16),
+          parseInt(result[2], 16),
+          parseInt(result[3], 16),
+          0.8,
+        ]
         : null
     },
     returningTimeZone(date) {
@@ -173,9 +171,18 @@ export default {
           if (key.includes('kecamatan')) {
             const datares = await self.$axios.$get(
               'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                el.value.locationId
+              el.value.locationId
             )
-            self.listWisata[key] = datares.data
+            var arr = []
+            for (var i = 0; i < datares.data.length; i++) {
+              if (new Date(datares.data[i].date).getUTCHours() == 12) {
+                arr.push(datares.data[i])
+
+                console.log(arr)
+                break;
+              }
+            }
+            self.listWisata[key] = arr
           }
         }
       }
@@ -194,9 +201,16 @@ export default {
             if (key.includes('kecamatan')) {
               const datares = await self.$axios.$get(
                 'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                  el.value.locationId
+                el.value.locationId
               )
-              self.listWisata[key] = datares.data
+              var arr = []
+              for (var i = 0; i < datares.data.length; i++) {
+                if (new Date(datares.data[i].date).getUTCHours() == 12) {
+                  arr.push(datares.data[i])
+                  break;
+                }
+              }
+              self.listWisata[key] = arr
             }
             // }
           }
@@ -230,22 +244,22 @@ export default {
     } else {
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBanyakLokasi_name'
+        this.idTemplate + '_WidgetWisataBanyakLokasi_name'
         ]
       ) {
         this.name =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBanyakLokasi_name'
+          this.idTemplate + '_WidgetWisataBanyakLokasi_name'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBanyakLokasi_img'
+        this.idTemplate + '_WidgetWisataBanyakLokasi_img'
         ]
       ) {
         this.img =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBanyakLokasi_img'
+          this.idTemplate + '_WidgetWisataBanyakLokasi_img'
           ]
       }
     }
@@ -253,8 +267,13 @@ export default {
 }
 </script>
     
-    <style scoped>
+<style scoped>
 .font-color {
   color: #4e256c;
+}
+.stroke_white {
+  -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: white;
 }
 </style>
