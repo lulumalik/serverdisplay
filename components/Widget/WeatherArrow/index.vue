@@ -32,7 +32,7 @@
                 <div class=" items-center justify-center space-x-2">
                   <div class="w-32 relative">
                     &nbsp;
-                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-8 -top-2" />
+                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-8 -top-6" />
                   </div>
                   <div class="w-64 text-3xl font-semibold pl-20 text-left">
                     {{ weather_code[b.data.weather_code] }}
@@ -172,17 +172,17 @@ export default {
             res2.data.data.forEach((el, i) => {
               var datares = this.allNDF[el.locationId]
               if (datares && datares.length > 0) {
-                if (i <= 12) {
+                // if (i <= 12) {
                   this.forecast.push({
                     location: el,
                     data: datares[0],
                   })
-                } else {
-                  this.forecast2.push({
-                    location: el,
-                    data: datares[0],
-                  })
-                }
+                // } else {
+                //   this.forecast2.push({
+                //     location: el,
+                //     data: datares[0],
+                //   })
+                // }
               }
             })
           }
@@ -225,17 +225,17 @@ export default {
           res2.data.data.forEach((el, i) => {
             var datares = this.allNDF[el.locationId]
             if (datares && datares.length > 0) {
-              if (i <= 12) {
+              // if (i <= 12) {
                 this.forecast.push({
                   location: el,
                   data: datares[0],
                 })
-              } else {
-                this.forecast2.push({
-                  location: el,
-                  data: datares[0],
-                })
-              }
+              // } else {
+              //   this.forecast2.push({
+              //     location: el,
+              //     data: datares[0],
+              //   })
+              // }
             }
           })
         }
