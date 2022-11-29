@@ -12,7 +12,7 @@
               h-full
               px-6
               py-6
-              bg-white/60
+              bg-white/80
               rounded-b-md
               w-full
             ">
@@ -60,7 +60,7 @@
             class="rounded-md relative shadow-md border-2 border-white" ref="map"
             :idMap="'mapPenyebrangan' + idtemplate" @mapready="getData" />
         </div>
-        <div class="w-full bg-white/70 rounded-md p-6 mt-2 flex space-x-3">
+        <div class="w-full bg-white rounded-md p-6 mt-2 flex space-x-3">
           <div v-for="(data, i) in showData" :class="i == 0 ? '' : 'border-l border-dashed pl-4 border-gray-800'"
             :key="i" class="flex-grow ">
             <div>
@@ -75,8 +75,8 @@
                   </div>
                   <div class="text-xl">
                     <div class="flex-none relative flex items-center space-x-4 mt-2 font-bold text-2xl">
-                      <div class="bg-white rounded-full border border-gray-300 shadow-md w-12 h-12"><img
-                          class="w-16 absolute -left-2 -top-2"
+                      <div class="w-20 h-12"><img
+                          class="w-28 absolute -left-3 -top-8"
                           :src="'/Archive/' + weather_codeParsed[data.data[0].weather] + '.gif'" /></div>
                       <div>
                         {{ data.data[0].weather }}</div>

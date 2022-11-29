@@ -32,7 +32,7 @@
                 <div class=" items-center justify-center space-x-2">
                   <div class="w-32 relative">
                     &nbsp;
-                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-8 -top-6" />
+                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-8 -top-3" />
                   </div>
                   <div class="w-64 text-3xl font-semibold pl-20 text-left">
                     {{ weather_code[b.data.weather_code] }}

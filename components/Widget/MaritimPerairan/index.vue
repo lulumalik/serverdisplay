@@ -15,23 +15,12 @@
             ">
           Peta {{ showData && showData.value && showData.value.name }}
         </div>
-        <MapPenyebrangan
-          v-if="idtemplate"
-          style="height: 650px;width:100%;"
-          class="rounded-md relative shadow-md border-2 border-white"
-          ref="map"
-          :idMap="'mapPerairan' + idtemplate"
-          @mapready="getData"
-        />
+        <MapPenyebrangan v-if="idtemplate" style="height: 650px;width:100%;"
+          class="rounded-md relative shadow-md border-2 border-white" ref="map" :idMap="'mapPerairan' + idtemplate"
+          @mapready="getData" />
       </div>
-      <div
-        class="w-full overflow-hidden bg-black/60"
-        style="height: 650px !important"
-      >
-        <VueSlickCarousel
-          v-bind="settings"
-          v-if="Object.keys(listperairan).length > 0"
-        >
+      <div class="w-full overflow-hidden" style="height: 650px !important">
+        <VueSlickCarousel v-bind="settings" v-if="Object.keys(listperairan).length > 0">
           <template #prevArrow="arrowOption">
             <div v-show="false">{{ arrowOption }}</div>
           </template>
@@ -40,58 +29,50 @@
               {{ arrowOption }}
             </div>
           </template>
-          <div
-            v-for="(l, i) in listperairan"
-            :key="i"
-          >
-            <table class="w-full">
-              <tr>
-                <td
-                  colspan="5"
-                  class="text-left rounded-t-md bg-black text-2xl text-white"
-                >
+          <div v-for="(l, i) in listperairan" :key="i">
+            <div class="w-full bg-white rounded mb-2 text-black p-4">
+              <div>
+                <div class="text-left rounded-t-md font-semibold text-2xl">
                   <div>{{ i.split('_')[1] }}</div>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-white text-2xl">Waktu</td>
-                <td class="text-white text-2xl">Cuaca</td>
-                <td class="text-white text-2xl">Gelombang</td>
-                <td class="text-white text-2xl">Angin</td>
-                <td class="text-white text-2xl">Arah Angin</td>
-              </tr>
-              <tr
-                v-for="(forecast, index) in l"
-                v-show="index < 2"
-                :key="index"
-              >
-                <td
-                  class="text-white text-2xl"
-                  :class="index == 1 ? 'rounded-bl-md' : ''"
-                >
-                  {{ forecast.time_desc }}
-                </td>
-                <td class="text-white text-2xl">
-                  {{ forecast.weather || '-' }}
-                </td>
-                <td class="text-white text-2xl">
-                  <div>{{ forecast.wave_desc || '-' }}</div>
-                </td>
-                <td class="text-white text-2xl">
-                  <div class="flex">
-                    <div>{{ forecast.wind_speed_min || '-' }}</div>
-                    <div>-</div>
-                    <div>{{ forecast.wind_speed_max || '-' }} knots</div>
+                </div>
+              </div>
+              <hr class="border-gray-300 w-44 my-2">
+              <!-- <div>
+                <div class="text-2xl">Waktu</div>
+                <div class="text-2xl">Cuaca</div>
+                <div class="text-2xl">Gelombang</div>
+                <div class="text-2xl">Angin</div>
+                <div class="text-2xl">Arah Angin</div>
+              </div> -->
+              <div v-for="(forecast, index) in l" v-show="index < 2" :key="index" :class="index == 0 ? ' pb-2' : 'pt-2'">
+                <div class="text-2xl pb-4 text-center" :class="index == 1 ? 'rounded-bl-md' : ''">
+                  <div class="border-b w-32 mx-auto border-black">{{ forecast.time_desc }}</div>
+                </div>
+                <div class="grid grid-cols-4">
+                  <div class="text-2xl">
+                    <div class="text-lg font-bold">Cuaca</div>
+                    <div>{{ forecast.weather || '-' }}</div>
                   </div>
-                </td>
-                <td
-                  class="text-white text-2xl"
-                  :class="index == 1 ? 'rounded-br-md' : ''"
-                >
-                  <div>{{ forecast.wind_from || '-' }}</div>
-                </td>
-              </tr>
-            </table>
+                  <div class="text-2xl">
+                    <div class="text-lg font-bold">Gelombang</div>
+                    <div>{{ forecast.wave_desc || '-' }}</div>
+                  </div>
+                  <div class="text-2xl">
+                    <div class="text-lg font-bold">Kecepatan Angin</div>
+                    <div class="flex">
+                      <div>{{ forecast.wind_speed_min || '-' }}</div>
+                      <div>-</div>
+                      <div>{{ forecast.wind_speed_max || '-' }} knots</div>
+                    </div>
+                  </div>
+                  <div class="text-2xl" :class="index == 1 ? 'rounded-br-md' : ''">
+
+                    <div class="text-lg font-bold">Arah Angin</div>
+                    <div>{{ forecast.wind_from || '-' }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </VueSlickCarousel>
       </div>
@@ -100,13 +81,6 @@
 </template>
 
 <style scoped>
-td {
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border: 1px solid white;
-}
 table {
   border-radius: 15px;
 }
@@ -258,12 +232,12 @@ export default {
       } else {
         if (
           this.$store.state.displayWidget.widgetSaved[
-            self.idtemplate + '_WidgetMaritimPerairan_wilpel'
+          self.idtemplate + '_WidgetMaritimPerairan_wilpel'
           ]
         ) {
           var data =
             this.$store.state.displayWidget.widgetSaved[
-              self.idtemplate + '_WidgetMaritimPerairan_wilpel'
+            self.idtemplate + '_WidgetMaritimPerairan_wilpel'
             ]
           // console.log(el)
           this.showData = {

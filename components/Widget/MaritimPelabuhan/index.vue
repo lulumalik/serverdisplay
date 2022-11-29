@@ -7,26 +7,26 @@
             style="z-index:1000">
             {{ showData && showData.value && showData.value.portname }}
           </div>
-          <MapPenyebrangan v-if="idtemplate" style="height: 240px;width:100%;"
+          <MapPenyebrangan v-if="idtemplate" style="height: 280px;width:100%;"
             class="rounded-md relative shadow-md border-2 border-white" ref="map2" :idMap="'mapPelabuhan' + idtemplate"
             @mapready="getData" />
         </div>
-        <div class="flex space-x-4">
-          <table class="w-full mt-4" v-for="(data, i) in listpelabuhan" :key="i">
-            <tr>
-              <td class="text-left rounded-tl-md bg-black text-xl text-white">
+        <div class="flex space-x-2">
+          <div class="w-full mt-4 " v-for="(data, i) in listpelabuhan" :key="i">
+            <!-- <div>
+              <div class="text-left rounded-tl-md text-xl ">
                 Valid
-              </td>
-              <td class="text-left bg-black text-xl text-white">Cuaca</td>
-              <td class="text-left bg-black text-xl text-white">Angin</td>
-              <td class="text-left bg-black text-xl text-white">Arah Angin</td>
-              <td class="text-left rounded-tr-md bg-black text-xl text-white">
+              </div>
+              <div class="text-left text-xl ">Cuaca</div>
+              <div class="text-left text-xl ">Angin</div>
+              <div class="text-left text-xl ">Arah Angin</div>
+              <div class="text-left rounded-tr-md text-xl ">
                 Gelombang
-              </td>
-            </tr>
-            <tbody>
-              <tr>
-                <td class="text-left bg-black/70 text-xl text-white">
+              </div>
+            </div> -->
+            <div class="bg-white shadow-md rounded-md p-4">
+              <div>
+                <div class="text-left text-2xl font-bold">
                   {{
                       new Date(
                         returningTimeZone(new Date(data.valid_to))
@@ -43,30 +43,40 @@
                   {{
                       getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
                   }}
-                </td>
-                <td class="text-left bg-black/70 text-xl text-white">
-                  {{ data.weather }}
-                </td>
-                <td class="text-left bg-black/70 text-xl text-white">
-                  {{ data.wind_speed_min }} - {{ data.wind_speed_max }} Knots
-                </td>
-                <td class="text-left bg-black/70 text-xl text-white">
-                  {{ data.wind_from }}
-                </td>
-                <td class="text-left bg-black/70 text-xl text-white">
-                  {{ data.wave_desc }}
-                </td>
-              </tr>
-              <tr>
-                <td colspan="5" :class="i == 1 ? 'rounded-b-md' : ''" class="text-left bg-black/70 text-xl text-white">
+                </div>
+                <div class="grid grid-cols-4 my-4 gap-2 text-2xl">
+                  <div class="text-left ">
+
+                    <div class="text-lg font-bold">Cuaca</div>
+                    <div>{{ data.weather }}</div>
+                  </div>
+                  <div class="text-left ">
+
+                    <div class="text-lg font-bold">Kec. Angin</div>
+                    <div>
+                      {{ data.wind_speed_min }} - {{ data.wind_speed_max }} Knots</div>
+                  </div>
+                  <div class="text-left ">
+
+                    <div class="text-lg font-bold">Arah Angin</div>
+                    <div>{{ data.wind_from }}</div>
+                  </div>
+                  <div class="text-left ">
+                    <div class="text-lg font-bold">Gelombang</div>
+                    <div>{{ data.wave_desc }}</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div colspan="5" :class="i == 1 ? 'rounded-b-md' : ''" class="text-left text-xl ">
                   <div class="text-2xl">
                     <div class="text-red-500">Warning</div>
-                    <div :class="data.warning_desc.length > 12 ? '' : 'h-32'" v-html="data.warning_desc"></div>
+                    <div class="p-4 bg-gray-200 rounded mt-2" :class="data.warning_desc.length > 12 ? '' : 'h-32'" v-html="data.warning_desc"></div>
                   </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </client-only>
