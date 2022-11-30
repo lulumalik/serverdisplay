@@ -32,7 +32,7 @@
                 <div class=" items-center justify-center space-x-2">
                   <div class="w-32 relative">
                     &nbsp;
-                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-8 -top-3" />
+                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-8 -top-7" />
                   </div>
                   <div class="w-64 text-3xl font-semibold pl-20 text-left">
                     {{ weather_code[b.data.weather_code] }}
@@ -275,7 +275,7 @@ td {
   align-items: center;
   justify-content: center;
   width: 600px;
-  height: 150px;
+  height: 180px;
   padding-left: 85px;
   margin-left: 5px;
   background: rgba(255, 255, 255, 0.8);
@@ -291,8 +291,8 @@ td {
   width: 0;
   height: 0;
   border-left: 35px solid rgba(255, 255, 255, 0.7);
-  border-top: 80px solid transparent;
-  border-bottom: 80px solid transparent;
+  border-top: 85px solid transparent;
+  border-bottom: 85px solid transparent;
 }
 
 .right-arrow:before {
@@ -304,8 +304,8 @@ td {
   height: 0;
   border-left: 35px solid rgba(255, 255, 255, 0.8);
   z-index: 1000;
-  border-top: 75px solid transparent;
-  border-bottom: 75px solid transparent;
+  border-top: 91px solid transparent;
+  border-bottom: 91px solid transparent;
 }
 
 .left-rounded {

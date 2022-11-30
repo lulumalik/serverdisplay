@@ -11,7 +11,7 @@
         <img style="width: 450px" :src="warningURL" />
       </div>
       <div>
-        <img style="width: 450px" :src="warningURL" />
+        <img style="width: 450px" :src="warningURLText" />
       </div>
     </div>
   </div>
@@ -21,19 +21,23 @@
 export default {
   data() {
     return {
-      year: new Date().getFullYear(),
-      month: new Date().getMonth() + 1,
-      day: new Date().getDate(),
       shownotfound: false,
       area: 'CJK',
-      idTemplate:null,
-      warningURL:  'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
-          this.year +
-          '/' +
-          this.getZero(this.month) +
-          '/' +
-          this.getZero(this.day) +
-          '/infografis.jpg'
+      idTemplate: null,
+      warningURL: 'https://warningcuaca.bmkg.go.id/infografis/' + this.area + '/' +
+        new Date().getFullYear() +
+        '/' +
+        this.getZero(this.month) +
+        '/' +
+        this.getZero(new Date().getDate()) +
+        '/infografis.jpg',
+      warningURLText: 'https://warningcuaca.bmkg.go.id/infografis/' + this.area + '/' +
+        new Date().getFullYear() +
+        '/' +
+        this.getZero(this.month) +
+        '/' +
+        this.getZero(new Date().getDate()) +
+        '/infografis.jpg'
     }
   },
   methods: {
@@ -56,22 +60,30 @@ export default {
 
     imageNotFound(e) {
       var parent = this.$parent.$parent.$parent
-      if (parent.production) {
+      // if (parent.production) {
         // parent.errorImage['MaritimWarning'] =false
+        var yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
+        this.warningURL = 'https://warningcuaca.bmkg.go.id/infografis/' + this.area + '/' +
+          new Date().getFullYear() +
+          '/' +
+          this.getZero(yesterday.getMonth() + 1) +
+          '/' +
+          this.getZero(yesterday.getDate()) +
+          '/infografis.jpg'
 
-        parent.spliceSlide('https://warningcuaca.bmkg.go.id/infografis/CBB/' +
-          this.year +
+        this.warningURLText = 'https://warningcuaca.bmkg.go.id/infografis/' + this.area + '/' +
+          new Date().getFullYear() +
           '/' +
-          this.getZero(this.month) +
+          this.getZero(yesterday.getMonth() + 1) +
           '/' +
-          this.getZero(this.day) +
-          '/infografis.jpg')
-      }
+          this.getZero(yesterday.getDate()) +
+          '/infografis_text.jpg'
+      // }
     },
   },
   mounted() {
     var parentDisplay = this.$parent.$parent.$parent
-      this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
+    this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
 
     if (
       this.$store.state.displayWidget.widgetSaved[
@@ -82,24 +94,43 @@ export default {
         this.idTemplate + '_WidgetWarningWeather_area'
       ].area
     }
-    this.warningURL = 'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
-          this.year +
-          '/' +
-          this.getZero(this.month) +
-          '/' +
-          this.getZero(this.day) +
-          '/infografis.jpg'
+
+    this.warningURL = 'https://warningcuaca.bmkg.go.id/infografis/' + this.area + '/' +
+      new Date().getFullYear() +
+      '/' +
+      this.getZero(new Date().getMonth() + 1) +
+      '/' +
+      this.getZero(new Date().getDate()) +
+      '/infografis.jpg'
+
+    this.warningURLText = 'https://warningcuaca.bmkg.go.id/infografis/' + this.area + '/' +
+      new Date().getFullYear() +
+      '/' +
+      this.getZero(new Date().getMonth() + 1) +
+      '/' +
+      this.getZero(new Date().getDate()) +
+      '/infografis_text.jpg'
+
     this.testImage(this.warningURL)
 
     setInterval(() => {
-      this.warningURL = 'https://warningcuaca.bmkg.go.id/infografis/'+ this.area + '/' +
-          this.year +
-          '/' +
-          this.getZero(this.month) +
-          '/' +
-          this.getZero(this.day) +
-          '/infografis.jpg'
-          
+
+      this.warningURL = 'https://warningcuaca.bmkg.go.id/infografis/' + this.area + '/' +
+        new Date().getFullYear() +
+        '/' +
+        this.getZero(new Date().getMonth() + 1) +
+        '/' +
+        this.getZero(new Date().getDate()) +
+        '/infografis.jpg'
+
+      this.warningURLText = 'https://warningcuaca.bmkg.go.id/infografis/' + this.area + '/' +
+        new Date().getFullYear() +
+        '/' +
+        this.getZero(new Date().getMonth() + 1) +
+        '/' +
+        this.getZero(new Date().getDate()) +
+        '/infografis_text.jpg'
+
       this.testImage(this.warningURL)
     }, 60000)
   },
