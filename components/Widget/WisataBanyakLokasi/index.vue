@@ -178,7 +178,7 @@ export default {
               if (new Date(datares.data[i].date).getUTCHours() == 12) {
                 arr.push(datares.data[i])
 
-                console.log(arr)
+                // console.log(arr)
                 break;
               }
             }

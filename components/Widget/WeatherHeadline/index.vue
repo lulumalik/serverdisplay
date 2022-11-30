@@ -78,7 +78,7 @@
           </tr>
         </table>
       </div>
-      <div class="flex-grow text-2xl">
+      <div class="flex-grow text-2xl" v-if="forecast[1]">
         <table>
           <tr>
             <td>
@@ -90,7 +90,7 @@
               </div>
             </td>
             <td class="font-bold pl-6">
-              : {{ forecast[0].minTemp }} <sup>o</sup>C
+              : {{ forecast[1].minTemp }} <sup>o</sup>C
             </td>
           </tr>
           <tr>
@@ -103,7 +103,7 @@
               </div>
             </td>
             <td class="font-bold pl-6">
-              <div class="mt-2">: {{ forecast[0].maxTemp }} <sup>o</sup>C</div>
+              <div class="mt-2">: {{ forecast[1].maxTemp }} <sup>o</sup>C</div>
             </td>
           </tr>
         </table>
@@ -176,7 +176,11 @@ export default {
             if (ndflistener[el.value.ndf].length > 0) {
               for (var i = 0; i < ndflistener[el.value.ndf].length; i++) {
                 var comp = ndflistener[el.value.ndf][i]
+                if (i == 0) {
+                  this.forecast.push(comp)
+                }
                 if (comp.date.split('T')[1].split(':')[0] == '12') {
+                  // console.log(ndflistener[el.value.ndf], comp)
                   this.forecast.push(comp)
                   break
                 }
