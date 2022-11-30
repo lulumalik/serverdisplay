@@ -27,7 +27,7 @@
                 <b>{{ b.location.subdistrict }}</b>
               </div>
             </div>
-            <div class="flex items-end">
+            <div class="flex items-center mt-2">
               <div class="text-center ">
                 <div class=" items-center justify-center space-x-2">
                   <div class="w-32 relative">
@@ -39,18 +39,18 @@
                   </div>
                 </div>
               </div>
-              <div class="text-center  items-end font-semibold">
+              <div class="text-left  items-end font-semibold">
                 <div class="text-2xl">Kec. Angin</div>
-                <div class="flex">
-                  <div class="text-3xl">{{ b.data.wSpd }}</div>
-                  <div class="text-xl">km/jam</div>
+                <div class="flex mt-2">
+                  <div class="text-5xl">{{ b.data.wSpd }}</div>
+                  <div class="text-xl ml-1.5">km/jam</div>
                 </div>
               </div>
-              <div class="text-center ml-12 items-end font-semibold">
+              <div class="text-left ml-12 items-end font-semibold">
                 <div class="text-2xl">Suhu</div>
-                <div class="flex">
-                  <div class="text-3xl">{{ b.data.temp }}</div>
-                  <div class="text-xl"><sup>o</sup>C</div>
+                <div class="flex mt-2">
+                  <div class="text-5xl">{{ b.data.temp }}</div>
+                  <div class="text-2xl ml-1.5"><sup>o</sup>C</div>
                 </div>
               </div>
             </div>

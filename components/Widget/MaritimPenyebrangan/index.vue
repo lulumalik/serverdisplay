@@ -106,7 +106,7 @@
 
               </div>
 
-              <div class="leading-tight h-36 bg-white/40 px-4 py-2 mt-2 rounded overflow-hidden"
+              <div class="leading-tight h-36 text-xl py-2 mt-3 rounded overflow-hidden"
                 v-html="data.data[0].warning_desc"></div>
             </div>
             <!-- <div class="flex space-x-4 mt-3">

@@ -69,9 +69,9 @@
               </div>
               <div>
                 <div colspan="5" :class="i == 1 ? 'rounded-b-md' : ''" class="text-left text-xl ">
-                  <div class="text-2xl">
-                    <div class="text-red-500">Warning</div>
-                    <div class="p-4 bg-gray-200 rounded mt-2" :class="data.warning_desc.length > 12 ? '' : 'h-32'" v-html="data.warning_desc"></div>
+                  <div class="">
+                    <div class="text-red-500 text-2xl">Warning</div>
+                    <div class="p-2 overflow-hidden bg-gray-200 text-xl rounded mt-2 h-40" v-html="data.warning_desc"></div>
                   </div>
                 </div>
               </div>
