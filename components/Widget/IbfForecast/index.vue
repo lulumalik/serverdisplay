@@ -32,8 +32,7 @@ export default {
         var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
         setting[obj].forEach((el) => {
           this.location = el.value.name
-          this.testImage(
-            'https://signature.bmkg.go.id/storage/output/public-impact/' +
+          this.url = 'https://signature.bmkg.go.id/storage/output/public-impact/' +
             this.location +
             '/' +
             this.year +
@@ -42,13 +41,12 @@ export default {
             '/' +
             this.getZero(this.day) +
             '/00.png'
-          )
+          this.testImage(this.url)
         })
       } else {
         if (this.$store.state.displayWidget.widgetSaved[this.idTemplate + '_WidgetIbfForecast']) {
           this.location = this.$store.state.displayWidget.widgetSaved[this.idTemplate + '_WidgetIbfForecast'].name
-          this.testImage(
-            'https://signature.bmkg.go.id/storage/output/public-impact/' +
+          this.url = 'https://signature.bmkg.go.id/storage/output/public-impact/' +
             this.location +
             '/' +
             this.year +
@@ -57,6 +55,8 @@ export default {
             '/' +
             this.getZero(this.day) +
             '/00.png'
+          this.testImage(
+            this.url
           )
         }
       }
