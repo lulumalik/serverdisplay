@@ -29,12 +29,11 @@
             </div>
             <div class="flex items-center mt-2">
               <div class="text-center ">
-                <div class=" items-center justify-center space-x-2">
+                <div class=" items-start justify-center space-x-2">
                   <div class="w-32 relative">
-                    &nbsp;
-                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-8 -top-7" />
+                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-12 -top-7" />
                   </div>
-                  <div class="w-64 text-3xl font-semibold pl-20 text-left">
+                  <div class="w-56 text-3xl font-semibold pl-16 text-left">
                     {{ weather_code[b.data.weather_code] }}
                   </div>
                 </div>
