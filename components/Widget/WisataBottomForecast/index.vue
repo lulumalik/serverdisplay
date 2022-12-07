@@ -2,63 +2,70 @@
   <div class="h-44 w-full">
     &nbsp;
     <div :style="backgroundnize" class="fixed -top-24 w-full left-0" style="z-index: -1"></div>
-    <!-- <img :src="img" class="fixed -top-24 w-full left-0" style="z-index: -1" /> -->
+    <div class="fixed top-0 right-4 border-l-8 z-50 px-16 py-6 backdrop-blur-md"
+      :style="{ 'border-color': backgroundColor }">
+      <div class="uppercase text-2xl">
+        prakiraan cuaca wisata
+      </div>
+      <div class="font-bold text-center text-5xl" :style="{ color: color }">
+        {{ name !== '' ? name : 'No Name of location' }}
+      </div>
+    </div>
     <div class="
         rounded-tr-full
         pt-10
         pb-12
         pr-12
-        pl-24
+        pl-12
         w-full
         absolute
         -bottom-4
         left-0
         items-center
-      " :style="{ background: backgroundColor }">
-      <div class="w-full mb-10 relative" :style="{ color: color }">
-        <div class="font-bold text-5xl relative bottom-2 underline">
-          {{ name !== '' ? name : 'No Name of location' }}
-        </div>
-        <!-- <hr class="w-32 mt-3" style="border-color: #b6b6b6" /> -->
-        <!-- <div class="text-lg mt-3 mb-12 w-11/12 line-clamp">
-          {{ desc !== '' ? desc : 'No Data' }}
-        </div> -->
-        <div class="absolute right-12 -top-24 h-64 rounded-full flex items-center bg-indigo-500 w-64"
-          v-if="resultData.weather_code">
-          <div class="flex-none">
-            <img :src="'/Archive/' + resultData.weather_code + '.gif'" class="w-44 mx-auto absolute top-0 -right-48"
-              style="left: -200px" alt="imgdata" />
-          </div>
-          <div class="flex-grow text-white text-center mt-24">
-            <div class="text-4xl text-center" style="font-weight: 200 !important">
-              <div class="font-bold">
-                {{ resultData.temp }} <sup>o</sup>C</div>
-            </div>
-            <div class="text-2xl relative bottom-0.5 whitespace-nowrap">
-              <div class="font-bold">{{ weather_code[resultData.weather_code] }}</div>
+      ">
+      <!-- <div class="w-full mb-10 relative" :style="{ color: color }">
+      </div> -->
+      <div class="w-full flex justify-center mx-auto space-x-6 px-2 relative items-center " v-if="forecast.length > 0">
+        <div v-for="(f, i) in forecast" :key="i" class="relative w-full flex space-x-4 items-center h-36 rounded-xl"
+          :style="{ 'background-color': 'rgba(' + hexToRgb(backgroundColor, 0.6).join(',') + ')' }">
+          <div class="w-full h-full p-3">
+            <div :style="{ 'background-color': 'rgba(' + hexToRgb(backgroundColor, 0.8).join(',') + ')' }"
+              class="rounded-xl h-full flex items-end justify-center">
+              <img :src="'/Archive/' + f.weather_code + '.gif'" class="w-36 mx-auto absolute -top-2.5 left-0"
+                alt="imgdata" />
+              <div class="font-semibold text-sm text-center mb-2" :style="{ color: color }">{{
+                  weather_code[f.weather_code]
+              }}</div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="full flex mx-auto space-x-20 px-6 mb-4 relative items-center " v-if="forecast.length > 0">
-        <div v-for="(f, i) in forecast" :key="i" class="relative px-6"
-          :class="(i == forecast.length - 1) ? '' : 'border-r border-gray-200'">
-          <div class="absolute h-full -left-24 bg-indigo-100/80" style="width:400px;"></div>
-          <div class="flex-none w-28">
-            <img :src="'/Archive/' + f.weather_code + '.gif'" class="w-36 mx-auto absolute -top-12 right-0"
-              style="left: -200px" alt="imgdata" />
-          </div>
-          <div class="flex-grow" :style="{ color: color }">
-            <div class="text-xl relative left-4 text-left" style="font-weight: 200 !important">
+          <div class="w-full text-right" :style="{ color: color }">
+            <div class="text-4xl absolute -top-12 left-0" style="font-weight: 400 !important">
               <div>{{ returningTimeZone(new Date(f.date)).split(' ')
                   .splice(4, 4)[0]
                   .split(':')
                   .splice(0, 2)
                   .join(':')
-              }} {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }} </div>
+              }} <small>{{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}</small>
+                <small>({{ returningTimeZone(new Date(f.date)).split(' ')[0] }})</small>
+              </div>
             </div>
-            <div class="text-lg relative left-4 whitespace-nowrap">
-              <div class="">{{ weather_code[f.weather_code] }}</div>
+            <div class="text-lg relative right-4 whitespace-nowrap">
+              <div :style="{ 'background-color': 'rgba(' + hexToRgb(backgroundColor, 0.8).join(',') + ')' }"
+                class="text-3xl mb-2 px-4 py-2 flex rounded-xl">
+                <div class="relative w-1/2">
+                  <img src="/weatherheadline/compass.svg" alt="img" />
+                  <img src="/weatherheadline/arrow.svg" :style="{ transform: 'rotate(' + dirTo[f['wDir']] + 'deg)' }"
+                    alt="img2" class="absolute z-30 top-0 -left-1 right-0 mx-auto" />
+                </div>
+                <div class="flex-none w-1/2 relative">
+                  <div class="text-2xl">{{ f.wSpd }}</div>
+                  <div class="text-xs absolute bottom-0 right-0">Knots</div>
+                </div>
+              </div>
+              <div :style="{ 'background-color': 'rgba(' + hexToRgb(backgroundColor, 0.8).join(',') + ')' }"
+                class=" text-3xl px-4 py-2 rounded-xl">
+                {{ f.temp }} <sup>o</sup>C
+              </div>
             </div>
           </div>
         </div>
@@ -68,7 +75,7 @@
 </template>
 
 <script>
-import { weather_code } from '../../../utils/helperNDF.js'
+import { weather_code, dirTo, parseNameDir } from '../../../utils/helperNDF.js'
 export default {
   data() {
     return {
@@ -88,6 +95,12 @@ export default {
     weather_code: function () {
       return weather_code
     },
+    dirTo() {
+      return dirTo
+    },
+    parseNameDir() {
+      return parseNameDir
+    },
     getTimeZone() {
       var date = new Date().getTimezoneOffset()
       if (date == -420) {
@@ -100,6 +113,17 @@ export default {
     },
   },
   methods: {
+    hexToRgb(hex, transparent) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result
+        ? [
+          parseInt(result[1], 16),
+          parseInt(result[2], 16),
+          parseInt(result[3], 16),
+          transparent ? transparent : 0.8,
+        ]
+        : null
+    },
     returningTimeZone(date) {
       return (
         date.toString().split(' ').splice(0, 5).join(' ') +
@@ -113,7 +137,7 @@ export default {
       var parentDisplay = self.$parent.$parent.$parent
       if (parentDisplay.production) {
         this.allNDF = {}
-        var ndflistener = this.allNDF
+
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
         setting[obj].forEach(async (el) => {
@@ -121,46 +145,18 @@ export default {
           if (comp == 'WidgetWisataBottombarForecast') {
             var key = el.key.split('_')[2]
             if (key == 'kecamatan') {
-              // console.log(this.ndflistener[el.value.ndf], el)
+
               const datares = await this.$axios.$get(
                 'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
                 el.value.locationId
               )
+              this.allNDF = datares.data
+              if (datares.data.length > 0) {
+                for (var i = 0; i < 4; i++) {
 
-              self.$set(ndflistener, el.value.ndf, datares.data)
-              // ndflistener[el.value.ndf] = datares.data
+                  var comp = datares.data[i]
+                  this.forecast.push(comp)
 
-              if (ndflistener[el.value.ndf].length > 0) {
-                for (var i = 0; i < 5; i++) {
-                  var comp = ndflistener[el.value.ndf][i]
-                  if (i == 0) {
-                    this.resultData = comp
-                  } else {
-
-                    var comp = ndflistener[el.value.ndf][i]
-                    this.forecast.push(comp)
-                  }
-
-                  // var obj = {}
-                  // ndflistener[el.value.ndf].forEach((item) => {
-                  //   if (!obj[new Date(item.date).getUTCDate()]) {
-                  //     obj[new Date(item.date).getUTCDate()] = []
-                  //     obj[new Date(item.date).getUTCDate()].push(item)
-                  //   } else {
-                  //     obj[new Date(item.date).getUTCDate()].push(item)
-                  //   }
-                  // })
-                  // var result = {}
-                  // // console.log(obj, 'obj')
-                  // for (var k in obj) {
-                  //   var max = Math.max(...obj[k].map((o) => o.weather_code))
-                  //   result[k] = obj[k].find((o) => o.weather_code === max)
-                  // }
-                  // Object.values(result).forEach((el, i) => {
-                  //   if (i == 0) {
-                  //     this.resultData = el
-                  //   }
-                  // })
                 }
               }
             }
@@ -198,7 +194,7 @@ export default {
               'background-size': 'cover',
               'background-position': 'center',
               'background-repeat': 'no-repeat',
-              height: '100%',
+              height: '120%',
             }
           }
         }
@@ -218,6 +214,32 @@ export default {
           this.$store.state.displayWidget.widgetSaved[
           this.idTemplate + '_WidgetWisataBottombarForecast_description'
           ]
+      }
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+        this.idTemplate + '_WidgetWisataBottombarForecast_kecamatan'
+        ]
+      ) {
+        this.forecast.length = 0
+        this.allNDF = {}
+        var id = this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWisataBottombarForecast_kecamatan'
+        ].locationId
+        this.$axios.$get(
+          'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+          id
+        ).then(datares => {
+          this.allNDF = datares.data
+          if (datares.data.length > 0) {
+            for (var i = 0; i < 4; i++) {
+
+              var comp = datares.data[i]
+              this.forecast.push(comp)
+
+            }
+          }
+        })
+
       }
       if (
         this.$store.state.displayWidget.widgetSaved[

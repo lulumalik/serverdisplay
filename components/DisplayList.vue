@@ -23,10 +23,10 @@
         <img v-if="db.preview" :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
           class="absolute w-full h-full z-10" />
         <div class="text-center">
-          <div v-if="db.owner._id == currentUser.id" class="h-6 w-6 p-1 shadow-md rounded-br-md bg-green-500 absolute left-0 top-0">
+          <div v-if="db.owner._id == currentUser.id"
+            class="h-6 w-6 p-1 shadow-md rounded-br-md bg-green-500 absolute left-0 top-0">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24">
-              <path
-                fill="white"
+              <path fill="white"
                 d="M19 7.001c0 3.865-3.134 7-7 7s-7-3.135-7-7c0-3.867 3.134-7.001 7-7.001s7 3.134 7 7.001zm-1.598 7.18c-1.506 1.137-3.374 1.82-5.402 1.82-2.03 0-3.899-.685-5.407-1.822-4.072 1.793-6.593 7.376-6.593 9.821h24c0-2.423-2.6-8.006-6.598-9.819z" />
             </svg>
           </div>
@@ -75,19 +75,24 @@ export default {
   },
   mounted() {
     process.nextTick(() => {
-      console.log(this.$axios.defaults.baseURL.split('api')[0])
-      const socket = io(this.$axios.defaults.baseURL.split('api')[0], {
-        reconnectionDelayMax: 10000,
-      })
-      socket.connect()
-      socket.on('auth_request', (data) => {
-        console.log(data, ' auth  request')
-      })
-      setTimeout(() => {
-        socket.emit('auth', {
-          display_id: 'ea',
-        })
-      }, 1000)
+      // console.log(this.$axios.defaults.baseURL.split('api')[0])
+      // const socket = io(this.$axios.defaults.baseURL.split('api')[0], {
+      //   reconnectionDelayMax: 10000,
+      //   withCredentials: true,
+      //   extraHeaders: {
+      //     "my-custom-header": "abcd"
+      //   },
+      //   transports: [ 'polling', 'flashsocket'],
+      // })
+      // socket.connect()
+      // socket.on('auth_request', (data) => {
+      //   console.log(data, ' auth  request')
+      // })
+      // setTimeout(() => {
+      //   socket.emit('auth', {
+      //     display_id: 'ea',
+      //   })
+      // }, 1000)
     })
   },
   methods: {
