@@ -61,7 +61,7 @@
           :nodrag="true"
           ref="footer"
           v-if="useFooter"
-          style="background: rgba(0, 0, 0, 0.5) !important"
+          style="background: #a8ff00"
           :class="'overflow-hidden fixed bottom-0 w-full'"
         />
       </client-only>

@@ -6,17 +6,18 @@
           <div class="
               absolute
               top-0
-              right-0
+              left-0
               w-72
               z-50
               h-full
               px-6
               py-6
-              bg-white/80
-              rounded-b-md
+              bg-indigo-500
+              rounded-md
               w-full
+              text-white
             ">
-            <div class="text-3xl font-bold">Peta Penyebrangan Maritim</div>
+            <div class="text-3xl font-bold">Prakiraan Jalur Penyebrangan</div>
             <div class="text-xl mt-2 mb-1">Berlaku Mulai</div>
             <div class="text-xl font-semibold" v-if="showData.length > 0 && showData[0] && showData[0].data">
               <!-- {{showData[0].data[0].valid_from}} -->
@@ -60,95 +61,55 @@
             class="rounded-md relative shadow-md border-2 border-white" ref="map"
             :idMap="'mapPenyebrangan' + idtemplate" @mapready="getData" />
         </div>
-        <div class="w-full bg-white rounded-md p-6 mt-2 flex space-x-3">
-          <div v-for="(data, i) in showData" :class="i == 0 ? '' : 'border-l border-dashed pl-4 border-gray-800'"
-            :key="i" class="flex-grow ">
-            <div>
-              <div class="flex space-x-4">
-                <div class="flex-grow">
-                  <div class="flex items-end relative">
-                    <div class="flex space-x-2 text-3xl flex-grow font-semibold">
-                      <div class="flex w-full">
-                        <div class="flex-grow">{{ data.name }}</div>
+        <div class="w-full">
+          <!-- <div class="grid grid-cols-1 gap-6 w-full"> -->
+          <div class="grid grid-cols-2 gap-6">
+            <div class="">
+              <div v-for="(data, i) in showData" :key="i" class="bg-white rounded-md mt-4">
+                <div class="">
+                  <div>
+                    <div class="w-full bg-indigo-500 font-bold text-2xl rounded-md p-4 text-white">
+                      {{ data.name }}
+                    </div>
+                    <div class="p-6 rounded-md flex justify-between items-center space-x-6">
+                      <div class="text-xl">
+                        <div class="relative mt-2 font-bold text-2xl">
+                          <div class="w-24 h-12"><img class="w-36 absolute left-8 -top-16"
+                              :src="'/Archive/' + weather_codeParsed[data.data[0].weather] + '.gif'" />
+                          </div>
+                          <div class="text-center">{{ data.data[0].weather }}</div>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="flex space-x-4 ">
+                          <img src="/weatherheadline/wave.svg" class="w-6 " />
+                          <div class="text-2xl font-bold">Gelombang</div>
+                        </div>
+                        <div class="text-2xl mt-2.5">{{ data.data[0].wave_desc }}</div>
+                      </div>
+                      <div>
+                        <div class="flex space-x-4"> <img src="/general3/wind.svg" class="w-6" />
+                          <div class="text-2xl font-bold">Angin</div>
+                        </div>
+                        <div class="text-2xl mt-2.5">{{ data.data[0].wind_speed_min }} - {{ data.data[0].wind_speed_max
+                        }} Knots
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="text-xl">
-                    <div class="flex-none relative flex items-center space-x-4 mt-2 font-bold text-2xl">
-                      <div class="w-20 h-12"><img
-                          class="w-28 absolute -left-3 -top-8"
-                          :src="'/Archive/' + weather_codeParsed[data.data[0].weather] + '.gif'" /></div>
-                      <div>
-                        {{ data.data[0].weather }}</div>
-                    </div>
-                  </div>
-
-                  <div class="mt-6 font-bold text-2xl text-red-500">Warning</div>
                 </div>
-
-                <div v-if="data.data[0]" class="flex-none">
-                  <div class="shadow bg-white/20 px-3 py-1.5 rounded">
-                    <div class="flex space-x-4 ">
-                      <img src="/weatherheadline/wave.svg" class="w-6 " />
-                      <div class="text-2xl">Gelombang</div>
-                    </div>
-                    <div class="text-2xl">{{ data.data[0].wave_desc }}</div>
-                  </div>
-                  <div class="shadow bg-white/20 px-3 py-1.5 mt-2 rounded">
-                    <div class="flex space-x-4"> <img src="/general3/wind.svg" class="w-6" />
-                      <div class="text-2xl">Angin</div>
-                    </div>
-                    <div class="text-2xl">{{ data.data[0].wind_speed_min }} - {{ data.data[0].wind_speed_max }} Knots
-                    </div>
-                  </div>
-                </div>
-
-
               </div>
-
-              <div class="leading-tight h-36 text-xl py-2 mt-3 rounded overflow-hidden"
-                v-html="data.data[0].warning_desc"></div>
             </div>
-            <!-- <div class="flex space-x-4 mt-3">
-              <div class="mt-2">
-                <div class="text-2xl font-bold flex items-center space-x-2">
-                  <div>
-                    <img
-                      src="/general3/wind.svg"
-                      class="w-8"
-                    />
-                  </div>
-                  <div>Angin</div>
-                </div>
-                <div class="text-3xl mt-2">
-                  <div>
-                    {{ data.data[0].wind_speed_min }} knots -
-                    {{ data.data[0].wind_speed_max }} knots
-                  </div>
-                  <div>
-                    {{ data.data[0].wind_from }} ke
-                    {{ data.data[0].wind_to }}
-                  </div>
-                </div>
+            <div class="bg-white rounded-md mt-4" v-if="showData[0]">
+              <div class="w-full bg-indigo-500 font-bold text-2xl rounded-md p-4 text-white">
+                Peringatan Dini
               </div>
-              <div class="flex space-x-4 text-xl mt-2">
-                <div class="flex-grow">
-                  <div class="text-2xl font-bold flex items-center space-x-2">
-                    <div>
-                      <img
-                        src="/weatherheadline/wave.svg"
-                        class="w-8"
-                      />
-                    </div>
-                    <div>Gelombang</div>
-                  </div>
-                  <div class="text-3xl flex items-end mt-2">
-                    {{ data.data[0].wave_desc }}
-                  </div>
-                </div>
+              <div class="leading-tight p-6 text-justify leading-normal text-2xl mt-3 rounded overflow-hidden"
+                v-html="showData[0].data[0].warning_desc">
               </div>
-            </div> -->
+            </div>
           </div>
+
         </div>
       </div>
     </client-only>
@@ -493,7 +454,7 @@ export default {
         }
       })
       map.fitBounds(bounds, {
-        padding: { top: 120, bottom: 70, left: 20, right: 200 },
+        padding: { top: 120, bottom: 70, left: 200, right: 20 },
       })
     },
   },

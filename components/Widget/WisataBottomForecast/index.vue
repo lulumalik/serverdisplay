@@ -15,28 +15,47 @@
         left-0
         items-center
       " :style="{ background: backgroundColor }">
-      <div class="w-full mb-10" :style="{ color: color }">
-        <div class="font-bold text-5xl">
+      <div class="w-full mb-10 relative" :style="{ color: color }">
+        <div class="font-bold text-5xl relative bottom-2 underline">
           {{ name !== '' ? name : 'No Name of location' }}
         </div>
-        <hr class="w-32 mt-3" style="border-color: #b6b6b6" />
+        <!-- <hr class="w-32 mt-3" style="border-color: #b6b6b6" /> -->
         <!-- <div class="text-lg mt-3 mb-12 w-11/12 line-clamp">
           {{ desc !== '' ? desc : 'No Data' }}
         </div> -->
+        <div class="absolute right-12 -top-24 h-64 rounded-full flex items-center bg-indigo-500 w-64"
+          v-if="resultData.weather_code">
+          <div class="flex-none">
+            <img :src="'/Archive/' + resultData.weather_code + '.gif'" class="w-44 mx-auto absolute top-0 -right-48"
+              style="left: -200px" alt="imgdata" />
+          </div>
+          <div class="flex-grow text-white text-center mt-24">
+            <div class="text-4xl text-center" style="font-weight: 200 !important">
+              <div class="font-bold">
+                {{ resultData.temp }} <sup>o</sup>C</div>
+            </div>
+            <div class="text-2xl relative bottom-0.5 whitespace-nowrap">
+              <div class="font-bold">{{ weather_code[resultData.weather_code] }}</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="full flex mx-auto space-x-20 px-6 mb-4 relative items-center" v-if="forecast.length > 0">
-        <div v-for="(f, i) in forecast" :key="i" class="relative px-6" :class="(i == forecast.length - 1 ) ? '' : 'border-r border-gray-200'">
+      <div class="full flex mx-auto space-x-20 px-6 mb-4 relative items-center " v-if="forecast.length > 0">
+        <div v-for="(f, i) in forecast" :key="i" class="relative px-6"
+          :class="(i == forecast.length - 1) ? '' : 'border-r border-gray-200'">
+          <div class="absolute h-full -left-24 bg-indigo-100/80" style="width:400px;"></div>
           <div class="flex-none w-28">
-            <img :src="'/Archive/' + f.weather_code + '.gif'"
-              class="w-36 mx-auto absolute -top-12 right-0" style="left: -200px" alt="imgdata" />
+            <img :src="'/Archive/' + f.weather_code + '.gif'" class="w-36 mx-auto absolute -top-12 right-0"
+              style="left: -200px" alt="imgdata" />
           </div>
           <div class="flex-grow" :style="{ color: color }">
             <div class="text-xl relative left-4 text-left" style="font-weight: 200 !important">
               <div>{{ returningTimeZone(new Date(f.date)).split(' ')
-              .splice(4, 4)[0]
-              .split(':')
-              .splice(0, 2)
-              .join(':')}} {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }} </div>
+                  .splice(4, 4)[0]
+                  .split(':')
+                  .splice(0, 2)
+                  .join(':')
+              }} {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }} </div>
             </div>
             <div class="text-lg relative left-4 whitespace-nowrap">
               <div class="">{{ weather_code[f.weather_code] }}</div>
@@ -61,6 +80,7 @@ export default {
       img: '',
       backgroundnize: {},
       allNDF: {},
+      resultData: {},
       idTemplate: null,
     }
   },
@@ -113,9 +133,34 @@ export default {
               if (ndflistener[el.value.ndf].length > 0) {
                 for (var i = 0; i < 5; i++) {
                   var comp = ndflistener[el.value.ndf][i]
-                  // if (comp.date.split('T')[1].split(':')[0] == '12') {
-                  this.forecast.push(comp)
+                  if (i == 0) {
+                    this.resultData = comp
+                  } else {
+
+                    var comp = ndflistener[el.value.ndf][i]
+                    this.forecast.push(comp)
+                  }
+
+                  // var obj = {}
+                  // ndflistener[el.value.ndf].forEach((item) => {
+                  //   if (!obj[new Date(item.date).getUTCDate()]) {
+                  //     obj[new Date(item.date).getUTCDate()] = []
+                  //     obj[new Date(item.date).getUTCDate()].push(item)
+                  //   } else {
+                  //     obj[new Date(item.date).getUTCDate()].push(item)
+                  //   }
+                  // })
+                  // var result = {}
+                  // // console.log(obj, 'obj')
+                  // for (var k in obj) {
+                  //   var max = Math.max(...obj[k].map((o) => o.weather_code))
+                  //   result[k] = obj[k].find((o) => o.weather_code === max)
                   // }
+                  // Object.values(result).forEach((el, i) => {
+                  //   if (i == 0) {
+                  //     this.resultData = el
+                  //   }
+                  // })
                 }
               }
             }

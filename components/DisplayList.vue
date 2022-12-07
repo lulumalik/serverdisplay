@@ -64,7 +64,7 @@
 </template>
 
 <script>
-// import { io } from 'socket.io-client'
+import { io } from 'socket.io-client'
 import jwtDecode from 'jwt-decode'
 export default {
   props: {
@@ -74,20 +74,21 @@ export default {
     },
   },
   mounted() {
-    // process.nextTick(() => {
-    //   const socket = io(this.$axios.defaults.baseURL.split('api')[0], {
-    //     reconnectionDelayMax: 10000,
-    //   })
-    //   socket.connect()
-    //   socket.on('auth_request', (data) => {
-    //     console.log(data, ' auth  request')
-    //   })
-    //   setTimeout(() => {
-    //     socket.emit('auth', {
-    //       display_id: 'ea',
-    //     })
-    //   }, 1000)
-    // })
+    process.nextTick(() => {
+      console.log(this.$axios.defaults.baseURL.split('api')[0])
+      const socket = io(this.$axios.defaults.baseURL.split('api')[0], {
+        reconnectionDelayMax: 10000,
+      })
+      socket.connect()
+      socket.on('auth_request', (data) => {
+        console.log(data, ' auth  request')
+      })
+      setTimeout(() => {
+        socket.emit('auth', {
+          display_id: 'ea',
+        })
+      }, 1000)
+    })
   },
   methods: {
     clickTemplate(db) {

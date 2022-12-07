@@ -1,8 +1,8 @@
 <template>
   <div class="
       rounded-md
-      bg-black/70
-      text-white
+      bg-white
+      text-black
       shadow-md
       flex
       justify-center
@@ -11,29 +11,26 @@
     <div class="flex items-start space-x-4 w-full">
       <div class="w-full">
         <div>
-          <div>
-            <div class="px-6 pb-3 pt-6 font-semibold text-center text-5xl">
+          <div class="bg-indigo-500 text-white rounded">
+            <div class="px-6 pb-3.5 pt-6 font-semibold text-center text-4xl">
               Keberangkatan
             </div>
-            <div class="flex pb-6 px-6 mt-6 justify-center">
+            <div class="flex pb-6 justify-center">
               <div class="
                   flex-grow
                   font-thin
                   text-center
                   font-semibold
-                  text-5xl
+                  text-3xl
                 ">
                 {{ result.tagname }}
               </div>
             </div>
           </div>
           <div class="h-80 w-full relative flex items-center justify-center">
-            <div class="flex space-x-8">
+            <div class="flex pb-12">
               <div>
-                <img
-                  :src="'/departures/' + result.symbol + '.png'"
-                  class="w-64 mx-auto"
-                />
+                <img :src="'/Archive/' + weather_codeParsed[result.weather] + '.gif'" class="w-72 mx-auto" />
               </div>
               <div class="
                   font-bold
@@ -41,12 +38,10 @@
                   text-5xl
                   flex
                   items-center
-                  text-white
+                  text-black
                 ">
-                <div class="flex-grow text-left">
+                <div class="flex-grow relative right-4 text-left">
                   <div>{{ result.weather }}</div>
-                  <div class="text-lg mt-6">Waktu Valid</div>
-                  <div class="text-xl">{{ result.observationTime }} {{ result.time_zone}}</div>
                 </div>
               </div>
             </div>
@@ -55,11 +50,11 @@
         <div class="
             flex
             justify-center
-            text-2xl
+            text-3xl
             px-12
-            pb-0
+            pb-7
             px-8
-            pt-0
+            pt-1
             relative
             bottom-8
             rounded-md
@@ -68,34 +63,25 @@
             <div class="font-bold flex space-x-4">
               <div class="font-semibold flex items-center space-x-3">
                 <div class="ml-2">
-                  <img
-                    class="w-4"
-                    src="/weatherheadlineWhite/Temperature.svg"
-                  />
+                  <img class="w-5" src="/weatherheadline/Temperature.svg" />
                 </div>
                 <div class="pl-1">Suhu</div>
               </div>
             </div>
             <div class="mt-4 flex space-x-2 items-center">
-              <div><img
-                  class="w-8"
-                  src="/weatherheadlineWhite/eye.svg"
-                /></div>
+              <div><img class="w-8" src="/weatherheadline/eye.svg" /></div>
               <div class="font-semibold">Jarak Pandang</div>
             </div>
 
-            <div class="text-white mt-4 flex items-center space-x-4">
+            <div class=" mt-4 flex items-center space-x-4">
               <div class="ml-2">
-                <img
-                  class="w-4"
-                  src="/weatherheadlineWhite/WDir.svg"
-                />
+                <img class="w-5" src="/weatherheadline/WDir.svg" />
               </div>
               <div><b>Angin</b></div>
             </div>
           </div>
           <div class="flex-grow">
-            <div class="font-bold text-2xl">
+            <div class="font-bold">
               {{ result.temperature }}<sup>o</sup>C
             </div>
             <div class="font-bold mt-4">{{ result.visibility }} kilometers</div>
@@ -109,7 +95,9 @@
     </div>
   </div>
 </template>
-  <script>
+<script>
+
+import { weather_parsed } from '../../../utils/helperNDF.js'
 const xml = require('txml')
 export default {
   data() {
@@ -123,6 +111,9 @@ export default {
     }
   },
   computed: {
+    weather_codeParsed() {
+      return weather_parsed
+    },
     getTimeZone() {
       var date = new Date().getTimezoneOffset()
       if (date == -420) {
@@ -209,12 +200,12 @@ export default {
       } else {
         if (
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetDepartures_airport'
+          this.idTemplate + '_WidgetDepartures_airport'
           ]
         ) {
           var el =
             this.$store.state.displayWidget.widgetSaved[
-              this.idTemplate + '_WidgetDepartures_airport'
+            this.idTemplate + '_WidgetDepartures_airport'
             ]
           this.$axios
             .post('https://sena.circlegeo.com/api/sena/research/forward', {

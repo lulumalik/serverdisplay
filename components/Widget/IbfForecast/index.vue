@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- https://signature.bmkg.go.id/storage/output/public-impact/KEPULAUAN%20BANGKA%20BELITUNG/2022/09/15/48.png -->
-    <img style="width: 650px" class="mx-auto" :src="url" />
+    <img style="width: 650px" class="mx-auto rounded-lg" :src="url" />
   </div>
 </template>
 

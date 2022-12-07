@@ -2,7 +2,7 @@
   <div>
     <div class="w-full flex items-center ">
       <div class="flex-grow flex items-center space-x-4">
-        <img src="/bmkg.png" alt="bmkg" class="w-20" />
+        <img :src="$parent.isHujan ? '/bmkglogowht-01.png' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5  ? '/bmkglogowht-01.png' : '/bmkg.png'" alt="bmkg" class="w-20" />
         <div class="flex-grow">
           <div style="font-size:27px" class="font-semibold" :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5  ? 'text-white' : 'text-black'" >
             BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA

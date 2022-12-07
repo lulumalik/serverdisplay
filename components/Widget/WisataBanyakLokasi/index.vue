@@ -3,12 +3,12 @@
 
     <!-- {{listWisata}} -->
     <div class="grid grid-cols-2 w-full gap-4">
-      <div v-for="data in 4" :key="data" class="rounded-md p-8 shadow-md "
-        :style="{ background: listWisata['img' + data] ? 'url(' + listWisata['img' + data] + ')' : 'rgba(255,255,255,0.7)', backgroundSize: 'cover' }">
+      <div v-for="data in 2" :key="data" class="rounded-md p-8 shadow-md "
+        :style="{ background: listWisata['img' + data] ? 'url(' + listWisata['img' + data] + ')' : 'rgba(255,255,255,0.7)', backgroundSize: 'cover', 'background-repeat' : 'no-repeat'}">
         <div class=" rounded-lg px-3 py-2 stroke_white">
           <div class="text-4xl font-bold">{{ listWisata['name' + data] }}</div>
         </div>
-        <div class="flex space-x-4 w-full" v-if="listWisata['kecamatan' + data] && listWisata['kecamatan' + data].length > 0">
+        <div class="flex space-x-4 w-full h-72" v-if="listWisata['kecamatan' + data] && listWisata['kecamatan' + data].length > 0">
           <div>
             <div class="text-4xl mt-6 pt-7 stroke_white mb-3 font-bold"><span
                 class="py-1 px-3 rounded-lg">{{ returningTimeZone(new Date(listWisata['kecamatan' +

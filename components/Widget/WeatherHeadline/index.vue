@@ -17,7 +17,7 @@
       <div class="flex-none w-32">
         <img
           :src="'/Archive/' + forecast[0].weather_code + '.gif'"
-          class="w-56 absolute left-0 -top-10 z-50"
+          class="w-64 absolute left-0 -top-12 z-50"
           alt="imgdata"
         />
       </div>

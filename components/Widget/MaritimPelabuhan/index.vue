@@ -1,85 +1,135 @@
 <template>
   <div>
-    <client-only>
-      <div>
-        <div class="relative">
-          <div class="text-4xl absolute bg-white/70 text-black left-3 top-3 p-8 rounded-lg font-bold text-center"
-            style="z-index:1000">
-            {{ showData && showData.value && showData.value.portname }}
-          </div>
-          <MapPenyebrangan v-if="idtemplate" style="height: 280px;width:100%;"
-            class="rounded-md relative shadow-md border-2 border-white" ref="map2" :idMap="'mapPelabuhan' + idtemplate"
-            @mapready="getData" />
-        </div>
-        <div class="flex space-x-2">
-          <div class="w-full mt-4 " v-for="(data, i) in listpelabuhan" :key="i">
-            <!-- <div>
-              <div class="text-left rounded-tl-md text-xl ">
-                Valid
-              </div>
-              <div class="text-left text-xl ">Cuaca</div>
-              <div class="text-left text-xl ">Angin</div>
-              <div class="text-left text-xl ">Arah Angin</div>
-              <div class="text-left rounded-tr-md text-xl ">
-                Gelombang
-              </div>
-            </div> -->
-            <div class="bg-white shadow-md rounded-md p-4">
-              <div>
-                <div class="text-left text-2xl font-bold">
-                  {{
-                      new Date(
-                        returningTimeZone(new Date(data.valid_to))
-                      ).toLocaleDateString('id')
-                  }}
-                  {{
-                      returningTimeZone(new Date(data.valid_to))
-                        .split(' ')
-                        .splice(4, 4)[0]
-                        .split(':')
-                        .splice(0, 2)
-                        .join(':')
-                  }}
-                  {{
-                      getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
-                  }}
-                </div>
-                <div class="grid grid-cols-4 my-4 gap-2 text-2xl">
-                  <div class="text-left ">
+    <div>
 
-                    <div class="text-lg font-bold">Cuaca</div>
-                    <div>{{ data.weather }}</div>
-                  </div>
-                  <div class="text-left ">
+      <div v-if="showData && showData.value && showData.value.portname"
+        class="text-center font-bold mb-8 text-5xl" :class="isDark ? 'text-white' : 'text-black'">Prakiraan Cuaca Pelabuhan {{ showData.value.portname }}
+      </div>
 
-                    <div class="text-lg font-bold">Kec. Angin</div>
-                    <div>
-                      {{ data.wind_speed_min }} - {{ data.wind_speed_max }} Knots</div>
-                  </div>
-                  <div class="text-left ">
+      <div class="h-full w-full flex items-center justify-center font-color">
+        <div class="flex space-x-8 text-gray-700" v-if="listpelabuhan.length > 0">
+          <div v-for="(w, i) in listpelabuhan" :key="i">
+            <div class="
+              rounded-t-3xl
+              border-4 border-white
+              shadow-md
+              flex
+              items-center
+              justify-center
+              bg-gradient-to-b
+              from-indigo-500
+              to-blue-800
+              h-32
+              flex
+              space-x-6
+            " style="width:100%;">
 
-                    <div class="text-lg font-bold">Arah Angin</div>
-                    <div>{{ data.wind_from }}</div>
-                  </div>
-                  <div class="text-left ">
-                    <div class="text-lg font-bold">Gelombang</div>
-                    <div>{{ data.wave_desc }}</div>
+              <div class="flex-none">
+                <div class="font-bold text-2xl px-12 text-white flex space-x-4 justify-center">
+                  <div>{{ returningTimeZone(w.valid_from)[2] + ' ' +
+                      parseMonth(parseInt(returningTimeZone(w.valid_from)[1])
+                        -
+                        1) + ' ' + returningTimeZone(w.valid_from)[0]
+                  }}</div>
+                  <div>
+                    {{ w.valid_from.split(' ')[1] }} {{ w.valid_from.split(' ')[2] }}
                   </div>
                 </div>
-              </div>
-              <div>
-                <div colspan="5" :class="i == 1 ? 'rounded-b-md' : ''" class="text-left text-xl ">
-                  <div class="">
-                    <div class="text-red-500 text-2xl">Warning</div>
-                    <div class="p-2 overflow-hidden bg-gray-200 text-xl rounded mt-2 h-40" v-html="data.warning_desc"></div>
+                <div class="font-bold text-2xl px-12 text-white flex space-x-4 justify-center">
+                  <div>Berlaku Sampai </div>
+                  <div>{{ returningTimeZone(w.valid_to)[2] + ' ' +
+                      parseMonth(parseInt(returningTimeZone(w.valid_to)[1])
+                        -
+                        1) + ' ' + returningTimeZone(w.valid_to)[0]
+                  }}</div>
+                  <div>
+                    {{ w.valid_to.split(' ')[1] }} {{ w.valid_to.split(' ')[2] }}
                   </div>
                 </div>
               </div>
             </div>
+            <div class="px-4 pb-3 pt-3 bg-white flex  text-lg rounded-b-3xl shadow-md">
+              <div class="p-6 rounded-md">
+                <div class="text-xl mt-4">
+                  <div class="relative mt-2 flex space-x-8 font-bold text-2xl">
+                    <div class="w-28 h-12"><img class="w-40 absolute -left-8 -top-16"
+                        :src="'/Archive/' + weather_codeParsed[w.weather] + '.gif'" />
+                    </div>
+                    <div class="text-center text-3xl">{{ w.weather }}</div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-x-6 mt-10">
+                  <div class="flex space-x-4 ">
+                    <img src="/weatherheadline/wave.svg" class="w-6 " />
+                    <div class="text-2xl font-bold">Gelombang</div>
+                  </div>
+                  <div class="text-2xl">{{ w.wave_desc }}</div>
+                </div>
+                <div class="grid grid-cols-2 gap-x-6 mt-4">
+                  <div class="flex items-start space-x-4"> <img src="/general3/wind.svg" class="w-6 mt-1.5" />
+                    <div class="text-2xl font-bold">Angin</div>
+                  </div>
+                  <div class="text-2xl">
+                    <div>Dari {{ w.wind_from }} ke {{ w.wind_to }}</div>
+                    <div>{{ w.wind_speed_min }} - {{ w.wind_speed_max
+                    }} Knots</div>
+                  </div>
+                </div>
+                <div class="mt-4 text-2xl">
+
+                </div>
+              </div>
+              <!-- <div class="flex space-x2">
+                <div class="flex-none">
+                  <img :src="'/Archive/' + weather_codeParsed[w.weather] + '.gif'" class="w-32 mx-auto" />
+                </div>
+                <div class="w-full text-left">
+                  <div class="font-semibold mb-3 mt-2 text-3xl">
+                    {{ w.weather }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex space-x-4 ml-3 text-xl items-center">
+                <div>{{ w.wave_desc }}</div>
+              </div>
+              <div class="flex space-x-4 ml-3 text-xl items-center mt-4">
+                <div>{{ w.wind_speed_min }} - {{
+                    w.wind_speed_max
+                }} Knots</div>
+              </div> -->
+
+
+              <!-- <div class="mt-4">
+                <div class="w-full bg-indigo-500 w-full font-bold text-2xl py-2 text-white rounded px-4">
+                  Deskripsi Cuaca
+                </div>
+                <div class="leading-tight px-6 py-2 text-justify leading-normal text-xl rounded overflow-hidden"
+                  v-html="w.weather_desc">
+                </div>
+              </div> -->
+              <!-- <div class="flex space-x-4 ml-3 items-center mt-4">
+                <div class="w-6">
+                  <img src="/svg/wind.svg" class="w-6 relative right-1" />
+                </div>
+                <div>{{ w.wind_to }}</div>
+              </div> -->
+              <!-- <div class="flex space-x-4 ml-3 items-center mt-4">
+                <div class="w-6">
+                  <img src="/svg/dir.svg" class="w-5 relative right-0.5" :style="{
+                    transform:
+                      'rotate(' + parseInt(dirTo[w.wDir] - 180) + 'deg)',
+                  }" />
+                </div>
+                <div>
+                  {{ parseNameDir[w.wDir] }}
+                </div>
+              </div> -->
+            </div>
           </div>
         </div>
       </div>
-    </client-only>
+    </div>
   </div>
 </template>
   
@@ -95,11 +145,20 @@ td {
 table {
   border-radius: 15px;
 }
+
+.stroke_white {
+  -webkit-text-fill-color: black;
+  /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: white;
+}
 </style>
   
 <script>
 var maplibregl = require('maplibre-gl')
 import VueSlickCarousel from 'vue-slick-carousel'
+
+import { weather_parsed } from '../../../utils/helperNDF.js'
 
 export default {
   data() {
@@ -108,7 +167,7 @@ export default {
       idtemplate: null,
       showData: null,
       listpelabuhan: [],
-      currentDate: new Date().getHours(),
+      isDark: false
     }
   },
   components: {
@@ -116,6 +175,9 @@ export default {
   },
 
   computed: {
+    weather_codeParsed() {
+      return weather_parsed
+    },
     getTimeZone() {
       var date = new Date().getTimezoneOffset()
       if (date == -420) {
@@ -129,13 +191,51 @@ export default {
   },
 
   methods: {
+    parseMonth(month) {
+      var monthres;
+      switch (month) {
+        case 0:
+          monthres = 'Jan'
+          break
+        case 1:
+          monthres = 'Feb'
+          break
+        case 2:
+          monthres = 'Mar'
+          break
+        case 3:
+          monthres = 'Apr'
+          break
+        case 4:
+          monthres = 'Mei'
+          break
+        case 5:
+          monthres = 'Jun'
+          break
+        case 6:
+          monthres = 'Jul'
+          break
+        case 7:
+          monthres = 'Agu'
+          break
+        case 8:
+          monthres = 'Sep'
+          break
+        case 9:
+          monthres = 'Okt'
+          break
+        case 10:
+          monthres = 'Nov'
+          break
+        case 11:
+          monthres = 'Des'
+          break
+      }
+      return monthres
+    },
     returningTimeZone(date) {
-      return (
-        date.toString().split(' ').splice(0, 5).join(' ') +
-        ' GMT+0' +
-        this.getTimeZone +
-        '00'
-      )
+      var parsed = date.split(' ')[0]
+      return parsed.split('-')
     },
     initialMap(obj) {
       var self = this
@@ -169,6 +269,13 @@ export default {
 
       var parentDisplay = this.$parent.$parent.$parent
       this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
+      if (parentDisplay.isHujan) {
+        this.isDark = true
+      } else if (new Date().getHours() >= 18 || new Date().getHours() <= 5){
+        this.isDark = true
+      } else {
+        this.isDark = false
+      }
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var result = {}
@@ -228,7 +335,7 @@ export default {
     },
   },
   async mounted() {
-    // this.getData()
+    this.getData()
 
     var parentDisplay = this.$parent.$parent.$parent
     this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate

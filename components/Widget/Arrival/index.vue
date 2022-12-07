@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="rounded-md bg-black/70 text-white shadow-md">
-      <div class="text-white px-6 py-3.5 font-semibold text-center text-5xl">
+    <div class="rounded-md bg-indigo-500 text-white shadow-md">
+      <div class="text-white px-6 py-3.5 font-semibold text-center text-4xl">
         Tujuan
       </div>
     </div>
     <div
-      class="overflow-auto mt-6"
+      class="overflow-auto mt-2"
       style="height: 610px"
     >
       <VueSlickCarousel v-bind="settings">
@@ -18,36 +18,35 @@
             {{ arrowOption }}
           </div>
         </template>
-
         <div
-          class="flex space-x-4 mt-3.5"
+          class="flex space-x-4 mb-3.5"
           v-for="(val, i) in bandaras"
           :key="i"
         >
           <div
             style="width: 100px !important"
-            class="bg-black/70 text-white rounded-md z-10 shadow-md p-6 h-64"
+            class="text-black rounded-md bg-white z-10"
           >
-            <div class="mb-2 flex space-x-4">
-              <div class="text-3xl truncate">
+            <div class="px-6 py-3 flex space-x-4 bg-indigo-500 relative z-20 rounded-md">
+              <div class="text-3xl text-white truncate">
                 <b>{{ val.tagname }}</b>
               </div>
             </div>
-            <div>
-              <div class="text-xl">
-                <div class="mt-2 text-2xl font-bold flex items-center space-x-4">
+            <div class="p-6 rounded-md z-10">
+              <div class="text-2xl">
+                <div class="text-3xl relative font-bold flex items-center space-x-4">
                   <img
-                    :src="'/departures/' + val.symbol + '.png'"
-                    class="w-12"
+                    :src="'/Archive/' + weather_codeParsed[val.weather] + '.gif'"
+                    class="w-32 absolute"
                   />
-                  <div>{{ val.weather }}</div>
+                  <div class="pl-32 ">{{ val.weather }}</div>
                 </div>
-                <div class="font-semibold flex w-full mt-4">
+                <div class="font-semibold flex w-full mt-10">
                   <div class="flex space-x-4 items-center w-1/2">
                     <div class="ml-2">
                       <img
                         class="w-4"
-                        src="/weatherheadlineWhite/WDir.svg"
+                        src="/weatherheadline/WDir.svg"
                       />
                     </div>
                     <div>Angin</div>
@@ -60,7 +59,7 @@
                   <div class="flex items-center space-x-3 w-1/2">
                     <img
                       class="w-6 ml-1"
-                      src="/weatherheadlineWhite/eye.svg"
+                      src="/weatherheadline/eye.svg"
                     />
                     <div>Jarak Pandang</div>
                   </div>
@@ -73,7 +72,7 @@
                     <div class="ml-2">
                       <img
                         class="w-3.5"
-                        src="/weatherheadlineWhite/Temperature.svg"
+                        src="/weatherheadline/Temperature.svg"
                       />
                     </div>
                     <div>Suhu</div>
@@ -91,6 +90,7 @@
 
 <script>
 import VueSlickCarousel from 'vue-slick-carousel'
+import { weather_parsed } from '../../../utils/helperNDF.js'
 const xml = require('txml')
 export default {
   components: {
@@ -122,6 +122,11 @@ export default {
         },
       ],
     }
+  },
+  computed: {
+    weather_codeParsed() {
+      return weather_parsed
+    },
   },
   methods: {
     async getData() {

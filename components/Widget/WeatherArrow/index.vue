@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="mb-4">
-      <div class="font-bold text-6xl text-center stroke_white">
+    <div class="mb-4" :class="isDark ? 'text-white' : 'text-black'">
+      <div class="font-bold text-6xl text-center">
         {{ area }}
       </div>
-      <div class="text-5xl text-center mt-3 font-bold stroke_white" v-if="forecast.length > 0">
+      <div class="text-5xl text-center mt-3 font-bold" v-if="forecast.length > 0">
         <!-- {{forecast[0].data.date}} -->
         {{
             returningTimeZone(new Date(forecast[0].data.date))
@@ -18,34 +18,36 @@
       </div>
     </div>
     <div>
-      <div class="grid grid-cols-3 relative" style="width:1920px;right:280px">
-        <div v-for="(b, i) in forecast" :key="i" class="arrow my-2 basis-1/3 rounded-l-lg right-arrow"
+      <div class="grid grid-cols-3 relative" style="width:1920px;right:280px" v-if="forecast.length <= 12">
+        <div v-for="(b, i) in forecast" :key="i" class="arrow my-2 rounded-l-lg rounded-r-lg"
           :style="{ 'z-index': i - (i - 2) }">
           <div class="text-gray-800">
             <div>
-              <div class="text-3xl" :style="{ width: forecast2.length == 0 ? '600px' : 'auto' }">
+              <div
+                class="text-3xl bg-indigo-500 w-full rounded-lg px-5 text-center py-2 text-white absolute left-0 top-0">
                 <b>{{ b.location.subdistrict }}</b>
               </div>
             </div>
-            <div class="flex items-center mt-2">
-              <div class="text-center ">
+            <div class="grid grid-cols-3 mt-2 absolute bottom-5 left-5 w-full">
+              <div class="text-center">
                 <div class=" items-start justify-center space-x-2">
                   <div class="w-32 relative">
-                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute -left-12 -top-7" />
+                    <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute left-14"
+                      style="top:-6.2rem" />
                   </div>
-                  <div class="w-56 text-3xl font-semibold pl-16 text-left">
+                  <div class="w-56 text-3xl font-semibold text-center mt-12 pt-1 text-left">
                     {{ weather_code[b.data.weather_code] }}
                   </div>
                 </div>
               </div>
-              <div class="text-left  items-end font-semibold">
+              <div class="text-left pl-16 font-semibold">
                 <div class="text-2xl">Kec. Angin</div>
                 <div class="flex mt-2">
                   <div class="text-5xl">{{ b.data.wSpd }}</div>
                   <div class="text-xl ml-1.5">km/jam</div>
                 </div>
               </div>
-              <div class="text-left ml-12 items-end font-semibold">
+              <div class="text-left pl-12 font-semibold">
                 <div class="text-2xl">Suhu</div>
                 <div class="flex mt-2">
                   <div class="text-5xl">{{ b.data.temp }}</div>
@@ -76,13 +78,67 @@
           </div> -->
         </div>
       </div>
+      <div v-else>
+        <div>
+          <carousel :vertical="true" :autoPlay="true" :playSpeed="4000" :itemsToShow="1" style="height: 1000px;width:1920px;right:280px" class="relative">
+            <carouselitem v-for="(forecast2, i) in parsedforecast" :key="i" style="height:900px;">
+              <div class="grid grid-cols-3">
+                <div v-for="(b, k) in forecast2" :key="k" class="arrow my-2 w-full h-80 rounded-l-lg rounded-r-lg"
+                  :style="{ 'z-index': i - (i - 2) }">
+                  <div class="text-gray-800">
+                    <div>
+                      <div
+                        class="text-3xl bg-indigo-500 w-full rounded-lg px-5 text-center py-2 text-white absolute left-0 top-0">
+                        <b>{{ b.location.subdistrict }}</b>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-3 mt-2 absolute bottom-5 left-5 w-full">
+                      <div class="text-center">
+                        <div class=" items-start justify-center space-x-2">
+                          <div class="w-32 relative">
+                            <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute left-14"
+                              style="top:-6.2rem" />
+                          </div>
+                          <div class="w-56 text-3xl font-semibold text-center mt-12 pt-1 text-left">
+                            {{ weather_code[b.data.weather_code] }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="text-left pl-16 font-semibold">
+                        <div class="text-2xl">Kec. Angin</div>
+                        <div class="flex mt-2">
+                          <div class="text-5xl">{{ b.data.wSpd }}</div>
+                          <div class="text-xl ml-1.5">km/jam</div>
+                        </div>
+                      </div>
+                      <div class="text-left pl-12 font-semibold">
+                        <div class="text-2xl">Suhu</div>
+                        <div class="flex mt-2">
+                          <div class="text-5xl">{{ b.data.temp }}</div>
+                          <div class="text-2xl ml-1.5"><sup>o</sup>C</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </carouselitem>
+          </carousel>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+
+import VueSlickCarousel from 'vue-slick-carousel'
+
 import { weather_code, dirTo, parseNameDir } from '../../../utils/helperNDF.js'
 export default {
+  components: {
+    VueSlickCarousel
+  },
   data() {
     return {
       forecast: [],
@@ -90,12 +146,54 @@ export default {
       area: '',
       allNDF: {},
       idTemplate: null,
-      currentDate: new Date().getHours(),
+      settings: {
+        dots: false,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        verticalSwiping: true,
+        autoplay: true,
+        speed: 1000,
+        autoplaySpeed: 4000,
+      },
+      isDark: false,
     }
   },
   computed: {
     weather_code() {
       return weather_code
+    },
+    parsedforecast() {
+      var arr = []
+      this.forecast.forEach((el, i) => {
+        if (i < 12) {
+          if (!arr[0]) {
+            arr[0] = []
+          }
+          arr[0].push(el)
+        } else if (i < 24) {
+          if (!arr[1]) {
+            arr[1] = []
+          }
+          arr[1].push(el)
+        } else if (i < 36) {
+          if (!arr[2]) {
+            arr[2] = []
+          }
+          arr[2].push(el)
+        } else if (i < 48) {
+          if (!arr[3]) {
+            arr[3] = []
+          }
+          arr[3].push(el)
+        } else if (i < 60) {
+          if (!arr[4]) {
+            arr[4] = []
+          }
+          arr[4].push(el)
+        }
+      })
+      return arr
     },
     dirTo() {
       return dirTo
@@ -132,8 +230,14 @@ export default {
     },
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
-      this.currentDate = new Date().getHours()
       this.idTemplate = parentDisplay.obj.idtemplate
+      if (parentDisplay.isHujan) {
+        this.isDark = true
+      } else if (new Date().getHours() >= 18 || new Date().getHours() <= 5) {
+        this.isDark = true
+      } else {
+        this.isDark = false
+      }
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
@@ -172,10 +276,10 @@ export default {
               var datares = this.allNDF[el.locationId]
               if (datares && datares.length > 0) {
                 // if (i <= 12) {
-                  this.forecast.push({
-                    location: el,
-                    data: datares[0],
-                  })
+                this.forecast.push({
+                  location: el,
+                  data: datares[0],
+                })
                 // } else {
                 //   this.forecast2.push({
                 //     location: el,
@@ -225,10 +329,10 @@ export default {
             var datares = this.allNDF[el.locationId]
             if (datares && datares.length > 0) {
               // if (i <= 12) {
-                this.forecast.push({
-                  location: el,
-                  data: datares[0],
-                })
+              this.forecast.push({
+                location: el,
+                data: datares[0],
+              })
               // } else {
               //   this.forecast2.push({
               //     location: el,
@@ -260,10 +364,12 @@ td {
 }
 
 .stroke_white {
-  -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+  -webkit-text-fill-color: black;
+  /* Will override color (regardless of order) */
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: white;
 }
+
 .breadcramb-container {
   display: flex;
   align-items: center;
@@ -274,7 +380,7 @@ td {
   align-items: center;
   justify-content: center;
   width: 600px;
-  height: 180px;
+  height: 190px;
   padding-left: 85px;
   margin-left: 5px;
   background: rgba(255, 255, 255, 0.8);
@@ -301,7 +407,7 @@ td {
   bottom: 0;
   width: 0;
   height: 0;
-  border-left: 35px solid rgba(255, 255, 255, 0.8);
+  border-left: 91px solid rgba(255, 255, 255, 0.8);
   z-index: 1000;
   border-top: 91px solid transparent;
   border-bottom: 91px solid transparent;

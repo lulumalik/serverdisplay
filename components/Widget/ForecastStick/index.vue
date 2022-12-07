@@ -1,44 +1,6 @@
 <template>
   <div>
     <div class="h-full w-full flex items-center justify-center font-color">
-      <!-- <div
-        class="
-          fixed
-          left-0
-          mx-auto
-          flex
-          items-center
-          justify-center
-          w-full
-          right-0
-          top-10
-        "
-      >
-         v-for="(val,i) in weatherFiltered 
-        :class="[i == 1 ? 'rounded-bl-lg' : i == 4 ? 'rounded-br-lg' : '']""
-        :key="i"
-        <div
-          v-if="weatherFiltered[0]"
-          class="
-            bg-sky-700
-            border
-            rounded-b-xl
-            border-sky-500
-            px-6
-            py-2
-            font-semibold
-            text-white
-          "
-        >
-          {{
-            new Date(weatherFiltered[0].date)
-              .toString()
-              .split(' ')
-              .splice(0, 3)
-              .join(' ')
-          }}
-        </div>
-      </div> -->
       <div class="flex space-x-4 text-gray-700" v-if="forecast.length > 0">
         <div v-for="(w, i) in forecast" :key="i">
           <div class="
@@ -56,35 +18,35 @@
             ">
             <img :src="'/Archive/' + w.weather_code + '.gif'" class="w-44 mx-auto" />
           </div>
-          <div class="p-6 bg-white rounded-b-3xl shadow-md">
-
-            <div class="font-semibold text-center">
+          <div class="px-4 py-6 bg-white text-lg rounded-b-3xl shadow-md">
+            <div class="font-bold text-center text-lg text-black">
+              <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
+              {{ returningTimeZone(w.date)[2] + ' ' + parseMonth(parseInt(returningTimeZone(w.date)[1]) - 1) + ' ' + returningTimeZone(w.date)[0]}}
+              <!-- {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }} -->
+            </div>
+            <div class="font-semibold mb-3 text-lg text-center">
               {{ weather_code[w.weather_code] }}
             </div>
-            <div class="mb-3 font-bold text-xl text-center text-black">
-              <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
-              {{ returningTimeZone(new Date(w.date)) }}
-              {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
-            </div>
-            <div class="flex space-x-4 items-center mt-8">
+
+            <div class="flex space-x-4 ml-3  items-center mt-8">
               <div class="w-6">
                 <img src="/svg/temp.svg" class="w-4" />
               </div>
               <div>{{ w.temp }} <sup>o</sup>C</div>
             </div>
-            <div class="flex space-x-4 items-center mt-4">
+            <div class="flex space-x-4 ml-3 items-center mt-4">
               <div class="w-6">
                 <img src="/svg/precip.svg" class="w-4" />
               </div>
               <div>{{ w.rh }} %</div>
             </div>
-            <div class="flex space-x-4 items-center mt-4">
+            <div class="flex space-x-4 ml-3 items-center mt-4">
               <div class="w-6">
                 <img src="/svg/wind.svg" class="w-6 relative right-1" />
               </div>
               <div>{{ w.wSpd }} km/jam</div>
             </div>
-            <div class="flex space-x-4 items-center mt-4">
+            <div class="flex space-x-4 ml-3 items-center mt-4">
               <div class="w-6">
                 <img src="/svg/dir.svg" class="w-5 relative right-0.5" :style="{
                   transform:
@@ -179,17 +141,51 @@ export default {
     },
   },
   methods: {
+    parseMonth(month) {
+      var monthres;
+      switch (month) {
+        case 0:
+          monthres = 'Jan'
+          break
+        case 1:
+          monthres = 'Feb'
+          break
+        case 2:
+          monthres = 'Mar'
+          break
+        case 3:
+          monthres = 'Apr'
+          break
+        case 4:
+          monthres = 'Mei'
+          break
+        case 5:
+          monthres = 'Jun'
+          break
+        case 6:
+          monthres = 'Jul'
+          break
+        case 7:
+          monthres = 'Agu'
+          break
+        case 8:
+          monthres = 'Sep'
+          break
+        case 9:
+          monthres = 'Okt'
+          break
+        case 10:
+          monthres = 'Nov'
+          break
+        case 11:
+          monthres = 'Des'
+          break
+      }
+      return monthres
+    },
     returningTimeZone(date) {
-      var parsed = (
-        date.toString().split(' ').splice(0, 5).join(' ') +
-        ' GMT+0' +
-        this.getTimeZone +
-        '00'
-      )
-        .toString()
-        .split(' ')
-        .splice(4, 4)
-      return parsed[0] ? parsed[0].split(':').splice(0, 2).join(':') : ''
+      var parsed = date.split('T')[0]
+      return parsed.split('-')
     },
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
@@ -214,10 +210,31 @@ export default {
               )
               this.$set(ndflistener, el.value.ndf, datares.data)
               if (ndflistener[el.value.ndf].length > 0) {
-                for (var i = 0; i < 5; i++) {
-                  var comp = ndflistener[el.value.ndf][i]
-                  this.forecast.push(comp)
+                // for (var i = 0; i < 5; i++) {
+                //   var comp = ndflistener[el.value.ndf][i]
+                //   this.forecast.push(comp)
+                // }
+                
+                var obj = {}
+                ndflistener[el.value.ndf].forEach((item) => {
+                  if (!obj[new Date(item.date).getUTCDate()]) {
+                    obj[new Date(item.date).getUTCDate()] = []
+                    obj[new Date(item.date).getUTCDate()].push(item)
+                  } else {
+                    obj[new Date(item.date).getUTCDate()].push(item)
+                  }
+                })
+                var result = {}
+                // console.log(obj, 'obj')
+                for (var k in obj) {
+                  var max = Math.max(...obj[k].map((o) => o.weather_code))
+                  result[k] = obj[k].find((o) => o.weather_code === max)
                 }
+                Object.values(result).forEach((el, i) => {
+                  if (i < 5) {
+                    this.forecast.push(el)
+                  }
+                })
               }
               break
             }

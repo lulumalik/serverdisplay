@@ -1,69 +1,55 @@
 <template>
   <div>
-    <table class="w-full rounded-md text-lg shadow-md">
-      <tr class="text-white font-semibold">
-        <td style="background: #303030" class="rounded-tl-lg">Parameter</td>
-        <td
-          style="background: #303030"
-          :class="i == forecast.length - 1 ? 'rounded-tr-lg' : ''"
-          class="text-center"
-          v-for="(f, i) in forecast"
-          :key="i"
-        >
-          {{
-            getSecondOnly(
-              returningTimeZone(new Date(f.date)).split(' ').splice(4, 4)[0]
-            )
+    <div class="w-full rounded-md text-lg">
+      <div class="text-white grid grid-cols-4 font-semibold">
+        <div class="rounded-tl-lg bg-indigo-500">
+          <div class="text-3xl pl-6 py-3">Parameter</div>
+        </div>
+        <div :class="i == forecast.length - 1 ? 'rounded-tr-lg' : ''" class="text-center  
+              bg-indigo-500" v-for="(f, i) in forecast" :key="i">
+          <div class="text-3xl py-3"> {{
+              getSecondOnly(
+                returningTimeZone(new Date(f.date)).split(' ').splice(4, 4)[0]
+              )
           }}
-          {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
-        </td>
-      </tr>
-      <tr v-for="(val, key, ind) in listData" :key="key">
-        <td
-          class="bg-sky-400 text-2xl"
-          :class="[
-            ind % 2 == 0 ? 'bg-gray-300/80' : 'bg-gray-400/80',
+            {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}</div>
+        </div>
+      </div>
+      <div>
+        <div v-for="(val, key, ind) in listData" :key="key" class="flex">
+          <div class="text-3xl flex-none bg-white mt-0.5 py-4" style="width:320px;" :class="[
             ind == Object.keys(listData).length - 1 ? 'rounded-bl-lg' : '',
-          ]"
-        >
-          <div class="whitespace-nowrap">{{ key }}</div>
-        </td>
-        <td
-          class="text-center text-2xl"
-          v-for="(f, i) in forecast"
-          :key="i"
-          :class="[
-            ind % 2 == 0 ? 'bg-gray-100/80' : 'bg-gray-300/80',
-            ,
-            ind == Object.keys(listData).length - 1 && i == forecast.length - 1
-              ? 'rounded-br-lg'
-              : '',
-          ]"
-        >
-          <div class="whitespace-nowrap">
-            <div
-              v-if="key == 'Arah Angin'"
-              class="relative flex items-center justify-center space-x-2"
-            >
-              <div class="relative">
-                <img src="/weatherheadline/compass.svg" alt="img" />
-                <img
-                  src="/weatherheadline/arrow.svg"
-                  :style="{ transform: 'rotate(' + dirTo[f[val]] + 'deg)' }"
-                  alt="img2"
-                  class="absolute z-30 top-0 left-0 right-0 mx-auto"
-                />
+          ]">
+            <div class="whitespace-nowrap font-semibold pl-6">{{ key }}</div>
+          </div>
+          <div class="grid grid-cols-3 bg-white mt-0.5 py-4 flex-grow">
+            <div class="text-center text-3xl" v-for="(f, i) in forecast" :key="i" :class="[
+              ,
+              ind == Object.keys(listData).length - 1 && i == forecast.length - 1
+                ? 'rounded-br-lg'
+                : '',
+            ]">
+              <div class="whitespace-nowrap">
+                <div v-if="key == 'Arah Angin'" class="relative flex items-center justify-center space-x-2">
+                  <div class="relative">
+                    <img src="/weatherheadline/compass.svg" alt="img" />
+                    <img src="/weatherheadline/arrow.svg" :style="{ transform: 'rotate(' + dirTo[f[val]] + 'deg)' }"
+                      alt="img2" class="absolute z-30 top-0 left-0 right-0 mx-auto" />
+                  </div>
+                  <div class="text-3xl">{{ dirTo[f[val]] }} <sup>o</sup></div>
+                </div>
+                <div v-else class="text-3xl">
+                  {{ key == 'Cuaca' ? weather_code[f.weather_code] : f[val] }}
+                  <span>{{ parseSatuan[key] }}</span>
+                </div>
               </div>
-              <div>{{ dirTo[f[val]] }} <sup>o</sup></div>
-            </div>
-            <div v-else>
-              {{ key == 'Cuaca' ? weather_code[f.weather_code] : f[val] }}
-              <small>{{ parseSatuan[key] }}</small>
             </div>
           </div>
-        </td>
-      </tr>
-    </table>
+
+        </div>
+
+      </div>
+    </div>
   </div>
 </template>
 
@@ -171,7 +157,7 @@ export default {
           if (key == 'kecamatan' && key1 == 'WidgetForecastWeather') {
             const datares = await this.$axios.$get(
               'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-                el.value.locationId
+              el.value.locationId
             )
 
             this.$set(ndflistener, el.value.ndf, datares.data)
@@ -187,18 +173,18 @@ export default {
       } else {
         if (
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetForecastWeather_kecamatan'
+          this.idTemplate + '_WidgetForecastWeather_kecamatan'
           ]
         ) {
           var el =
             this.$store.state.displayWidget.widgetSaved[
-              this.idTemplate + '_WidgetForecastWeather_kecamatan'
+            this.idTemplate + '_WidgetForecastWeather_kecamatan'
             ]
 
           this.forecast.length = 0
           const datares = await this.$axios.$get(
             'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
-              el.locationId
+            el.locationId
           )
 
           this.$set(ndflistener, el.locationId, datares.data)

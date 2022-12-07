@@ -20,8 +20,8 @@
         />
       </div>
       <div class="uppercase flex-grow text-xl bg-white/80 rounded-lg shadow-md px-6 py-6">
-        <div class="bg-blue-900/80 text-2xl rounded-md text-white p-4 text-center">
-          <div>Informasi gempa bumi terakhir {{ datagempa.Tanggal }}</div>
+        <div class="bg-indigo-500 text-2xl rounded-md font-bold text-white p-4 text-center">
+          <div>Informasi gempa bumi terkini</div>
           <div></div>
         </div>
         <table class="mx-3 my-6 font-semibold">
@@ -44,11 +44,11 @@
             <td class="pl-2 pt-4">: {{ datagempa.Coordinates && datagempa.Coordinates.split(',').join(', ') || '-' }}</td>
           </tr>
           <tr>
-            <td class="pt-4">Jam</td>
-            <td class="pl-2 pt-4">: {{ datagempa.Jam || '-' }}</td>
+            <td class="pt-4">Waktu</td>
+            <td class="pl-2 pt-4">: {{datagempa.Tanggal}}, {{ datagempa.Jam || '-' }}</td>
           </tr>
         </table>
-        <hr class="border-gray-300 my-6 " />
+        <hr class="border-gray-800 my-6 " />
         <div
           class="w-full mx-3 py-4 font-semibold"
           :class="datagempa.Wilayah ? '' : 'mt-16'"

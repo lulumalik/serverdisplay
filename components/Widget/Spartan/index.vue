@@ -10,6 +10,7 @@
         day +
         '.png'
       "
+      class="rounded-lg"
     />
   </div>
 </template>

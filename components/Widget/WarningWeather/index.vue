@@ -8,10 +8,10 @@
     </div>
     <div v-else class="flex justify-center space-x-4">
       <div>
-        <img style="width: 450px" :src="warningURL" />
+        <img style="width: 450px" class="rounded-lg" :src="warningURL" />
       </div>
       <div>
-        <img style="width: 450px" :src="warningURLText" />
+        <img style="width: 450px" class="rounded-lg" :src="warningURLText" />
       </div>
     </div>
   </div>
