@@ -63,6 +63,7 @@ export default {
     },
     postImage(img) {
       var index = this.$parent.$refs['header'].indexdata
+      // console.log(this.$parent.obj, index, this.$parent.$parent.logos)
       if (!this.$parent.$parent.logos[this.$parent.obj.idtemplate]) {
         this.$parent.$parent.logos[this.$parent.obj.idtemplate] = []
         this.$parent.$parent.logos[this.$parent.obj.idtemplate][index] = img

@@ -207,6 +207,24 @@ export default {
     } else {
       if (
         this.$store.state.displayWidget.widgetSaved[
+        this.idTemplate + '_WidgetWisataBottombarForecast_img'
+        ]
+      ) {
+        this.img =
+          this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWisataBottombarForecast_img'
+          ]
+        this.backgroundnize = {
+          'background-image': 'url(' + this.img + ')',
+          'background-size': 'cover',
+          'background-position': 'center',
+          'background-repeat': 'no-repeat',
+          height: '120%',
+        }
+      }
+
+      if (
+        this.$store.state.displayWidget.widgetSaved[
         this.idTemplate + '_WidgetWisataBottombarForecast_description'
         ]
       ) {

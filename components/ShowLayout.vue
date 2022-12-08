@@ -3,7 +3,7 @@
     class="relative"
     :class="!production ? 'border-2 border-white' : ''"
   >
-    <!-- <ChooseLogo v-if="chooseLogo" /> -->
+    <ChooseLogo v-if="chooseLogo" />
     <HeaderTemplate
       ref="header"
       :class="
@@ -12,6 +12,7 @@
           : 'fixed top-0 w-full px-8 py-2 left-0'
       "
       v-if="useHeader"
+      style="z-index:1000"
       :nodrag="$route.name == 'display-create' ? false : true"
     />
     <div

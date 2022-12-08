@@ -99,7 +99,7 @@ export default {
       interval: {},
       timeoutgetdata: null,
       getDataAgain: false,
-      logos: {},
+      logos: [],
       isHujan: false,
     }
   },
@@ -183,7 +183,7 @@ export default {
       })
       this.responseDisplay = res.data
       if (res.data.properties.allLogo) {
-        this.logos = res.data.properties.allLogo
+        this.logos = res.data.properties.allLogo || []
       }
       if (res.data.properties.delay) {
         this.speed = res.data.properties.delay * 1000

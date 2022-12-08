@@ -197,8 +197,8 @@ export default {
         this.getDisplayLocation = res.data.location.name
         this.useVideo = res.data.properties.video
         this.backgroundStatic = res.data.properties.backgroundStatic
-        this.$refs['preview'].logos = res.data.properties.allLogo
-        this.$refs['preview'].times = res.data.properties.delay
+        this.$refs['preview'].logos = res.data.properties.allLogo || {}
+        this.$refs['preview'].times = res.data.properties.delay 
         this.$refs['preview'].width = res.data.properties.width || 1366
         this.$refs['preview'].height = res.data.properties.height || 768
         this.templateAddedList.forEach((el) => {
