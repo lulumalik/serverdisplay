@@ -35,7 +35,7 @@
           <div>
             <TemplateList :templateDB="templateDB" />
           </div>
-          <div class="text-right">
+          <div class="text-right hidden">
             <button
               class="
                 bg-blue-200

@@ -1,24 +1,18 @@
 <template>
   <div>
-    <div
-      class="mb-4"
-      :class="currentDate >= 18 ? 'text-white' : 'text-black'"
-    >
+    <div class="mb-4" :class="currentDate >= 18 ? 'text-white' : 'text-black'">
       <div class="font-bold text-6xl text-center stroke_white">
         {{ area }}
       </div>
-      <div
-        class="text-5xl text-center mt-3 stroke_white font-bold"
-        v-if="forecast.length > 0"
-      >
+      <div class="text-5xl text-center mt-3 stroke_white font-bold" v-if="forecast.length > 0">
         <!-- {{forecast[0].data.date}} -->
         {{
-          returningTimeZone(new Date(forecast[0].data.date))
-            .split(' ')
-            .splice(4, 4)[0]
-            .split(':')
-            .splice(0, 2)
-            .join(':')
+            returningTimeZone(new Date(forecast[0].data.date))
+              .split(' ')
+              .splice(4, 4)[0]
+              .split(':')
+              .splice(0, 2)
+              .join(':')
         }}
         {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
       </div>
@@ -36,32 +30,17 @@
             Kelembaban
           </th>
         </tr>
-        <tr
-          v-for="(b, i) in forecast"
-          :key="i"
-          class="text-white"
-        >
-          <td
-            class="bg-black/60"
-            :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''"
-          >
-            <div
-              class="text-3xl"
-              :style="{width:forecast2.length == 0 ? '600px' : 'auto'}"
-            >
+        <tr v-for="(b, i) in forecast" :key="i" class="text-white">
+          <td class="bg-black/60" :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''">
+            <div class="text-3xl" :style="{ width: forecast2.length == 0 ? '600px' : 'auto' }">
               <b>{{ b.location.subdistrict }}</b>
             </div>
           </td>
           <td class="text-center bg-black/60 font-semibold px-2 py-4">
-            <div
-              class="flex items-center justify-center space-x-2"
-              :style="{width:forecast2.length == 0 ? '500px' : 'auto'}"
-            >
+            <div class="flex items-center justify-center space-x-2"
+              :style="{ width: forecast2.length == 0 ? '500px' : 'auto' }">
               <div class="w-32 relative">
-                <img
-                  :src="'/Archive/' + b.data.weather_code + '.gif'"
-                  class="w-32 absolute left-0 -top-16 pb-3"
-                />
+                <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute left-0 -top-16 pb-3" />
               </div>
               <div class="w-56 text-3xl text-left">
                 {{ weather_code[b.data.weather_code] }}
@@ -69,32 +48,20 @@
             </div>
           </td>
           <td class="text-center bg-black/60 font-semibold">
-            <div
-              class="text-3xl"
-              :style="{width:forecast2.length == 0 ? '300px' : 'auto'}"
-            >{{ b.data.wSpd }} km/jam</div>
+            <div class="text-3xl" :style="{ width: forecast2.length == 0 ? '300px' : 'auto' }">{{ b.data.wSpd }} km/jam
+            </div>
           </td>
           <td class="text-center bg-black/60 font-semibold">
-            <div
-              class="text-3xl"
-              :style="{width:forecast2.length == 0 ? '100px' : 'auto'}"
-            >{{ b.data.temp }} <sup>o</sup>C</div>
+            <div class="text-3xl" :style="{ width: forecast2.length == 0 ? '100px' : 'auto' }">{{ b.data.temp }}
+              <sup>o</sup>C
+            </div>
           </td>
-          <td
-            :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''"
-            class="text-center bg-black/60 font-semibold"
-          >
-            <div
-              class="text-3xl"
-              :style="{width:forecast2.length == 0 ? '300px' : 'auto'}"
-            >{{ b.data.rh }} %</div>
+          <td :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''" class="text-center bg-black/60 font-semibold">
+            <div class="text-3xl" :style="{ width: forecast2.length == 0 ? '300px' : 'auto' }">{{ b.data.rh }} %</div>
           </td>
         </tr>
       </table>
-      <table
-        class="w-full text-2xl mx-auto mt-6"
-        v-if="forecast2.length > 0"
-      >
+      <table class="w-full text-2xl mx-auto mt-6" v-if="forecast2.length > 0">
         <tr class="text-white">
           <th class="text-3xl bg-black/80 rounded-tl-lg text-left">
             <div class="pl-2">Nama Lokasi</div>
@@ -106,32 +73,17 @@
             Kelembaban
           </th>
         </tr>
-        <tr
-          v-for="(b, i) in forecast2"
-          :key="i"
-          class="text-white"
-        >
-          <td
-            class="bg-black/60"
-            :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''"
-          >
-            <div
-              class="text-3xl"
-              :style="{width:forecast2.length == 0 ? '600px' : 'auto'}"
-            >
+        <tr v-for="(b, i) in forecast2" :key="i" class="text-white">
+          <td class="bg-black/60" :class="i == forecast.length - 1 ? 'rounded-bl-lg' : ''">
+            <div class="text-3xl" :style="{ width: forecast2.length == 0 ? '600px' : 'auto' }">
               <b>{{ b.location.subdistrict }}</b>
             </div>
           </td>
           <td class="text-center bg-black/60 font-semibold px-2 py-4">
-            <div
-              class="flex items-center justify-center space-x-2"
-              :style="{width:forecast2.length == 0 ? '500px' : 'auto'}"
-            >
+            <div class="flex items-center justify-center space-x-2"
+              :style="{ width: forecast2.length == 0 ? '500px' : 'auto' }">
               <div class="w-32 relative">
-                <img
-                  :src="'/Archive/' + b.data.weather_code + '.gif'"
-                  class="w-32 absolute left-0 -top-16 pb-3"
-                />
+                <img :src="'/Archive/' + b.data.weather_code + '.gif'" class="w-32 absolute left-0 -top-16 pb-3" />
               </div>
               <div class="w-56 text-3xl text-left">
                 {{ weather_code[b.data.weather_code] }}
@@ -139,25 +91,16 @@
             </div>
           </td>
           <td class="text-center bg-black/60 font-semibold">
-            <div
-              class="text-3xl"
-              :style="{width:forecast2.length == 0 ? '300px' : 'auto'}"
-            >{{ b.data.wSpd }} km/jam</div>
+            <div class="text-3xl" :style="{ width: forecast2.length == 0 ? '300px' : 'auto' }">{{ b.data.wSpd }} km/jam
+            </div>
           </td>
           <td class="text-center bg-black/60 font-semibold">
-            <div
-              class="text-3xl"
-              :style="{width:forecast2.length == 0 ? '100px' : 'auto'}"
-            >{{ b.data.temp }} <sup>o</sup>C</div>
+            <div class="text-3xl" :style="{ width: forecast2.length == 0 ? '100px' : 'auto' }">{{ b.data.temp }}
+              <sup>o</sup>C
+            </div>
           </td>
-          <td
-            :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''"
-            class="text-center bg-black/60 font-semibold"
-          >
-            <div
-              class="text-3xl"
-              :style="{width:forecast2.length == 0 ? '300px' : 'auto'}"
-            >{{ b.data.rh }} %</div>
+          <td :class="i == forecast.length - 1 ? 'rounded-br-lg' : ''" class="text-center bg-black/60 font-semibold">
+            <div class="text-3xl" :style="{ width: forecast2.length == 0 ? '300px' : 'auto' }">{{ b.data.rh }} %</div>
           </td>
         </tr>
       </table>
@@ -218,7 +161,7 @@ export default {
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
       this.currentDate = new Date().getHours()
-      this.idTemplate = parentDisplay.obj.idtemplate
+      this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
@@ -231,9 +174,10 @@ export default {
           if (key == 'kotkab' && key1 == 'WidgetWeatherTable2') {
             this.allNDF = {}
             this.area = el.value.kotkab
+            consnole.log(el.value)
             var res2 = await this.$axios.get(
               'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
-                el.value._id
+              el.value._id
             )
             var allndf = res2.data.data.map((a) => {
               return a.locationId
@@ -273,20 +217,74 @@ export default {
         })
       } else {
         if (
+          this.idTemplate &&
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWeatherTable2_kotkab'
+          this.idTemplate + '_WidgetWeatherTable2_kotkab'
           ]
         ) {
           var el =
             this.$store.state.displayWidget.widgetSaved[
-              this.idTemplate + '_WidgetWeatherTable2_kotkab'
+            this.idTemplate + '_WidgetWeatherTable2_kotkab'
             ]
 
           this.allNDF = {}
           this.area = el.kotkab
           var res2 = await this.$axios.get(
             'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
-              el._id
+            el._id
+          )
+          var allndf = res2.data.data.map((a) => {
+            return a.locationId
+          })
+          const ndf2 = await this.$axios.$post(
+            'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
+            {
+              location: allndf,
+              date: new Date().toISOString(),
+            }
+          )
+
+          ndf2.data.forEach((el) => {
+            if (!this.allNDF[el.location.locationId]) {
+              this.allNDF[el.location.locationId] = []
+            }
+            this.allNDF[el.location.locationId].push(el)
+          })
+
+          res2.data.data.forEach((el, i) => {
+            var datares = this.allNDF[el.locationId]
+            if (datares && datares.length > 0) {
+              if (i <= 12) {
+                this.forecast.push({
+                  location: el,
+                  data: datares[0],
+                })
+              } else {
+                this.forecast2.push({
+                  location: el,
+                  data: datares[0],
+                })
+              }
+            }
+          })
+        } else {
+          var el = {
+            "_id": "5eaf0a5e3ffd2807236959de",
+            "type": "kotkab",
+            "provinsi": "Kepulauan Bangka Belitung",
+            "provinsi_code": "19",
+            "kotkab": "Belitung Timur",
+            "kotkab_code": "1906",
+            "createdAt": "2020-05-03T18:15:58.687Z",
+            "updatedAt": "2020-05-03T18:15:58.687Z"
+          }
+
+
+          this.allNDF = {}
+          this.area = el.kotkab
+          var res2 = await this.$axios.get(
+            'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+            el._id
           )
           var allndf = res2.data.data.map((a) => {
             return a.locationId
@@ -334,6 +332,7 @@ th {
   padding: 25px !important;
   height: 30px !important;
 }
+
 td {
   white-space: nowrap;
   padding-left: 35px;
@@ -342,8 +341,10 @@ td {
   padding-bottom: 20px;
   border: 0.1px solid rgba(0, 0, 0, 0.1);
 }
+
 .stroke_white {
-  -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+  -webkit-text-fill-color: black;
+  /* Will override color (regardless of order) */
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: white;
 }

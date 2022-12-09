@@ -80,7 +80,8 @@
       </div>
       <div v-else>
         <div>
-          <carousel :vertical="true" :autoPlay="true" :playSpeed="4000" :itemsToShow="1" style="height: 1000px;width:1920px;right:280px" class="relative">
+          <carousel :vertical="true" :autoPlay="true" :playSpeed="4000" :itemsToShow="1"
+            style="height: 1000px;width:1920px;right:280px" class="relative">
             <carouselitem v-for="(forecast2, i) in parsedforecast" :key="i" style="height:900px;">
               <div class="grid grid-cols-3">
                 <div v-for="(b, k) in forecast2" :key="k" class="arrow my-2 w-full h-80 rounded-l-lg rounded-r-lg"
@@ -230,7 +231,7 @@ export default {
     },
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
-      this.idTemplate = parentDisplay.obj.idtemplate
+      this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
       if (parentDisplay.isHujan) {
         this.isDark = true
       } else if (new Date().getHours() >= 18 || new Date().getHours() <= 5) {
@@ -292,6 +293,7 @@ export default {
         })
       } else {
         if (
+          this.idTemplate &&
           this.$store.state.displayWidget.widgetSaved[
           this.idTemplate + '_WidgetWeatherArrow_kotkab'
           ]
@@ -301,6 +303,57 @@ export default {
             this.idTemplate + '_WidgetWeatherArrow_kotkab'
             ]
 
+          this.allNDF = {}
+          this.area = el.kotkab
+          var res2 = await this.$axios.get(
+            'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+            el._id
+          )
+          var allndf = res2.data.data.map((a) => {
+            return a.locationId
+          })
+          const ndf2 = await this.$axios.$post(
+            'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
+            {
+              location: allndf,
+              date: new Date().toISOString(),
+            }
+          )
+
+          ndf2.data.forEach((el) => {
+            if (!this.allNDF[el.location.locationId]) {
+              this.allNDF[el.location.locationId] = []
+            }
+            this.allNDF[el.location.locationId].push(el)
+          })
+
+          res2.data.data.forEach((el, i) => {
+            var datares = this.allNDF[el.locationId]
+            if (datares && datares.length > 0) {
+              // if (i <= 12) {
+              this.forecast.push({
+                location: el,
+                data: datares[0],
+              })
+              // } else {
+              //   this.forecast2.push({
+              //     location: el,
+              //     data: datares[0],
+              //   })
+              // }
+            }
+          })
+        } else {
+          var el = {
+            "_id": "5eaf0a5e3ffd2807236959de",
+            "type": "kotkab",
+            "provinsi": "Kepulauan Bangka Belitung",
+            "provinsi_code": "19",
+            "kotkab": "Belitung Timur",
+            "kotkab_code": "1906",
+            "createdAt": "2020-05-03T18:15:58.687Z",
+            "updatedAt": "2020-05-03T18:15:58.687Z"
+          }
           this.allNDF = {}
           this.area = el.kotkab
           var res2 = await this.$axios.get(

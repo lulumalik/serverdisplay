@@ -26,7 +26,7 @@
             relative
           "
         >
-          <!-- <div class="mb-6 flex space-x-6 absolute top-4 right-4">
+          <div class="mb-6 flex space-x-6 absolute top-4 right-4">
             <div class="relative">
               <input
                 type="text"
@@ -49,16 +49,17 @@
                 </svg>
               </div>
             </div>
-          </div> -->
+          </div>
           <div style="height: 85%">
-            <div class="mt-12 grid grid-cols-6 gap-4">
+            <div class="mt-24 grid grid-cols-5 gap-12">
               <!-- <DisplayList :templateDB="templateDB" /> -->
               <div
-                v-for="(img, i) in templateDB"
+                v-for="(img, i) in filterTempalteByName"
                 :key="i"
                 class="relative"
                 style="width: 200px; height: 200px"
               >
+                <div class="absolute -top-6 bg-white rounded p-1 left-0 right-0 mx-auto text-center w-full">{{img.filename.split('-')[1]}}</div>
                 <button
                   @click="deleteLogos(img._id)"
                   class="
@@ -113,7 +114,7 @@
             </div>
           </div>
           <div class="text-right flex justify-end w-full">
-            <div class="flex-none">
+            <!-- <div class="flex-none">
               <paginate
                 :page-count="total"
                 :click-handler="functionName"
@@ -122,7 +123,7 @@
                 :container-class="'flex space-x-4'"
               >
               </paginate>
-            </div>
+            </div> -->
             <div class="flex-grow">
               <button
                 class="
@@ -180,6 +181,13 @@ export default {
     this.callAllData()
   },
   middleware: ['checkLogin'],
+  computed: {
+    filterTempalteByName() {
+      return this.templateDB.filter((item) => {
+        return item.filename.toLowerCase().includes(this.searchname.toLowerCase())
+      })
+    }
+  },
   methods: {
     copyimage(url) {
       var self = this
@@ -202,13 +210,13 @@ export default {
       document.getElementById('fileUpload').click()
     },
     callAllData() {
-      this.$axios.$get('logo?row=20').then((res) => {
+      this.$axios.$get('logo?row=10000').then((res) => {
         this.total = res.count / 10 + 1
         this.templateDB = res.data
       })
     },
     functionName(e) {
-      this.$axios.$get('logo?row=20&page=' + e).then((res) => {
+      this.$axios.$get('logo?row=10000&page=' + e).then((res) => {
         this.total = res.count / 20 + 1
         this.templateDB = res.data
       })

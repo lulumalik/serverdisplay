@@ -30,7 +30,7 @@
           :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
           class="absolute w-full h-full z-10"
         />
-        <p class="truncate relative z-20">
+        <p class="truncate relative z-20 bg-white p-1 rounded">
           {{ db.name }}
         </p>
         <div 
@@ -48,13 +48,13 @@
             />
           </svg>
         </div>
-        <img
+        <!-- <img
           v-if="$parent.templateDBSelected == db._id"
           @click="deleteTemplate(db)"
           src="/trash.svg"
           alt="trash"
           class="absolute bottom-2 w-6 z-30 right-2"
-        />
+        /> -->
       </div>
       <div
         v-if="filterByCategory.length == 0"

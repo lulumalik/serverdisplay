@@ -69,7 +69,7 @@
               -
             </button>
           </div>
-          <div class="flex bg-white" style="height: calc(100vh - 30%)">
+          <div class="flex bg-white" style="height: calc(100vh - 13%)">
             <!-- sidebar -->
             <div
               class="
@@ -231,7 +231,7 @@
               </div>
             </div>
           </div>
-          <div class="flex items-start pr-6">
+          <!-- <div class="flex items-start p-6">
             <div class="w-3/12 p-4">
               <div class="text-left flex justify-start items-center space-x-3">
                 <button
@@ -311,7 +311,7 @@
                 />
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </client-only>
     </div>
