@@ -2,8 +2,8 @@
   <div>
     <div>
 
-      <div v-if="showData && showData.value && showData.value.portname"
-        class="text-center font-bold mb-8 text-5xl" :class="isDark ? 'text-white' : 'text-black'">Prakiraan Cuaca Pelabuhan {{ showData.value.portname }}
+      <div v-if="showData && showData.value && showData.value.portname" class="text-center font-bold mb-8 text-5xl"
+        :class="isDark ? 'text-white' : 'text-black'">Prakiraan Cuaca Pelabuhan {{ showData.value.portname }}
       </div>
 
       <div class="h-full w-full flex items-center justify-center font-color">
@@ -26,24 +26,42 @@
 
               <div class="flex-none">
                 <div class="font-bold text-2xl px-12 text-white flex space-x-4 justify-center">
-                  <div>{{ returningTimeZone(w.valid_from)[2] + ' ' +
-                      parseMonth(parseInt(returningTimeZone(w.valid_from)[1])
-                        -
-                        1) + ' ' + returningTimeZone(w.valid_from)[0]
+                  <div>{{ spliting(new Date(
+                      returningTimeZone(new Date(w.valid_from))
+                    ).toLocaleDateString('id'))
                   }}</div>
                   <div>
-                    {{ w.valid_from.split(' ')[1] }} {{ w.valid_from.split(' ')[2] }}
+                    {{
+                        returningTimeZone(new Date(w.valid_from))
+                          .split(' ')
+                          .splice(4, 4)[0]
+                          .split(':')
+                          .splice(0, 2)
+                          .join(':')
+                    }}
+                    {{
+                        getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+                    }}
                   </div>
                 </div>
                 <div class="font-bold text-2xl px-12 text-white flex space-x-4 justify-center">
                   <div>Berlaku Sampai </div>
-                  <div>{{ returningTimeZone(w.valid_to)[2] + ' ' +
-                      parseMonth(parseInt(returningTimeZone(w.valid_to)[1])
-                        -
-                        1) + ' ' + returningTimeZone(w.valid_to)[0]
+                  <div>{{ spliting(new Date(
+                      returningTimeZone(new Date(w.valid_to))
+                    ).toLocaleDateString('id'))
                   }}</div>
                   <div>
-                    {{ w.valid_to.split(' ')[1] }} {{ w.valid_to.split(' ')[2] }}
+                    {{
+                        returningTimeZone(new Date(w.valid_to))
+                          .split(' ')
+                          .splice(4, 4)[0]
+                          .split(':')
+                          .splice(0, 2)
+                          .join(':')
+                    }}
+                    {{
+                        getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+                    }}
                   </div>
                 </div>
               </div>
@@ -52,13 +70,13 @@
               <div class="p-6 rounded-md">
                 <div class="text-xl mt-4">
                   <div class="relative mt-2 flex space-x-8 font-bold text-2xl">
-                    <div class="w-28 h-12"><img class="w-40 absolute -left-8 -top-16"
+                    <div class="w-32 h-12"><img class="w-44 absolute -left-8 -top-16"
                         :src="'/Archive/' + weather_codeParsed[w.weather] + '.gif'" />
                     </div>
                     <div class="text-center text-3xl">{{ w.weather }}</div>
                   </div>
                 </div>
-                <div class="grid grid-cols-2 gap-x-6 mt-10">
+                <div class="grid grid-cols-2 gap-x-6 mt-14">
                   <div class="flex space-x-4 ">
                     <img src="/weatherheadline/wave.svg" class="w-6 " />
                     <div class="text-2xl font-bold">Gelombang</div>
@@ -191,6 +209,14 @@ export default {
   },
 
   methods: {
+    spliting(date) {
+      if (date) {
+        var dateing = date.split('/')
+        return dateing[0] + ' ' + this.parseMonth(parseInt(dateing[1]) - 1) + ' ' + dateing[2]
+      } else {
+        return ''
+      }
+    },
     parseMonth(month) {
       var monthres;
       switch (month) {
@@ -234,9 +260,17 @@ export default {
       return monthres
     },
     returningTimeZone(date) {
-      var parsed = date.split(' ')[0]
-      return parsed.split('-')
+      return (
+        date.toString().split(' ').splice(0, 5).join(' ') +
+        ' GMT+0' +
+        this.getTimeZone +
+        '00'
+      )
     },
+    // returningTimeZone(date) {
+    //   var parsed = date.split(' ')[0]
+    //   return parsed.split('-')
+    // },
     initialMap(obj) {
       var self = this
       var map = this.$refs['map2'].map
@@ -271,7 +305,7 @@ export default {
       this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
       if (parentDisplay.isHujan) {
         this.isDark = true
-      } else if (new Date().getHours() >= 18 || new Date().getHours() <= 5){
+      } else if (new Date().getHours() >= 18 || new Date().getHours() <= 5) {
         this.isDark = true
       } else {
         this.isDark = false

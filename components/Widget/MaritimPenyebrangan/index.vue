@@ -71,23 +71,23 @@
                     <div class="w-full bg-indigo-500 font-bold text-2xl rounded-md p-4 text-white">
                       {{ data.name }}
                     </div>
-                    <div class="p-6 rounded-md flex justify-between items-center space-x-6">
-                      <div class="text-xl">
+                    <div class="p-6 rounded-md flex justify-center items-center space-x-6">
+                      <div class="text-xl w-full">
                         <div class="relative mt-2 font-bold text-2xl">
-                          <div class="w-24 h-12"><img class="w-36 absolute left-8 -top-16"
+                          <div class="w-24 h-12"><img class="w-36 absolute left-6 -top-16"
                               :src="'/Archive/' + weather_codeParsed[data.data[0].weather] + '.gif'" />
                           </div>
                           <div class="text-center">{{ data.data[0].weather }}</div>
                         </div>
                       </div>
-                      <div>
+                      <div class="w-full">
                         <div class="flex space-x-4 ">
                           <img src="/weatherheadline/wave.svg" class="w-6 " />
                           <div class="text-2xl font-bold">Gelombang</div>
                         </div>
                         <div class="text-2xl mt-2.5">{{ data.data[0].wave_desc }}</div>
                       </div>
-                      <div>
+                      <div class="w-full">
                         <div class="flex space-x-4"> <img src="/general3/wind.svg" class="w-6" />
                           <div class="text-2xl font-bold">Angin</div>
                         </div>

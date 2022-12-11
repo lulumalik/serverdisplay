@@ -320,11 +320,13 @@ export default {
       }
       var alltemplate = {}
       var allndf = {}
+      var logos = {}
       // console.log(widgetparse, this.templateAddedList)
       this.templateAddedList.forEach((el, i) => {
         if (widgetparse[el.idtemplate]) {
           alltemplate[i] = this.templateAddedList[i]
           allndf[el.idtemplate] = widgetparse[el.idtemplate]
+          logos[el.idtemplate] = this.$refs['preview'].logos[el.idtemplate]
         }
       })
       var obj = {
@@ -346,7 +348,7 @@ export default {
           footer: this.useFooter,
           video: this.useVideo,
           backgroundStatic: this.backgroundStatic,
-          allLogo: this.$refs['preview'].logos,
+          allLogo: logos,
           allTemplate: alltemplate,
           allSetting: allndf,
         },

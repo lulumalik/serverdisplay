@@ -21,13 +21,13 @@
         <MapPenyebrangan v-if="idtemplate" style="height: 650px;width:100%;"
           class="rounded-md relative shadow-md border-2 border-white" ref="map" :idMap="'mapPerairan' + idtemplate"
           @mapready="getData" />
-          <div class="absolute bg-white rounded p-2 text-xs bottom-4 left-4">
-            <div class="mb-1">Legenda</div>
-            <div v-for="(l , i) in legenda" :key="i" class="flex items-center space-x-2">
-              <div class="h-3 w-3 rounded-full" :style="{background: l.color}"></div>
-              <div>{{l.kategori}}</div>
-            </div>
+        <div class="absolute bg-white rounded p-2 text-xs bottom-4 left-4">
+          <div class="mb-1">Legenda</div>
+          <div v-for="(l, i) in legenda" :key="i" class="flex items-center space-x-2">
+            <div class="h-3 w-3 rounded-full" :style="{ background: l.color }"></div>
+            <div>{{ l.kategori }}</div>
           </div>
+        </div>
       </div>
       <div class="w-full overflow-hidden" style="height: 650px !important">
         <VueSlickCarousel v-bind="settings" v-if="Object.keys(listperairan).length > 0">
@@ -43,11 +43,11 @@
             <div class="w-full bg-white rounded-md mb-4 text-black">
               <div class="bg-indigo-500 px-4 py-2 rounded-md font-bold">
                 <div class="text-left rounded-t-md text-white font-semibold text-3xl">
-                  <div>{{ i.split('_')[1] }}</div>
+                  <div>{{ i }}</div>
                 </div>
               </div>
               <div class="px-4 pb-4 pt-6">
-                <div v-if="l && l[0]" >
+                <div v-if="l && l[0]">
                   <!-- <div class="text-2xl pb-4 text-center" :class="index == 1 ? 'rounded-bl-md' : ''">
                     <div class=" w-32 mx-auto">{{ forecast.time_desc }}</div>
                   </div> -->
@@ -71,7 +71,7 @@
                         <div>{{ l[0].wind_speed_max || '-' }} knots</div>
                       </div>
                     </div>
-                    <div class="text-2xl mt-2" :class="index == 1 ? 'rounded-br-md' : ''">
+                    <div class="text-2xl mt-2" :class="i == 1 ? 'rounded-br-md' : ''">
 
                       <div class="text-2xl font-bold">Arah Angin</div>
                       <div class="mt-1">{{ l[0].wind_from || '-' }}</div>
@@ -136,30 +136,37 @@ export default {
         {
           kategori: 'Tenang 0.1 - 0.5 m',
           color: '#2793f2',
+          gelombang: '0.1 - 0.5 m'
         },
         {
           kategori: 'Rendah 0.5 - 1.25 m',
           color: '#00d342',
+          gelombang: '0.5 - 1.25 m'
         },
         {
           kategori: 'Sedang 1.25 - 2.50 m',
           color: '#fff200',
+          gelombang: '1.25 - 2.50 m'
         },
         {
           kategori: 'Tinggi 2.50 - 4.0 m',
           color: '#fd8436',
+          gelombang: '2.50 - 4.0 m'
         },
         {
           kategori: 'Sangat Tinggi 4.0 - 6.0 m',
           color: '#fb0b15',
+          gelombang: '4.0 - 6.0 m'
         },
         {
           kategori: 'Ekstrem 6.0 - 9.0 m',
           color: '#ef38ce',
+          gelombang: '6.0 - 9.0 m'
         },
         {
           kategori: 'Sangat Ekstrem 2.50 - 4.0 m',
           color: '#000000',
+          gelombang: '2.50 - 4.0 m'
         },
 
       ]
@@ -169,20 +176,21 @@ export default {
     VueSlickCarousel,
   },
   methods: {
-    initialMap(geojson) {
+    initialMap(geojson, id) {
+      // console.log(geojson)
       var self = this
       var map = this.$refs['map'].map
 
-      if (map.getSource('perairan')) {
-        map.removeSource('perairan')
+      if (map.getSource(id)) {
+        map.removeSource(id)
       }
 
-      if (map.getLayer('outline')) {
-        map.removeLayer('outline')
+      if (map.getLayer(id + 'outline')) {
+        map.removeLayer(id + 'outline')
       }
 
-      if (map.getLayer('perairan')) {
-        map.removeLayer('perairan')
+      if (map.getLayer(id)) {
+        map.removeLayer(id)
       }
 
       for (var key in this.marker) {
@@ -191,49 +199,37 @@ export default {
         }
       }
 
-      map.addSource('perairan', {
+      map.addSource(id, {
         type: 'geojson',
         data: geojson,
       })
-
+      // console.log(geojson)
+      // console.log()
       map.addLayer({
-        id: 'perairan',
+        id: id,
         type: 'fill',
-        source: 'perairan',
+        source: id,
         paint: {
-          'fill-color': '#088',
+          'fill-color': this.legenda.filter((val) => val.gelombang == geojson.properties.gelombang)[0].color || '#088',
           'fill-opacity': 0.8,
         },
       })
       map.addLayer({
-        id: 'outline',
+        id: id + 'outline',
         type: 'line',
-        source: 'perairan',
+        source: id,
         layout: {},
         paint: {
           'line-color': '#fff',
           'line-width': 2,
         },
       })
-
-      // zoom to geojson
-      var bounds = new maplibregl.LngLatBounds()
-      geojson.features.forEach(function (feature, i) {
-        feature.geometry.coordinates[0].forEach(function (coord) {
-          bounds.extend(coord)
-        })
-
-        // }
-      })
-      map.fitBounds(bounds, {
-        padding: { top: 150, bottom: 150, left: 0, right: 0 },
-      })
     },
     async getData() {
       var self = this
       var parentDisplay = this.$parent.$parent.$parent
       this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
-
+      this.listperairan = {}
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var result = {}
@@ -257,27 +253,43 @@ export default {
               result.value.id.split('.')[0] +
               '.json',
           })
-          .then((res) => {
-            this.initialMap(res.data)
-            res.data.features.forEach((el) => {
-              self.$set(
-                self.listperairan,
-                el.properties.WP_1 + '_' + el.properties.WP_IMM,
-                []
-              )
+          .then(async (res) => {
+            var features = {
+              type: 'FeatureCollection',
+              features: [],
+            }
+            await new Promise((resolve, reject) => {
+              res.data.features.forEach(async (el, i) => {
+                const res2 = await this.$axios
+                  .post('https://sena.circlegeo.com/api/sena/research/forward', {
+                    url:
+                      'https://maritim.bmkg.go.id/public_api/perairan/' +
+                      el.properties.WP_1 + '_' + el.properties.WP_IMM +
+                      '.json',
+                  })
+
+                el.properties.gelombang = res2.data.data[0].wave_desc
+                self.initialMap(el, el.properties.WP_1 + '_' + el.properties.WP_IMM)
+
+                self.$set(self.listperairan, el.properties.WP_IMM, res2.data.data)
+                if (i == res.data.features.length - 1) {
+                  resolve('done')
+                }
+              })
             })
 
-            Object.keys(self.listperairan).forEach((el) => {
-              this.$axios
-                .post('https://sena.circlegeo.com/api/sena/research/forward', {
-                  url:
-                    'https://maritim.bmkg.go.id/public_api/perairan/' +
-                    el.split(' ').join('%20') +
-                    '.json',
-                })
-                .then((res) => {
-                  self.$set(self.listperairan, el, res.data.data)
-                })
+            var map = this.$refs['map'].map
+            // zoom to geojson
+            var bounds = new maplibregl.LngLatBounds()
+            res.data.features.forEach(function (feature, i) {
+              feature.geometry.coordinates[0].forEach(function (coord) {
+                bounds.extend(coord)
+              })
+
+              // }
+            })
+            map.fitBounds(bounds, {
+              padding: { top: 150, bottom: 150, left: 0, right: 0 },
             })
           })
       } else {
@@ -304,12 +316,14 @@ export default {
                 '.json',
             })
             .then((res) => {
-              this.initialMap(res.data)
+              this.initialMap(res.data, 'perairan')
               res.data.features.forEach((el) => {
                 self.$set(
                   self.listperairan,
                   el.properties.WP_1 + '_' + el.properties.WP_IMM,
-                  []
+                  {
+                    geometry: el
+                  }
                 )
               })
 
