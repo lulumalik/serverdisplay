@@ -174,7 +174,6 @@ export default {
           if (key == 'kotkab' && key1 == 'WidgetWeatherTable2') {
             this.allNDF = {}
             this.area = el.value.kotkab
-            consnole.log(el.value)
             var res2 = await this.$axios.get(
               'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
               el.value._id
