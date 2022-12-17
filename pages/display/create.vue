@@ -1,29 +1,35 @@
 <template>
   <div class="bg-gray-200 h-screen">
     <client-only>
-      <Navbar
-        class="w-full sticky top-0"
-        style="z-index: 1000"
-      />
+      <Navbar class="w-full sticky top-0" style="z-index: 1000" />
+      <button @click="backto" class="
+                  text-xs
+                  pl-6
+                  relative top-3
+                  cursor-pointer
+                  flex
+                  items-center
+                  space-x-2
+                  text-black
+                  font-bold
+                ">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
+          class="text-black relative bottom-0.5">
+          <path fill="currentColor"
+            d="M13.427 3.021h-7.427v-3.021l-6 5.39 6 5.61v-3h7.427c3.071 0 5.561 2.356 5.561 5.427 0 3.071-2.489 5.573-5.561 5.573h-7.427v5h7.427c5.84 0 10.573-4.734 10.573-10.573s-4.733-10.406-10.573-10.406z" />
+        </svg>
+        <div>Back</div>
+      </button>
       <form class="text-sm px-6 pt-4 flex items-end space-x-4">
         <div class="flex-grow">
           <div class="flex items-center">
             <div class="flex-grow">Display ID</div>
           </div>
           <div class="mt-2 relative">
-            <input
-              v-model="displayID"
-              placeholder="id"
-              :class="getDisplayIDSpaces ? 'border-red-500' : ''"
-              class="w-full rounded border border-gray-300 px-2 py-1.5"
-              type="text"
-              required
-            />
+            <input v-model="displayID" placeholder="id" :class="getDisplayIDSpaces ? 'border-red-500' : ''"
+              class="w-full rounded border border-gray-300 px-2 py-1.5" type="text" required />
             <div class="absolute -top-5 right-0">
-              <small
-                class="text-red-500"
-                v-if="getDisplayIDSpaces"
-              >
+              <small class="text-red-500" v-if="getDisplayIDSpaces">
                 no spaces allowed
               </small>
             </div>
@@ -32,56 +38,32 @@
         <div class="flex-grow">
           <div>Display Name</div>
           <div class="mt-2">
-            <input
-              v-model="displayName"
-              placeholder="name"
-              class="w-full rounded border-gray-300 border px-2 py-1.5"
-              type="text"
-              required
-            />
+            <input v-model="displayName" placeholder="name" class="w-full rounded border-gray-300 border px-2 py-1.5"
+              type="text" required />
           </div>
         </div>
         <div class="flex-grow">
           <div>Display Location</div>
           <div class="mt-2">
-            <input
-              label="name"
-              class="w-full rounded border-gray-300 border px-2 py-1.5"
-              v-model="getDisplayLocation"
-              type="text"
-            />
+            <input label="name" class="w-full rounded border-gray-300 border px-2 py-1.5" v-model="getDisplayLocation"
+              type="text" />
           </div>
         </div>
-        <div
-          class="flex-grow"
-          v-if="currentUser == (allfind.owner && allfind.owner._id)"
-        >
-          <!--  -->
-          <!-- {{currentUser}} {{allfind.owner}} -->
-          <div
-            type="submit"
-            class="
+        <div class="flex-grow"
+          v-if="roleUser && roleUser.role.name == 'Admin' ? true : currentUser == (allfind.owner && allfind.owner._id)">
+          <div type="submit" class="
               px-4
               cursor-pointer
               text-center
               rounded
               bg-sky-500
               text-white
-            "
-            style="padding-top: 7px; padding-bottom: 7px"
-            @click="updateAndCreateDisplay"
-            :disabled="saving"
-          >
+            " style="padding-top: 7px; padding-bottom: 7px" @click="updateAndCreateDisplay" :disabled="saving">
             {{ saving ? 'Saving Display...' : 'Update and Refresh Display' }}
           </div>
         </div>
-        <div
-          class="flex-grow"
-          v-if="$route.query.id"
-        >
-          <div
-            type="submit"
-            class="
+        <div class="flex-grow" v-if="$route.query.id">
+          <div type="submit" class="
               bg-blue-200
               border border-blue-400
               shadow
@@ -92,11 +74,7 @@
               rounded
               text-xs text-center
               cursor-pointer
-            "
-            style="padding-top: 7px; padding-bottom: 7px"
-            @click="createWithUpdate"
-            :disabled="saving"
-          >
+            " style="padding-top: 7px; padding-bottom: 7px" @click="createWithUpdate" :disabled="saving">
             {{ saving ? 'Saving Display...' : 'Save as new Display' }}
           </div>
         </div>
@@ -126,10 +104,7 @@
     <client-only>
       <div class="flex w-full">
         <DisplaySidebar class="flex-none" />
-        <DisplayPreview
-          ref="preview"
-          class="flex-grow h-full overflow-auto"
-        />
+        <DisplayPreview ref="preview" class="flex-grow h-full overflow-auto" />
         <DisplayWidgetOption class="flex-none" />
       </div>
     </client-only>
@@ -157,6 +132,7 @@ export default {
       currentUser: null,
       status: true,
       showSetting: false,
+      roleUser: null
     }
   },
   middleware: ['checkLogin'],
@@ -176,6 +152,7 @@ export default {
     if (this.$route.query.id) {
       try {
         this.showSetting = false
+        this.roleUser = jwtdecode(this.$cookies.get('users'))
         this.currentUser = jwtdecode(this.$cookies.get('users')).id
         const res = await this.$axios.$get(
           'display/find/' + this.$route.query.id
@@ -198,7 +175,7 @@ export default {
         this.useVideo = res.data.properties.video
         this.backgroundStatic = res.data.properties.backgroundStatic
         this.$refs['preview'].logos = res.data.properties.allLogo || {}
-        this.$refs['preview'].times = res.data.properties.delay 
+        this.$refs['preview'].times = res.data.properties.delay
         this.$refs['preview'].width = res.data.properties.width || 1366
         this.$refs['preview'].height = res.data.properties.height || 768
         this.templateAddedList.forEach((el) => {
@@ -221,6 +198,9 @@ export default {
     }
   },
   methods: {
+    backto() {
+      window.history.back()
+    },
     toGallery() {
       this.$router.push('/g/' + this.allfind.username)
     },
@@ -268,7 +248,7 @@ export default {
       try {
         const res = await this.$axios.$post(
           'display/create?generateSecret' +
-            (this.secretCode ? '=true' : '=false'),
+          (this.secretCode ? '=true' : '=false'),
           obj
         )
         this.saving = false
@@ -371,4 +351,5 @@ export default {
 </script>
 
 <style>
+
 </style>

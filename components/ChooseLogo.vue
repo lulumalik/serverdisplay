@@ -12,7 +12,8 @@
         w-full
         bg-black/50
       " style="z-index: 100000000000000">
-      <div class="bg-white pt-8 px-20 pb-20 rounded overflow-auto" style="width: 80%;height:800px;">
+      <div class="bg-white pt-8 px-20 pb-20 rounded overflow-auto relative" style="width: 80%;height:800px;">
+        <button @click="$parent.chooseLogo = false" class="text-red-500  text-4xl absolute right-4 top-4">&times;</button>
         <div class="text-center">
           <input v-model="search" placeholder="Search Logo By Name"
             class="py-2 px-4 w-72 rounded-full border border-gray-800" />

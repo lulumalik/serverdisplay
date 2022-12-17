@@ -65,7 +65,7 @@ export default {
   },
   mounted() {
     this.$axios
-      .post('https://sena.circlegeo.com/api/sena/research/forward', {
+      .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
         url: 'http://aviation.bmkg.go.id/latest/observation.xml.php',
       })
       .then((res) => {

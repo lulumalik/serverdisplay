@@ -43,7 +43,7 @@
           <div>
             <DisplayList :templateDB="templateDB" />
           </div>
-          <div class="text-right flex justify-end w-full">
+          <div class="text-right flex mt-4 justify-end w-full">
             <div class="flex-none">
               <paginate
                 :page-count="total"
@@ -128,12 +128,15 @@ export default {
         .$get('display?row=1000&keyword=' + this.searchname)
         .then((res) => {
           this.templateDB = res.data
-          this.total = res.count / 10 + 1
+          this.total = res.count / 10
         })
     },
     callAllData() {
       this.$axios.$get('display?row=20&page=' + this.page).then((res) => {
-        this.total = res.count / 10 + 1
+        // parseInt res.count if decimal
+        var count = res.count / 10
+        this.total = count
+  
         this.templateDB = res.data
       })
       this.$axios.$get('layout').then((res) => {
@@ -151,7 +154,7 @@ export default {
     },
     functionName(e) {
       this.$axios.$get('display?row=20&page=' + e).then((res) => {
-        this.total = res.count / 20 + 1
+        this.total = res.count / 10
         this.templateDB = res.data
       })
     },

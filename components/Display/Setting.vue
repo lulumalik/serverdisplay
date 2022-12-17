@@ -200,7 +200,7 @@ export default {
         }
       })
     this.$axios
-      .post('https://sena.circlegeo.com/api/sena/research/forward', {
+      .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
         url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
       })
       .then((res) => {
