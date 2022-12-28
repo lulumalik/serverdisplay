@@ -314,6 +314,13 @@ export default {
         name: this.displayName,
         template: this.templateAddedList,
         status: this.status,
+        location: {
+          name: this.getDisplayLocation,
+          geometry: {
+            type: 'Point',
+            coordinates: [107.77268, -2.58072],
+          },
+        },
         properties: {
           delay: parseFloat(this.$refs['preview'].times) || 60,
           width: this.$refs['preview'].width,
