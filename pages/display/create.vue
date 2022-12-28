@@ -312,13 +312,6 @@ export default {
       var obj = {
         username: this.displayID,
         name: this.displayName,
-        location: {
-          name: this.getDisplayLocation,
-          geometry: {
-            type: 'Point',
-            coordinates: [107.77268, -2.58072],
-          },
-        },
         template: this.templateAddedList,
         status: this.status,
         properties: {
