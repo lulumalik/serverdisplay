@@ -92,7 +92,7 @@ export default {
     ) {
       this.area = this.$store.state.displayWidget.widgetSaved[
         this.idTemplate + '_WidgetWarningWeather_area'
-      ].area
+      ].id
     }
 
     this.warningURL = 'https://warningcuaca.bmkg.go.id/infografis/' + this.area + '/' +
