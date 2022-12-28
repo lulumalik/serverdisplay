@@ -1,10 +1,10 @@
 version: '3.8'
 services:
   server-display:
-    image: "bmkg/server-display"
-    restart: unless-stopped
+    build: .
+    restart: always
     networks:
-      - "core-infra"
+      - "nginx_public"
 networks:
-  core-infra:
+  nginx_public:
     external: true
