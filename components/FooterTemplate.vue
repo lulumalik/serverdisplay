@@ -190,24 +190,24 @@ export default {
     getRunningText() {
       this.$axios
         .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
-          url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
+          url: 'https://nowcasting.bmkg.go.id/cap/xml/id/newsflash.xml',
         })
         .then((res) => {
           const json = xml.parse(res.data)
-          var id = 'CBB'
+          var id = 'CSU'
           if (this.$parent.useFooter) {
             var split = this.$parent.useFooter.id.split('')
             id = split[0] + split[1] + split[2]
           }
+          // console.log(id)
           var dataparsed = json[0].children[0].children
           var index = json[0].children[0].children.length - 1
           var listParsedArray = dataparsed[index].children
           this.runningText.length = 0
-          // console.log(listParsedArray)
           listParsedArray.forEach((item) => {
             // this.runningText.push(item.text)
             if (item.children[0].children[0].includes(id)) {
-              this.runningText.push(item.children[4].children[0])
+              this.runningText.push(item.children[5].children[0])
             }
           })
         })
