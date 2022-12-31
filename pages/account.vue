@@ -65,7 +65,7 @@
           <div class="mb-4">
             <button class="bg-sky-500 px-6 py-2 rounded-lg text-white font-semibold" @click="adduser">Add User</button>
           </div>
-          <div style="height:784px;">
+          <div style="height:calc(100vh - 210px)" class="overflow-auto">
             <table class="w-full bg-white rounded-b-lg shadow-lg">
               <tr>
                 <td class="bg-sky-500 rounded-tl-lg text-white font-semibold">
@@ -264,7 +264,7 @@ export default {
       if (e) {
         this.page = e
       }
-      this.$axios.$get('user' + '?row=10&page=' + this.page).then((res) => {
+      this.$axios.$get('user' + '?row=20&page=' + this.page).then((res) => {
         this.total = parseInt(res.count / 20 + 1)
         this.templateDB = res.data
       })

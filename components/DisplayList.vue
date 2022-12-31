@@ -1,7 +1,7 @@
 <template>
   <div >
     <div class="text-xl mb-4 font-bold text-sky-500">Display</div>
-    <div style="height: calc(100vh - 200px)" class="overflow-auto" v-if="currentUser.role && currentUser.role.name != 'Admin'">
+    <div style="height: calc(100vh - 240px)" class="overflow-auto" v-if="currentUser.role && currentUser.role.name != 'Admin'">
       <div class="flex items-center flex-wrap pb-4">
         <div v-for="(db, i) in filterUser" :key="i" class="
           rounded
