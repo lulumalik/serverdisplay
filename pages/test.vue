@@ -16,13 +16,13 @@ export default {
       // const res = await this.$axios.$get('role')
       // this.role = res.data
       // console.log(this.role)
-
-      var akun = [{
-        username: 'Stasiun Meteorologi Kelas I Blang Bintang, Banda Aceh',
-        email: 'blangbintang1@bmkg.go.id',
-        password: 'blangbintang1',
-        role: "62da5b5e86085485a9b60cca",
-      },
+      var akun = [
+      //   {
+      //   username: 'Stasiun Meteorologi Kelas I Blang Bintang, Banda Aceh',
+      //   email: 'blangbintang1@bmkg.go.id',
+      //   password: 'blangbintang1',
+      //   role: "62da5b5e86085485a9b60cca",
+      // },
       {
         username: 'Stasiun Meteorologi Kelas III Cut Bau Maimun Saleh - Sabang',
         email: 'cutbaumaimunsaleh@bmkg.go.id',
@@ -683,7 +683,9 @@ export default {
       }
       ]
 
-      arrayobj.forEach((obj) => {
+
+      akun.forEach( (obj) => {
+
         this.$axios
           .$post('user/create', obj)
           .then((res) => {
@@ -692,6 +694,7 @@ export default {
           .catch((err) => {
             console.log('err', obj)
           })
+
       })
     }
   }

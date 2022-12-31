@@ -258,13 +258,13 @@ export default {
     filterUser() {
       // filter by userid
       return this.templateDB.filter((db) => {
-        // console.log(db.owner._id , this.currentUser)
-        return db.owner._id == this.currentUser.id
+        // console.log(db.owner , this.currentUser)
+        return db.owner && db.owner._id == this.currentUser.id
       })
     },
     filterNotUser() {
       return this.templateDB.filter((db) => {
-        return db.owner._id != this.currentUser.id
+        return db.owner && db.owner._id != this.currentUser.id
       })
     },
     filterAdmin() {
