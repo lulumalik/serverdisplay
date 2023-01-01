@@ -120,13 +120,13 @@ export default {
         .$get('display?row=1000&keyword=' + this.searchname)
         .then((res) => {
           this.templateDB = res.data
-          this.total = res.count / 10
+          this.total = parseInt(res.count / 20 + 2)
         })
     },
     callAllData() {
       this.$axios.$get('display?row=20&page=' + this.page).then((res) => {
         // parseInt res.count if decimal
-        var count = res.count / 10
+        var count = parseInt(res.count / 20 + 2)
         this.total = count
 
         this.templateDB = res.data
@@ -146,7 +146,7 @@ export default {
     },
     functionName(e) {
       this.$axios.$get('display?row=20&page=' + e).then((res) => {
-        this.total = res.count / 10
+        this.total = parseInt(res.count / 20 + 2)
         this.templateDB = res.data
       })
     },

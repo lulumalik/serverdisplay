@@ -265,7 +265,7 @@ export default {
         this.page = e
       }
       this.$axios.$get('user' + '?row=20&page=' + this.page).then((res) => {
-        this.total = parseInt(res.count / 20 + 1)
+        this.total = parseInt(res.count / 20 + 2)
         this.templateDB = res.data
       })
       this.$axios.$get('role').then((res) => {
