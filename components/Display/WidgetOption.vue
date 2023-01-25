@@ -60,7 +60,7 @@ export default {
     }
   },
   async mounted() {
-    var res = await this.$axios.get('https://weather.circlegeo.com/api/cgms/weather/province')
+    var res = await this.$axios.$get('/cgms/weather/province')
     this.province = res.data.data
   },
   methods: {

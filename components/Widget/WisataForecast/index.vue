@@ -201,7 +201,7 @@ export default {
             if (key == 'kecamatan') {
               // console.log(this.ndflistener[el.value.ndf], el)
               const datares = await this.$axios.$get(
-                'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+                `${this.$baseUrlNdf}/get?locationId=` +
                   el.value.locationId
               )
 

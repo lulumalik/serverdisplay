@@ -88,7 +88,7 @@ export default {
     getKecamatan(index) {
       this.$axios
         .get(
-          'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+          `${this.$baseUrlNdf}/get?locationId=` +
             this.kotkab[index]._id
         )
         .then((res) => {

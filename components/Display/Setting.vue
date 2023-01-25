@@ -267,7 +267,7 @@ export default {
   },
   mounted() {
     this.$axios
-      .get('https://weather.circlegeo.com/api/cgms/weather/province')
+      .$get('/cgms/weather/province')
       .then((res) => {
         this.provinceList = res.data.data
         // alert(this.$parent.$parent.useVideo)
@@ -291,7 +291,7 @@ export default {
     }
 
     this.$axios
-      .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+      .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
         url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
       })
       .then((res) => {
@@ -330,7 +330,7 @@ export default {
     getKecamatan() {
       this.$axios
         .get(
-          'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+          `${this.$baseUrlNdf}/get?locationId=` +
           this.kotkab._id
         )
         .then((res) => {

@@ -147,7 +147,7 @@ export default {
             if (key == 'kecamatan') {
 
               const datares = await this.$axios.$get(
-                'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+                `${this.$baseUrlNdf}/get?locationId=` +
                 el.value.locationId
               )
               this.allNDF = datares.data
@@ -244,7 +244,7 @@ export default {
           this.idTemplate + '_WidgetWisataBottombarForecast_kecamatan'
         ].locationId
         this.$axios.$get(
-          'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+          `${this.$baseUrlNdf}/get?locationId=` +
           id
         ).then(datares => {
           this.allNDF = datares.data

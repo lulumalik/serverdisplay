@@ -148,7 +148,7 @@ export default {
           }
         })
         this.$axios
-          .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+          .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
             url: 'http://aviation.bmkg.go.id/latest/observation.xml.php',
           })
           .then((res) => {
@@ -213,7 +213,7 @@ export default {
             ]
 
           this.$axios
-            .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+            .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
               url: 'http://aviation.bmkg.go.id/latest/observation.xml.php',
             })
             .then((res) => {

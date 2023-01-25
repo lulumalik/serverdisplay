@@ -170,7 +170,7 @@ export default {
           //
           if (key.includes('kecamatan')) {
             const datares = await self.$axios.$get(
-              'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+              `${this.$baseUrlNdf}/get?locationId=` +
               el.value.locationId
             )
             var arr = []
@@ -200,7 +200,7 @@ export default {
             //
             if (key.includes('kecamatan')) {
               const datares = await self.$axios.$get(
-                'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+                `${this.$baseUrlNdf}/get?locationId=` +
                 el.value.locationId
               )
               var arr = []

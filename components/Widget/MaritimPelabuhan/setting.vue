@@ -39,7 +39,7 @@
     mounted() {
       this.wilpelList = []
       this.$axios
-        .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+        .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
           url: 'https://maritim.bmkg.go.id/public_api/pelabuhan_list',
         })
         .then((res) => {

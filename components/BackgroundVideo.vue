@@ -35,7 +35,7 @@ export default {
     async getVideo() {
       if (this.$parent.responseDisplay.properties.video) {
         const datares = await this.$axios.$get(
-          'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+          `${this.$baseUrlNdf}/get?locationId=` +
             this.$parent.responseDisplay.properties.video.locationId
         )
         // console.log(datares)

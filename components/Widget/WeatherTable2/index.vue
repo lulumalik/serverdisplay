@@ -175,14 +175,14 @@ export default {
             this.allNDF = {}
             this.area = el.value.kotkab
             var res2 = await this.$axios.get(
-              'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+              `${this.$baseUrlNdf}/get?locationId=` +
               el.value._id
             )
             var allndf = res2.data.data.map((a) => {
               return a.locationId
             })
             const ndf2 = await this.$axios.$post(
-              'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
+              `${this.$baseUrlNdf}/getMany?locationId=`,
               {
                 location: allndf,
                 date: new Date().toISOString(),
@@ -229,14 +229,14 @@ export default {
           this.allNDF = {}
           this.area = el.kotkab
           var res2 = await this.$axios.get(
-            'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+            `${this.$baseUrlNdf}/get?locationId=` +
             el._id
           )
           var allndf = res2.data.data.map((a) => {
             return a.locationId
           })
           const ndf2 = await this.$axios.$post(
-            'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
+            `${this.$baseUrlNdf}/getMany?locationId=`,
             {
               location: allndf,
               date: new Date().toISOString(),
@@ -282,14 +282,14 @@ export default {
           this.allNDF = {}
           this.area = el.kotkab
           var res2 = await this.$axios.get(
-            'https://weather.circlegeo.com/api/cgms/weather/ndf/location?_id=' +
+            `${this.$baseUrlNdf}/get?locationId=` +
             el._id
           )
           var allndf = res2.data.data.map((a) => {
             return a.locationId
           })
           const ndf2 = await this.$axios.$post(
-            'https://weather.circlegeo.com/api/cgms/weather/ndf/getMany',
+            `${this.$baseUrlNdf}/getMany?locationId=`,
             {
               location: allndf,
               date: new Date().toISOString(),

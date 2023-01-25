@@ -156,7 +156,7 @@ export default {
           var key1 = el.key.split('_')[1]
           if (key == 'kecamatan' && key1 == 'WidgetForecastWeather') {
             const datares = await this.$axios.$get(
-              'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+              `${this.$baseUrlNdf}/get?locationId=` +
               el.value.locationId
             )
 
@@ -183,7 +183,7 @@ export default {
 
           this.forecast.length = 0
           const datares = await this.$axios.$get(
-            'https://weather.circlegeo.com/api/cgms/weather/ndf/get?locationId=' +
+            `${this.$baseUrlNdf}/get?locationId=` +
             el.locationId
           )
 

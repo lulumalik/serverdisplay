@@ -75,7 +75,7 @@ export default {
   methods: {
     getData() {
       this.$axios
-        .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+        .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
           url: 'https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json',
         })
         .then((res) => {

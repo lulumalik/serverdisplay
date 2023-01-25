@@ -327,7 +327,7 @@ export default {
         this.listpelabuhan.length = 0
         // console.log(arr)
         this.$axios
-          .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+          .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
             url:
               'https://maritim.bmkg.go.id/public_api/pelabuhan/' +
               result.value.name.split('.')[0] +
@@ -354,7 +354,7 @@ export default {
           this.listpelabuhan.length = 0
           // console.log(arr)
           this.$axios
-            .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+            .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
               url:
                 'https://maritim.bmkg.go.id/public_api/pelabuhan/' +
                 el.name.split('.')[0] +

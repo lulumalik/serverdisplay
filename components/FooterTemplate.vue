@@ -189,7 +189,7 @@ export default {
   methods: {
     getRunningText() {
       this.$axios
-        .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+        .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
           url: 'https://nowcasting.bmkg.go.id/cap/xml/id/newsflash.xml',
         })
         .then((res) => {

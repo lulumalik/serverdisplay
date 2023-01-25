@@ -37,7 +37,7 @@
     },
     mounted() {
       this.$axios
-        .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+        .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
           url: 'https://maritim.bmkg.go.id/ajax_home/select_data/pelayanan',
         })
         .then((res) => {

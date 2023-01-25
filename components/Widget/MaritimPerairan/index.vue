@@ -247,7 +247,7 @@ export default {
         // console.log(arr)
         // https://maritim.bmkg.go.id/geojson-update/T.json
         this.$axios
-          .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+          .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
             url:
               'https://maritim.bmkg.go.id/geojson-update/' +
               result.value.id.split('.')[0] +
@@ -261,7 +261,7 @@ export default {
             await new Promise((resolve, reject) => {
               res.data.features.forEach(async (el, i) => {
                 const res2 = await this.$axios
-                  .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+                  .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
                     url:
                       'https://maritim.bmkg.go.id/public_api/perairan/' +
                       el.properties.WP_1 + '_' + el.properties.WP_IMM +
@@ -309,7 +309,7 @@ export default {
           // console.log(arr)
           // https://maritim.bmkg.go.id/geojson-update/T.json
           this.$axios
-            .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+            .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
               url:
                 'https://maritim.bmkg.go.id/geojson-update/' +
                 data.id.split('.')[0] +
@@ -330,7 +330,7 @@ export default {
               Object.keys(self.listperairan).forEach((el) => {
                 this.$axios
                   .post(
-                    'https://weather.circlegeo.com/api/cgms/weather/forward',
+                    `${this.$baseUrlNdf}/cgms/weather/forward`,
                     {
                       url:
                         'https://maritim.bmkg.go.id/public_api/perairan/' +

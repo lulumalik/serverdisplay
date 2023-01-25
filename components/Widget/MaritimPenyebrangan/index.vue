@@ -336,7 +336,7 @@ export default {
 
       result.forEach(async (el, i) => {
         const res = await this.$axios.post(
-          'https://weather.circlegeo.com/api/cgms/weather/forward',
+          `${this.$baseUrlNdf}/cgms/weather/forward`,
           {
             url:
               'https://maritim.bmkg.go.id/public_api/pelabuhan/' +

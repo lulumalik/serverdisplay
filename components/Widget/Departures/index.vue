@@ -147,7 +147,7 @@ export default {
           var key2 = el.key.split('_')[2]
           if (key2 == 'airport') {
             this.$axios
-              .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+              .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
                 url: 'http://aviation.bmkg.go.id/latest/observation.xml.php',
               })
               .then((res) => {
@@ -208,7 +208,7 @@ export default {
             this.idTemplate + '_WidgetDepartures_airport'
             ]
           this.$axios
-            .post('https://weather.circlegeo.com/api/cgms/weather/forward', {
+            .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
               url: 'http://aviation.bmkg.go.id/latest/observation.xml.php',
             })
             .then((res) => {
