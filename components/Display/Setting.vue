@@ -292,13 +292,12 @@ export default {
 
     this.$axios
       .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
-        url: 'https://warningcuaca.bmkg.go.id/cap/xml/id/newsflash.xml',
+        url: 'https://nowcasting.bmkg.go.id/cap/xml/id/newsflash.xml',
       })
       .then((res) => {
         const json = xml.parse(res.data)
         var dataparsed = json[0].children[0].children
         var index = json[0].children[0].children.length - 1
-        console.log(dataparsed)
         var listParsedArray = dataparsed[index].children
         this.listGempa.length = 0
         listParsedArray.forEach((item) => {
