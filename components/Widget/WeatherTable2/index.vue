@@ -175,7 +175,7 @@ export default {
             this.allNDF = {}
             this.area = el.value.kotkab
             var res2 = await this.$axios.get(
-              `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
+              `${this.$baseUrlNdf}/cgms/weather/ndf/location?_id=` +
               el.value._id
             )
             var allndf = res2.data.data.map((a) => {
@@ -229,7 +229,7 @@ export default {
           this.allNDF = {}
           this.area = el.kotkab
           var res2 = await this.$axios.get(
-            `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
+            `${this.$baseUrlNdf}/cgms/weather/ndf/location?_id=` +
             el._id
           )
           var allndf = res2.data.data.map((a) => {
@@ -282,7 +282,7 @@ export default {
           this.allNDF = {}
           this.area = el.kotkab
           var res2 = await this.$axios.get(
-            `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
+            `${this.$baseUrlNdf}/cgms/weather/ndf/location?_id=` +
             el._id
           )
           var allndf = res2.data.data.map((a) => {
