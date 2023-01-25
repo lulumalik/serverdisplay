@@ -267,9 +267,9 @@ export default {
   },
   mounted() {
     this.$axios
-      .$get('/cgms/weather/province')
+      .$get(this.$baseUrlNdf + '/cgms/weather/province')
       .then((res) => {
-        this.provinceList = res.data.data
+        this.provinceList = res.data
         // alert(this.$parent.$parent.useVideo)
         if (this.$parent.$parent.useVideo) {
           this.isUseVideo = true
@@ -318,12 +318,12 @@ export default {
     },
     getProvinsi() {
       this.$axios
-        .get(
-          'https://weather.circlegeo.com/api/cgms/weather/administration/kotkab?_id=' +
+        .$get(
+          this.$baseUrlNdf + '/cgms/weather/administration/kotkab?_id=' +
           this.province._id
         )
         .then((res) => {
-          this.listKotkab = res.data.data
+          this.listKotkab = res.data
           // this.kotkab = this.listKotkab[0]
         })
     },
@@ -334,7 +334,7 @@ export default {
           this.kotkab._id
         )
         .then((res) => {
-          this.listKecamatan = res.data.data
+          this.listKecamatan = res.data
         })
     },
     changeSelected() {

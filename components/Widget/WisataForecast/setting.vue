@@ -90,12 +90,12 @@ export default {
   methods: {
     getProvinsi() {
       this.$axios
-        .get(
-          'https://weather.circlegeo.com/api/cgms/weather/administration/kotkab?_id=' +
+        .$get(
+          this.$baseUrlNdf + '/cgms/weather/administration/kotkab?_id=' +
             this.province._id
         )
         .then((res) => {
-          this.listKotkab = res.data.data
+          this.listKotkab = res.data
           // this.kotkab = this.listKotkab[0]
         })
     },
@@ -106,7 +106,7 @@ export default {
             this.kotkab._id
         )
         .then((res) => {
-          this.listKecamatan = res.data.data
+          this.listKecamatan = res.data
         })
     },
     changeSelected() {

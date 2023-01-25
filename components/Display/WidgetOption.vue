@@ -60,8 +60,8 @@ export default {
     }
   },
   async mounted() {
-    var res = await this.$axios.$get('/cgms/weather/province')
-    this.province = res.data.data
+    var res = await this.$axios.$get(this.$baseUrlNdf + '/cgms/weather/province')
+    this.province = res.data
   },
   methods: {
     isEmpty(obj) {

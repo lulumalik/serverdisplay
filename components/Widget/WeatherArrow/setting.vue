@@ -36,12 +36,12 @@ export default {
   methods: {
     getProvinsi() {
       this.$axios
-        .get(
-          'https://weather.circlegeo.com/api/cgms/weather/administration/kotkab?_id=' +
+        .$get(
+          this.$baseUrlNdf + '/cgms/weather/administration/kotkab?_id=' +
             this.province._id
         )
         .then((res) => {
-          this.listKotkab = res.data.data
+          this.listKotkab = res.data
           // this.kotkab = this.listKotkab[0]
         })
     },
