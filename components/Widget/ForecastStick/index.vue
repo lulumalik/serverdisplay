@@ -21,32 +21,35 @@
           <div class="px-4 py-6 bg-white text-lg rounded-b-3xl shadow-md">
             <div class="font-bold text-center text-lg text-black">
               <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
-              {{ returningTimeZone(w.date)[2] + ' ' + parseMonth(parseInt(returningTimeZone(w.date)[1]) - 1) + ' ' + returningTimeZone(w.date)[0]}}
+              {{
+                returningTimeZone(w.date)[2] + ' ' + parseMonth(parseInt(returningTimeZone(w.date)[1]) - 1) + ' ' +
+                  returningTimeZone(w.date)[0]
+              }}
               <!-- {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }} -->
             </div>
             <div class="font-semibold mb-3 text-lg text-center">
               {{ weather_code[w.weather_code] }}
             </div>
 
-            <div class="flex space-x-4 ml-3  items-center mt-8">
+            <div class="flex space-x-2 ml-3  items-center mt-8">
               <div class="w-6">
                 <img src="/svg/temp.svg" class="w-4" />
               </div>
               <div>{{ w.temp }} <sup>o</sup>C</div>
             </div>
-            <div class="flex space-x-4 ml-3 items-center mt-4">
+            <div class="flex space-x-2 ml-3 items-center mt-4">
               <div class="w-6">
                 <img src="/svg/precip.svg" class="w-4" />
               </div>
               <div>{{ w.rh }} %</div>
             </div>
-            <div class="flex space-x-4 ml-3 items-center mt-4">
+            <div class="flex space-x-2 ml-3 items-center mt-4">
               <div class="w-6">
                 <img src="/svg/wind.svg" class="w-6 relative right-1" />
               </div>
               <div>{{ w.wSpd }} km/jam</div>
             </div>
-            <div class="flex space-x-4 ml-3 items-center mt-4">
+            <div class="flex space-x-2 ml-3 items-center mt-4">
               <div class="w-6">
                 <img src="/svg/dir.svg" class="w-5 relative right-0.5" :style="{
                   transform:
@@ -214,7 +217,7 @@ export default {
                 //   var comp = ndflistener[el.value.ndf][i]
                 //   this.forecast.push(comp)
                 // }
-                
+
                 var obj = {}
                 ndflistener[el.value.ndf].forEach((item) => {
                   if (!obj[new Date(item.date).getUTCDate()]) {
@@ -259,11 +262,33 @@ export default {
           this.$set(ndflistener, el.locationId, datares.data)
 
           if (ndflistener[el.locationId].length > 0) {
-            for (var i = 0; i < 5; i++) {
-              var comp = ndflistener[el.locationId][i]
-              this.forecast.push(comp)
+            // for (var i = 0; i < 5; i++) {
+            //   var comp = ndflistener[el.locationId][i]
+            //   this.forecast.push(comp)
+            // }
+
+            var obj = {}
+            ndflistener[el.locationId].forEach((item) => {
+              if (!obj[new Date(item.date).getUTCDate()]) {
+                obj[new Date(item.date).getUTCDate()] = []
+                obj[new Date(item.date).getUTCDate()].push(item)
+              } else {
+                obj[new Date(item.date).getUTCDate()].push(item)
+              }
+            })
+            var result = {}
+            // console.log(obj, 'obj')
+            for (var k in obj) {
+              var max = Math.max(...obj[k].map((o) => o.weather_code))
+              result[k] = obj[k].find((o) => o.weather_code === max)
             }
+            Object.values(result).forEach((el, i) => {
+              if (i < 5) {
+                this.forecast.push(el)
+              }
+            })
           }
+
         }
       }
     },

@@ -330,11 +330,11 @@ export default {
     getKecamatan() {
       this.$axios
         .get(
-          `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
+          `${this.$baseUrlNdf}/cgms/weather/ndf/location?_id=` +
           this.kotkab._id
         )
         .then((res) => {
-          this.listKecamatan = res.data
+          this.listKecamatan = res.data.data
         })
     },
     changeSelected() {
