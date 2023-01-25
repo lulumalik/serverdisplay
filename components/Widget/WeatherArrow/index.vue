@@ -252,14 +252,14 @@ export default {
             this.allNDF = {}
             this.area = el.value.kotkab
             var res2 = await this.$axios.get(
-              `${this.$baseUrlNdf}/get?locationId=` +
+              `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
               el.value._id
             )
             var allndf = res2.data.data.map((a) => {
               return a.locationId
             })
             const ndf2 = await this.$axios.$post(
-              `${this.$baseUrlNdf}/getMany?locationId=`,
+              `${this.$baseUrlNdf}/cgms/weather/ndf/getMany?locationId=`,
               {
                 location: allndf,
                 date: new Date().toISOString(),
@@ -306,14 +306,14 @@ export default {
           this.allNDF = {}
           this.area = el.kotkab
           var res2 = await this.$axios.get(
-            `${this.$baseUrlNdf}/get?locationId=` +
+            `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
             el._id
           )
           var allndf = res2.data.data.map((a) => {
             return a.locationId
           })
           const ndf2 = await this.$axios.$post(
-            `${this.$baseUrlNdf}/getMany?locationId=`,
+            `${this.$baseUrlNdf}/cgms/weather/ndf/getMany?locationId=`,
             {
               location: allndf,
               date: new Date().toISOString(),
@@ -357,14 +357,14 @@ export default {
           this.allNDF = {}
           this.area = el.kotkab
           var res2 = await this.$axios.get(
-            `${this.$baseUrlNdf}/get?locationId=` +
+            `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
             el._id
           )
           var allndf = res2.data.data.map((a) => {
             return a.locationId
           })
           const ndf2 = await this.$axios.$post(
-            `${this.$baseUrlNdf}/getMany?locationId=`,
+            `${this.$baseUrlNdf}/cgms/weather/ndf/getMany?locationId=`,
             {
               location: allndf,
               date: new Date().toISOString(),

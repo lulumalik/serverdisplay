@@ -167,7 +167,7 @@ export default {
           var key1 = el.key.split('_')[1]
           if (key == 'kecamatan' && key1 == 'WidgetWeatherHeadline') {
             const datares = await this.$axios.$get(
-              `${this.$baseUrlNdf}/get?locationId=` +
+              `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
                 el.value.locationId
             )
 
@@ -199,7 +199,7 @@ export default {
               this.idTemplate + '_WidgetWeatherHeadline_kecamatan'
             ]
           const datares = await this.$axios.$get(
-            `${this.$baseUrlNdf}/get?locationId=` +
+            `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
               el.locationId
           )
 

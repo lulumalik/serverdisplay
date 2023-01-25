@@ -115,7 +115,7 @@ export default {
     getKecamatan() {
       this.$axios
         .get(
-          `${this.$baseUrlNdf}/get?locationId=` +
+          `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
             this.kotkab._id
         )
         .then((res) => {

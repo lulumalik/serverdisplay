@@ -205,7 +205,7 @@ export default {
           if (comp == 'WidgetForecastStick') {
             if (key == 'kecamatan') {
               const datares = await this.$axios.$get(
-                `${this.$baseUrlNdf}/get?locationId=` +
+                `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
                 el.value.locationId
               )
               this.$set(ndflistener, el.value.ndf, datares.data)
@@ -252,7 +252,7 @@ export default {
             obj + '_WidgetForecastStick_kecamatan'
             ]
           const datares = await this.$axios.$get(
-            `${this.$baseUrlNdf}/get?locationId=` +
+            `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
             el.locationId
           )
 

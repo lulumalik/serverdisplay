@@ -170,7 +170,7 @@ export default {
           //
           if (key.includes('kecamatan')) {
             const datares = await self.$axios.$get(
-              `${this.$baseUrlNdf}/get?locationId=` +
+              `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
               el.value.locationId
             )
             var arr = []
@@ -200,7 +200,7 @@ export default {
             //
             if (key.includes('kecamatan')) {
               const datares = await self.$axios.$get(
-                `${this.$baseUrlNdf}/get?locationId=` +
+                `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
                 el.value.locationId
               )
               var arr = []
