@@ -290,26 +290,27 @@ export default {
       }
     }
 
-    this.$axios
-      .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
-        url: 'https://nowcasting.bmkg.go.id/cap/xml/id/newsflash.xml',
-      })
-      .then((res) => {
-        const json = xml.parse(res.data)
-        var dataparsed = json[0].children[0].children
-        var index = json[0].children[0].children.length - 1
-        var listParsedArray = dataparsed[index].children
-        this.listGempa.length = 0
-        listParsedArray.forEach((item) => {
-          // this.runningText.push(item.text)
-          // if (item.children[0].children[0].includes('CBB')) {
-          this.listGempa.push({
-            name: item.children[3].children[0],
-            id: item.children[0].children[0],
-          })
-          // }
-        })
-      })
+    // this.$axios
+    //   .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
+    //     url: 'https://nowcasting.bmkg.go.id/cap/xml/id/newsflash.xml',
+    //   })
+    //   .then((res) => {
+    //     const json = xml.parse(res.data)
+    //     var dataparsed = json[0].children[0].children
+    //     var index = json[0].children[0].children.length - 1
+    //     var listParsedArray = dataparsed[index].children
+    //     this.listGempa.length = 0
+    //     listParsedArray.forEach((item) => {
+    //       // this.runningText.push(item.text)
+    //       // if (item.children[0].children[0].includes('CBB')) {
+    //         console.log(item.children)
+    //       this.listGempa.push({
+    //         name: item.children[3].children[0],
+    //         id: item.children[0].children[0],
+    //       })
+    //       // }
+    //     })
+    //   })
   },
   methods: {
     changeFooter(val) {
