@@ -1,57 +1,26 @@
 <template>
-  <div class="h-screen w-screen md:flex items-center justify-center">
+  <div class="h-screen w-screen bg md:flex items-center justify-center">
     <div class="
         flex-grow
-        md:w-1/2
-        flex
-        items-start
-        relative
-        justify-center
-        h-screen
-      ">
-      <div class="area">
-        <ul class="circles">
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-        </ul>
-      </div>
-    </div>
-    <div class="
-        flex-grow
-        p-8
-        m-4
-        md:m-0
+        p-4
+        w-full
         md:w-1/2 md:flex
         items-center
         md:p-12
         lg:p-32
-        w-72
-        mx-auto
-        left-0
-        right-0
+        h-full
         md:h-screen
         text-gray-800
-        absolute
-        top-24
-        md:top-0
-        md:relative
-        bg-white
+        
+
       ">
-      <form @submit.prevent="loginFunc" class="w-full">
+      <form @submit.prevent="loginFunc" class="w-full bg-white w-11/12 md:w-5/12 p-6 relative top-24 md:top-0 md:p-12 rounded mx-auto">
         <div class="
             md:text-4xl
             font-semibold
             text-center
           ">
-          ADMIN
+          UPT
         </div>
 
         <div class="uppercase text-center 
@@ -105,128 +74,33 @@
 </template>
 
 <style>
-.area {
-  background: #4e54c8;
-  background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);
+.bg {
   width: 100%;
   height: 100vh;
-
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: 300% 300%;
+  background-image: linear-gradient(-45deg,
+      rgba(59, 173, 227, 1) 0%,
+      rgba(87, 111, 230, 1) 25%,
+      rgba(152, 68, 183, 1) 51%,
+      rgba(255, 53, 127, 1) 100%);
+  animation: AnimateBG 20s ease infinite;
 }
 
-.circles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.circles li {
-  position: absolute;
-  display: block;
-  list-style: none;
-  width: 20px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  animation: animate 25s linear infinite;
-  bottom: -150px;
-
-}
-
-.circles li:nth-child(1) {
-  left: 25%;
-  width: 80px;
-  height: 80px;
-  animation-delay: 0s;
-}
-
-
-.circles li:nth-child(2) {
-  left: 10%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 2s;
-  animation-duration: 12s;
-}
-
-.circles li:nth-child(3) {
-  left: 70%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 4s;
-}
-
-.circles li:nth-child(4) {
-  left: 40%;
-  width: 60px;
-  height: 60px;
-  animation-delay: 0s;
-  animation-duration: 18s;
-}
-
-.circles li:nth-child(5) {
-  left: 65%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 0s;
-}
-
-.circles li:nth-child(6) {
-  left: 75%;
-  width: 110px;
-  height: 110px;
-  animation-delay: 3s;
-}
-
-.circles li:nth-child(7) {
-  left: 35%;
-  width: 150px;
-  height: 150px;
-  animation-delay: 7s;
-}
-
-.circles li:nth-child(8) {
-  left: 50%;
-  width: 25px;
-  height: 25px;
-  animation-delay: 15s;
-  animation-duration: 45s;
-}
-
-.circles li:nth-child(9) {
-  left: 20%;
-  width: 15px;
-  height: 15px;
-  animation-delay: 2s;
-  animation-duration: 35s;
-}
-
-.circles li:nth-child(10) {
-  left: 85%;
-  width: 150px;
-  height: 150px;
-  animation-delay: 0s;
-  animation-duration: 11s;
-}
-
-
-
-@keyframes animate {
-
+@keyframes AnimateBG {
   0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-    border-radius: 0;
+    background-position: 0% 50%
+  }
+
+  50% {
+    background-position: 100% 50%
   }
 
   100% {
-    transform: translateY(-1000px) rotate(720deg);
-    opacity: 0;
-    border-radius: 50%;
+    background-position: 0% 50%
   }
-
 }
 </style>
 
@@ -242,12 +116,12 @@ export default {
       loading: false,
     }
   },
-  created() {
-    // this.$router.push("/login?redirect=inapows");
-    if (this.$cookies.get('users')) {
-      this.$router.push('/display')
-    }
-  },
+  // created() {
+  //   // this.$router.push("/login?redirect=inapows");
+  //   if (this.$cookies.get('users')) {
+  //     this.$router.push('/display')
+  //   }
+  // },
   methods: {
     serialize(obj) {
       var str = []
@@ -258,7 +132,6 @@ export default {
       return str.join('&')
     },
     loginFunc() {
-      var query = this.$route.query
       this.loading = true
       this.$axios
         .$post(`user/login`, this.login)
@@ -268,7 +141,7 @@ export default {
             path: '/',
             maxAge: 60 * 60 * 24 * 7,
           })
-          this.$router.push('/display')
+          window.open('/display', "_self")
         })
         .catch((error) => {
           console.log(error)

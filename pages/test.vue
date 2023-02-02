@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="nuke">Nuclear Button</button>
+    <!-- <button @click="nuke">Nuclear Button</button> -->
   </div>
 </template>
 
