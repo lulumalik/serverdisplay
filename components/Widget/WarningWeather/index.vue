@@ -86,14 +86,11 @@ export default {
     this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
 
     if (
-      this.$store.state.displayWidget.widgetSaved[
-      this.idTemplate + '_WidgetWarningWeather_area'
-      ]
+      parentDisplay.responseDisplay.properties.allSetting[this.idTemplate]
     ) {
-      this.area = this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWarningWeather_area'
-      ].id
+      this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.id
     }
+
 
     this.warningURL = 'https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +
       new Date().getFullYear() +
