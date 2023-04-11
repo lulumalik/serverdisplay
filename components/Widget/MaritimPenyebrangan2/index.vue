@@ -338,18 +338,17 @@ export default {
           }
         })
         this.showData = result
+        // console.log(this.showData)
         this.listpelabuhan.length = 0
         // console.log(arr)
         this.$axios
           .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
             url:
-              'https://maritim.bmkg.go.id/public_api/pelabuhan/' +
-              result.value.name.split('.')[0] +
-              '.json',
+            'https://maritim.bmkg.go.id/ajax/bindpopup_penyeberangan?id=' + this.showData.value.id,
           })
           .then((res) => {
-            self.listpelabuhan = res.data.data
-            self.initialMap(res.data)
+            self.listpelabuhan = [res.data]
+            self.initialMap([res.data])
           })
       } else {
         if (
