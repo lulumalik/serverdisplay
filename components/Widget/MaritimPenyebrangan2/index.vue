@@ -7,89 +7,103 @@
       </div>
 
       <div class="h-full w-full flex items-center justify-center font-color">
-        <div class="flex space-x-8 text-gray-700" v-if="listpelabuhan.length > 0">
-          <div v-for="(w, i) in listpelabuhan" :key="i" style="width:680px">
+        <div class="text-gray-700" v-if="listpelabuhan.length > 0" style="width:750px">
+          <div v-for="(w, i) in listpelabuhan" :key="i">
             <div class="
-              rounded-t-3xl
-              border-4 border-white
-              shadow-md
-              flex
-              items-center
-              justify-center
-              bg-gradient-to-b
-              from-indigo-500
-              to-blue-800
-              h-32
-              flex
-              space-x-6
-            " style="width:100%;">
+                  rounded-t-3xl
+                  border-4 border-white
+                  shadow-md
+                  flex
+                  items-center
+                  justify-center
+                  bg-gradient-to-b
+                  from-indigo-500
+                  to-blue-800
+                  h-32
+                  w-full
+                  space-x-6
+                ">
 
               <div class="flex-none">
                 <div class="font-bold text-2xl px-12 text-white flex space-x-4 justify-center">
                   <div>{{ spliting(new Date(
-                      returningTimeZone(new Date(w.valid_from))
-                    ).toLocaleDateString('id'))
+                    returningTimeZone(new Date(w.valid_from))
+                  ).toLocaleDateString('id'))
                   }}</div>
                   <div>
                     {{
-                        returningTimeZone(new Date(w.valid_from))
-                          .split(' ')
-                          .splice(4, 4)[0]
-                          .split(':')
-                          .splice(0, 2)
-                          .join(':')
+                      returningTimeZone(new Date(w.valid_from))
+                        .split(' ')
+                        .splice(4, 4)[0]
+                        .split(':')
+                        .splice(0, 2)
+                        .join(':')
                     }}
                     {{
-                        getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+                      getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
                     }}
                   </div>
                 </div>
                 <div class="font-bold text-2xl px-12 text-white flex space-x-4 justify-center">
                   <div>Berlaku Sampai </div>
                   <div>{{ spliting(new Date(
-                      returningTimeZone(new Date(w.valid_to))
-                    ).toLocaleDateString('id'))
+                    returningTimeZone(new Date(w.valid_to))
+                  ).toLocaleDateString('id'))
                   }}</div>
                   <div>
                     {{
-                        returningTimeZone(new Date(w.valid_to))
-                          .split(' ')
-                          .splice(4, 4)[0]
-                          .split(':')
-                          .splice(0, 2)
-                          .join(':')
+                      returningTimeZone(new Date(w.valid_to))
+                        .split(' ')
+                        .splice(4, 4)[0]
+                        .split(':')
+                        .splice(0, 2)
+                        .join(':')
                     }}
                     {{
-                        getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+                      getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
                     }}
                   </div>
                 </div>
               </div>
             </div>
-            <div class="px-4 pb-3 pt-3 bg-white flex  text-lg rounded-b-3xl shadow-md">
+            <div class="px-4 pb-3 pt-3 bg-white w-full text-lg rounded-b-3xl shadow-md">
               <div class="p-6 rounded-md">
-                <div class="text-xl mt-4">
-                  <div class="relative mt-2 flex space-x-8 font-bold text-2xl">
-                    <div class="w-32 h-12"><img class="w-44 absolute -left-8 -top-16"
-                        :src="'/Archive/' + weather_codeParsed[w.weather] + '.gif'" />
+                <div class="text-4xl text-center font-bold pb-4">
+                  {{ w.jalur_name }}
+                </div>
+                <div class="text-xl mt-12">
+                  <div class="relative mt-2 flex space-x-8 justify-center font-bold text-2xl">
+                    <div class="relative">
+                      <div class="w-36 h-12"><img class="w-64 absolute right-0 -top-14"
+                          :src="'/Archive/' + weather_codeParsed[w.cuaca.name] + '.gif'" />
+                      </div>
                     </div>
-                    <div class="text-center text-3xl">{{ w.weather }}</div>
+                    <div class="text-center text-3xl">{{ w.cuaca.name }}</div>
                   </div>
                 </div>
                 <div class="flex space-x-4 mt-14">
-                  <div class="flex space-x-4 w-52 ">
-                    <img src="/weatherheadline/wave.svg" class="w-6 " />
+                  <div class="flex space-x-4 w-52 items-start ">
+                    <img src="/weatherheadline/wave.svg" class="w-6 relative top-1" />
                     <div class="text-2xl font-bold">Gelombang</div>
                   </div>
-                  <div class="text-2xl">{{ w.wave_desc }}</div>
+                  <div class="text-2xl ">
+                    <div>
+                      {{ w.gelombang.name }}
+                    </div>
+                    <div class="flex space-x-4">
+                      <div>{{ w.gelombang.gelombang_min }}</div>
+                      <div>{{ w.gelombang.gelombang_max }}</div>
+                      <div>m</div>
+                    </div>
+                  </div>
                 </div>
                 <div class="flex space-x-4 mt-4">
                   <div class="flex items-start space-x-4 w-52"> <img src="/general3/wind.svg" class="w-6 mt-1.5" />
                     <div class="text-2xl font-bold">Angin</div>
                   </div>
                   <div class="text-2xl">
-                    <div>Dari {{ w.wind_from }} ke {{ w.wind_to }}</div>
-                    <div>{{ w.wind_speed_min }} - {{ w.wind_speed_max
+                    <div>Dari {{ w.angin.from.name }} ke {{ w.angin.to.name }}</div>
+                    <div>{{ w.angin_from }} - {{ w.angin_to
                     }} Knots</div>
                   </div>
                 </div>
@@ -318,7 +332,7 @@ export default {
         setting[self.idtemplate].map((el) => {
           // console.log(el)
           var key = el.key.split('_')[1]
-          if (key == 'WidgetMaritimPelabuhan') {
+          if (key == 'WidgetMaritimPenyebrangan2') {
             // arr.push(el)
             result = el
           }
@@ -340,12 +354,12 @@ export default {
       } else {
         if (
           this.$store.state.displayWidget.widgetSaved[
-          self.idtemplate + '_WidgetMaritimPelabuhan_port'
+          self.idtemplate + '_WidgetMaritimPenyebrangan2_port'
           ]
         ) {
           var el =
             this.$store.state.displayWidget.widgetSaved[
-            self.idtemplate + '_WidgetMaritimPelabuhan_port'
+            self.idtemplate + '_WidgetMaritimPenyebrangan2_port'
             ]
 
           this.showData = {
@@ -353,16 +367,15 @@ export default {
           }
           this.listpelabuhan.length = 0
           // console.log(arr)
+          // console.log(el)
           this.$axios
             .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
-              url:
-                'https://maritim.bmkg.go.id/public_api/pelabuhan/' +
-                el.name.split('.')[0] +
-                '.json',
+              url: 'https://maritim.bmkg.go.id/ajax/bindpopup_penyeberangan?id=' + el.id,
             })
             .then((res) => {
-              self.listpelabuhan = res.data.data
-              self.initialMap(res.data)
+              // console.log(res)
+              self.listpelabuhan = [res.data]
+              self.initialMap([res.data])
             })
         }
       }
