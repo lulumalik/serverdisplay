@@ -220,11 +220,11 @@ export default {
 
                 var obj = {}
                 ndflistener[el.value.ndf].forEach((item) => {
-                  if (!obj[new Date(item.date).getUTCMonth() * parseFloat('0.' + new Date(item.date).getUTCDate())]) {
-                    obj[new Date(item.date).getUTCMonth() * parseFloat('0.' + new Date(item.date).getUTCDate())] = []
-                    obj[new Date(item.date).getUTCMonth() * parseFloat('0.' + new Date(item.date).getUTCDate())].push(item)
+                  if (!obj[parseFloat(new Date(item.date).getUTCMonth() + '.' + new Date(item.date).getUTCDate())]) {
+                    obj[parseFloat(new Date(item.date).getUTCMonth() + '.' + new Date(item.date).getUTCDate())] = []
+                    obj[parseFloat(new Date(item.date).getUTCMonth() + '.' + new Date(item.date).getUTCDate())].push(item)
                   } else {
-                    obj[new Date(item.date).getUTCMonth() * parseFloat('0.' + new Date(item.date).getUTCDate())].push(item)
+                    obj[parseFloat(new Date(item.date).getUTCMonth() + '.' + new Date(item.date).getUTCDate())].push(item)
                   }
                 })
                 var result = {}
@@ -269,11 +269,11 @@ export default {
 
             var obj = {}
             ndflistener[el.locationId].forEach((item) => {
-              if (!obj[new Date(item.date).getUTCMonth() * parseFloat('0.' + new Date(item.date).getUTCDate())]) {
-                obj[new Date(item.date).getUTCMonth() * parseFloat('0.' + new Date(item.date).getUTCDate())] = []
-                obj[new Date(item.date).getUTCMonth() * parseFloat('0.' + new Date(item.date).getUTCDate())].push(item)
+              if (!obj[parseFloat(new Date(item.date).getUTCMonth() + '.' + new Date(item.date).getUTCDate())]) {
+                obj[parseFloat(new Date(item.date).getUTCMonth() + '.' + new Date(item.date).getUTCDate())] = []
+                obj[parseFloat(new Date(item.date).getUTCMonth() + '.' + new Date(item.date).getUTCDate())].push(item)
               } else {
-                obj[new Date(item.date).getUTCMonth() * parseFloat('0.' + new Date(item.date).getUTCDate())].push(item)
+                obj[parseFloat(new Date(item.date).getUTCMonth() + '.' + new Date(item.date).getUTCDate())].push(item)
               }
             })
             var result = {}
