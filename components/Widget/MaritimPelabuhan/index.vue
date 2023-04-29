@@ -8,7 +8,7 @@
 
       <div class="h-full w-full flex items-center justify-center font-color">
         <div class="flex space-x-8 text-gray-700" v-if="listpelabuhan.length > 0">
-          <div v-for="(w, i) in listpelabuhan" :key="i" style="width:680px">
+          <div v-for="(w, i) in sortListPelabuhan" :key="i" style="width:680px">
             <div class="
               rounded-t-3xl
               border-4 border-white
@@ -206,6 +206,9 @@ export default {
         return 5
       }
     },
+    sortListPelabuhan() {
+      return this.listpelabuhan.sort((a, b) => new Date(a.valid_from) - new Date(b.valid_from))
+    }
   },
 
   methods: {
