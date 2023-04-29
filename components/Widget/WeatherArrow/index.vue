@@ -80,7 +80,9 @@
       </div>
       <div v-else>
         <div>
-          <carousel :vertical="true" :autoPlay="true" :playSpeed="4000" :itemsToShow="1"
+          <carousel :vertical="true" :autoPlay="true" :playSpeed="4000" :itemsToShow="1" 
+          :wheelControl="false"
+          :hoverPause="false"
             style="height: 1000px;width:1920px;right:280px" class="relative">
             <carouselitem v-for="(forecast2, i) in parsedforecast" :key="i" style="height:900px;">
               <div class="grid grid-cols-3">
