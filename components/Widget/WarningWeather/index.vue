@@ -7,7 +7,6 @@
       </div>
     </div>
     <div v-else class="flex justify-center space-x-4">
-      {{ area }}
       <div>
         <img style="width: 450px" class="rounded-lg" :src="warningURL" />
       </div>
@@ -100,7 +99,11 @@ export default {
       if (
         parentDisplay.responseDisplay.properties.allSetting[this.idTemplate]
       ) {
-        this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1].value.id
+        if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0]) {
+          this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area
+        } else {
+          this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1].value.id
+        }
       }
     }
 

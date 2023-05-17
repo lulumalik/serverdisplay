@@ -38,6 +38,7 @@
 
 <script>
 export default {
+  props: ['emitonly'],
   data() {
     return {
       templateDB: [],
@@ -69,20 +70,28 @@ export default {
       })
     },
     postImage(img) {
-      var index = this.$parent.$refs['header'].indexdata
-      // console.log(this.$parent.obj, index, this.$parent.$parent.logos)
-      if (!this.$parent.$parent.logos[this.$parent.obj.idtemplate]) {
-        this.$parent.$parent.logos[this.$parent.obj.idtemplate] = []
-        this.$parent.$parent.logos[this.$parent.obj.idtemplate][index] = img
+      if (this.emitonly) {
+        this.$emit('url', img.url)
       } else {
+        var index = this.$parent.$refs['header'].indexdata
+        
+        this.$parent.$parent.$parent.templateAddedList.forEach(el => {
+          if (!this.$parent.$parent.logos[el.idtemplate]) {
+            this.$parent.$parent.logos[el.idtemplate] = []
+            this.$parent.$parent.logos[el.idtemplate][index] = img
+          } else {
 
-        this.$parent.$parent.logos[this.$parent.obj.idtemplate][index] = img
+            this.$parent.$parent.logos[el.idtemplate][index] = img
+          }
+        })
+
+
+        this.$parent.useHeader = false
+        setTimeout(() => {
+          this.$parent.useHeader = true
+          this.$parent.chooseLogo = false
+        }, 500)
       }
-      this.$parent.useHeader = false
-      setTimeout(() => {
-        this.$parent.useHeader = true
-        this.$parent.chooseLogo = false
-      }, 500)
     },
   },
 }

@@ -2,25 +2,30 @@
   <div>
     <div class="w-full flex items-center ">
       <div class="flex-grow flex items-center space-x-4">
-        <img :src="$parent.isHujan ? '/bmkglogowht-01.png' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5  ? '/bmkglogowht-01.png' : '/bmkg.png'" alt="bmkg" class="w-20" />
+        <img
+          :src="$parent.isHujan ? '/bmkglogowht-01.png' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? '/bmkglogowht-01.png' : '/bmkg.png'"
+          alt="bmkg" class="w-20" />
         <div class="flex-grow">
-          <div style="font-size:27px" class="font-semibold" :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5  ? 'text-white' : 'text-black'" >
+          <div style="font-size:27px" class="font-semibold"
+            :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'">
             BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA
           </div>
-          <div class="text-xl mt-2 kaushan" :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'">
+          <div class="text-xl mt-2 kaushan"
+            :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'">
             Cepat, Tepat, Akurat, Luas, dan Mudah Dipahami
           </div>
         </div>
-        <div class="flex-none font-thin pr-4" :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'" v-if="nodrag">
+        <div class="flex-none font-thin pr-4"
+          :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'"
+          v-if="nodrag">
           <div class="flex items-center justify-end">
             <div class="ml-2 font-bold text-3xl">
               {{ $parent.location ? $parent.location.name : '-' }}
             </div>
           </div>
-          <div
-            class="text-2xl mt-1 flex items-center font-semibold justify-end"
-          >
-            <div class="ml-2" :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'">
+          <div class="text-2xl mt-1 flex items-center font-semibold justify-end">
+            <div class="ml-2"
+              :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'">
               {{
                 deleteSecond(
                   new Date(currentDate)
@@ -38,43 +43,29 @@
       </div>
       <div class="flex-none flex space-x-3" v-if="!nodrag">
         <div v-for="(l, i) in 3" :key="i">
-          <div
-            v-if="
-            $parent.$parent.logos &&
-              $parent.$parent.logos[$parent.obj.idtemplate] &&
-              $parent.$parent.logos[$parent.obj.idtemplate][l]
-            "
-            class="relative"
-          >
-            <button
-              @click="deleteLogos(l)"
-              v-if="!nodrag"
-              class="
+          <div v-if="$parent.$parent.logos &&
+            $parent.$parent.logos[$parent.obj.idtemplate] &&
+            $parent.$parent.logos[$parent.obj.idtemplate][l]
+            " class="relative">
+            <button @click="deleteLogos(l)" v-if="!nodrag" class="
                 text-red-500
                 font-bold
                 absolute
                 -right-3
                 -top-2
                 cursor-pointer
-              "
-            >
+              ">
               &times;
             </button>
 
-            <img
-              :src="
-                $axios.defaults.baseURL +
-                $parent.$parent.logos[$parent.obj.idtemplate][l].url.replace(
-                  '/api/',
-                  ''
-                )
-              "
-              style="width: 80px"
-            />
+            <img :src="$axios.defaults.baseURL +
+              $parent.$parent.logos[$parent.obj.idtemplate][l].url.replace(
+                '/api/',
+                ''
+              )
+              " style="width: 80px" />
           </div>
-          <div
-            v-else
-            class="
+          <div v-else class="
               h-8
               w-8
               rounded
@@ -83,31 +74,22 @@
               items-center
               justify-center
               cursor-pointer
-            "
-            @click="uploadLogo(l)"
-          >
+            " @click="uploadLogo(l)">
             <span class="relative bottom-0.5">+</span>
           </div>
         </div>
       </div>
       <div v-else class="flex-none flex space-x-3">
         <div v-for="(l, i) in 3" :key="i" class="relative">
-          <div
-            v-if="
-              $parent.$parent.logos[$parent.obj.idtemplate] &&
-              $parent.$parent.logos[$parent.obj.idtemplate][l]
-            "
-          >
-            <img
-              :src="
-                $axios.defaults.baseURL +
-                $parent.$parent.logos[$parent.obj.idtemplate][l].url.replace(
-                  '/api/',
-                  ''
-                )
-              "
-              style="width: 80px"
-            />
+          <div v-if="$parent.$parent.logos[$parent.obj.idtemplate] &&
+            $parent.$parent.logos[$parent.obj.idtemplate][l]
+            ">
+            <img :src="$axios.defaults.baseURL +
+              $parent.$parent.logos[$parent.obj.idtemplate][l].url.replace(
+                '/api/',
+                ''
+              )
+              " style="width: 80px" />
           </div>
         </div>
       </div>
@@ -117,8 +99,9 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
+
 .kaushan {
-    font-family: 'Kaushan Script', cursive;
+  font-family: 'Kaushan Script', cursive;
 }
 </style>
 
@@ -252,24 +235,27 @@ export default {
     },
     deleteLogos(index) {
       var arr = []
-      this.$parent.$parent.logos[this.$parent.obj.idtemplate].forEach(
-        (el, i) => {
-          if (index !== i) {
-            arr.push(el)
-          } else {
-            arr.push(null)
+      this.$parent.$parent.$parent.templateAddedList.forEach(el => {
+        this.$parent.$parent.logos[el.idtemplate].forEach(
+          (el, i) => {
+            if (index !== i) {
+              arr.push(el)
+            } else {
+              arr.push(null)
+            }
           }
-        }
-      )
-      // console.log(arr)
-      this.$parent.$parent.logos[this.$parent.obj.idtemplate].length = 0
-      this.$parent.$parent.logos[this.$parent.obj.idtemplate] = arr
-      // $parent.logos[i] = null
+        )
+        // console.log(arr)
+        this.$parent.$parent.logos[el.idtemplate].length = 0
+        this.$parent.$parent.logos[el.idtemplate] = arr
+        // $parent.logos[i] = null
 
-      this.$parent.useHeader = false
-      setTimeout(() => {
-        this.$parent.useHeader = true
-      }, 500)
+        this.$parent.useHeader = false
+        setTimeout(() => {
+          this.$parent.useHeader = true
+        }, 500)
+      })
+
     },
   },
 }

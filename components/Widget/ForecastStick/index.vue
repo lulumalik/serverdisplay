@@ -15,21 +15,24 @@
               to-blue-800
               w-44
               h-36
+              relative
             ">
-            <img :src="'/Archive/' + w.weather_code + '.gif'" class="w-44 mx-auto" />
+            <img :src="'/Archive/' + w.weather_code + '.gif'" class="w-44 relative bottom-4 mx-auto" />
+            <div class="absolute bottom-3 left-0 right-0 text-white text-xs font-bold text-center">{{ kec }}</div>
           </div>
-          <div class="px-4 py-6 bg-white text-lg rounded-b-3xl shadow-md">
+          <div class="px-4 pt-3 pb-6 bg-white text-lg rounded-b-3xl shadow-md relative z-30">
             <div class="font-bold text-center text-lg text-black">
               <!-- {{ w.date.split('T')[1].replace('.000Z', ' UTC') }} -->
               {{
                 returningTimeZone(w.date)[2] + ' ' + parseMonth(parseInt(returningTimeZone(w.date)[1]) - 1) + ' ' +
-                  returningTimeZone(w.date)[0]
+                returningTimeZone(w.date)[0]
               }}
               <!-- {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }} -->
             </div>
-            <div class="font-semibold mb-3 text-lg text-center">
+            <div class="font-semibold  text-lg text-center">
               {{ weather_code[w.weather_code] }}
             </div>
+
 
             <div class="flex space-x-2 ml-3  items-center mt-8">
               <div class="w-6">
@@ -74,6 +77,7 @@ export default {
     return {
       allNDF: {},
       currentDate: new Date().getHours(),
+      kec: '',
       forecast: [
         {
           _id: '62e1d18fe1ec873f27342d0b',
@@ -207,6 +211,7 @@ export default {
           var comp = el.key.split('_')[1]
           if (comp == 'WidgetForecastStick') {
             if (key == 'kecamatan') {
+              this.kec = el.value.subdistrict
               const datares = await this.$axios.$get(
                 `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
                 el.value.locationId

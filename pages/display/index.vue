@@ -22,7 +22,7 @@
           </div>
           <div class="mb-6 flex space-x-6 absolute top-10 right-4">
             <div class="relative">
-              <input type="text" v-model="searchname" placeholder="Search"
+              <input type="text" v-model="searchname" placeholder="Search by name"
                 class="rounded-full w-56 py-2 px-4 border border-sky-400" />
               <div class="absolute right-4 top-3.5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="text-sky-400">
@@ -37,8 +37,8 @@
           </div>
           <div class="text-right flex mt-4 justify-end w-full">
             <div class="flex-none">
-              <paginate :page-count="total" :click-handler="functionName" :prev-text="'Prev'" :next-text="'Next'"
-                :container-class="'flex space-x-4'">
+              <paginate :page-count="total" v-if="searchname.length == 0" :click-handler="functionName"
+                :prev-text="'Prev'" :next-text="'Next'" :container-class="'flex space-x-4'">
               </paginate>
             </div>
             <div class="flex-grow">
@@ -104,7 +104,13 @@ export default {
         clearTimeout(this.timeoutsearch)
       }
       this.timeoutsearch = setTimeout(() => {
-        this.searchData()
+        if (val.length == 0) {
+          this.page = 1
+          this.total = 10
+          this.callAllData()
+        } else {
+          this.searchData()
+        }
       }, 500)
     },
   },
@@ -117,18 +123,17 @@ export default {
     },
     searchData() {
       this.$axios
-        .$get('display?row=1000&keyword=' + this.searchname)
+        .$get('display?row=10000000&keyword=' + this.searchname.toLowerCase())
         .then((res) => {
           this.templateDB = res.data
-          this.total = parseInt(res.count / 20 + 2)
+          this.total = parseInt(res.count / 10000000 + 2)
         })
     },
     callAllData() {
-      this.$axios.$get('display?row=20&page=' + this.page).then((res) => {
+      this.$axios.$get('display?row=50&page=' + this.page).then((res) => {
         // parseInt res.count if decimal
-        var count = parseInt(res.count / 20 + 2)
+        var count = parseInt(res.count / 50 + 2)
         this.total = count
-
         this.templateDB = res.data
       })
       this.$axios.$get('layout').then((res) => {
@@ -145,17 +150,16 @@ export default {
       })
     },
     functionName(e) {
-      this.$axios.$get('display?row=20&page=' + e).then((res) => {
-        this.total = parseInt(res.count / 20 + 2)
+      this.$axios.$get('display?row=50&page=' + e).then((res) => {
+        this.total = parseInt(res.count / 50 + 2)
         this.templateDB = res.data
       })
     },
-    editing() {
+    editing(username) {
       this.$router.push({
         name: 'display-create',
         query: {
-          id: this.templateDB.find((db) => db._id == this.templateDBSelected)
-            .username,
+          id: username,
         },
       })
     },

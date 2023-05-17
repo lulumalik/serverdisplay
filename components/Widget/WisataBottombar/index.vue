@@ -1,14 +1,9 @@
 <template>
   <div class="h-44 w-full">
     &nbsp;
-    <div
-      :style="backgroundnize"
-      class="fixed -top-24 w-full left-0"
-      style="z-index: -1"
-    ></div>
+    <div :style="backgroundnize" class="fixed -top-24 w-full left-0" style="z-index: -1"></div>
     <!-- <img :src="img" class="fixed -top-24 w-full left-0" style="z-index: -1" /> -->
-    <div
-      class="
+    <div class="
         rounded-tr-full
         pt-10
         pb-12
@@ -20,43 +15,29 @@
         left-0
         flex
         items-center
-      "
-      :style="{ background: backgroundColor }"
-    >
-      <div
-        class="w-9/12"
-        :style="{ color: color }"
-      >
-        <div class="font-bold text-5xl">
-          {{ name !== '' ? name : 'No Name of location' }}
+      " :style="{ background: backgroundColor }">
+      <div class="w-9/12" :style="{ color: color }">
+        <div class="flex space-x-2 items-end">
+          <div class="font-bold text-5xl ">
+
+            {{ name !== '' ? name : 'No Name of location' }}
+          </div>
+          <div class="relative text-md font-bold left-3">
+            - {{ kec }}
+          </div>
         </div>
-        <hr
-          class="w-32 mt-3"
-          style="border-color: #b6b6b6"
-        />
+        <hr class="w-32 mt-3" style="border-color: #b6b6b6" />
         <div class="text-lg mt-3 w-11/12 line-clamp">
           {{ desc !== '' ? desc : 'No Data' }}
         </div>
       </div>
-      <div
-        class="w-3/12 flex mx-auto space-x-4 relative items-center"
-        v-if="forecast.length > 0"
-      >
+      <div class="w-3/12 flex mx-auto space-x-4 relative items-center" v-if="forecast.length > 0">
         <div class="flex-none w-28">
-          <img
-            :src="'/Archive/' + forecast[0].weather_code + '.gif'"
-            class="w-44 mx-auto absolute -left-44 -top-12 right-0"
-            alt="imgdata"
-          />
+          <img :src="'/Archive/' + forecast[0].weather_code + '.gif'"
+            class="w-44 mx-auto absolute -left-44 -top-12 right-0" alt="imgdata" />
         </div>
-        <div
-          class="flex-grow"
-          :style="{ color: color }"
-        >
-          <div
-            class="text-6xl text-left"
-            style="font-weight: 200 !important"
-          >
+        <div class="flex-grow" :style="{ color: color }">
+          <div class="text-6xl text-left" style="font-weight: 200 !important">
             <div>{{ forecast[0].temp }}<sup>o</sup>C</div>
           </div>
           <div class="relative text-lg left-3">
@@ -82,6 +63,7 @@ export default {
       backgroundnize: {},
       allNDF: {},
       idTemplate: null,
+      kec: ''
     }
   },
   computed: {
@@ -106,7 +88,7 @@ export default {
               // console.log(this.ndflistener[el.value.ndf], el)
               const datares = await this.$axios.$get(
                 `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
-                  el.value.locationId
+                el.value.locationId
               )
 
               self.$set(ndflistener, el.value.ndf, datares.data)
@@ -142,6 +124,7 @@ export default {
             this.name = el.value
           } else if (key == 'kecamatan') {
             this.forecast.length = 0
+            this.kec = el.value.subdistrict
             this.getData()
           } else if (key == 'description') {
             this.desc = el.value
@@ -151,8 +134,13 @@ export default {
             this.backgroundColor = el.value
           } else if (key == 'img') {
             this.img = el.value
+            var images = this.img.includes('/api/') ?
+              ('url(' +
+                $axios.defaults.baseURL +
+                img.split('/api/')[1] +
+                ')') : `url(${this.img})`
             this.backgroundnize = {
-              'background-image': 'url(' + this.img + ')',
+              'background-image': images,
               'background-size': 'cover',
               'background-position': 'center',
               'background-repeat': 'no-repeat',
@@ -169,52 +157,52 @@ export default {
     } else {
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_description'
+        this.idTemplate + '_WidgetWisataBottombar_description'
         ]
       ) {
         this.desc =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_description'
+          this.idTemplate + '_WidgetWisataBottombar_description'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_name'
+        this.idTemplate + '_WidgetWisataBottombar_name'
         ]
       ) {
         this.name =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_name'
+          this.idTemplate + '_WidgetWisataBottombar_name'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_color'
+        this.idTemplate + '_WidgetWisataBottombar_color'
         ]
       ) {
         this.color =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_color'
+          this.idTemplate + '_WidgetWisataBottombar_color'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_background'
+        this.idTemplate + '_WidgetWisataBottombar_background'
         ]
       ) {
         this.backgroundColor =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_background'
+          this.idTemplate + '_WidgetWisataBottombar_background'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombar_img'
+        this.idTemplate + '_WidgetWisataBottombar_img'
         ]
       ) {
         this.img =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataBottombar_img'
+          this.idTemplate + '_WidgetWisataBottombar_img'
           ]
       }
     }
