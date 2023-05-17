@@ -1,21 +1,33 @@
 <template>
   <div>
+    <!-- <div class="fixed shadow-md w-96 mx-auto p-4 bg-white rounded-md left-0 right-0 top-24" style="z-index:10000" v-if="showoverlay">
+      <client-only>
+        <div class="mb-4 font-bold text-xl relative">
+          Form Upload
+          <button @click="showoverlay = false" class="text-red-500 absolute -right-6 -top-8 text-3xl">&times;</button>
+        </div>
+        <div>
+          <div>Title</div>
+          <div class="mt-1">
+            <input type="text" placeholder="title" v-model="title" class="border border-gray-200 rounded-md px-2 py-1 w-full"/>
+          </div>
+        </div>
+        <button class="w-full bg-blue-500 rounded-md py-1 mt-4 text-white font-semibold" @click="uploadimage">
+          Upload image
+        </button>
+        <picture-input id="fileUpload" type="file" accept="image/jpeg,image/png" @change="dataFile" class="hidden">
+        </picture-input>
+      </client-only>
+    </div> -->
     <client-only>
-      <picture-input
-        id="fileUpload"
-        type="file"
-        accept="image/jpeg,image/png"
-        @change="dataFile"
-        class="hidden"
-      >
+      <picture-input id="fileUpload" type="file" accept="image/jpeg,image/png" @change="dataFile" class="hidden">
       </picture-input>
     </client-only>
     <Navbar class="w-full" />
     <div class="flex w-full" style="height: calc(100vh - 65.5px)">
       <Sidebar class="flex-none" />
       <client-only>
-        <div
-          class="
+        <div class="
             flex-grow
             bg-gray-100
             w-full
@@ -24,45 +36,26 @@
             py-4
             overflow-auto
             relative
-          "
-        >
+          ">
           <div class="mb-6 flex space-x-6 absolute top-4 right-4">
             <div class="relative">
-              <input
-                type="text"
-                v-model="searchname"
-                placeholder="Search"
-                class="rounded-full w-56 py-2 px-4 border border-sky-400"
-              />
+              <input type="text" v-model="searchname" placeholder="Search"
+                class="rounded-full w-56 py-2 px-4 border border-sky-400" />
               <div class="absolute right-4 top-3.5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  class="text-sky-400"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M9.145 18.29c-5.042 0-9.145-4.102-9.145-9.145s4.103-9.145 9.145-9.145 9.145 4.103 9.145 9.145-4.102 9.145-9.145 9.145zm0-15.167c-3.321 0-6.022 2.702-6.022 6.022s2.702 6.022 6.022 6.022 6.023-2.702 6.023-6.022-2.702-6.022-6.023-6.022zm9.263 12.443c-.817 1.176-1.852 2.188-3.046 2.981l5.452 5.453 3.014-3.013-5.42-5.421z"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="text-sky-400">
+                  <path fill="currentColor"
+                    d="M9.145 18.29c-5.042 0-9.145-4.102-9.145-9.145s4.103-9.145 9.145-9.145 9.145 4.103 9.145 9.145-4.102 9.145-9.145 9.145zm0-15.167c-3.321 0-6.022 2.702-6.022 6.022s2.702 6.022 6.022 6.022 6.023-2.702 6.023-6.022-2.702-6.022-6.023-6.022zm9.263 12.443c-.817 1.176-1.852 2.188-3.046 2.981l5.452 5.453 3.014-3.013-5.42-5.421z" />
                 </svg>
               </div>
             </div>
           </div>
-          <div style="height: 85%">
+          <div style="height: 95%" class="overflow-auto">
             <div class="mt-24 grid grid-cols-5 gap-12">
               <!-- <DisplayList :templateDB="templateDB" /> -->
-              <div
-                v-for="(img, i) in filterTempalteByName"
-                :key="i"
-                class="relative"
-                style="width: 200px; height: 200px"
-              >
-                <div class="absolute -top-6 bg-white rounded p-1 left-0 right-0 mx-auto text-center w-full">{{img.filename.split('-')[1]}}</div>
-                <button
-                  @click="deleteLogos(img._id)"
-                  class="
+              <div v-for="(img, i) in filterTempalteByName" :key="i" class="relative" style="width: 200px; height: 200px">
+                <div class="absolute -top-6 bg-white rounded p-1 left-0 right-0 mx-auto text-center w-full">
+                  {{ img.filename.split('-')[1] }}</div>
+                <button @click="deleteLogos(img._id)" class="
                     text-red-500
                     font-bold
                     absolute
@@ -70,25 +63,21 @@
                     top-2
                     text-xl
                     cursor-pointer
-                  "
-                >
+                  ">
                   &times;
                 </button>
-                <div
-                  @click="copyimage(img.url)"
-                  class="rounded-md border-4 border-white shadow-md cursor-pointer"
-                  style="width: 200px; height: 200px; background-size: cover"
-                  :style="{
-                    backgroundImage:
+                <div @click="copyimage(img.url)" class="rounded-md border-4 border-white shadow-md cursor-pointer"
+                  style="width: 200px; height: 200px; background-size: cover" :style="{
+                    backgroundImage: img.url.includes('.png') ?
                       'url(' +
                       $axios.defaults.baseURL +
                       img.url.split('/api/')[1] +
-                      ')',
-                  }"
-                ></div>
-                <button
-                  @click="copyimage(img.url)"
-                  class="
+                      ')' : 'url(' +
+                      $axios.defaults.baseURL +
+                      img.url.split('/api/')[1] +
+                      '.png)',
+                  }"></div>
+                <button @click="copyimage(img.url)" class="
                     text-sky-400
                     absolute
                     bg-white
@@ -96,18 +85,10 @@
                     bottom-2
                     left-2
                     cursor-pointer
-                  "
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M21 2h-19v19h-2v-21h21v2zm3 2v20h-20v-20h20zm-2 2h-1.93c-.669 0-1.293.334-1.664.891l-1.406 2.109h-6l-1.406-2.109c-.371-.557-.995-.891-1.664-.891h-1.93v16h16v-16zm-3 6h-10v1h10v-1zm0 3h-10v1h10v-1zm0 3h-10v1h10v-1z"
-                    />
+                  ">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                      d="M21 2h-19v19h-2v-21h21v2zm3 2v20h-20v-20h20zm-2 2h-1.93c-.669 0-1.293.334-1.664.891l-1.406 2.109h-6l-1.406-2.109c-.371-.557-.995-.891-1.664-.891h-1.93v16h16v-16zm-3 6h-10v1h10v-1zm0 3h-10v1h10v-1zm0 3h-10v1h10v-1z" />
                   </svg>
                 </button>
               </div>
@@ -125,8 +106,7 @@
               </paginate>
             </div> -->
             <div class="flex-grow">
-              <button
-                class="
+              <button class="
                   bg-blue-200
                   border border-blue-400
                   shadow
@@ -136,9 +116,7 @@
                   font-semibold
                   rounded
                   text-xs
-                "
-                @click="creating"
-              >
+                " @click="uploadimage">
                 Upload Assets
               </button>
             </div>
@@ -157,6 +135,7 @@ ul li {
   width: auto !important;
   background: white;
 }
+
 ul li.active {
   background: #3b82f6 !important;
   color: white;
@@ -175,6 +154,9 @@ export default {
       searchname: '',
       page: 1,
       total: 10,
+      title: '',
+      showoverlay: false,
+      filedata: null
     }
   },
   mounted() {
@@ -206,8 +188,12 @@ export default {
         }
       )
     },
-    creating() {
+    uploadimage() {
       document.getElementById('fileUpload').click()
+    },
+    creating() {
+      // document.getElementById('fileUpload').click()
+      this.showoverlay = true
     },
     callAllData() {
       this.$axios.$get('logo?row=10000').then((res) => {
@@ -246,7 +232,9 @@ export default {
     uploadImage(img) {
       return new Promise((resolve, reject) => {
         var data = new FormData()
+        // console.log(img)
         data.append('file', img)
+        // data.append('title', this.title + '.png')
 
         this.$axios
           .$post('logo/create', data)
@@ -259,10 +247,13 @@ export default {
             })
             this.callAllData()
             resolve(res)
+            this.showoverlay = false
           })
           .catch((err) => {
             // this.saving = false
             // this.rerender = false
+
+            this.showoverlay = false
             resolve()
             this.callAllData()
             this.$toast.open({
@@ -274,6 +265,9 @@ export default {
       })
     },
     dataFile(e) {
+      // if (this.title.length == 0) {
+      //   return alert('pleases fill form')
+      // }
       this.uploadImage(this.dataURLtoFile(e, 'logos.png'))
     },
   },
