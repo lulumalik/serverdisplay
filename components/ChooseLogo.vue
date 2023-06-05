@@ -43,6 +43,7 @@ export default {
     return {
       templateDB: [],
       search: '',
+      timeoutsearch: null
     }
   },
   mounted() {
@@ -54,6 +55,16 @@ export default {
         return db.filename.toLowerCase().includes(this.search.toLowerCase())
       })
     },
+  },
+  watch: {
+    // search(val) {
+    //   if (this.timeoutsearch) {
+    //     clearTimeout(this.timeoutsearch)
+    //   }
+    //   this.timeoutsearch = setTimeout(() => {
+    //     this.searchData()
+    //   }, 500)
+    // }
   },
   methods: {
     searchData() {
@@ -74,7 +85,7 @@ export default {
         this.$emit('url', img.url)
       } else {
         var index = this.$parent.$refs['header'].indexdata
-        
+
         this.$parent.$parent.$parent.templateAddedList.forEach(el => {
           if (!this.$parent.$parent.logos[el.idtemplate]) {
             this.$parent.$parent.logos[el.idtemplate] = []

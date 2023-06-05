@@ -117,7 +117,7 @@
         </div>
       </div>
     </div> -->
-    <div style="height: calc(100vh - 240px)" class="overflow-auto w-full" >
+    <div style="height: calc(100vh - 240px)" class="overflow-auto w-full">
       <table class="bg-white w-full font-bold rounded shadow-md">
         <tr>
           <td>
@@ -149,7 +149,9 @@
             <div>{{ db.name }}</div>
           </td>
           <td>
-            {{ db.username }}
+            <div @click="copytext(db.username)" class="flex items-center underline text-blue-500 cursor-pointer">
+              <div>{{ db.username }}</div>
+            </div>
           </td>
           <td>
             {{ db.owner && db.owner.username || '-' }}
@@ -159,11 +161,11 @@
 
               <div class="w-4 h-4 rounded-full" :class="db.status ? 'bg-green-500' : 'bg-red-500'"></div>
               <div>
-                {{ db.status ? 'Active' : 'Not Active'}}
+                {{ db.status ? 'Active' : 'Not Active' }}
               </div>
             </div>
           </td>
-          <td class="flex space-x-3">
+          <td>
             <!-- <img v-if="db.preview" :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
               class=" w-full h-full" />
             <div class="absolute bottom-3 left-3 cursor-pointer" @click="copytext(db.username)">
@@ -172,15 +174,17 @@
                   d="M21 2h-19v19h-2v-21h21v2zm3 2v20h-20v-20h20zm-2 2h-1.93c-.669 0-1.293.334-1.664.891l-1.406 2.109h-6l-1.406-2.109c-.371-.557-.995-.891-1.664-.891h-1.93v16h16v-16zm-3 6h-10v1h10v-1zm0 3h-10v1h10v-1zm0 3h-10v1h10v-1z" />
               </svg>
             </div> -->
-            <div @click="$parent.editing(db.username)"
-              class="bg-blue-500 w-5 h-5 shadow-xl cursor-pointer rounded-full flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
-                <path fill="#fff"
-                  d="M1.438 16.872l-1.438 7.128 7.127-1.438 12.642-12.64-5.69-5.69-12.641 12.64zm2.271 2.253l-.85-.849 11.141-11.125.849.849-11.14 11.125zm20.291-13.436l-2.817 2.819-5.69-5.691 2.816-2.817 5.691 5.689z" />
-              </svg>
-            </div>
-            <div>
-              <img @click="deleteTemplate(db)" src="/trash.svg" alt="trash" class="w-6 right-2" />
+            <div class="items-center flex space-x-3">
+              <div @click="$parent.editing(db.username)"
+                class="bg-blue-500 w-5 h-5 shadow-xl cursor-pointer rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
+                  <path fill="#fff"
+                    d="M1.438 16.872l-1.438 7.128 7.127-1.438 12.642-12.64-5.69-5.69-12.641 12.64zm2.271 2.253l-.85-.849 11.141-11.125.849.849-11.14 11.125zm20.291-13.436l-2.817 2.819-5.69-5.691 2.816-2.817 5.691 5.689z" />
+                </svg>
+              </div>
+              <div>
+                <img @click="deleteTemplate(db)" src="/trash.svg" alt="trash" class="w-6 right-2" />
+              </div>
             </div>
           </td>
 

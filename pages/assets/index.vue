@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <div class="fixed shadow-md w-96 mx-auto p-4 bg-white rounded-md left-0 right-0 top-24" style="z-index:10000" v-if="showoverlay">
+    <div class="fixed shadow-md w-96 mx-auto p-4 bg-white rounded-md left-0 right-0 top-24" style="z-index:10000" v-if="showoverlay">
       <client-only>
         <div class="mb-4 font-bold text-xl relative">
           Form Upload
@@ -18,7 +18,7 @@
         <picture-input id="fileUpload" type="file" accept="image/jpeg,image/png" @change="dataFile" class="hidden">
         </picture-input>
       </client-only>
-    </div> -->
+    </div>
     <client-only>
       <picture-input id="fileUpload" type="file" accept="image/jpeg,image/png" @change="dataFile" class="hidden">
       </picture-input>
@@ -54,7 +54,7 @@
               <!-- <DisplayList :templateDB="templateDB" /> -->
               <div v-for="(img, i) in filterTempalteByName" :key="i" class="relative" style="width: 200px; height: 200px">
                 <div class="absolute -top-6 bg-white rounded p-1 left-0 right-0 mx-auto text-center w-full">
-                  {{ img.filename.split('-')[1] }}</div>
+                  {{ img.title ? img.title : img.filename.split('-')[1] }}</div>
                 <button @click="deleteLogos(img._id)" class="
                     text-red-500
                     font-bold
@@ -92,6 +92,9 @@
                   </svg>
                 </button>
               </div>
+              <div v-if="filterTempalteByName.length == 0" class="text-center">
+                No assets found
+              </div>
             </div>
           </div>
           <div class="text-right flex justify-end w-full">
@@ -116,7 +119,7 @@
                   font-semibold
                   rounded
                   text-xs
-                " @click="uploadimage">
+                " @click="showoverlay = true">
                 Upload Assets
               </button>
             </div>
@@ -230,11 +233,14 @@ export default {
       })
     },
     uploadImage(img) {
+      if (this.title.length == 0) {
+        return alert('title is required')
+      }
       return new Promise((resolve, reject) => {
         var data = new FormData()
         // console.log(img)
         data.append('file', img)
-        // data.append('title', this.title + '.png')
+        data.append('title', this.title)
 
         this.$axios
           .$post('logo/create', data)
