@@ -99,14 +99,15 @@ export default {
       if (
         parentDisplay.responseDisplay.properties.allSetting[this.idTemplate]
       ) {
-        if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0]) {
+        if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0] && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area) {
+
           this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area
-        } else {
+        } else if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1] && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1].value.id) {
+
           this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1].value.id
         }
       }
     }
-
     this.warningURL = 'https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +
       new Date().getFullYear() +
       '/' +
