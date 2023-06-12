@@ -52,32 +52,42 @@ export default {
     },
     imageFound() {
       var parent = this.$parent.$parent.$parent
-      if (parent.production) {
-        // parent.errorImage['MaritimWarning'] =false
-        // parent.spliceSlide()
-      }
+      var id = parent.obj && parent.obj.idtemplate
+      // if (parent.production) {
+      //   // parent.errorImage['MaritimWarning'] = false
+      //   parent.spliceSlide(id)
+      // }
     },
 
     imageNotFound(e) {
       var parent = this.$parent.$parent.$parent
-      // if (parent.production) {
-      // parent.errorImage['MaritimWarning'] =false
-      var yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
-      this.warningURL = 'https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +
-        new Date().getFullYear() +
-        '/' +
-        this.getZero(yesterday.getMonth() + 1) +
-        '/' +
-        this.getZero(yesterday.getDate()) +
-        '/infografis.jpg'
+      if (parent.production) {
+        // parent.errorImage['MaritimWarning'] = false
+        parent.spliceSlide('https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +
+          new Date().getFullYear() +
+          '/' +
+          this.getZero(new Date().getMonth() + 1) +
+          '/' +
+          this.getZero(new Date().getDate()) +
+          '/infografis.jpg'
+        )
+      }
+      // var yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
+      // this.warningURL = 'https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +
+      //   new Date().getFullYear() +
+      //   '/' +
+      //   this.getZero(yesterday.getMonth() + 1) +
+      //   '/' +
+      //   this.getZero(yesterday.getDate()) +
+      //   '/infografis.jpg'
 
-      this.warningURLText = 'https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +
-        new Date().getFullYear() +
-        '/' +
-        this.getZero(yesterday.getMonth() + 1) +
-        '/' +
-        this.getZero(yesterday.getDate()) +
-        '/infografis_text.jpg'
+      // this.warningURLText = 'https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +
+      //   new Date().getFullYear() +
+      //   '/' +
+      //   this.getZero(yesterday.getMonth() + 1) +
+      //   '/' +
+      //   this.getZero(yesterday.getDate()) +
+      //   '/infografis_text.jpg'
       // }
     },
   },
@@ -85,27 +95,27 @@ export default {
     var parentDisplay = this.$parent.$parent.$parent
     this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
 
-    if (
-      this.$store.state.displayWidget.widgetSaved[
-      this.idTemplate + '_WidgetWarningWeather_area'
-      ]
-    ) {
-      this.area = this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWarningWeather_area'
-      ].id
-    }
-
     if (parentDisplay.production) {
       if (
         parentDisplay.responseDisplay.properties.allSetting[this.idTemplate]
       ) {
-        if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0] && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area) {
-
-          this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area
-        } else if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1] && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1].value.id) {
+        if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1] && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1].value.id) {
 
           this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1].value.id
+        } else if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0] && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area) {
+
+          this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area
         }
+      }
+    } else {
+      if (
+        this.$store.state.displayWidget.widgetSaved[
+        this.idTemplate + '_WidgetWarningWeather_area'
+        ]
+      ) {
+        this.area = this.$store.state.displayWidget.widgetSaved[
+          this.idTemplate + '_WidgetWarningWeather_area'
+        ].id
       }
     }
     this.warningURL = 'https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +

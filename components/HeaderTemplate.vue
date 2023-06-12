@@ -142,6 +142,31 @@ export default {
       var day = new Date(date).getDay()
       var month = new Date(date).getMonth()
 
+      var currentDate = new Date().toLocaleDateString();
+      var lastTriggeredDate = localStorage.getItem('refreshdate')
+      // Memeriksa apakah fungsi telah dipicu hari ini
+      if (lastTriggeredDate !== currentDate) {
+        // Mendapatkan waktu saat ini
+        var currentTime = new Date(date);
+
+        // Mendapatkan waktu tengah malam berikutnya
+        var nextMidnight = new Date(date);
+        nextMidnight.setHours(24, 0, 1, 0); // Set jam, menit, detik, dan milidetik menjadi 00:00:01
+
+        // Menghitung selisih waktu antara waktu saat ini dan waktu tengah malam berikutnya
+        var timeDiff = nextMidnight - currentTime;
+
+        // Memeriksa apakah waktu saat ini telah melebihi batas yang ditentukan
+        if (timeDiff <= 0) {
+          // Refresh browser
+          location.reload();
+
+          // Mengupdate tanggal terakhir fungsi dipicu
+          localStorage.setItem('refreshdate', currentDate)
+          
+        }
+      }
+
       var dayres
       var monthres
       switch (day) {
