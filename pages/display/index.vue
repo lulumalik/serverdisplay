@@ -22,7 +22,7 @@
           </div>
           <div class="mb-6 flex space-x-6 absolute top-10 right-4">
             <div class="relative">
-              <input type="text" v-model="searchname" placeholder="Search by name"
+              <input type="text" v-model="searchname" placeholder="Search by Display ID"
                 class="rounded-full w-56 py-2 px-4 border border-sky-400" />
               <div class="absolute right-4 top-3.5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="text-sky-400">

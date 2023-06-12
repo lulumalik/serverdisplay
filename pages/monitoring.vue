@@ -1,0 +1,562 @@
+<template>
+    <div class="bg-gray-100">
+        <Navbar class="w-full" />
+        <div class="flex w-full" style="height: calc(100vh - 65.5px)">
+            <Sidebar class="flex-none" />
+            <client-only>
+                <div class="p-8 relative">
+                    <div class="mb-6 flex space-x-6 absolute top-6 right-8">
+                        <div class="relative">
+                            <input type="text" v-model="searchname" placeholder="Search by name"
+                                class="rounded-full w-56 py-2 px-4 border border-sky-400" />
+                            <div class="absolute right-4 top-3.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    class="text-sky-400">
+                                    <path fill="currentColor"
+                                        d="M9.145 18.29c-5.042 0-9.145-4.102-9.145-9.145s4.103-9.145 9.145-9.145 9.145 4.103 9.145 9.145-4.102 9.145-9.145 9.145zm0-15.167c-3.321 0-6.022 2.702-6.022 6.022s2.702 6.022 6.022 6.022 6.023-2.702 6.023-6.022-2.702-6.022-6.023-6.022zm9.263 12.443c-.817 1.176-1.852 2.188-3.046 2.981l5.452 5.453 3.014-3.013-5.42-5.421z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full">
+                        <div class="text-xl mb-4 font-bold text-sky-500">List Display</div>
+                        <div class="flex space-x-4">
+                            <div style="height: calc(100vh - 240px);width: calc(100vw - 740px)"
+                                class="overflow-auto flex-grow">
+                                <table class="bg-white w-full font-bold rounded shadow-xl">
+                                    <tr>
+                                        <td>
+                                            Display Name
+                                        </td>
+                                        <td>
+                                            Display ID
+                                        </td>
+                                        <td>
+                                            Status
+                                        </td>
+                                    </tr>
+                                    <tbody v-for="(db, i) in templateDB" :key="i" class="
+                                        rounded
+                                        w-auto
+                                        font-normal
+                                        cursor-pointer
+                                        relative
+                                        hover:bg-gray-200
+                                        border-b border-gray-200
+                                    
+                                    " :class="selectedTable == db.username ? 'bg-gray-200' : 'bg-white'"
+                                        @click="selectdata(db, db.username)">
+                                        <tr>
+                                            <td>
+                                                <div :id="db.username">{{ db.name }}</div>
+                                            </td>
+                                            <td>
+                                                <div class="flex items-center">
+                                                    <div>{{ db.username }}</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="flex space-x-3 items-center">
+
+                                                    <div class="w-4 h-4 rounded-full"
+                                                        :class="db.status ? 'bg-green-500' : 'bg-red-500'">
+                                                    </div>
+                                                    <div>
+                                                        {{ db.status ? 'Active' : 'Not Active' }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                                <div v-if="templateDB.length == 0" class="text-center text-xs w-full p-12">
+                                    no displays founds.
+                                </div>
+                            </div>
+                            <div style="width: 420px;">
+                                <div class="font-bold mt-3 mb-3">Data Display<button @click="toLink('https://widis.bmkg.go.id/g/' + selectedTable)" target="_blank" class="uppercase pl-3 underline cursor-pointer text-blue-500">{{ selectedTable
+                                }}</button></div>
+                                <div>
+                                    <div v-if="selectedCollapse" class="bg-white p-4 rounded-md overflow-auto"
+                                        style="height: calc(100vh - 290px)">
+                                        <div>
+                                            <div v-if="toArrayMonitor(selectedCollapse).length > 0">
+                                                <!-- {{ toArrayMonitor(selectedCollapse[db.username]) }} -->
+                                                <div v-for="(val, key) in toArrayMonitor(selectedCollapse)" :key="key">
+                                                    <div v-if="val.tour" class="mt-2">
+                                                        <div v-for="(v, k) in sortir(val.tour)" :key="k">
+                                                            <div v-if="v.key.includes('name')" class="font-semibold">
+                                                                {{ v.value }}
+                                                            </div>
+                                                            <div v-else class="grid grid-cols-2 gap-2">
+                                                                <div> {{ v.value.subdistrict }}</div>
+                                                                <div @click="toNDF(v.value.locationId)"
+                                                                    class="underline text-blue-500 cursor-pointer"> {{
+                                                                        v.value.locationId }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.stick" class="mt-2">
+                                                        <div v-for="(v, k) in sortir(val.stick)" :key="k">
+                                                            <div v-if="v.key.includes('kotkab')" class="font-semibold">
+                                                                {{ v.value.kotkab }}
+                                                            </div>
+                                                            <div v-else class="grid grid-cols-2 gap-2">
+                                                                <div> {{ v.value.subdistrict }}</div>
+                                                                <div @click="toNDF(v.value.locationId)"
+                                                                    class="underline text-blue-500 cursor-pointer"> {{
+                                                                        v.value.locationId }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.weatherlocation" class="mt-2">
+                                                        <div v-for="(v, k) in val.weatherlocation" :key="k">
+                                                            <div v-if="v.key.includes('province')" class="font-semibold">
+                                                                {{ v.value.provinsi }}
+                                                            </div>
+                                                            <div v-else class="grid grid-cols-2 gap-2">
+                                                                <div> {{ v.value.kotkab }}</div>
+                                                                <div @click="toKotkab(v.value._id)"
+                                                                    class="underline text-blue-500 cursor-pointer"> {{
+                                                                        v.value.kotkab }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.eq" class="mt-2">
+                                                        <div class="grid grid-cols-2 items-center">
+                                                            <div class="font-bold">
+                                                                Latest Earthquake
+                                                            </div>
+                                                            <div>
+                                                                <button @click="toGempa"
+                                                                    class="underline ml-1 text-blue-500 cursor-pointer">Link</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.ibf" class="mt-2">
+                                                        <div class="grid grid-cols-2 items-center">
+                                                            <div class="font-bold">
+                                                                IIBF Prakiraan Cuaca
+                                                            </div>
+                                                            <div>
+                                                                <a :href="val.ibf" target="_blank"
+                                                                    class="underline ml-1 text-blue-500 cursor-pointer">
+                                                                    Link </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.perairan" class="mt-2">
+                                                        <div class="grid grid-cols-2 items-center">
+                                                            <div class="font-bold">
+                                                                Maritim Perairan
+                                                            </div>
+                                                            <div>
+                                                                <a :href="val.perairan" target="_blank"
+                                                                    class="underline ml-1 text-blue-500 cursor-pointer">
+                                                                    Link </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.penyebrangan" class="mt-2">
+                                                        <div class="grid grid-cols-2 items-start">
+                                                            <div class="font-bold">
+                                                                Maritim Penyebrangan
+                                                            </div>
+                                                            <div>
+                                                                <div v-for="(v, ind) in val.penyebrangan" :key="ind">
+                                                                    <button
+                                                                        @click="toPelabuhan(v.value.name || v.value.id, !v.value.name ? v.value.id : v.value.name)"
+                                                                        class="underline ml-1 text-blue-500">
+                                                                        {{ v.value.portname || v.value.name }} </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.pelabuhan" class="mt-2">
+                                                        <div class="grid grid-cols-2 items-start">
+                                                            <div class="font-bold">
+                                                                Maritim Pelabuhan
+                                                            </div>
+                                                            <div>
+                                                                <button @click="toPelabuhan(val.pelabuhan.value.name)"
+                                                                    class="underline ml-1 text-blue-500">
+                                                                    {{ val.pelabuhan.value.portname }} </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.spartan" class="mt-2">
+                                                        <div class="grid grid-cols-2 items-center">
+                                                            <div class="font-semibold">
+                                                                SPARTAN {{ val.spartan[1].value.name }} <span
+                                                                    class="uppercase">{{ val.spartan[0].value.id }}</span>
+                                                            </div>
+                                                            <img :src="`https://cdn.bmkg.go.id/DataMKG/MEWS/spartan/${val.spartan[1].value.key}_${val.spartan[0].value.id}_${val.spartan[2].value.key}.png`"
+                                                                width="150" />
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.deparr" class="mt-2">
+                                                        <div class="underline text-blue-500 cursor-pointer">
+                                                            <a href="http://aviation.bmkg.go.id/latest/observation.xml.php"
+                                                                target="_blank">All reference fo api Departure and Arrival
+                                                                goes to here</a>
+                                                        </div>
+                                                        <div class="grid grid-cols-2 items-start"
+                                                            v-for="(v, ind) in val.deparr" :key="ind">
+                                                            <div class="font-semibold">
+                                                                {{ v.key.includes('Departures') ? 'Departures' : 'Arrival'
+                                                                }}
+                                                            </div>
+                                                            <div v-if="Array.isArray(v.value)">
+                                                                <div v-for="(arrival, ar) in v.value" :key="ar">
+                                                                    {{ arrival.value.tagname }} - {{ arrival.value.icaoid }}
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                {{ v.value.tagname }} - {{ v.value.icaoid }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="val.weatherwarning" class="mt-2">
+                                                        <div class="grid grid-cols-2 items-center">
+                                                            <div class="font-semibold">
+                                                                Area {{ val.weatherwarning.area }}
+                                                            </div>
+                                                            <img :src="val.weatherwarning.img" width="150" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div v-else>
+                                                <small>Display not selected</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <paginate :page-count="total" v-if="searchname.length == 0" :click-handler="functionName"
+                        :prev-text="'Prev'" :next-text="'Next'" :container-class="'flex mt-4 space-x-4'">
+                    </paginate>
+                </div>
+            </client-only>
+        </div>
+    </div>
+</template>
+  
+<style>
+pre[data-lang]::before {
+    content: attr(data-lang);
+    display: block;
+}
+
+td {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+table {
+    border-radius: 15px !important;
+}
+
+ul li {
+    text-align: center !important;
+    padding: 5px !important;
+    border-radius: 5px !important;
+    width: auto !important;
+    background: white;
+}
+
+ul li.active {
+    background: #3b82f6 !important;
+    color: white;
+}
+</style>
+  
+<script>
+
+export default {
+    data() {
+        return {
+            page: 1,
+            total: 10,
+            searchname: '',
+            templateDB: [],
+            selectedCollapse: {},
+            selectedTable: null
+        }
+    },
+    mounted() {
+        this.callAllData()
+    },
+    watch: {
+        searchname(val) {
+            if (this.timeoutsearch) {
+                clearTimeout(this.timeoutsearch)
+            }
+            this.timeoutsearch = setTimeout(() => {
+                if (val.length == 0) {
+                    this.page = 1
+                    this.total = 10
+                    this.callAllData()
+                } else {
+                    this.searchData()
+                }
+            }, 500)
+        },
+    },
+    middleware: ['checkLogin'],
+    methods: {
+        toLink(link) {
+            window.open(link, '_blank')
+        },
+        selectdata(db, data) {
+            // this.selectedCollapse = {}
+
+            if (this.selectedCollapse[db.username]) {
+                // this.selectedCollapse = {}
+                this.selectedTable = null
+            } else {
+                this.selectedCollapse = {}
+                this.selectedTable = data
+                this.selectedCollapse = db.properties
+                // this.$set(this.selectedCollapse, db.username, db.properties)
+            }
+        },
+        callAllData() {
+            this.$axios.$get('display?row=50&page=' + this.page).then((res) => {
+                // parseInt res.count if decimal
+                var count = parseInt(res.count / 50 + 1)
+                this.total = count
+                this.templateDB = res.data
+            })
+        },
+        toNDF(data) {
+            window.open('https://widis.bmkg.go.id/ndf/cgms/weather/ndf/get?locationId=' + data, '_blank')
+        },
+        toPelabuhan(data, isID) {
+            if (isID) {
+                window.open('https://maritim.bmkg.go.id/ajax/bindpopup_penyeberangan?id=' + data, '_blank')
+            } else {
+                window.open('https://maritim.bmkg.go.id/public_api/pelabuhan/' + data, '_blank')
+            }
+
+        },
+        toGempa() {
+            window.open('https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json', '_blank')
+        },
+        toKotkab(id) {
+            window.open('https://widis.bmkg.go.id/ndf/cgms/weather/ndf/location?_id=' + id, '_blank')
+        },
+        sortir(data) {
+            return data.sort((a, b) => {
+                const nameA = a.key.toLowerCase();
+                const nameB = b.key.toLowerCase();
+
+                if (nameA > nameB) {
+                    return -1;
+                }
+                if (nameA < nameB) {
+                    return 1;
+                }
+
+                return 0;
+            });
+        },
+        toArrayMonitor(obj) {
+            var filtertemplate = obj.allTemplate
+            var result = []
+            for (var key in filtertemplate) {
+                if (filtertemplate[key].name == 'Tour Information' || filtertemplate[key].name == 'Cuaca Wisata 1') {
+                    result.push(
+                        {
+                            tour: obj.allSetting[filtertemplate[key].idtemplate].filter(e => {
+                                if (e.key.includes('kecamatan') || e.key.includes('name')) {
+                                    return e
+                                }
+                            })
+                        }
+                    )
+                } else if (filtertemplate[key].name == 'Forecast Stick' || filtertemplate[key].name == 'Prakiraan Cuaca' || filtertemplate[key].name == 'Prakiraan cuaca per 3 jam' || filtertemplate[key].name == 'Wisata ( bawah ) Forecast' || filtertemplate[key].name == 'Wisata Forecast' || filtertemplate[key].name == 'Signifikan Cuaca') {
+                    result.push(
+                        {
+                            stick: obj.allSetting[filtertemplate[key].idtemplate].filter(e => {
+                                if (e.key.includes('kecamatan') || e.key.includes('kotkab')) {
+                                    return e
+                                }
+
+                            })
+                        }
+                    )
+                } else if (filtertemplate[key].name == 'Weather Location' || filtertemplate[key].name == 'Weather Arrow' || filtertemplate[key].name == 'Cuaca Kecamatan' || filtertemplate[key].name == 'Cuaca Kecamatan Blok' ) {
+                    result.push(
+                        {
+                            weatherlocation: obj.allSetting[filtertemplate[key].idtemplate]
+                        }
+                    )
+                } else if (filtertemplate[key].name == 'Earthquake') {
+                    result.push(
+                        {
+                            eq: obj.allSetting[filtertemplate[key].idtemplate]
+                        }
+                    )
+                } else if (filtertemplate[key].name == 'IBF Prakira') {
+
+                    result.push(
+                        {
+                            ibf: 'https://signature.bmkg.go.id/storage/output/public-impact/' +
+                                obj.allSetting[filtertemplate[key].idtemplate][0].value.name +
+                                '/' +
+                                new Date().getFullYear() +
+                                '/' +
+                                this.getZero(new Date().getMonth() + 1) +
+                                '/' +
+                                this.getZero(new Date().getDate()) +
+                                '/00.png'
+                        }
+                    )
+                } else if (filtertemplate[key].name == 'Maritim Penyebrangan' || filtertemplate[key].name == 'Maritim Penyebrangan 2') {
+                    var valuedata = obj.allSetting[filtertemplate[key].idtemplate]
+                    result.push({
+                        penyebrangan: valuedata.filter(e => e.value.name)
+                    })
+                } else if (filtertemplate[key].name == 'Maritim Pelabuhan') {
+                    result.push({
+                        pelabuhan: obj.allSetting[filtertemplate[key].idtemplate][0]
+                    })
+                } else if (filtertemplate[key].name == 'Perairan Maritim') {
+                    var valuedata = obj.allSetting[filtertemplate[key].idtemplate][0].value
+                    result.push({
+                        perairan: 'https://maritim.bmkg.go.id/public_api/perairan/' +
+                            valuedata.id + '_' + valuedata.name +
+                            '.json'
+                    })
+                } else if (filtertemplate[key].name == 'Spartan') {
+                    var valuedata = obj.allSetting[filtertemplate[key].idtemplate]
+                    result.push({
+                        spartan: valuedata
+                    })
+                } else if (filtertemplate[key].name == 'Weather Warning' || filtertemplate[key].name == 'Peringatan Dini Cuaca') {
+
+                    var yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
+                    var area
+                    if (obj.allSetting[filtertemplate[key].idtemplate][0].value && obj.allSetting[filtertemplate[key].idtemplate][0].value.area) {
+                        area = obj.allSetting[filtertemplate[key].idtemplate][0].value.area
+                    } else if (obj.allSetting[filtertemplate[key].idtemplate][0].value && obj.allSetting[filtertemplate[key].idtemplate][0].value.id) {
+                        area = obj.allSetting[filtertemplate[key].idtemplate][0].value.id
+                    }
+                    result.push({
+                        weatherwarning: {
+                            img: 'https://nowcasting.bmkg.go.id/infografis/' + area + '/' +
+                                new Date().getFullYear() +
+                                '/' +
+                                this.getZero(yesterday.getMonth() + 1) +
+                                '/' +
+                                this.getZero(yesterday.getDate()) +
+                                '/infografis.jpg',
+                            area: area
+                        }
+                    })
+                } else if (filtertemplate[key].name == 'Departure, Arrival') {
+                    result.push({
+                        deparr: obj.allSetting[filtertemplate[key].idtemplate]
+                    })
+                } else {
+                    console.log(filtertemplate[key].name, obj.allSetting[filtertemplate[key].idtemplate])
+                }
+            }
+            return result
+        },
+        // filterByName(key, val) {
+        // https://signature.bmkg.go.id/storage/output/public-impact/SULAWESI%20TENGGARA/2023/06/09/00.png
+        //     var locationidbase = 'https://widis.bmkg.go.id/ndf/cgms/weather/ndf/get?locationId='
+        //     if (key.includes('WidgetWisataBottombar')) {
+        //         return val.filter(e => {
+        //             if (e.key.includes('kecamatan')) {
+        //                 return e.value.locationId
+        //             }
+        //         })[0]
+        //     } else if (key.includes('WidgetArrival')) {
+        //         return ''
+        //     } else if (key.includes('WidgetDepartures')) {
+        //         return ''
+        //     } else if (key.includes('WidgetEarthquake')) {
+        //         // const res = await this.$axios.post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
+        //         //     url: 'https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json',
+        //         // })
+        //         return 'https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json'
+        //     } else if (key.includes('WidgetForecastStick')) {
+        //         return val.filter(e => e.value.ndf)
+        //     } else if (key.includes('WidgetForecastWeather')) {
+        //         return val.filter(e => e.locationId)[0]
+        //     } else if (key.includes('WidgetIbfForecast')) {
+        //         return 'https://signature.bmkg.go.id/storage/output/public-impact/' +
+        //             val.filter(e => e.value.name)[0] +
+        //             '/' +
+        //             this.year +
+        //             '/' +
+        //             this.getZero(this.month) +
+        //             '/' +
+        //             this.getZero(this.day) +
+        //             '/00.png'
+        //     } else if (key.includes('WidgetMaritimPelabuhan')) {
+        //         return ''
+        //     } else if (key.includes('WidgetMaritimPenyebrangan')) {
+        //         return ''
+        //     } else if (key.includes('WidgetMaritimPenyebrangan2')) {
+        //         return ''
+        //     } else if (key.includes('WidgetMaritimPerairan')) {
+        //         return ''
+        //     } else if (key.includes('WidgetMaritimWarning')) {
+        //         return ''
+        //     } else if (key.includes('WidgetOfsStatic')) {
+        //         return ''
+        //     } else if (key.includes('WidgetSpartan')) {
+        //         return ''
+        //     } else if (key.includes('WidgetVisibility')) {
+        //         return ''
+        //     } else if (key.includes('WidgetWarning3Harian')) {
+        //         return ''
+        //     } else if (key.includes('WidgetWarningWeather')) {
+        //         return ''
+        //     } else if (key.includes('WidgetWeatherArrow')) {
+        //         return ''
+        //     } else if (key.includes('WidgetWeatherHeadline')) {
+        //         return ''
+        //     } else if (key.includes('WidgetWeatherTable2')) {
+        //         return ''
+        //     } else if (key.includes('WidgetWisataBanyakLokasi')) {
+        //         return ''
+        //     } else if (key.includes('WidgetWisataBottombar')) {
+        //         return ''
+        //     } else if (key.includes('WidgetWisataBottombarForecast')) {
+        //         return ''
+        //     } else if (key.includes('WidgetWisataForecast')) {
+        //         return ''
+        //     } else {
+        //         return 'not found'
+        //     }
+        // },
+        searchData() {
+            this.$axios
+                .$get('display?row=10000000&keyword=' + this.searchname.toLowerCase())
+                .then((res) => {
+                    this.templateDB = res.data
+                    this.total = parseInt(res.count / 10000000 + 1)
+                })
+        },
+        functionName(e) {
+            this.$axios.$get('display?row=50&page=' + e).then((res) => {
+                this.total = parseInt(res.count / 50 + 1)
+                this.templateDB = res.data
+            })
+        },
+        getZero(numb) {
+            return parseInt(numb) < 10 ? '0' + numb : numb
+        },
+    },
+}
+</script>

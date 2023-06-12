@@ -22,6 +22,11 @@ export default {
                 path: '/template',
                 pathname: 'template',
                 icon: 'SidebarIconTemplate'
+            },{
+                name: 'Monitoring',
+                path: '/monitoring',
+                pathname: 'monitoring',
+                icon: 'SidebarIconMonitor'
             }, {
                 name: 'Assets',
                 path: '/assets',

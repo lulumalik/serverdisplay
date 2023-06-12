@@ -25,7 +25,7 @@
             </div>
             <div>Turn {{ $parent.$parent.status ? 'Off' : 'On' }} Display</div>
           </label>
-          <label class="flex space-x-2">
+          <label class="flex space-x-2 mt-2">
             <div>
               <input type="checkbox" v-model="$parent.$parent.useFooter" class="text-xs p-1.5 rounded" />
             </div>
@@ -46,26 +46,35 @@
             <div>Background</div>
             <div class="flex space-x-4 mt-2">
               <label class="text-center flex-grow">
-                <input type="radio" :value="true" v-model="isUseVideo" />
+                <input type="radio" :value="true" v-model="isUseVideo"  @change="chooseLogo = false"/>
                 <div>Dynamic</div>
               </label>
               <label class="text-center flex-grow">
-                <input type="radio" :value="false" v-model="isUseVideo" />
+                <input type="radio" :value="false" v-model="isUseVideo" @change="chooseLogo = true"/>
                 <div>Static</div>
               </label>
             </div>
             <div v-if="!isUseVideo" class="mt-3">
               <div>image url</div>
-              <div>
-                <input type="text" class="border border-gray-300 px-2 py-1 rounded w-full"
-                  v-model="$parent.$parent.backgroundStatic" />
+              <ChooseLogo v-if="chooseLogo" @url="$parent.$parent.backgroundStatic = $event; chooseLogo = false"
+                :emitonly="true" />
+              <div v-if="$parent.$parent.backgroundStatic">
+                <div class="rounded-md border-4 mb-1 border-white shadow-md cursor-pointer"
+                  style="width: 300px; height: 200px; background-size: cover" :style="{
+                    backgroundImage: $parent.$parent.backgroundStatic.includes('/api/') ?
+                      ('url(' +
+                        $axios.defaults.baseURL +
+                        $parent.$parent.backgroundStatic.split('/api/')[1] +
+                        ')') : `url(${$parent.$parent.backgroundStatic})`,
+                  }"></div>
               </div>
             </div>
           </div>
           <div class="mt-4 rounded w-full text-white py-2 text-center"
             :class="$parent.$parent.useVideo ? 'bg-green-500' : 'bg-red-500 '"
             v-if="$parent.$parent.useVideo && isUseVideo">
-            {{ $parent.$parent.useVideo ? 'You already choose ' + $parent.$parent.useVideo.subdistrict : `Choose Weather Location`}}
+            {{ $parent.$parent.useVideo ? 'You already choose ' + $parent.$parent.useVideo.subdistrict : `Choose Weather
+            Location`}}
           </div>
           <div v-if="isUseVideo" class="mt-4">
             <div>Provinsi</div>
@@ -112,6 +121,7 @@ export default {
       useVideo: false,
       subdistrict: '',
       runningtextData: null,
+      chooseLogo: false,
       listGempa: [
         {
           "id": "CJK",

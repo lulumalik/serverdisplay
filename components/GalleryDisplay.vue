@@ -3,67 +3,28 @@
     <div v-if="!responseDisplay.status">
       <AnimatedBG />
     </div>
-    <div
-      v-else
-      class="overflow-hidden h-screen w-screen relative"
-      :style="{ backgroundImage: 'url(' + backgroundStatic + ')', backgroundSize: 'cover' }"
-    >
+    <div v-else class="overflow-hidden h-screen w-screen relative"
+      :style="{ backgroundImage: 'url(' + backgroundStatic + ')', backgroundSize: 'cover' }">
       <client-only>
-        <div
-          class="h-full w-full overflow-hidden fixed left-0"
-          style="z-index: 0"
-          v-if="
-          responseDisplay.properties &&
+        <div class="h-full w-full overflow-hidden fixed left-0" style="z-index: 0" v-if="responseDisplay.properties &&
           responseDisplay.properties.video
-        "
-        >
+          ">
           <BackgroundVideo @hujan="isHujan = $event" />
         </div>
-        <carousel
-          v-if="templates.length > 0"
-          :autoPlay="true"
-          :playSpeed="speed"
-          :wheelControl="false"
-          :hoverPause="false"
-          style="height: 100vw !important; width: 100vw !important"
-          ref="carousel"
-        >
-          <carouselitem
-            v-for="(obj, i) in templates"
-            :key="i"
-            class="overflow-hidden h-screen w-screen relative"
-            :style="background[i]"
-          >
-            <Dummy
-              ref="dummy"
-              :logos="logos"
-            >
-              <ShowLayout
-                @splice="splicing"
-                ref="layout"
-                id="layout"
-                :obj="obj"
-                :widgetDB="widget"
-                :layoutDB="layoutDB"
-                style="transform-origin: 0 0"
-                :isHujan="isHujan"
-                :production="true"
-                :indexLoop="i"
-                :location="location"
-                :allNDF="allNDF"
-                :responseDisplay="responseDisplay"
-              />
+        <carousel v-if="templates.length > 0" :autoPlay="true" :playSpeed="speed" :wheelControl="false"
+          :hoverPause="false" style="height: 100vw !important; width: 100vw !important" ref="carousel">
+          <carouselitem v-for="(obj, i) in templates" :key="i" class="overflow-hidden h-screen w-screen relative"
+            :style="background[i]">
+            <Dummy ref="dummy" :logos="logos">
+              <ShowLayout @splice="splicing" ref="layout" id="layout" :obj="obj" :widgetDB="widget" :layoutDB="layoutDB"
+                style="transform-origin: 0 0" :isHujan="isHujan" :production="true" :indexLoop="i" :location="location"
+                :allNDF="allNDF" :responseDisplay="responseDisplay" />
             </Dummy>
           </carouselitem>
         </carousel>
 
-        <FooterTemplate
-          :nodrag="true"
-          ref="footer"
-          v-if="useFooter"
-          style="background: #a8ff00"
-          :class="'overflow-hidden fixed bottom-0 w-full'"
-        />
+        <FooterTemplate :nodrag="true" ref="footer" v-if="useFooter" style="background: #a8ff00"
+          :class="'overflow-hidden fixed bottom-0 w-full'" />
       </client-only>
     </div>
   </div>
@@ -224,7 +185,10 @@ export default {
         this.responseDisplay.properties.backgroundStatic &&
         !this.responseDisplay.properties.video
       ) {
-        this.backgroundStatic = this.responseDisplay.properties.backgroundStatic
+        this.backgroundStatic = this.responseDisplay.properties.backgroundStatic.includes('/api/') ?
+          (this.$axios.defaults.baseURL +
+            this.responseDisplay.properties.backgroundStatic.split('/api/')[1])
+          : (this.responseDisplay.properties.backgroundStatic)
       }
       res.data.template.forEach(async (el, i) => {
         // console.log(el.properties.widgetndf)
