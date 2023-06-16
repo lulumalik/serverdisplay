@@ -59,7 +59,7 @@
               bg-sky-500
               text-white
             " style="padding-top: 7px; padding-bottom: 7px" @click="updateAndCreateDisplay" :disabled="saving">
-            {{ saving ? 'Saving Display...' : $route.query.id ? 'Create Display' : 'Update and Refresh Display' }}
+            {{ saving ? 'Saving Display...' : $route.query.id ? 'Update and Refresh Display' : 'Create Display' }}
           </div>
         </div>
         <div class="flex-grow" v-if="$route.query.id">
@@ -194,6 +194,8 @@ export default {
         // window.open('/display', '_self')
       }
     } else {
+
+      this.showSetting = true
       this.templateDB = res1.data
     }
   },

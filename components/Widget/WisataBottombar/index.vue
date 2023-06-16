@@ -136,8 +136,8 @@ export default {
             this.img = el.value
             var images = this.img.includes('/api/') ?
               ('url(' +
-                $axios.defaults.baseURL +
-                img.split('/api/')[1] +
+                this.$axios.defaults.baseURL +
+                this.img.split('/api/')[1] +
                 ')') : `url(${this.img})`
             this.backgroundnize = {
               'background-image': images,

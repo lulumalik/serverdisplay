@@ -3,14 +3,17 @@
     <div class="flex space-x-4 mb-4 items-center">
       <div class="text-xl font-bold text-sky-500">List Display </div>
       <div>
-        <div class="relative space-x-1.5 text-xs cursor-pointer flex justify-center items-center w-44 text-center py-1 text-white rounded-md bg-sky-500" @click="rotasi">
+        <div
+          class="relative space-x-1.5 text-xs cursor-pointer flex justify-center items-center w-44 text-center py-1 text-white rounded-md bg-sky-500"
+          @click="rotasi">
           <div>
-            {{ orderlatest ?  'Sorted by New Data' : 'Sorted by Latest Data'}}
+            {{ orderlatest ? 'Sorted by New Data' : 'Sorted by Latest Data' }}
           </div>
           <div>
             <svg xmlns="http://www.w3.org/2000/svg" :class="!orderlatest ? 'rotate-180' : ''" width="11" height="11"
               viewBox="0 0 24 24">
-              <path fill="currentColor" d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 17l-6-8h12l-6 8z" />
+              <path fill="currentColor"
+                d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 17l-6-8h12l-6 8z" />
             </svg>
           </div>
         </div>
@@ -87,7 +90,7 @@
                     d="M1.438 16.872l-1.438 7.128 7.127-1.438 12.642-12.64-5.69-5.69-12.641 12.64zm2.271 2.253l-.85-.849 11.141-11.125.849.849-11.14 11.125zm20.291-13.436l-2.817 2.819-5.69-5.691 2.816-2.817 5.691 5.689z" />
                 </svg>
               </div>
-              <div>
+              <div >
                 <img @click="deleteTemplate(db)" src="/trash.svg" alt="trash" class="w-6" />
               </div>
             </div>
@@ -186,10 +189,17 @@ export default {
     deleteTemplate(db) {
       this.$confirm('Are you sure?, this Display cannot be returned').then(
         (res) => {
-          this.$axios.$delete('display/delete/' + db._id).then((res) => {
-            this.$parent.templateDBSelected = null
-            this.$parent.callAllData()
-          })
+          if (db.request_status) {
+            this.$axios.$delete('display_request/delete/' + db._id).then((res) => {
+              this.$parent.templateDBSelected = null
+              this.$parent.callAllData()
+            })
+          } else {
+            this.$axios.$delete('display/delete/' + db._id).then((res) => {
+              this.$parent.templateDBSelected = null
+              this.$parent.callAllData()
+            })
+          }
         }
       )
     },

@@ -14,6 +14,8 @@ export default function ({ $axios, redirect, app, store }) {
             app.$cookies.remove('users')
             redirect("/");
         }
+
+        return Promise.reject(error)
         // var response =
         //     error.response && error.response.data && error.response.data.error;
         // store.commit("users/mutationUsers", {

@@ -128,7 +128,7 @@ export default {
     const res1 = await this.$axios.$get('template')
     if (this.$route.query.id) {
       try {
-        this.showSetting = false
+        this.showSetting = true
         this.roleUser = jwtdecode(this.$cookies.get('users'))
         this.currentUser = jwtdecode(this.$cookies.get('users')).id
         const res = await this.$axios.$get(
@@ -171,6 +171,7 @@ export default {
         // window.open('/display', '_self')
       }
     } else {
+      this.showSetting = true
       this.templateDB = res1.data
     }
   },
@@ -217,7 +218,7 @@ export default {
         })
         // window.reload()
         setTimeout(() => {
-          window.location.href = '/display/request'
+          window.location.href = '/display'
         }, 1000)
       } catch (error) {
         if (error.response.data.message.code == 11000) {
@@ -240,6 +241,7 @@ export default {
     async createData(obj) {
       try {
         obj.request_type = 'CREATE'
+        console.log(obj)
         const res = await this.$axios.$post(
           'display_request/create',
           obj
@@ -251,7 +253,7 @@ export default {
           duration: 2000,
         })
         setTimeout(() => {
-          window.location.href = '/display/request'
+          window.location.href = '/display'
         }, 1000)
       } catch (error) {
         if (error.response.data.message.code == 11000) {
