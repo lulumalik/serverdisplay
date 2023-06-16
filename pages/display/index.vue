@@ -130,9 +130,9 @@ export default {
         })
     },
     callAllData() {
-      this.$axios.$get('display?row=50&page=' + this.page).then((res) => {
+      this.$axios.$get(`display?row=50&page=` + this.page).then((res) => {
         // parseInt res.count if decimal
-        var count = parseInt(res.count / 50 + 1)
+        var count = parseInt((res.total / 50) + 1)
         this.total = count
         this.templateDB = res.data
       })
@@ -151,15 +151,15 @@ export default {
     },
     functionName(e) {
       this.$axios.$get('display?row=50&page=' + e).then((res) => {
-        this.total = parseInt(res.count / 50 + 1)
+        this.total = parseInt((res.total / 50) + 1)
         this.templateDB = res.data
       })
     },
-    editing(username) {
+    editing(db) {
       this.$router.push({
         name: 'display-create',
         query: {
-          id: username,
+          id: db.username,
         },
       })
     },

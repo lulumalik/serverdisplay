@@ -157,11 +157,14 @@
             {{ db.owner && db.owner.username || '-' }}
           </td>
           <td>
-            <div class="flex space-x-3 items-center">
-
-              <div class="w-4 h-4 rounded-full" :class="db.status ? 'bg-green-500' : 'bg-red-500'"></div>
-              <div>
-                {{ db.status ? 'Active' : 'Not Active' }}
+            <div class="flex items-center">
+              <div class="font-semibold">
+                <div v-if="db.request_status" :class="db.request_status == 'APPROVED' ? 'text-green-500' : db.request_status == 'PENDING' ? 'text-yellow-500' : 'text-red-500'">
+                  {{ db.request_status }}
+                </div>
+                <div v-else :class="db.status ? 'text-green-500' : 'text-red-500'">
+                  {{ db.status ? 'Active' : 'Disabled' }}
+                </div>
               </div>
             </div>
           </td>
@@ -175,7 +178,7 @@
               </svg>
             </div> -->
             <div class="items-center flex space-x-3">
-              <div @click="$parent.editing(db.username)"
+              <div @click="$parent.editing(db)"
                 class="bg-blue-500 w-5 h-5 shadow-xl cursor-pointer rounded-full flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
                   <path fill="#fff"
@@ -183,7 +186,7 @@
                 </svg>
               </div>
               <div>
-                <img @click="deleteTemplate(db)" src="/trash.svg" alt="trash" class="w-6 right-2" />
+                <img @click="deleteTemplate(db)" src="/trash.svg" alt="trash" class="w-6" />
               </div>
             </div>
           </td>

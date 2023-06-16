@@ -56,13 +56,13 @@
           v-if="runningText.length > 0"
         >
           <div class="flex space-x-4 text-xl">
-            <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" />
+            <!-- <img src="/bmkg.png" width="30" class=" mx-3" alt="bmkg" /> -->
             {{ runningText.join(', ') }}
           </div>
         </div>
         <div class="p-2 para" v-else id="para1">
           <div class="flex space-x-4 text-xl">
-            <img src="/bmkg.png" class="w-6 mx-3" alt="bmkg" />
+            <!-- <img src="/bmkg.png" width="30" class=" mx-3" alt="bmkg" /> -->
             <div class="flex space-x-3 items-center">
               <div>
                 Badan Meteorologi Klimatologi dan Geofisika - Cepat Tepat Akurat
@@ -196,6 +196,7 @@ export default {
           const json = xml.parse(res.data)
           var id = 'CSU'
           if (this.$parent.useFooter) {
+            console.log(this.$parent.useFooter)
             var split = this.$parent.useFooter.id.split('')
             id = split[0] + split[1] + split[2]
           }

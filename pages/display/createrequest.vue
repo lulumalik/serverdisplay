@@ -3,16 +3,16 @@
     <client-only>
       <Navbar class="w-full sticky top-0" style="z-index: 1000" />
       <button @click="backto" class="
-                  text-xs
-                  pl-6
-                  relative top-3
-                  cursor-pointer
-                  flex
-                  items-center
-                  space-x-2
-                  text-black
-                  font-bold
-                ">
+                    text-xs
+                    pl-6
+                    relative top-3
+                    cursor-pointer
+                    flex
+                    items-center
+                    space-x-2
+                    text-black
+                    font-bold
+                  ">
         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
           class="text-black relative bottom-0.5">
           <path fill="currentColor"
@@ -49,38 +49,8 @@
               type="text" />
           </div>
         </div>
-        <div class="flex-grow"
-          v-if="roleUser && roleUser.role.name == 'Admin' ? true : currentUser == (allfind.owner && allfind.owner._id)">
-          <div type="submit" class="
-              px-4
-              cursor-pointer
-              text-center
-              rounded
-              bg-sky-500
-              text-white
-            " style="padding-top: 7px; padding-bottom: 7px" @click="updateAndCreateDisplay" :disabled="saving">
-            {{ saving ? 'Saving Display...' : 'Update and Refresh Display' }}
-          </div>
-        </div>
         <div class="flex-grow" v-if="$route.query.id">
-          <div type="submit" class="
-              bg-blue-200
-              border border-blue-400
-              shadow
-              px-6
-              py-2
-              text-blue-600
-              font-semibold
-              rounded
-              text-xs text-center
-              cursor-pointer
-            " style="padding-top: 7px; padding-bottom: 7px" @click="createWithUpdate" :disabled="saving">
-            {{ saving ? 'Saving Display...' : 'Save as new Display' }}
-          </div>
-        </div>
-        <!-- <div class="flex-none">
-                     <div
-              class="
+          <div class="
                 bg-blue-200
                 border border-blue-400
                 shadow
@@ -89,15 +59,22 @@
                 text-blue-600
                 font-semibold
                 rounded
-                text-xs
+                text-xs text-center
                 cursor-pointer
-              "
-              v-if="$route.query.id"
-              @click="toGallery"
-            >
-              Preview Display
-            </div>
-        </div> -->
+              " style="padding-top: 7px; padding-bottom: 7px" @click="updateAndCreateDisplay" :disabled="saving">
+            {{ saving ? 'Saving Display...' : 'Save Display' }}
+          </div>
+        </div>
+        <div class="flex-grow" v-if="roleUser && roleUser.role.name == 'Admin'">
+          <div class="flex space-x-2">
+            <button @click="updaterequest('approve')" class="py-1.5 w-24 text-white rounded bg-green-600 text-sm">
+              APPROVE
+            </button>
+            <button @click="updaterequest('reject')" class="py-1.5 w-24 text-white rounded bg-red-600 text-sm">
+              REJECT
+            </button>
+          </div>
+        </div>
       </form>
     </client-only>
 
@@ -110,7 +87,7 @@
     </client-only>
   </div>
 </template>
-
+  
 <script>
 import jwtdecode from 'jwt-decode'
 export default {
@@ -155,7 +132,7 @@ export default {
         this.roleUser = jwtdecode(this.$cookies.get('users'))
         this.currentUser = jwtdecode(this.$cookies.get('users')).id
         const res = await this.$axios.$get(
-          'display/find/' + this.$route.query.id
+          'display_request/find/' + this.$route.query.id
         )
         this.allfind = res.data
         this.templateDB = res1.data
@@ -198,6 +175,17 @@ export default {
     }
   },
   methods: {
+    async updaterequest(val) {
+      await this.$axios.$put(`display_request/${val}/${this.$route.query.id}`)
+      this.$toast.open({
+        message: 'Display ' + val,
+        type: val == 'reject' ? 'danger' : 'success',
+        duration: 2000,
+      })
+      setTimeout(() => {
+        window.location.href = '/display/request'
+      }, 1000)
+    },
     backto() {
       window.history.back()
     },
@@ -214,9 +202,11 @@ export default {
     async updateData(obj) {
       try {
 
-        // obj.request_type = 'UPDATE'
+        obj.request_type = 'UPDATE'
+        // this.$set(obj, 'ref', this.$route.query.id)
+        // console.log(obj)
         const res = await this.$axios.$put(
-          'display/update/' + this.allfind._id,
+          'display_request/update/' + this.$route.query.id,
           obj
         )
         this.saving = false
@@ -225,8 +215,9 @@ export default {
           type: 'success',
           duration: 2000,
         })
+        // window.reload()
         setTimeout(() => {
-          window.location.href = '/display/create?id=' + res.data.username
+          window.location.href = '/display/request'
         }, 1000)
       } catch (error) {
         if (error.response.data.message.code == 11000) {
@@ -250,7 +241,7 @@ export default {
       try {
         obj.request_type = 'CREATE'
         const res = await this.$axios.$post(
-          'display/create',
+          'display_request/create',
           obj
         )
         this.saving = false
@@ -260,7 +251,7 @@ export default {
           duration: 2000,
         })
         setTimeout(() => {
-          window.location.href = '/display/create'
+          window.location.href = '/display/request'
         }, 1000)
       } catch (error) {
         if (error.response.data.message.code == 11000) {
@@ -279,9 +270,6 @@ export default {
           })
         }
       }
-    },
-    createWithUpdate() {
-      this.updateAndCreateDisplay('create')
     },
     updateAndCreateDisplay(createOnly) {
       // this.saving = true
@@ -337,21 +325,24 @@ export default {
       }
 
       // this.$store.commit('displayWidget/emptyWidget')
-      // console.log(obj)
-      if (createOnly == 'create') {
-        this.createData(obj)
-        return true
-      }
+
+      // if (createOnly == 'create') {
+      //   console.log(obj, 'create')
+      //   // this.createData(obj)
+      //   // return true
+      // }
       if (!this.$route.query.id) {
+
+        // console.log(obj, 'create no id')
         this.createData(obj)
       } else {
+
+        // console.log(obj, 'update')
         this.updateData(obj)
       }
     },
   },
 }
 </script>
-
-<style>
-
-</style>
+  
+<style></style>

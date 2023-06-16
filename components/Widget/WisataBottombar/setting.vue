@@ -36,17 +36,11 @@
     <!-- changeImg -->
 
     <div class="mt-2">Image Background URL</div>
-    <ChooseLogo v-if="chooseLogo" @url="img = $event; chooseLogo = false" :emitonly="true" />
+    <ChooseLogo v-if="chooseLogo" @url="changeImg" :emitonly="true" />
 
     <div @click="chooseLogo = true" class="cursor-pointer">
-      <div class="rounded-md border-4 mb-1 border-white shadow-md cursor-pointer"
-        style="width: 200px; height: 100px; background-size: cover" :style="{
-          backgroundImage: img.includes('/api/') ?
-            ('url(' +
-              $axios.defaults.baseURL +
-              img.split('/api/')[1] +
-              ')') : `url(${img})`,
-        }"></div>
+      <img @error="handleImageError" class="rounded-md border-4 mb-1 border-white shadow-md cursor-pointer" :src="img.includes('/api/') ? $axios.defaults.baseURL +
+        img.split('/api/')[1] : img" style="width: 200px;"  />
       <input disabled type="text" class="px-2 py-1.5 w-full border border-gray-300 rounded" @input="changeImg"
         v-model="img" placeholder="name place" />
     </div>
@@ -72,6 +66,9 @@ export default {
     },
   },
   methods: {
+    handleImageError(event) {
+      event.target.src = '/plus.png';
+    },
     getProvinsi() {
       this.$axios
         .$get(
@@ -138,10 +135,16 @@ export default {
         value: this.color,
       })
     },
-    changeImg() {
+    changeImg(img) {
+      // this.$store.commit('displayWidget/mutationWidget', {
+      //   key: this.idTemplate + '_WidgetWisataBottombar_img',
+      //   value: this.img,
+      // })
+      this.chooseLogo = false
+      this.img = img
       this.$store.commit('displayWidget/mutationWidget', {
         key: this.idTemplate + '_WidgetWisataBottombar_img',
-        value: this.img,
+        value: img,
       })
     },
   },
@@ -238,7 +241,7 @@ export default {
       name: '',
       color: '#000000',
       backgroundColor: '#ffffff',
-      img: '',
+      img: '/plus.png',
       listKotkab: [],
       listKecamatan: [],
       chooseLogo: false

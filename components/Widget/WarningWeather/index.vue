@@ -62,6 +62,7 @@ export default {
     imageNotFound(e) {
       var parent = this.$parent.$parent.$parent
       if (parent.production) {
+        console.log('ea')
         // parent.errorImage['MaritimWarning'] = false
         parent.spliceSlide('https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +
           new Date().getFullYear() +
@@ -134,6 +135,7 @@ export default {
       this.getZero(new Date().getDate()) +
       '/infografis_text.jpg'
 
+    console.log(this.warningURL)
     this.testImage(this.warningURL)
 
     setInterval(() => {

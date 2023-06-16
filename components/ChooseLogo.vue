@@ -22,7 +22,7 @@
           <!-- <DisplayList :templateDB="templateDB" /> -->
           <div v-for="(img, i) in filterTemplateDB" :key="i" class="relative cursor-pointer" @click="postImage(img)">
             <div class="h-40 flex items-center">
-              <img class="w-24 mx-auto max-h-32 cursor-pointer" :src="$axios.defaults.baseURL + img.url.split('/api/')[1]"
+              <img class="w-24 mx-auto cursor-pointer" style="object-fit: cover;" :src="$axios.defaults.baseURL + img.url.split('/api/')[1]"
                 alt="img" />
             </div>
 

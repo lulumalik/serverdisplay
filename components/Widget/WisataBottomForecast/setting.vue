@@ -3,47 +3,30 @@
     <div>
       <div>Provinsi</div>
       <div>
-        <v-select
-          label="provinsi"
-          @option:selected="changeSelected"
-          v-model="province"
-          :options="$parent.province"
-        ></v-select>
+        <v-select label="provinsi" @option:selected="changeSelected" v-model="province"
+          :options="$parent.province"></v-select>
       </div>
       <div v-if="province">
         <div class="mt-2 flex items-center">
           <div class="flex-grow">Kotkab</div>
         </div>
         <div>
-          <v-select
-            label="kotkab"
-            @option:selected="changeSelectedKotkab"
-            v-model="kotkab"
-            :options="listKotkab"
-          ></v-select>
+          <v-select label="kotkab" @option:selected="changeSelectedKotkab" v-model="kotkab"
+            :options="listKotkab"></v-select>
         </div>
       </div>
       <div v-if="kotkab">
         <div class="mt-2">Kecamatan</div>
         <div>
-          <v-select
-            label="subdistrict"
-            @option:selected="changeSelectedKecamatan"
-            v-model="kecamatan"
-            :options="listKecamatan"
-          ></v-select>
+          <v-select label="subdistrict" @option:selected="changeSelectedKecamatan" v-model="kecamatan"
+            :options="listKecamatan"></v-select>
         </div>
       </div>
     </div>
     <div class="mt-2">Name of location</div>
     <div>
-      <input
-        type="text"
-        class="px-2 py-1.5 w-full border border-gray-300 rounded"
-        @input="changeName"
-        v-model="name"
-        placeholder="name place"
-      />
+      <input type="text" class="px-2 py-1.5 w-full border border-gray-300 rounded" @input="changeName" v-model="name"
+        placeholder="name place" />
     </div>
     <!-- <div class="mt-2">Description</div>
     <div>
@@ -61,33 +44,25 @@
     <!-- changeImg -->
     <div class="mt-2">Image Background URL</div>
     <div>
-      <input
-        type="text"
-        class="px-2 py-1.5 w-full border border-gray-300 rounded"
-        @input="changeImg"
-        v-model="img"
-        placeholder="name place"
-      />
+
+      <ChooseLogo v-if="chooseLogo" @url="changeImg" :emitonly="true" />
+
+      <div @click="chooseLogo = true" class="cursor-pointer">
+        <img @error="handleImageError" class="rounded-md border-4 mb-1 border-white shadow-md cursor-pointer" :src="img.includes('/api/') ? $axios.defaults.baseURL +
+          img.split('/api/')[1] : img" style="width: 200px;" />
+        <input disabled type="text" class="px-2 py-1.5 w-full border border-gray-300 rounded" @input="changeImg"
+          v-model="img" placeholder="name place" />
+      </div>
     </div>
     <div class="mt-2">Color</div>
     <div>
-      <input
-        type="color"
-        class="px-2 py-1.5 w-full border border-gray-300 rounded"
-        @change="changeColor"
-        v-model="color"
-        placeholder="name place"
-      />
+      <input type="color" class="px-2 py-1.5 w-full border border-gray-300 rounded" @change="changeColor" v-model="color"
+        placeholder="name place" />
     </div>
     <div class="mt-2">Background Color</div>
     <div>
-      <input
-        type="color"
-        class="px-2 py-1.5 w-full border border-gray-300 rounded"
-        @change="changeBackground"
-        v-model="backgroundColor"
-        placeholder="name place"
-      />
+      <input type="color" class="px-2 py-1.5 w-full border border-gray-300 rounded" @change="changeBackground"
+        v-model="backgroundColor" placeholder="name place" />
     </div>
   </div>
 </template>
@@ -101,11 +76,14 @@ export default {
     },
   },
   methods: {
+    handleImageError(event) {
+      event.target.src = '/plus.png';
+    },
     getProvinsi() {
       this.$axios
         .$get(
           this.$baseUrlNdf + '/cgms/weather/administration/kotkab?_id=' +
-            this.province._id
+          this.province._id
         )
         .then((res) => {
           this.listKotkab = res.data
@@ -116,7 +94,7 @@ export default {
       this.$axios
         .get(
           `${this.$baseUrlNdf}/cgms/weather/ndf/location?_id=` +
-            this.kotkab._id
+          this.kotkab._id
         )
         .then((res) => {
           this.listKecamatan = res.data.data
@@ -167,94 +145,100 @@ export default {
         value: this.color,
       })
     },
-    changeImg() {
+    changeImg(img) {
+      // this.$store.commit('displayWidget/mutationWidget', {
+      //   key: this.idTemplate + '_WidgetWisataBottombarForecast_img',
+      //   value: this.img,
+      // })
+      this.chooseLogo = false
+      this.img = img
       this.$store.commit('displayWidget/mutationWidget', {
         key: this.idTemplate + '_WidgetWisataBottombarForecast_img',
-        value: this.img,
+        value: img,
       })
     },
   },
   mounted() {
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWisataBottombarForecast_province'
+      this.idTemplate + '_WidgetWisataBottombarForecast_province'
       ]
     ) {
       this.province =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombarForecast_province'
+        this.idTemplate + '_WidgetWisataBottombarForecast_province'
         ]
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWisataBottombarForecast_kotkab'
+      this.idTemplate + '_WidgetWisataBottombarForecast_kotkab'
       ]
     ) {
       this.kotkab =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombarForecast_kotkab'
+        this.idTemplate + '_WidgetWisataBottombarForecast_kotkab'
         ]
       this.getProvinsi()
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWisataBottombarForecast_kecamatan'
+      this.idTemplate + '_WidgetWisataBottombarForecast_kecamatan'
       ]
     ) {
       this.kecamatan =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombarForecast_kecamatan'
+        this.idTemplate + '_WidgetWisataBottombarForecast_kecamatan'
         ]
       this.getKecamatan()
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWisataBottombarForecast_description'
+      this.idTemplate + '_WidgetWisataBottombarForecast_description'
       ]
     ) {
       this.desc =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombarForecast_description'
+        this.idTemplate + '_WidgetWisataBottombarForecast_description'
         ]
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWisataBottombarForecast_name'
+      this.idTemplate + '_WidgetWisataBottombarForecast_name'
       ]
     ) {
       this.name =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombarForecast_name'
+        this.idTemplate + '_WidgetWisataBottombarForecast_name'
         ]
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWisataBottombarForecast_color'
+      this.idTemplate + '_WidgetWisataBottombarForecast_color'
       ]
     ) {
       this.color =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombarForecast_color'
+        this.idTemplate + '_WidgetWisataBottombarForecast_color'
         ]
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWisataBottombarForecast_background'
+      this.idTemplate + '_WidgetWisataBottombarForecast_background'
       ]
     ) {
       this.backgroundColor =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombarForecast_background'
+        this.idTemplate + '_WidgetWisataBottombarForecast_background'
         ]
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWisataBottombarForecast_img'
+      this.idTemplate + '_WidgetWisataBottombarForecast_img'
       ]
     ) {
       this.img =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataBottombarForecast_img'
+        this.idTemplate + '_WidgetWisataBottombarForecast_img'
         ]
     }
   },
@@ -267,9 +251,10 @@ export default {
       name: '',
       color: '#000000',
       backgroundColor: '#ffffff',
-      img: '',
+      img: '/plus.png',
       listKotkab: [],
       listKecamatan: [],
+      chooseLogo: false
     }
   },
 }

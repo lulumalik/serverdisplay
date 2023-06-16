@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="fixed w-96 mx-auto p-12  bg-white rounded-md left-0 right-0 top-24" style="z-index:10000;box-shadow: 1px -1px 227px 71px rgba(0,0,0,0.39);" v-if="showoverlay">
+    <div class="fixed w-96 mx-auto p-12  bg-white rounded-md left-0 right-0 top-24"
+      style="z-index:10000;box-shadow: 1px -1px 227px 71px rgba(0,0,0,0.39);" v-if="showoverlay">
       <client-only>
         <div class="mb-4 font-bold text-xl relative">
           Form Upload
@@ -9,7 +10,8 @@
         <div class="mt-8">
           <div>Title</div>
           <div class="mt-1">
-            <input type="text" placeholder="Title" v-model="title" class="border border-gray-200 rounded-md px-2 py-1 w-full"/>
+            <input type="text" placeholder="Title" v-model="title"
+              class="border border-gray-200 rounded-md px-2 py-1 w-full" />
           </div>
         </div>
         <button class="w-full bg-blue-500 rounded-md py-1 mt-8 text-white font-semibold" @click="uploadimage">
@@ -66,17 +68,12 @@
                   ">
                   &times;
                 </button>
-                <div @click="copyimage(img.url)" class="rounded-md border-4 border-white shadow-md cursor-pointer"
-                  style="width: 200px; height: 200px; background-size: cover" :style="{
-                    backgroundImage: img.url.includes('.png') ?
-                      'url(' +
-                      $axios.defaults.baseURL +
-                      img.url.split('/api/')[1] +
-                      ')' : 'url(' +
-                      $axios.defaults.baseURL +
-                      img.url.split('/api/')[1] +
-                      '.png)',
-                  }"></div>
+                <img @click="copyimage(img.url)" class="rounded-md border-4 border-white shadow-md cursor-pointer"
+                  style="width: 200px;object-fit: cover;height:200px;" :src="img.url.includes('.png') ?
+                    $axios.defaults.baseURL +
+                    img.url.split('/api/')[1] :
+                    $axios.defaults.baseURL +
+                    img.url.split('/api/')[1]" />
                 <button @click="copyimage(img.url)" class="
                     text-sky-400
                     absolute

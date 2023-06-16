@@ -41,6 +41,11 @@
               </option>
             </select>
           </div>
+          <div class="mt-2">
+            <div>Limit</div>
+            
+            <input type="number" class="border border-gray-300 p-3 w-full rounded" v-model="formdata.number_of_display" />
+          </div>
           <div>
             <input type="submit" class="bg-blue-500 text-white p-3 rounded mt-4 w-full" value="Submit" />
           </div>
@@ -161,6 +166,7 @@ export default {
         email: '',
         password: '',
         role: '',
+        number_of_display: 10
       },
       timeoutsearch: null,
       role: null,
@@ -246,6 +252,7 @@ export default {
         email: data.email,
         password: '',
         role: data.role._id,
+        number_of_display: data.number_of_display
       }
     },
     deleteAccount(db) {
