@@ -143,13 +143,13 @@ export default {
         this.$set(this.layoutDB, data._id, data.name)
       })
       this.responseDisplay = res.data
-      if (res.data.properties.allLogo) {
+      if (res.data.properties && res.data.properties.allLogo) {
         this.logos = res.data.properties.allLogo || []
       }
-      if (res.data.properties.delay) {
+      if (res.data.properties && res.data.properties.delay) {
         this.speed = res.data.properties.delay * 1000
       }
-      if (res.data.properties.footer) {
+      if (res.data.properties && res.data.properties.footer) {
         this.useFooter = res.data.properties.footer
       }
       var alltemplate = res.data.properties.allTemplate

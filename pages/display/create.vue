@@ -59,7 +59,7 @@
               bg-sky-500
               text-white
             " style="padding-top: 7px; padding-bottom: 7px" @click="updateAndCreateDisplay" :disabled="saving">
-            {{ saving ? 'Saving Display...' : 'Update and Refresh Display' }}
+            {{ saving ? 'Saving Display...' : $route.query.id ? 'Create Display' : 'Update and Refresh Display' }}
           </div>
         </div>
         <div class="flex-grow" v-if="$route.query.id">
@@ -135,7 +135,7 @@ export default {
       roleUser: null
     }
   },
-  middleware: ['checkLogin'],
+  middleware: ['checkAdmin'],
   computed: {
     getDisplaySecretSpaces() {
       return /\s/g.test(this.secretCode)

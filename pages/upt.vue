@@ -116,12 +116,12 @@ export default {
       loading: false,
     }
   },
-  // created() {
-  //   // this.$router.push("/login?redirect=inapows");
-  //   if (this.$cookies.get('users')) {
-  //     this.$router.push('/display')
-  //   }
-  // },
+  created() {
+    // this.$router.push("/login?redirect=inapows");
+    if (this.$cookies.get('users')) {
+      this.$router.push('/display')
+    }
+  },
   methods: {
     serialize(obj) {
       var str = []

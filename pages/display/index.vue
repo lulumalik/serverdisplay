@@ -33,7 +33,7 @@
             </div>
           </div>
           <div class="mt-4">
-            <DisplayList :templateDB="templateDB" />
+            <DisplayList :templateDB="templateDB"  @ordering="callAllData"/>
           </div>
           <div class="text-right flex mt-4 justify-end w-full">
             <div class="flex-none">
@@ -42,7 +42,8 @@
               </paginate>
             </div>
             <div class="flex-grow">
-              <button class="
+              &nbsp;
+              <!-- <button class="
                   bg-blue-200
                   border border-blue-400
                   shadow
@@ -54,7 +55,7 @@
                   text-xs
                 " @click="creating">
                 {{ 'Create New' }}
-              </button>
+              </button> -->
             </div>
           </div>
         </div>
@@ -93,10 +94,11 @@ export default {
       page: 1,
       total: 10,
       timeoutsearch: null,
+      orderlatest: true
     }
   },
   mounted() {
-    this.callAllData()
+    this.callAllData(this.orderlatest)
   },
   watch: {
     searchname(val) {
@@ -107,7 +109,7 @@ export default {
         if (val.length == 0) {
           this.page = 1
           this.total = 10
-          this.callAllData()
+          this.callAllData(this.orderlatest)
         } else {
           this.searchData()
         }
@@ -129,8 +131,9 @@ export default {
           this.total = parseInt(res.count / 10000000 + 1)
         })
     },
-    callAllData() {
-      this.$axios.$get(`display?row=50&page=` + this.page).then((res) => {
+    callAllData(order) {
+      this.orderlatest = order
+      this.$axios.$get(`display?row=50&order=desc${order ? '&sortBy=id' : ''}&page=` + this.page).then((res) => {
         // parseInt res.count if decimal
         var count = parseInt((res.total / 50) + 1)
         this.total = count
@@ -150,7 +153,7 @@ export default {
       })
     },
     functionName(e) {
-      this.$axios.$get('display?row=50&page=' + e).then((res) => {
+      this.$axios.$get(`display?row=50&order=desc${this.orderlatest ? '&sortBy=id' : ''}&page=` + e).then((res) => {
         this.total = parseInt((res.total / 50) + 1)
         this.templateDB = res.data
       })

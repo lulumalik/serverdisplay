@@ -1,127 +1,28 @@
 <template>
   <div>
-    <div class="text-xl mb-4 font-bold text-sky-500">List Display</div>
-    <!-- <div style="height: calc(100vh - 240px)" class="overflow-auto"
-      v-if="currentUser.role && currentUser.role.name != 'Admin'">
-      <div class="flex items-center flex-wrap pb-4">
-        <div v-for="(db, i) in filterUser" :key="i" class="
-          rounded
-          px-4
-          w-auto
-          h-32
-          flex
-          items-center
-          justify-center
-          shadow-md
-          cursor-pointer
-          relative
-          m-3
-          px-12
-        " :class="$parent.templateDBSelected == db._id
-          ? 'border-4 border-sky-500 bg-white font-semibold'
-          : 'bg-white'
-          " @click="clickTemplate(db)">
-          <img v-if="db.preview" :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
-            class="absolute w-full h-full z-10" />
-          <div class="text-center">
-            <div v-if="currentUser.role && currentUser.role.name == 'Admin' ? true : db.owner._id == currentUser.id"
-              class="h-6 w-6 p-1 shadow-md rounded-br-md bg-green-500 absolute left-0 top-0">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24">
-                <path fill="white"
-                  d="M19 7.001c0 3.865-3.134 7-7 7s-7-3.135-7-7c0-3.867 3.134-7.001 7-7.001s7 3.134 7 7.001zm-1.598 7.18c-1.506 1.137-3.374 1.82-5.402 1.82-2.03 0-3.899-.685-5.407-1.822-4.072 1.793-6.593 7.376-6.593 9.821h24c0-2.423-2.6-8.006-6.598-9.819z" />
-              </svg>
-            </div>
-            <div class="h-3 w-3 shadow-lg rounded-full absolute right-4 top-4"
-              :style="{ background: db.status ? '#00ff00' : '#ff0000' }">
-            </div>
-            <p class="uppercase text-xl z-20">
-              {{ db.username }}
-            </p>
-            <small class="truncate relative">
-              {{ db.name }}
-            </small>
+    <div class="flex space-x-4 mb-4 items-center">
+      <div class="text-xl font-bold text-sky-500">List Display </div>
+      <div>
+        <div class="relative space-x-1.5 text-xs cursor-pointer flex justify-center items-center w-44 text-center py-1 text-white rounded-md bg-sky-500" @click="rotasi">
+          <div>
+            {{ orderlatest ?  'Sorted by New Data' : 'Sorted by Latest Data'}}
           </div>
-          <div class="absolute bottom-3 left-3 cursor-pointer" @click="copytext(db.username)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="text-sky-400">
-              <path fill="currentColor"
-                d="M21 2h-19v19h-2v-21h21v2zm3 2v20h-20v-20h20zm-2 2h-1.93c-.669 0-1.293.334-1.664.891l-1.406 2.109h-6l-1.406-2.109c-.371-.557-.995-.891-1.664-.891h-1.93v16h16v-16zm-3 6h-10v1h10v-1zm0 3h-10v1h10v-1zm0 3h-10v1h10v-1z" />
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" :class="!orderlatest ? 'rotate-180' : ''" width="11" height="11"
+              viewBox="0 0 24 24">
+              <path fill="currentColor" d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 17l-6-8h12l-6 8z" />
             </svg>
           </div>
-          <div @click="$parent.editing()" v-if="$parent.templateDBSelected == db._id"
-            class="bg-blue-500 w-5 h-5 absolute bottom-2.5 left-12 z-30 cursor-pointer rounded-full flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
-              <path fill="#fff"
-                d="M1.438 16.872l-1.438 7.128 7.127-1.438 12.642-12.64-5.69-5.69-12.641 12.64zm2.271 2.253l-.85-.849 11.141-11.125.849.849-11.14 11.125zm20.291-13.436l-2.817 2.819-5.69-5.691 2.816-2.817 5.691 5.689z" />
-            </svg>
-          </div>
-          <img v-if="$parent.templateDBSelected == db._id" @click="deleteTemplate(db)" src="/trash.svg" alt="trash"
-            class="absolute bottom-2 w-6 z-30 right-2" />
-        </div>
-        <div v-if="filterNotUser.length == 0 && filterUser.length == 0" class="text-center text-xs w-full p-12">
-          no displays founds.
         </div>
       </div>
-      <div class="flex border-t-2 border-gray-300 items-center pt-4 flex-wrap">
-        <div v-for="(db, i) in filterNotUser" :key="i" class="
-          rounded
-          px-4
-          w-auto
-          h-32
-          flex
-          items-center
-          justify-center
-          shadow-md
-          cursor-pointer
-          relative
-          m-3
-          px-12
-        " :class="$parent.templateDBSelected == db._id
-          ? 'border-4 border-sky-500 bg-white font-semibold'
-          : 'bg-white'
-          " @click="clickTemplate(db)">
-          <img v-if="db.preview" :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
-            class="absolute w-full h-full z-10" />
-          <div class="text-center">
-            <div v-if="currentUser.role && currentUser.role.name == 'Admin' ? true : db.owner._id == currentUser.id"
-              class="h-6 w-6 p-1 shadow-md rounded-br-md bg-green-500 absolute left-0 top-0">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24">
-                <path fill="white"
-                  d="M19 7.001c0 3.865-3.134 7-7 7s-7-3.135-7-7c0-3.867 3.134-7.001 7-7.001s7 3.134 7 7.001zm-1.598 7.18c-1.506 1.137-3.374 1.82-5.402 1.82-2.03 0-3.899-.685-5.407-1.822-4.072 1.793-6.593 7.376-6.593 9.821h24c0-2.423-2.6-8.006-6.598-9.819z" />
-              </svg>
-            </div>
-            <div class="h-3 w-3 shadow-lg rounded-full absolute right-4 top-4"
-              :style="{ background: db.status ? '#00ff00' : '#ff0000' }">
-            </div>
-            <p class="uppercase text-xl z-20">
-              {{ db.username }}
-            </p>
-            <small class="truncate relative">
-              {{ db.name }}
-            </small>
-          </div>
-          <div class="absolute bottom-3 left-3 cursor-pointer" @click="copytext(db.username)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="text-sky-400">
-              <path fill="currentColor"
-                d="M21 2h-19v19h-2v-21h21v2zm3 2v20h-20v-20h20zm-2 2h-1.93c-.669 0-1.293.334-1.664.891l-1.406 2.109h-6l-1.406-2.109c-.371-.557-.995-.891-1.664-.891h-1.93v16h16v-16zm-3 6h-10v1h10v-1zm0 3h-10v1h10v-1zm0 3h-10v1h10v-1z" />
-            </svg>
-          </div>
-          <div @click="$parent.editing()" v-if="$parent.templateDBSelected == db._id"
-            class="bg-blue-500 w-5 h-5 absolute bottom-2.5 left-12 z-30 cursor-pointer rounded-full flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
-              <path fill="#fff"
-                d="M1.438 16.872l-1.438 7.128 7.127-1.438 12.642-12.64-5.69-5.69-12.641 12.64zm2.271 2.253l-.85-.849 11.141-11.125.849.849-11.14 11.125zm20.291-13.436l-2.817 2.819-5.69-5.691 2.816-2.817 5.691 5.689z" />
-            </svg>
-          </div>
-          <img v-if="$parent.templateDBSelected == db._id" @click="deleteTemplate(db)" src="/trash.svg" alt="trash"
-            class="absolute bottom-2 w-6 z-30 right-2" />
-        </div>
-      </div>
-    </div> -->
+    </div>
     <div style="height: calc(100vh - 240px)" class="overflow-auto w-full">
       <table class="bg-white w-full font-bold rounded shadow-md">
         <tr>
           <td>
-            Display Name
+            <div>
+              Display Name
+            </div>
           </td>
           <td>
             Display ID
@@ -159,7 +60,8 @@
           <td>
             <div class="flex items-center">
               <div class="font-semibold">
-                <div v-if="db.request_status" :class="db.request_status == 'APPROVED' ? 'text-green-500' : db.request_status == 'PENDING' ? 'text-yellow-500' : 'text-red-500'">
+                <div v-if="db.request_status"
+                  :class="db.request_status == 'APPROVED' ? 'text-green-500' : db.request_status == 'PENDING' ? 'text-yellow-500' : 'text-red-500'">
                   {{ db.request_status }}
                 </div>
                 <div v-else :class="db.status ? 'text-green-500' : 'text-red-500'">
@@ -224,6 +126,11 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      orderlatest: true
+    }
+  },
   mounted() {
     process.nextTick(() => {
       // console.log(this.$axios.defaults.baseURL.split('api')[0])
@@ -247,6 +154,10 @@ export default {
     })
   },
   methods: {
+    rotasi() {
+      this.orderlatest = !this.orderlatest
+      this.$emit('ordering', this.orderlatest)
+    },
     clickTemplate(db) {
       if (db._id == this.$parent.templateDBSelected) {
         this.$parent.templateDBSelected = null

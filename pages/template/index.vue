@@ -36,7 +36,8 @@
             <TemplateList :templateDB="templateDB" />
           </div>
           <div class="text-right hidden">
-            <button
+            &nbsp;
+            <!-- <button
               class="
                 bg-blue-200
                 border border-blue-400
@@ -51,7 +52,7 @@
               @click="creating"
             >
               {{  'Create New' }}
-            </button>
+            </button> -->
           </div>
         </div>
       </client-only>

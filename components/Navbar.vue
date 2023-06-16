@@ -13,7 +13,7 @@
     </div>
     <div class="flex space-x-4 items-center">
       <DisplaySetting class="relative top-1" v-if="$route.name == 'display-create' && $parent.showSetting" />
-      <button v-else @click="$router.push('/display/create')" class="
+      <button v-else @click="createDisplay" class="
           bg-blue-500
           border
           shadow
@@ -47,6 +47,15 @@
 import jwtDecode from 'jwt-decode'
 export default {
   methods: {
+    createDisplay() {
+      if (jwtDecode(this.$cookies.get('users')).role.name == 'Admin') {
+
+        this.$router.push('/display/create')
+      } else {
+
+        this.$router.push('/display/createrequest')
+      }
+    },
     logout() {
       if (jwtDecode(this.$cookies.get('users')).role.name == 'Admin') {
         this.$cookies.remove('users')
@@ -67,6 +76,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -15,7 +15,7 @@
               relative
   
             ">
-            <div class="mb-6 flex space-x-6 absolute top-4 right-4">
+            <!-- <div class="mb-6 flex space-x-6 absolute top-4 right-4">
               <div class="relative">
                 <input type="text" v-model="searchname" placeholder="Search by Display ID"
                   class="rounded-full w-56 py-2 px-4 border border-sky-400" />
@@ -26,7 +26,7 @@
                   </svg>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="mt-4">
               <DisplayList :templateDB="templateDB" />
             </div>
@@ -126,7 +126,7 @@
           })
       },
       callAllData() {
-        this.$axios.$get('display_request?row=50&page=' + this.page).then((res) => {
+        this.$axios.$get('display_request?row=50&order=desc&page=' + this.page).then((res) => {
           // parseInt res.count if decimal
           var count = parseInt(res.count / 50 + 1)
           this.total = count

@@ -49,7 +49,7 @@
               type="text" />
           </div>
         </div>
-        <div class="flex-grow" v-if="$route.query.id">
+        <div class="flex-grow">
           <div class="
                 bg-blue-200
                 border border-blue-400
