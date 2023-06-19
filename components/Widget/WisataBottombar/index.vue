@@ -1,7 +1,7 @@
 <template>
   <div class="h-44 w-full">
     &nbsp;
-    <div :style="backgroundnize" class="fixed -top-24 w-full left-0" style="z-index: -1"></div>
+    <img :src="backgroundnize" class="fixed w-screen h-screen -top-24 left-0 object-cover" style="z-index: -1" />
     <!-- <img :src="img" class="fixed -top-24 w-full left-0" style="z-index: -1" /> -->
     <div class="
         rounded-tr-full
@@ -135,17 +135,9 @@ export default {
           } else if (key == 'img') {
             this.img = el.value
             var images = this.img.includes('/api/') ?
-              ('url(' +
-                this.$axios.defaults.baseURL +
-                this.img.split('/api/')[1] +
-                ')') : `url(${this.img})`
-            this.backgroundnize = {
-              'background-image': images,
-              'background-size': 'cover',
-              'background-position': 'center',
-              'background-repeat': 'no-repeat',
-              height: '100%',
-            }
+              ( this.$axios.defaults.baseURL +
+                this.img.split('/api/')[1]) : `${this.img}`
+            this.backgroundnize = images
           }
         }
       })

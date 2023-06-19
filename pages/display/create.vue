@@ -127,6 +127,7 @@ export default {
       getDisplayLocation: 'Kepulauan Bangka Belitung',
       allfind: {},
       useFooter: true,
+      useTimeOffset: null,
       useVideo: null,
       backgroundStatic: null,
       currentUser: null,
@@ -170,6 +171,7 @@ export default {
         this.displayName = res.data.name
         // console.log(res.data)
         this.status = res.data.status
+        this.useTimeOffset = res.data.properties.timeoffset
         this.useFooter = res.data.properties.footer
         this.getDisplayLocation = res.data.location.name
         this.useVideo = res.data.properties.video
@@ -330,6 +332,7 @@ export default {
           width: this.$refs['preview'].width,
           height: this.$refs['preview'].height,
           footer: this.useFooter,
+          timeoffset: this.useTimeOffset,
           video: this.useVideo,
           backgroundStatic: this.backgroundStatic,
           allLogo: logos,

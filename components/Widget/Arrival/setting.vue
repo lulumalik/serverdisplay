@@ -1,14 +1,13 @@
 <template>
   <div>
     <div v-for="(airport, i) in listedAirport" :key="i">
-      <div class="mt-2">Select Airport {{ i + 1 }}</div>
+      <div class="mt-2 flex space-x-3">
+        <div class="flex-grow">Select Airport {{ i + 1 }} </div>
+        <div class="text-red-500 flex-none cursor-pointer text-xl" @click="listedAirport.splice(i , 1)">&times;</div>
+      </div>
       <div>
-        <v-select
-          label="tagname"
-          @option:selected="changeSelected"
-          v-model="airport.value"
-          :options="airportList"
-        ></v-select>
+        <v-select label="tagname" @option:selected="changeSelected" v-model="airport.value"
+          :options="airportList"></v-select>
       </div>
       <!-- <div class="mt-2">Image Url</div>
       <div>
@@ -21,9 +20,7 @@
         />
       </div> -->
     </div>
-    <div
-      @click="listedAirport.push({})"
-      class="
+    <div @click="listedAirport.push({})" class="
         bg-gray-100
         border-gray-300 border
         w-full
@@ -33,14 +30,13 @@
         text-gray-600
         mt-2
         cursor-pointer
-      "
-    >
+      ">
       +
     </div>
   </div>
 </template>
   
-  <script>
+<script>
 const xml = require('txml')
 export default {
   props: {
@@ -93,12 +89,12 @@ export default {
       })
     if (
       this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetArrival_airport'
+      this.idTemplate + '_WidgetArrival_airport'
       ]
     ) {
       this.listedAirport =
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetArrival_airport'
+        this.idTemplate + '_WidgetArrival_airport'
         ]
     }
   },

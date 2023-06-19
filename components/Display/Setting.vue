@@ -31,9 +31,18 @@
             </div>
             <div>Running text</div>
           </label>
-          <div>
+          <div class="mt-2">
             <v-select label="name" :disabled="!$parent.$parent.useFooter" @option:selected="changeFooter"
               v-model="runningtextData" :options="listGempa"></v-select>
+          </div>
+          <div  class="pt-4">
+            <label>
+              <div>Time Offset <b><small>( default by localtime )</small></b></div>
+              <div>
+                <v-select label="name" v-model="selectedoffset" :options="listime" @change="changeTimeOffset">
+                </v-select>
+              </div>
+            </label>
           </div>
           <div class="mt-4">
             <!-- <div>
@@ -46,11 +55,11 @@
             <div>Background</div>
             <div class="flex space-x-4 mt-2">
               <label class="text-center flex-grow">
-                <input type="radio" :value="true" v-model="isUseVideo"  @change="chooseLogo = false"/>
+                <input type="radio" :value="true" v-model="isUseVideo" @change="chooseLogo = false" />
                 <div>Dynamic</div>
               </label>
               <label class="text-center flex-grow">
-                <input type="radio" :value="false" v-model="isUseVideo" @change="chooseLogo = true"/>
+                <input type="radio" :value="false" v-model="isUseVideo" @change="chooseLogo = true" />
                 <div>Static</div>
               </label>
             </div>
@@ -122,6 +131,21 @@ export default {
       subdistrict: '',
       runningtextData: null,
       chooseLogo: false,
+      selectedoffset: null,
+      listime: [
+        {
+          name: 'WIB ( GMT +7 )',
+          offset: 7
+        },
+        {
+          name: 'WITA ( GMT +8 )',
+          offset: 8
+        },
+        {
+          name: 'WIT ( GMT +9 )',
+          offset: 9
+        }
+      ],
       listGempa: [
         {
           "id": "CJK",
@@ -323,6 +347,9 @@ export default {
     //   })
   },
   methods: {
+    changeTimeOffset(val) {
+      this.$parent.$parent.useTimeOffset = val
+    },
     changeFooter(val) {
       this.$parent.$parent.useFooter = val
     },

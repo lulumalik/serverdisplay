@@ -26,15 +26,9 @@
           <div class="text-2xl mt-1 flex items-center font-semibold justify-end">
             <div class="ml-2"
               :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'">
-              {{
-                deleteSecond(
-                  new Date(currentDate)
-                    .toString()
-                    .split(' ')
-                    .splice(0, 5)
-                    .join(' ')
-                )
-              }}
+              <span v-if="currentDate"> {{
+                konversiWaktuGMT(currentDate)
+              }}</span>
               {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
             </div>
             <!-- Selasa, 12 Juli 2022 | 10:31:22 WIB -->
@@ -117,6 +111,7 @@ export default {
       currentDate: '',
       indexdata: null,
       chooseLogo: true,
+      returningtime: ''
     }
   },
   mounted() {
@@ -124,6 +119,9 @@ export default {
     setInterval(() => {
       this.returningTimeZone()
     }, 1000)
+    // setInterval(() => {
+    //   this.refreshBrowserEveryHour()
+    // }, 3600000);
   },
   computed: {
     getTimeZone() {
@@ -138,121 +136,57 @@ export default {
     },
   },
   methods: {
-    deleteSecond(date) {
-      var day = new Date(date).getDay()
-      var month = new Date(date).getMonth()
+    refreshBrowserEveryHour() {
+      // Refresh the browser
+      location.reload();
+    },
+    getOffsetGMT() {
+      // Mendapatkan waktu lokal saat ini
+      var waktuLokal = new Date();
 
-      var currentDate = new Date().toLocaleDateString();
-      var lastTriggeredDate = localStorage.getItem('refreshdate')
-      // Memeriksa apakah fungsi telah dipicu hari ini
-      if (lastTriggeredDate !== currentDate) {
-        // Mendapatkan waktu saat ini
-        var currentTime = new Date(date);
+      // Mendapatkan offset waktu lokal dalam menit
+      var offset = waktuLokal.getTimezoneOffset();
 
-        // Mendapatkan waktu tengah malam berikutnya
-        var nextMidnight = new Date(date);
-        nextMidnight.setHours(24, 0, 1, 0); // Set jam, menit, detik, dan milidetik menjadi 00:00:01
+      // Mengubah offset menjadi format GMT
+      var offsetGMT = -(offset / 60);
 
-        // Menghitung selisih waktu antara waktu saat ini dan waktu tengah malam berikutnya
-        var timeDiff = nextMidnight - currentTime;
+      // Membentuk string offset GMT dengan format yang sesuai
+      var offsetString = offsetGMT > 0 ? offsetGMT : offsetGMT.toString();
 
-        // Memeriksa apakah waktu saat ini telah melebihi batas yang ditentukan
-        if (timeDiff <= 0) {
-          // Refresh browser
-          location.reload();
-
-          // Mengupdate tanggal terakhir fungsi dipicu
-          localStorage.setItem('refreshdate', currentDate)
-          
-        }
+      // Menambahkan nol pada offset yang hanya satu digit
+      if (offsetGMT > -10 && offsetGMT < 10) {
+        offsetString = offsetString;
       }
 
-      var dayres
-      var monthres
-      switch (day) {
-        case 0:
-          dayres = 'Minggu'
-          break
-        case 1:
-          dayres = 'Senin'
-          break
-        case 2:
-          dayres = 'Selasa'
-          break
-        case 3:
-          dayres = 'Rabu'
-          break
-        case 4:
-          dayres = 'Kamis'
-          break
-        case 5:
-          dayres = "Jum'at"
-          break
-        case 6:
-          dayres = 'Sabtu'
-          break
+      // Mengembalikan offset GMT dalam format string
+      return offsetString;
+    },
+    konversiWaktuGMT(waktu, offset) {
+      // Mendapatkan waktu lokal
+
+      var waktuLokal = new Date(waktu);
+      // console.log(this.$parent.responseDisplay)
+      var offsetjam;
+
+      if (this.$parent.responseDisplay.properties && this.$parent.responseDisplay.properties.timeoffset) {
+        offsetjam = this.$parent.responseDisplay.properties.timeoffset * 3600000
+      } else {
+        offsetjam = this.getOffsetGMT() * 3600000
       }
 
-      switch (month) {
-        case 0:
-          monthres = 'Januari'
-          break
-        case 1:
-          monthres = 'Februari'
-          break
-        case 2:
-          monthres = 'Maret'
-          break
-        case 3:
-          monthres = 'April'
-          break
-        case 4:
-          monthres = 'Mei'
-          break
-        case 5:
-          monthres = 'Juni'
-          break
-        case 6:
-          monthres = 'Juli'
-          break
-        case 7:
-          monthres = 'Agustus'
-          break
-        case 8:
-          monthres = 'September'
-          break
-        case 9:
-          monthres = 'Oktober'
-          break
-        case 10:
-          monthres = 'November'
-          break
-        case 11:
-          monthres = 'Desember'
-          break
-      }
 
-      var dat = date.split(' ').splice(4, 4)[0]
-      var final = dat ? dat.split(':').splice(0, 2).join(':') : ''
+      this.returningtime = offsetjam == 7 ? 'WIB' : offsetjam == 8 ? 'WITA' : offsetjam == 9 ? 'WIT' : ''
+      // Mendapatkan waktu GMT dengan penyesuaian offset
+      var waktuGMT = new Date(waktuLokal.getTime() + (offsetjam));
 
-      return (
-        dayres +
-        ', ' +
-        new Date(date).getDate() +
-        ' ' +
-        monthres +
-        ' ' +
-        new Date(date).getFullYear() +
-        ' ' +
-        final
-      )
+      // Mengembalikan waktu GMT dalam format string
+      var time = waktuGMT.toISOString()
+      var date = time.split('T')[0]
+      var time2 = time.split('T')[1].split(':')
+      return `${date} ${[time2[0], time2[1]].join(':')}`
     },
     returningTimeZone() {
-      this.currentDate =
-        new Date().toString().split(' ').splice(0, 5).join(' ') +
-        ' GMT+0' +
-        this.getTimeZone +
-        '00'
+      this.currentDate = new Date()
     },
     uploadLogo(i) {
       this.indexdata = i

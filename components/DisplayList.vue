@@ -53,9 +53,10 @@
             <div>{{ db.name }}</div>
           </td>
           <td>
-            <div @click="copytext(db.username)" class="flex items-center underline text-blue-500 cursor-pointer">
+            <div v-if="!db.request_status" @click="copytext(db.username)" class="flex items-center underline text-blue-500 cursor-pointer">
               <div>{{ db.username }}</div>
             </div>
+            <div v-else > {{ db.username }}</div>
           </td>
           <td>
             {{ db.owner && db.owner.username || '-' }}
@@ -192,12 +193,12 @@ export default {
           if (db.request_status) {
             this.$axios.$delete('display_request/delete/' + db._id).then((res) => {
               this.$parent.templateDBSelected = null
-              this.$parent.callAllData()
+              this.$parent.callAllData(this.$parent.orderlatest)
             })
           } else {
             this.$axios.$delete('display/delete/' + db._id).then((res) => {
               this.$parent.templateDBSelected = null
-              this.$parent.callAllData()
+              this.$parent.callAllData(this.$parent.orderlatest)
             })
           }
         }
