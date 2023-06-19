@@ -39,7 +39,7 @@
             <label>
               <div>Time Offset <b><small>( default by localtime )</small></b></div>
               <div>
-                <v-select label="name" v-model="selectedoffset" :options="listime" @change="changeTimeOffset">
+                <v-select label="name" v-model="selectedoffset" :options="listime">
                 </v-select>
               </div>
             </label>
@@ -298,6 +298,9 @@ export default {
         this.$parent.$parent.useVideo = false
       }
     },
+    selectedoffset(val) {
+      this.$parent.$parent.useTimeOffset = val
+    }
   },
   mounted() {
     this.$axios
@@ -324,6 +327,10 @@ export default {
       }
     }
 
+    if (this.$parent.$parent.useTimeOffset) {
+      this.selectedoffset = this.$parent.$parent.useTimeOffset
+    }
+
     // this.$axios
     //   .post(`${this.$baseUrlNdf}/cgms/weather/forward`, {
     //     url: 'https://nowcasting.bmkg.go.id/cap/xml/id/newsflash.xml',
@@ -347,9 +354,6 @@ export default {
     //   })
   },
   methods: {
-    changeTimeOffset(val) {
-      this.$parent.$parent.useTimeOffset = val
-    },
     changeFooter(val) {
       this.$parent.$parent.useFooter = val
     },

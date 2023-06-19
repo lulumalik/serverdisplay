@@ -29,7 +29,7 @@
               <span v-if="currentDate"> {{
                 konversiWaktuGMT(currentDate)
               }}</span>
-              {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+              {{ returningtime }}
             </div>
             <!-- Selasa, 12 Juli 2022 | 10:31:22 WIB -->
           </div>
@@ -169,13 +169,12 @@ export default {
       var offsetjam;
 
       if (this.$parent.responseDisplay.properties && this.$parent.responseDisplay.properties.timeoffset) {
-        offsetjam = this.$parent.responseDisplay.properties.timeoffset * 3600000
+        offsetjam = this.$parent.responseDisplay.properties.timeoffset.offset * 3600000
+        this.returningtime = this.$parent.responseDisplay.properties.timeoffset.offset == 7 ? 'WIB' : this.$parent.responseDisplay.properties.timeoffset.offset == 8 ? 'WITA' : this.$parent.responseDisplay.properties.timeoffset.offset == 9 ? 'WIT' : ''
       } else {
         offsetjam = this.getOffsetGMT() * 3600000
+        this.returningtime = this.getOffsetGMT() == 7 ? 'WIB' : this.getOffsetGMT() == 8 ? 'WITA' : this.getOffsetGMT() == 9 ? 'WIT' : ''
       }
-
-
-      this.returningtime = offsetjam == 7 ? 'WIB' : offsetjam == 8 ? 'WITA' : offsetjam == 9 ? 'WIT' : ''
       // Mendapatkan waktu GMT dengan penyesuaian offset
       var waktuGMT = new Date(waktuLokal.getTime() + (offsetjam));
 

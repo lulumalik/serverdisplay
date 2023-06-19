@@ -229,9 +229,9 @@ export default {
           type: 'success',
           duration: 2000,
         })
-        setTimeout(() => {
-          window.location.href = '/display/create?id=' + res.data.username
-        }, 1000)
+        // setTimeout(() => {
+        //   window.location.href = '/display/create?id=' + res.data.username
+        // }, 1000)
       } catch (error) {
         if (error.response.data.message.code == 11000) {
           this.saving = false
@@ -342,7 +342,7 @@ export default {
       }
 
       // this.$store.commit('displayWidget/emptyWidget')
-      // console.log(obj)
+      console.log(obj)
       if (createOnly == 'create') {
         this.createData(obj)
         return true

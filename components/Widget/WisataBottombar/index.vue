@@ -1,7 +1,7 @@
 <template>
   <div class="h-44 w-full">
     &nbsp;
-    <img :src="backgroundnize" class="fixed w-screen h-screen -top-24 left-0 object-cover" style="z-index: -1" />
+    <img :src="backgroundnize" class="fixed w-screen h-screen -top-32 left-0 object-cover" style="z-index: -1" />
     <!-- <img :src="img" class="fixed -top-24 w-full left-0" style="z-index: -1" /> -->
     <div class="
         rounded-tr-full
@@ -135,7 +135,7 @@ export default {
           } else if (key == 'img') {
             this.img = el.value
             var images = this.img.includes('/api/') ?
-              ( this.$axios.defaults.baseURL +
+              (this.$axios.defaults.baseURL +
                 this.img.split('/api/')[1]) : `${this.img}`
             this.backgroundnize = images
           }
@@ -196,6 +196,11 @@ export default {
           this.$store.state.displayWidget.widgetSaved[
           this.idTemplate + '_WidgetWisataBottombar_img'
           ]
+
+        var images = this.img.includes('/api/') ?
+          (this.$axios.defaults.baseURL +
+            this.img.split('/api/')[1]) : `${this.img}`
+        this.backgroundnize = images
       }
     }
   },
