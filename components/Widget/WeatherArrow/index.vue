@@ -6,15 +6,16 @@
       </div>
       <div class="text-5xl text-center mt-3 font-bold" v-if="forecast.length > 0">
         <!-- {{forecast[0].data.date}} -->
-        {{
-            returningTimeZone(new Date(forecast[0].data.date))
-              .split(' ')
-              .splice(4, 4)[0]
-              .split(':')
-              .splice(0, 2)
-              .join(':')
+        <div>{{ konversiWaktuGMT(forecast[0].data.date, offset) }} {{ returningtime }}</div>
+        <!-- {{
+          returningTimeZone(new Date(forecast[0].data.date))
+            .split(' ')
+            .splice(4, 4)[0]
+            .split(':')
+            .splice(0, 2)
+            .join(':')
         }}
-        {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+        {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }} -->
       </div>
     </div>
     <div>
@@ -80,10 +81,8 @@
       </div>
       <div v-else>
         <div>
-          <carousel :vertical="true" :autoPlay="true" :playSpeed="4000" :itemsToShow="1" 
-          :wheelControl="false"
-          :hoverPause="false"
-            style="height: 1000px;width:1920px;right:280px" class="relative">
+          <carousel :vertical="true" :autoPlay="true" :playSpeed="4000" :itemsToShow="1" :wheelControl="false"
+            :hoverPause="false" style="height: 1000px;width:1920px;right:280px" class="relative">
             <carouselitem v-for="(forecast2, i) in parsedforecast" :key="i" style="height:900px;">
               <div class="grid grid-cols-3">
                 <div v-for="(b, k) in forecast2" :key="k" class="arrow my-2 w-full h-80 rounded-l-lg rounded-r-lg"
@@ -149,6 +148,7 @@ export default {
       area: '',
       allNDF: {},
       idTemplate: null,
+      returningtime: null,
       settings: {
         dots: false,
         infinite: true,
@@ -163,6 +163,9 @@ export default {
     }
   },
   computed: {
+    offset() {
+      return this.$store.state.ndfData.offsettime
+    },
     weather_code() {
       return weather_code
     },
@@ -223,6 +226,28 @@ export default {
     }, 3600000)
   },
   methods: {
+    konversiWaktuGMT(waktu, offset) {
+      // Mendapatkan waktu lokal
+      var waktuLokal = new Date(waktu);
+      // console.log(this.$parent.responseDisplay)
+      var offsetjam;
+
+      // if (this.$parent.responseDisplay.properties && this.$parent.responseDisplay.properties.timeoffset) {
+      offsetjam = offset * 3600000
+      this.returningtime = offset == 7 ? 'WIB' : offset == 8 ? 'WITA' : offset == 9 ? 'WIT' : ''
+      // } else {
+      //   offsetjam = this.getOffsetGMT() * 3600000
+      //   this.returningtime = this.getOffsetGMT() == 7 ? 'WIB' : this.getOffsetGMT() == 8 ? 'WITA' : this.getOffsetGMT() == 9 ? 'WIT' : ''
+      // }
+      // Mendapatkan waktu GMT dengan penyesuaian offset
+      var waktuGMT = new Date(waktuLokal.getTime() + (offsetjam));
+
+      // Mengembalikan waktu GMT dalam format string
+      var time = waktuGMT.toISOString()
+      var date = time.split('T')[0]
+      var time2 = time.split('T')[1].split(':')
+      return `${[time2[0], time2[1]].join(':')}`
+    },
     returningTimeZone(date) {
       return (
         date.toString().split(' ').splice(0, 5).join(' ') +

@@ -1,52 +1,27 @@
 <template>
   <div class="h-44 w-full">
     &nbsp;
-    <div
-      :style="backgroundnize"
-      class="fixed -top-32 -left-24"
-      style="z-index: -1"
-    ></div>
+    <img :src="backgroundnize" class="fixed -top-32 object-fit h-screen w-screen" style="z-index: -1" />
     <!-- <img :src="img" class="fixed -top-24 w-full left-0" style="z-index: -1" /> -->
     <!--  -->
 
-    <div class="font-bold text-6xl mb-6 px-12 relative bottom-24">
+    <div class="font-bold text-6xl mb-6 px-12 relative bottom-24" :style="{ color: color }">
       {{ name !== '' ? name : 'No Name of location' }}
     </div>
     <div class="flex w-full space-x-4 px-6 relative bottom-24">
-      <div
-        v-for="(val, i) in forecast"
-        :key="i"
-        class="flex-grow rounded-lg px-6 py-2.5"
-        :style="{ background: 'rgb(' + hexToRgb(backgroundColor).join(',') + ')' }"
-      >
-        <div class="text-4xl mb-3">
-          {{
-          returningTimeZone(new Date(val.date))
-            .split(' ')
-            .splice(4, 4)[0]
-            .split(':')
-            .splice(0, 2)
-            .join(':')
-        }}
-          {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+      <div v-for="(val, i) in forecast" :key="i" class="flex-grow rounded-lg px-6 py-2.5"
+        :style="{ background: 'rgb(' + hexToRgb(backgroundColor).join(',') + ')' }">
+        <div class="text-4xl mb-3" :style="{ color: color }">
+          <div>{{ konversiWaktuGMT(val.date, offset) }} {{ returningtime }}</div>
         </div>
         <div class="relative flex">
           <div class="flex-grow">
             &nbsp;
-            <img
-              :src="'/Archive/' + val.weather_code + '.gif'"
-              class="w-44 mx-auto absolute -left-44 -top-12 right-0"
-              alt="imgdata"
-            />
+            <img :src="'/Archive/' + val.weather_code + '.gif'" class="w-44 mx-auto absolute -left-44 -top-12 right-0"
+              alt="imgdata" />
           </div>
-          <div
-            class="flex-none"
-            :style="{ color: color }"
-          >
-            <div
-              class="text-6xl text-left"
-              style="font-weight: 200 !important"
-            >
+          <div class="flex-none" :style="{ color: color }">
+            <div class="text-6xl text-left" style="font-weight: 200 !important">
               <div>{{ val.temp }}<sup>o</sup>C</div>
             </div>
             <div class="text-2xl">
@@ -59,7 +34,7 @@
   </div>
 </template>
   
-  <script>
+<script>
 import { weather_code } from '../../../utils/helperNDF.js'
 export default {
   data() {
@@ -144,6 +119,7 @@ export default {
         },
       ],
       color: '#000000',
+      returningtime: null,
       backgroundColor: '#ffffff',
       img: '',
       backgroundnize: {},
@@ -152,6 +128,9 @@ export default {
     }
   },
   computed: {
+    offset() {
+      return this.$store.state.ndfData.offsettime
+    },
     weather_code: function () {
       return weather_code
     },
@@ -167,15 +146,37 @@ export default {
     },
   },
   methods: {
+    konversiWaktuGMT(waktu, offset) {
+      // Mendapatkan waktu lokal
+      var waktuLokal = new Date(waktu);
+      // console.log(this.$parent.responseDisplay)
+      var offsetjam;
+
+      // if (this.$parent.responseDisplay.properties && this.$parent.responseDisplay.properties.timeoffset) {
+      offsetjam = offset * 3600000
+      this.returningtime = offset == 7 ? 'WIB' : offset == 8 ? 'WITA' : offset == 9 ? 'WIT' : ''
+      // } else {
+      //   offsetjam = this.getOffsetGMT() * 3600000
+      //   this.returningtime = this.getOffsetGMT() == 7 ? 'WIB' : this.getOffsetGMT() == 8 ? 'WITA' : this.getOffsetGMT() == 9 ? 'WIT' : ''
+      // }
+      // Mendapatkan waktu GMT dengan penyesuaian offset
+      var waktuGMT = new Date(waktuLokal.getTime() + (offsetjam));
+
+      // Mengembalikan waktu GMT dalam format string
+      var time = waktuGMT.toISOString()
+      var date = time.split('T')[0]
+      var time2 = time.split('T')[1].split(':')
+      return `${[time2[0], time2[1]].join(':')}`
+    },
     hexToRgb(hex) {
       var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
       return result
         ? [
-            parseInt(result[1], 16),
-            parseInt(result[2], 16),
-            parseInt(result[3], 16),
-            0.8,
-          ]
+          parseInt(result[1], 16),
+          parseInt(result[2], 16),
+          parseInt(result[3], 16),
+          0.8,
+        ]
         : null
     },
     returningTimeZone(date) {
@@ -202,7 +203,7 @@ export default {
               // console.log(this.ndflistener[el.value.ndf], el)
               const datares = await this.$axios.$get(
                 `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
-                  el.value.locationId
+                el.value.locationId
               )
 
               self.$set(ndflistener, el.value.ndf, datares.data)
@@ -245,13 +246,16 @@ export default {
             this.backgroundColor = el.value
           } else if (key == 'img') {
             this.img = el.value
-            this.backgroundnize = {
-              'background-image': 'url(' + this.img + ')',
-              'background-size': 'cover',
-              'background-repeat': 'no-repeat',
-              height: '100vh',
-              width: '100vw',
-            }
+            this.backgroundnize = this.img.includes('/api/') ?
+              (this.$axios.defaults.baseURL +
+                this.img.split('/api/')[1]) : `${this.img}`
+            //  {
+            //   'background-image': 'url(' + this.img + ')',
+            //   'background-size': 'cover',
+            //   'background-repeat': 'no-repeat',
+            //   height: '100vh',
+            //   width: '100vw',
+            // }
           }
         }
       })
@@ -263,50 +267,54 @@ export default {
     } else {
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataForecast_name'
+        this.idTemplate + '_WidgetWisataForecast_name'
         ]
       ) {
         this.name =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataForecast_name'
+          this.idTemplate + '_WidgetWisataForecast_name'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataForecast_color'
+        this.idTemplate + '_WidgetWisataForecast_color'
         ]
       ) {
         this.color =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataForecast_color'
+          this.idTemplate + '_WidgetWisataForecast_color'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataForecast_background'
+        this.idTemplate + '_WidgetWisataForecast_background'
         ]
       ) {
         this.backgroundColor =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataForecast_background'
+          this.idTemplate + '_WidgetWisataForecast_background'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetWisataForecast_img'
+        this.idTemplate + '_WidgetWisataForecast_img'
         ]
       ) {
         this.img =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWisataForecast_img'
+          this.idTemplate + '_WidgetWisataForecast_img'
           ]
+
+        this.backgroundnize = this.img.includes('/api/') ?
+          (this.$axios.defaults.baseURL +
+            this.img.split('/api/')[1]) : `${this.img}`
       }
     }
   },
 }
 </script>
   
-  <style scoped>
+<style scoped>
 .font-color {
   color: #4e256c;
 }

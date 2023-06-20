@@ -1,7 +1,6 @@
 <template>
   <div class="w-full">
-    <div
-      class="
+    <div class="
         bg-white/70
         rounded-lg
         relative
@@ -12,20 +11,23 @@
         space-x-8
         w-full
         shadow-md
-      "
-    >
+      ">
       <div class="flex-none w-32">
-        <img
-          :src="'/Archive/' + forecast[0].weather_code + '.gif'"
-          class="w-64 absolute left-0 -top-12 z-50"
-          alt="imgdata"
-        />
+        <img :src="'/Archive/' + forecast[0].weather_code + '.gif'" class="w-64 absolute left-0 -top-12 z-50"
+          alt="imgdata" />
       </div>
-      <div class="font-bold flex-grow pl-14">
-        <div class="uppercase text-4xl">
+      <!-- {{  }} -->
+      <div class="flex-grow pl-14 relative">
+        <div class="text-xl font-semibold" v-if="offset && selectedTime">
+            <!-- {{ forecast[0].date }} -->
+            <div>{{ konversiWaktuGMT(selectedTime, offset) }} {{ returningtime }}</div>
+          </div>
+        <div class="uppercase font-bold  text-4xl mt-2">
           {{ weather_code[forecast[0].weather_code] }}
         </div>
-        <div class="text-4xl mt-2">{{ forecast[0].temp }}<sup>o</sup>C</div>
+        <div class="text-4xl font-bold flex items-end">
+          <div class="flex-grow">{{ forecast[0].temp }}<sup>o</sup>C </div>
+        </div>
       </div>
       <div class="flex-grow text-2xl">
         <table>
@@ -63,14 +65,9 @@
                 <div>:</div>
                 <div class="relative">
                   <img src="/weatherheadline/compass.svg" alt="img" />
-                  <img
-                    src="/weatherheadline/arrow.svg"
-                    :style="{
-                      transform: 'rotate(' + dirTo[forecast[0].wDir] + 'deg)',
-                    }"
-                    alt="img2"
-                    class="absolute z-30 top-0 left-0 right-0 mx-auto"
-                  />
+                  <img src="/weatherheadline/arrow.svg" :style="{
+                    transform: 'rotate(' + dirTo[forecast[0].wDir] + 'deg)',
+                  }" alt="img2" class="absolute z-30 top-0 left-0 right-0 mx-auto" />
                 </div>
                 <div>{{ dirTo[forecast[0].wDir] }}<sup>o</sup></div>
               </div>
@@ -129,6 +126,8 @@ export default {
           wSpd: 0,
         },
       ],
+      selectedTime: null,
+      returningtime: null,
       listData: {
         Weather: 'weather_code',
         Temperature: 'temp',
@@ -151,8 +150,33 @@ export default {
     ndflistener() {
       return this.$store.state.ndfData.allNDF
     },
+    offset() {
+      return this.$store.state.ndfData.offsettime
+    },
   },
   methods: {
+    konversiWaktuGMT(waktu, offset) {
+      // Mendapatkan waktu lokal
+      var waktuLokal = new Date(waktu);
+      // console.log(this.$parent.responseDisplay)
+      var offsetjam;
+
+      // if (this.$parent.responseDisplay.properties && this.$parent.responseDisplay.properties.timeoffset) {
+      offsetjam = offset * 3600000
+      this.returningtime = offset == 7 ? 'WIB' : offset == 8 ? 'WITA' : offset == 9 ? 'WIT' : ''
+      // } else {
+      //   offsetjam = this.getOffsetGMT() * 3600000
+      //   this.returningtime = this.getOffsetGMT() == 7 ? 'WIB' : this.getOffsetGMT() == 8 ? 'WITA' : this.getOffsetGMT() == 9 ? 'WIT' : ''
+      // }
+      // Mendapatkan waktu GMT dengan penyesuaian offset
+      var waktuGMT = new Date(waktuLokal.getTime() + (offsetjam));
+
+      // Mengembalikan waktu GMT dalam format string
+      var time = waktuGMT.toISOString()
+      var date = time.split('T')[0]
+      var time2 = time.split('T')[1].split(':')
+      return `${date} ${[time2[0], time2[1]].join(':')}`
+    },
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
       this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
@@ -168,7 +192,7 @@ export default {
           if (key == 'kecamatan' && key1 == 'WidgetWeatherHeadline') {
             const datares = await this.$axios.$get(
               `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
-                el.value.locationId
+              el.value.locationId
             )
 
             this.$set(ndflistener, el.value.ndf, datares.data)
@@ -181,6 +205,8 @@ export default {
                 }
                 if (comp.date.split('T')[1].split(':')[0] == '12') {
                   // console.log(ndflistener[el.value.ndf], comp)
+                  // console.log(comp, 'eaea')
+                  this.selectedTime = comp.date
                   this.forecast.push(comp)
                   break
                 }
@@ -191,16 +217,16 @@ export default {
       } else {
         if (
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetWeatherHeadline_kecamatan'
+          this.idTemplate + '_WidgetWeatherHeadline_kecamatan'
           ]
         ) {
           var el =
             this.$store.state.displayWidget.widgetSaved[
-              this.idTemplate + '_WidgetWeatherHeadline_kecamatan'
+            this.idTemplate + '_WidgetWeatherHeadline_kecamatan'
             ]
           const datares = await this.$axios.$get(
             `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
-              el.locationId
+            el.locationId
           )
 
           this.$set(ndflistener, el.locationId, datares.data)
@@ -209,6 +235,8 @@ export default {
             for (var i = 0; i < ndflistener[el.locationId].length; i++) {
               var comp = ndflistener[el.locationId][i]
               if (comp.date.split('T')[1].split(':')[0] == '12') {
+
+                this.selectedTime = comp.date
                 this.forecast.push(comp)
                 break
               }

@@ -170,9 +170,14 @@ export default {
 
       if (this.$parent.responseDisplay.properties && this.$parent.responseDisplay.properties.timeoffset) {
         offsetjam = this.$parent.responseDisplay.properties.timeoffset.offset * 3600000
+
+        this.$store.commit('ndfData/mutationoffset', this.$parent.responseDisplay.properties.timeoffset.offset)
+
         this.returningtime = this.$parent.responseDisplay.properties.timeoffset.offset == 7 ? 'WIB' : this.$parent.responseDisplay.properties.timeoffset.offset == 8 ? 'WITA' : this.$parent.responseDisplay.properties.timeoffset.offset == 9 ? 'WIT' : ''
       } else {
         offsetjam = this.getOffsetGMT() * 3600000
+
+        this.$store.commit('ndfData/mutationoffset', this.getOffsetGMT())
         this.returningtime = this.getOffsetGMT() == 7 ? 'WIB' : this.getOffsetGMT() == 8 ? 'WITA' : this.getOffsetGMT() == 9 ? 'WIT' : ''
       }
       // Mendapatkan waktu GMT dengan penyesuaian offset

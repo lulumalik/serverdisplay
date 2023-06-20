@@ -6,15 +6,8 @@
       </div>
       <div class="text-5xl text-center mt-3 stroke_white font-bold" v-if="forecast.length > 0">
         <!-- {{forecast[0].data.date}} -->
-        {{
-            returningTimeZone(new Date(forecast[0].data.date))
-              .split(' ')
-              .splice(4, 4)[0]
-              .split(':')
-              .splice(0, 2)
-              .join(':')
-        }}
-        {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}
+        
+        <div>{{ konversiWaktuGMT(forecast[0].data.date, offset) }} {{ returningtime }}</div>
       </div>
     </div>
     <div class="flex space-x-4 justify-center">
@@ -119,6 +112,7 @@ export default {
       allNDF: {},
       idTemplate: null,
       currentDate: new Date().getHours(),
+      returningtime: null
     }
   },
   computed: {
@@ -141,6 +135,9 @@ export default {
         return 5
       }
     },
+    offset() {
+      return this.$store.state.ndfData.offsettime
+    },
   },
   mounted() {
     this.getData()
@@ -150,6 +147,28 @@ export default {
     }, 3600000)
   },
   methods: {
+    konversiWaktuGMT(waktu, offset) {
+      // Mendapatkan waktu lokal
+      var waktuLokal = new Date(waktu);
+      // console.log(this.$parent.responseDisplay)
+      var offsetjam;
+
+      // if (this.$parent.responseDisplay.properties && this.$parent.responseDisplay.properties.timeoffset) {
+      offsetjam = offset * 3600000
+      this.returningtime = offset == 7 ? 'WIB' : offset == 8 ? 'WITA' : offset == 9 ? 'WIT' : ''
+      // } else {
+      //   offsetjam = this.getOffsetGMT() * 3600000
+      //   this.returningtime = this.getOffsetGMT() == 7 ? 'WIB' : this.getOffsetGMT() == 8 ? 'WITA' : this.getOffsetGMT() == 9 ? 'WIT' : ''
+      // }
+      // Mendapatkan waktu GMT dengan penyesuaian offset
+      var waktuGMT = new Date(waktuLokal.getTime() + (offsetjam));
+
+      // Mengembalikan waktu GMT dalam format string
+      var time = waktuGMT.toISOString()
+      var date = time.split('T')[0]
+      var time2 = time.split('T')[1].split(':')
+      return `${[time2[0], time2[1]].join(':')}`
+    },
     returningTimeZone(date) {
       return (
         date.toString().split(' ').splice(0, 5).join(' ') +

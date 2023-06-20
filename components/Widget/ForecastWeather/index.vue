@@ -7,12 +7,9 @@
         </div>
         <div :class="i == forecast.length - 1 ? 'rounded-tr-lg' : ''" class="text-center  
               bg-indigo-500" v-for="(f, i) in forecast" :key="i">
-          <div class="text-3xl py-3"> {{
-              getSecondOnly(
-                returningTimeZone(new Date(f.date)).split(' ').splice(4, 4)[0]
-              )
-          }}
-            {{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}</div>
+          <div class="text-3xl py-3">
+            <div>{{ konversiWaktuGMT(f.date, offset) }} {{ returningtime }}</div>
+          </div>
         </div>
       </div>
       <div>
@@ -59,11 +56,12 @@ export default {
   data() {
     return {
       idTemplate: null,
+      returningtime: null,
       forecast: [
         {
           _id: '62e1d18fe1ec873f27342d0b',
           location: '625c7d97c1a1102fc994072e',
-          date: 'T00:00:00.000Z',
+          date: '2023-06-23T00:00:00.000Z',
           rh: 0,
           temp: 0,
           weather_code: 1,
@@ -73,7 +71,7 @@ export default {
         {
           _id: '62e1d18fe1ec873f27342d0c',
           location: '625c7d97c1a1102fc994072e',
-          date: 'T00:00:00.000Z',
+          date: '2023-06-24T00:00:00.000Z',
           rh: 0,
           temp: 0,
           weather_code: 1,
@@ -83,7 +81,7 @@ export default {
         {
           _id: '62e1d18fe1ec873f27342d0d',
           location: '625c7d97c1a1102fc994072e',
-          date: 'T00:00:00.000Z',
+          date: '2023-06-25T00:00:00.000Z',
           rh: 0,
           temp: 0,
           weather_code: 1,
@@ -127,12 +125,37 @@ export default {
         return 5
       }
     },
+    offset() {
+      return this.$store.state.ndfData.offsettime
+    },
   },
   methods: {
     getSecondOnly(val) {
       if (val) {
         return val.split(':')[0] + ':' + val.split(':')[1]
       }
+    },
+    konversiWaktuGMT(waktu, offset) {
+      // Mendapatkan waktu lokal
+      var waktuLokal = new Date(waktu);
+      // console.log(this.$parent.responseDisplay)
+      var offsetjam;
+
+      // if (this.$parent.responseDisplay.properties && this.$parent.responseDisplay.properties.timeoffset) {
+      offsetjam = offset * 3600000
+      this.returningtime = offset == 7 ? 'WIB' : offset == 8 ? 'WITA' : offset == 9 ? 'WIT' : ''
+      // } else {
+      //   offsetjam = this.getOffsetGMT() * 3600000
+      //   this.returningtime = this.getOffsetGMT() == 7 ? 'WIB' : this.getOffsetGMT() == 8 ? 'WITA' : this.getOffsetGMT() == 9 ? 'WIT' : ''
+      // }
+      // Mendapatkan waktu GMT dengan penyesuaian offset
+      var waktuGMT = new Date(waktuLokal.getTime() + (offsetjam));
+
+      // Mengembalikan waktu GMT dalam format string
+      var time = waktuGMT.toISOString()
+      var date = time.split('T')[0]
+      var time2 = time.split('T')[1].split(':')
+      return `${[time2[0], time2[1]].join(':')}`
     },
     returningTimeZone(date) {
       return (

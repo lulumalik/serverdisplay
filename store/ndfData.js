@@ -1,5 +1,6 @@
 export const state = () => ({
     allNDF: {},
+    offsettime: null
 })
 
 export const mutations = {
@@ -9,6 +10,9 @@ export const mutations = {
         } else {
             state.allNDF[data.key] = data.value
         }
+    },
+    mutationoffset(state, data) {
+        state.offsettime = data
     },
     emptyNDF(state) {
         state.allNDF = {}
