@@ -2,16 +2,24 @@
   <div>
     <div>Provinsi</div>
     <div>
-      <v-select label="provinsi" @option:selected="changeSelected" v-model="province"
-        :options="$parent.province"></v-select>
+      <v-select
+        label="provinsi"
+        @option:selected="changeSelected"
+        v-model="province"
+        :options="$parent.province"
+      ></v-select>
     </div>
     <div v-if="province">
       <div class="mt-2 flex items-center">
         <div class="flex-grow">Kotkab</div>
       </div>
       <div>
-        <v-select label="kotkab" @option:selected="changeSelectedKotkab" v-model="kotkab"
-          :options="listKotkab"></v-select>
+        <v-select
+          label="kotkab"
+          @option:selected="changeSelectedKotkab"
+          v-model="kotkab"
+          :options="listKotkab"
+        ></v-select>
       </div>
     </div>
   </div>
@@ -25,17 +33,12 @@ export default {
       },
     },
   },
-  computed: {
-    offset() {
-      return this.$store.state.ndfData.offsettime
-    },
-  },
   methods: {
     getProvinsi() {
       this.$axios
         .$get(
           this.$baseUrlNdf + '/cgms/weather/administration/kotkab?_id=' +
-          this.province._id
+            this.province._id
         )
         .then((res) => {
           this.listKotkab = res.data
@@ -60,24 +63,24 @@ export default {
   async mounted() {
     if (
       this.$store.state.displayWidget.widgetSaved[
-      this.idTemplate + '_WidgetWeatherTable2_province'
+        this.idTemplate + '_WidgetWeatherTable2_province'
       ]
     ) {
       this.province =
         this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWeatherTable2_province'
+          this.idTemplate + '_WidgetWeatherTable2_province'
         ]
 
       this.getProvinsi()
     }
     if (
       this.$store.state.displayWidget.widgetSaved[
-      this.idTemplate + '_WidgetWeatherTable2_kotkab'
+        this.idTemplate + '_WidgetWeatherTable2_kotkab'
       ]
     ) {
       this.kotkab =
         this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetWeatherTable2_kotkab'
+          this.idTemplate + '_WidgetWeatherTable2_kotkab'
         ]
     }
   },
