@@ -5,11 +5,8 @@
         Tujuan
       </div>
     </div>
-    <div
-      class="overflow-auto mt-2"
-      style="height: 610px"
-    >
-      <VueSlickCarousel v-bind="settings">
+    <div class="overflow-auto mt-2" style="height: 600px">
+      <VueSlickCarousel v-bind="settings" style="height: 600px">
         <template #prevArrow="arrowOption">
           <div v-show="false">{{ arrowOption }}</div>
         </template>
@@ -18,15 +15,8 @@
             {{ arrowOption }}
           </div>
         </template>
-        <div
-          class="flex space-x-4 mb-3.5"
-          v-for="(val, i) in bandaras"
-          :key="i"
-        >
-          <div
-            style="width: 100px !important"
-            class="text-black rounded-md bg-white z-10"
-          >
+        <div class="flex space-x-4 mt-8" style="height:400px;" v-for="(val, i) in bandaras" :key="i">
+          <div style="width: 100px !important;height:200px;" class="text-black rounded-md bg-white z-10">
             <div class="px-6 py-3 flex space-x-4 bg-indigo-500 relative z-20 rounded-md">
               <div class="text-3xl text-white truncate">
                 <b>{{ val.tagname }}</b>
@@ -35,49 +25,37 @@
             <div class="p-6 rounded-md z-10">
               <div class="text-2xl">
                 <div class="text-3xl relative font-bold flex items-center space-x-4">
-                  <img
-                    :src="'/Archive/' + weather_codeParsed[val.weather] + '.gif'"
-                    class="w-32 absolute"
-                  />
+                  <img :src="'/Archive/' + weather_codeParsed[val.weather] + '.gif'" class="w-32 absolute" />
                   <div class="pl-32 ">{{ val.weather }}</div>
                 </div>
                 <div class="font-semibold flex w-full mt-10">
-                  <div class="flex space-x-4 items-center w-1/2">
+                  <div class="flex space-x-4 items-center w-5/12">
                     <div class="ml-2">
-                      <img
-                        class="w-4"
-                        src="/weatherheadline/WDir.svg"
-                      />
+                      <img class="w-4" src="/weatherheadline/WDir.svg" />
                     </div>
                     <div>Angin</div>
                   </div>
-                  <div class="w-1/2">
+                  <div class="w-7/12">
                     {{ parseFloat(val.windSpeed) ? val.windSpeed + 'km/jam dari ' + val.windDirection : val.windSpeed }}
                   </div>
                 </div>
                 <div class="font-semibold flex w-full mt-1.5">
-                  <div class="flex items-center space-x-3 w-1/2">
-                    <img
-                      class="w-6 ml-1"
-                      src="/weatherheadline/eye.svg"
-                    />
-                    <div>Jarak Pandang</div>
+                  <div class="flex items-center space-x-3 w-5/12">
+                    <img class="w-6 ml-1" src="/weatherheadline/eye.svg" />
+                    <div class="whitespace-nowrap">Jarak Pandang</div>
                   </div>
-                  <div class="w-1/2">
+                  <div class="w-7/12">
                     {{ val.visibility || '-' }} Kilometers
                   </div>
                 </div>
                 <div class="font-semibold flex w-full mt-1.5">
-                  <div class="flex items-center space-x-4 w-1/2">
+                  <div class="flex items-center space-x-4 w-5/12">
                     <div class="ml-2">
-                      <img
-                        class="w-3.5"
-                        src="/weatherheadline/Temperature.svg"
-                      />
+                      <img class="w-3.5" src="/weatherheadline/Temperature.svg" />
                     </div>
                     <div>Suhu</div>
                   </div>
-                  <div class="w-1/2">{{ val.temperature }} <sup>o</sup>C</div>
+                  <div class="w-7/12">{{ val.temperature }} <sup>o</sup>C</div>
                 </div>
               </div>
             </div>
@@ -107,6 +85,8 @@ export default {
         verticalSwiping: true,
         autoplay: true,
         speed: 1000,
+        centerPadding: "30px",
+        adaptiveHeight: true,
         autoplaySpeed: 5000,
       },
       idTemplate: null,
@@ -203,13 +183,13 @@ export default {
         // console.log( this.$store.state.displayWidget.widgetSaved, this.idTemplate)
         if (
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetArrival_airport'
+          this.idTemplate + '_WidgetArrival_airport'
           ]
         ) {
           this.bandaras.length = 0
           var el =
             this.$store.state.displayWidget.widgetSaved[
-              this.idTemplate + '_WidgetArrival_airport'
+            this.idTemplate + '_WidgetArrival_airport'
             ]
 
           this.$axios

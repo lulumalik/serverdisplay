@@ -1,7 +1,7 @@
 <template>
   <div class="h-44 w-full">
     &nbsp;
-    <div :style="backgroundnize" class="fixed -top-24 w-full left-0" style="z-index: -1"></div>
+    <img :src="backgroundnize" class="fixed -top-24 w-full object-fit left-0" style="z-index: -1" />
     <div class="fixed top-0 right-4 border-l-8 z-50 px-16 py-6 backdrop-blur-md"
       :style="{ 'border-color': backgroundColor }">
       <div class="uppercase text-2xl">
@@ -34,17 +34,17 @@
               <img :src="'/Archive/' + f.weather_code + '.gif'" class="w-36 mx-auto absolute -top-2.5 left-0"
                 alt="imgdata" />
               <div class="font-semibold text-sm text-center mb-2" :style="{ color: color }">{{
-                  weather_code[f.weather_code]
+                weather_code[f.weather_code]
               }}</div>
             </div>
           </div>
           <div class="w-full text-right" :style="{ color: color }">
             <div class="text-4xl absolute -top-12 left-0" style="font-weight: 400 !important">
               <div>{{ returningTimeZone(new Date(f.date)).split(' ')
-                  .splice(4, 4)[0]
-                  .split(':')
-                  .splice(0, 2)
-                  .join(':')
+                .splice(4, 4)[0]
+                .split(':')
+                .splice(0, 2)
+                .join(':')
               }} <small>{{ getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT' }}</small>
                 <small>({{ returningTimeZone(new Date(f.date)).split(' ')[0] }})</small>
               </div>
@@ -189,13 +189,10 @@ export default {
             this.backgroundColor = el.value
           } else if (key == 'img') {
             this.img = el.value
-            this.backgroundnize = {
-              'background-image': 'url(' + this.img + ')',
-              'background-size': 'cover',
-              'background-position': 'center',
-              'background-repeat': 'no-repeat',
-              height: '120%',
-            }
+            var images = this.img.includes('/api/') ?
+              (this.$axios.defaults.baseURL +
+                this.img.split('/api/')[1]) : `${this.img}`
+            this.backgroundnize = images
           }
         }
       })
@@ -214,13 +211,10 @@ export default {
           this.$store.state.displayWidget.widgetSaved[
           this.idTemplate + '_WidgetWisataBottombarForecast_img'
           ]
-        this.backgroundnize = {
-          'background-image': 'url(' + this.img + ')',
-          'background-size': 'cover',
-          'background-position': 'center',
-          'background-repeat': 'no-repeat',
-          height: '120%',
-        }
+        var images = this.img.includes('/api/') ?
+          (this.$axios.defaults.baseURL +
+            this.img.split('/api/')[1]) : `${this.img}`
+        this.backgroundnize = images
       }
 
       if (
