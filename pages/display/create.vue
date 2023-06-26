@@ -51,7 +51,7 @@
         </div>
         <div class="flex-grow"
           v-if="roleUser && roleUser.role.name == 'Admin' ? true : currentUser == (allfind.owner && allfind.owner._id)">
-          <div type="submit" class="
+          <div  class="
               px-4
               cursor-pointer
               text-center
@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="flex-grow" v-if="$route.query.id">
-          <div type="submit" class="
+          <div  class="
               bg-blue-200
               border border-blue-400
               shadow
@@ -105,7 +105,16 @@
       <div class="flex w-full">
         <DisplaySidebar class="flex-none" />
         <DisplayPreview ref="preview" class="flex-grow h-full overflow-auto" />
-        <DisplayWidgetOption class="flex-none" />
+        <div  class="flex-none">
+          <DisplayWidgetOption />
+          <div class="p-3" v-if="$route.query.id">
+            <div class="mb-2">Display Notes</div>
+            <div>
+              <textarea placeholder="Input notes" class="w-full rounded-md shadow resize-none p-2 text-xs" rows="6" v-model="notes"> 
+              </textarea>
+            </div>
+          </div>
+        </div>
       </div>
     </client-only>
   </div>
@@ -133,7 +142,8 @@ export default {
       currentUser: null,
       status: true,
       showSetting: false,
-      roleUser: null
+      roleUser: null,
+      notes: ''
     }
   },
   middleware: ['checkAdmin'],
@@ -170,6 +180,7 @@ export default {
         this.displayID = res.data.username
         this.displayName = res.data.name
         // console.log(res.data)
+        this.notes = res.data.note
         this.status = res.data.status
         this.useTimeOffset = res.data.properties.timeoffset
         this.useFooter = res.data.properties.footer
@@ -217,7 +228,7 @@ export default {
     },
     async updateData(obj) {
       try {
-
+        obj.note = this.notes
         // obj.request_type = 'UPDATE'
         const res = await this.$axios.$put(
           'display/update/' + this.allfind._id,
@@ -229,9 +240,9 @@ export default {
           type: 'success',
           duration: 2000,
         })
-        // setTimeout(() => {
-        //   window.location.href = '/display/create?id=' + res.data.username
-        // }, 1000)
+        setTimeout(() => {
+          window.location.href = '/display'
+        }, 1000)
       } catch (error) {
         if (error.response.data.message.code == 11000) {
           this.saving = false
@@ -254,7 +265,7 @@ export default {
       try {
         obj.request_type = 'CREATE'
         const res = await this.$axios.$post(
-          'display/create',
+          'display_request/create',
           obj
         )
         this.saving = false
@@ -264,7 +275,7 @@ export default {
           duration: 2000,
         })
         setTimeout(() => {
-          window.location.href = '/display/create'
+          window.location.href = '/display'
         }, 1000)
       } catch (error) {
         if (error.response.data.message.code == 11000) {
@@ -342,7 +353,7 @@ export default {
       }
 
       // this.$store.commit('displayWidget/emptyWidget')
-      console.log(obj)
+      // console.log(obj)
       if (createOnly == 'create') {
         this.createData(obj)
         return true

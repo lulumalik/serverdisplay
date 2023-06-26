@@ -210,7 +210,7 @@ export default {
         type: 'fill',
         source: id,
         paint: {
-          'fill-color': this.legenda.filter((val) => val.gelombang == geojson.properties.gelombang)[0].color || '#088',
+          'fill-color': this.legenda.filter((val) => geojson.properties ? val.gelombang == geojson.properties.gelombang : [{color: '#088'}])[0].color || '#088',
           'fill-opacity': 0.8,
         },
       })

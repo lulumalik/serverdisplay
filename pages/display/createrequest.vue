@@ -243,7 +243,7 @@ export default {
     async createData(obj) {
       try {
         obj.request_type = 'CREATE'
-        console.log(obj)
+        // console.log(obj)
         const res = await this.$axios.$post(
           'display_request/create',
           obj

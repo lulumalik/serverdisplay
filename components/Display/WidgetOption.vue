@@ -5,7 +5,7 @@
       <client-only>
         <div
           class="bg-white w-full mt-3 rounded overflow-auto w-72"
-          style="height: calc(100vh - 300px)"
+          :style="{height: $route.query.id ? 'calc(100vh - 400px)' : 'calc(100vh - 250px)'}"
         >
           <div class="p-2">
             <select
