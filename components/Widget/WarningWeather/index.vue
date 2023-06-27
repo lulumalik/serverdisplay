@@ -62,7 +62,7 @@ export default {
     imageNotFound(e) {
       var parent = this.$parent.$parent.$parent
       if (parent.production) {
-        console.log('ea')
+        // console.log('ea')
         // parent.errorImage['MaritimWarning'] = false
         parent.spliceSlide('https://nowcasting.bmkg.go.id/infografis/' + this.area + '/' +
           new Date().getFullYear() +
@@ -101,9 +101,12 @@ export default {
         parentDisplay.responseDisplay.properties.allSetting[this.idTemplate]
       ) {
         if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1] && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1].value.id) {
-
+         
           this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][1].value.id
         } else if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0] && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area) {
+
+          this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area
+        } else if (parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0] && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.id) {
 
           this.area = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value.area
         }
