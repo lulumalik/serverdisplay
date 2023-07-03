@@ -1,5 +1,53 @@
 <template>
     <div class="bg-gray-100">
+        <div class="fixed left-0 flex items-center justify-center right-0 w-full h-full"
+            style="z-index:1000;background: rgba(0,0,0,0.5)" v-if="popup">
+            <div class="bg-white rounded-lg p-5">
+                <div class="font-bold mb-4 flex">
+                    <div class="flex-grow">
+                        Display Report
+                    </div>
+                    <div class="text-red-500 cursor-pointer" @click="popup = false">
+                        &times;
+                    </div>
+                </div>
+                <div class="py-2">
+                    <b>{{ reportselected.name }}</b>
+                </div>
+                <div class="mt-2 flex space-x-4">
+                    <button class="text-white bg-green-500 w-44 text-center py-1 font-bold rounded-md"
+                        @click="makenew = true">Make new
+                        report</button>
+                    <button class="text-white bg-blue-500 w-44 text-center py-1 font-bold rounded-md"
+                        @click="makenew = false">Update report</button>
+                </div>
+                <div class="mt-2" v-if="!makenew">
+                    Uploaded Report
+                    <select class="py-1 px-4 w-full border border-gray-300 rounded">
+                        <option v-for="(c, i) in uploadedreport" :key="i">
+                            {{ c.description }}
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <div class="mt-2">
+                        Select Category
+                    </div>
+                    <select class="py-1 px-4 w-full border border-gray-300 rounded">
+                        <option v-for="(c, i) in category" :key="i">
+                            {{ c }}
+                        </option>
+                    </select>
+                    <div class="mt-2">Description</div>
+                    <textarea rows="7" v-model="descreport" class="border w-full border-gray-300">
+                </textarea>
+                    <div class="mt-4 text-right">
+                        <button @click="submitreport"
+                            class="text-white bg-blue-500 px-4 py-1 font-bold rounded-md">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <Navbar class="w-full" />
         <div class="flex w-full" style="height: calc(100vh - 65.5px)">
             <Sidebar class="flex-none" />
@@ -48,7 +96,19 @@
                                         @click="selectdata(db, db.username)">
                                         <tr>
                                             <td>
-                                                <div :id="db.username">{{ db.name }}</div>
+                                                <div class="flex space-x-4 items-center">
+                                                    <div class="relative z-50 cursor-pointer">
+                                                        <svg clip-rule="evenodd" fill-rule="evenodd" @click="openpopup(db)"
+                                                            stroke-linejoin="round" stroke-miterlimit="2"
+                                                            viewBox="0 0 24 24" width="20" height="20"
+                                                            xmlns="http://www.w3.org/2000/svg" class="text-red-500">
+                                                            <path fill="currentColor"
+                                                                d="m12.002 21.534c5.518 0 9.998-4.48 9.998-9.998s-4.48-9.997-9.998-9.997c-5.517 0-9.997 4.479-9.997 9.997s4.48 9.998 9.997 9.998zm0-8c-.414 0-.75-.336-.75-.75v-5.5c0-.414.336-.75.75-.75s.75.336.75.75v5.5c0 .414-.336.75-.75.75zm-.002 3c-.552 0-1-.448-1-1s.448-1 1-1 1 .448 1 1-.448 1-1 1z"
+                                                                fill-rule="nonzero" />
+                                                        </svg>
+                                                    </div>
+                                                    <div :id="db.username">{{ db.name }}</div>
+                                                </div>
                                             </td>
                                             <td>
                                                 <div class="flex items-center">
@@ -75,11 +135,13 @@
                                 </div>
                             </div>
                             <div style="width: 420px;">
-                                <div class="font-bold mt-3 mb-3">Data Display<button @click="toLink('https://widis.bmkg.go.id/g/' + selectedTable)" target="_blank" class="uppercase pl-3 underline cursor-pointer text-blue-500">{{ selectedTable
-                                }}</button></div>
+                                <div class="font-bold mt-3 mb-3">Data Display<button
+                                        @click="toLink('https://widis.bmkg.go.id/g/' + selectedTable)" target="_blank"
+                                        class="uppercase pl-3 underline cursor-pointer text-blue-500">{{ selectedTable
+                                        }}</button></div>
                                 <div>
                                     <div v-if="selectedCollapse" class="bg-white p-4 rounded-md overflow-auto"
-                                        style="height: calc(100vh - 290px)">
+                                        style="height: calc(100vh - 435px)">
                                         <div>
                                             <div v-if="toArrayMonitor(selectedCollapse).length > 0">
                                                 <!-- {{ toArrayMonitor(selectedCollapse[db.username]) }} -->
@@ -233,6 +295,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="pt-2">
+                                    <div class="mb-2 font-bold">Display Notes</div>
+                                    <div>
+                                        <textarea placeholder="Input notes"
+                                            class="w-full rounded-md shadow resize-none p-2 text-xs" rows="6"
+                                            v-model="notes">
+                                        </textarea>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -286,7 +358,14 @@ export default {
             searchname: '',
             templateDB: [],
             selectedCollapse: {},
-            selectedTable: null
+            selectedTable: null,
+            notes: '',
+            popup: false,
+            descreport: '',
+            category: [1, 2, 3, 4, 5, 6],
+            reportselected: {},
+            makenew: true,
+            uploadedreport: []
         }
     },
     mounted() {
@@ -310,12 +389,30 @@ export default {
     },
     middleware: ['checkLogin'],
     methods: {
+        openpopup(db) {
+            this.reportselected = db
+            this.$axios.$get('report-display/findbydisplay/' + db.id).then((res) => {
+                // console.log(res)
+                this.uploadedreport = res.data
+                this.popup = true
+            })
+        },
+        submitreport() {
+            this.$axios.$post('report-display/create', {
+                category: this.categoryselected,
+                description: this.descreport,
+                display: this.reportselected.id
+            }).then((res) => {
+                console.log(res)
+            })
+        },
         toLink(link) {
             window.open(link, '_blank')
         },
         selectdata(db, data) {
             // this.selectedCollapse = {}
-
+            // console.log(db)
+            this.notes = db.note
             if (this.selectedCollapse[db.username]) {
                 // this.selectedCollapse = {}
                 this.selectedTable = null
@@ -327,7 +424,7 @@ export default {
             }
         },
         callAllData() {
-            this.$axios.$get('display?row=50&page=' + this.page).then((res) => {
+            this.$axios.$get('display?row=50&order=desc&sortBy=id&page=' + this.page).then((res) => {
                 // parseInt res.count if decimal
                 var count = parseInt(res.count / 50 + 1)
                 this.total = count
@@ -391,7 +488,7 @@ export default {
                             })
                         }
                     )
-                } else if (filtertemplate[key].name == 'Weather Location' || filtertemplate[key].name == 'Weather Arrow' || filtertemplate[key].name == 'Cuaca Kecamatan' || filtertemplate[key].name == 'Cuaca Kecamatan Blok' ) {
+                } else if (filtertemplate[key].name == 'Weather Location' || filtertemplate[key].name == 'Weather Arrow' || filtertemplate[key].name == 'Cuaca Kecamatan' || filtertemplate[key].name == 'Cuaca Kecamatan Blok') {
                     result.push(
                         {
                             weatherlocation: obj.allSetting[filtertemplate[key].idtemplate]
@@ -549,7 +646,7 @@ export default {
                 })
         },
         functionName(e) {
-            this.$axios.$get('display?row=50&page=' + e).then((res) => {
+            this.$axios.$get('display?row=50&order=desc&sortBy=id&page=' + e).then((res) => {
                 this.total = parseInt(res.count / 50 + 1)
                 this.templateDB = res.data
             })
