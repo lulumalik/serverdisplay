@@ -43,7 +43,7 @@
           </div>
           <div class="mt-2">
             <div>Limit</div>
-            
+
             <input type="number" class="border border-gray-300 p-3 w-full rounded" v-model="formdata.number_of_display" />
           </div>
           <div>
@@ -134,6 +134,7 @@ td {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+
 ul li {
   text-align: center !important;
   padding: 5px !important;
@@ -141,6 +142,7 @@ ul li {
   width: auto !important;
   background: white;
 }
+
 ul li.active {
   background: #3b82f6 !important;
   color: white;
@@ -198,10 +200,13 @@ export default {
     },
     submitForm() {
       // user/create
-      if (this.formdata.password.length < 6) {
-        this.$toast.error('Password must be at least 6 characters')
-        return
+      if (this.popup == 'add') {
+        if (this.formdata.password.length < 6) {
+          this.$toast.error('Password must be at least 6 characters')
+          return
+        }
       }
+      
       if (this.popup == 'add') {
         this.$axios
           .$post('user/create', this.formdata)
@@ -223,6 +228,9 @@ export default {
             })
           })
       } else {
+        if (this.formdata.password.length == 0) {
+          delete this.formdata.password
+        }
         this.$axios
           .$put('user/update/' + this.idselected, this.formdata)
           .then((res) => {

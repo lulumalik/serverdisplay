@@ -17,12 +17,12 @@ export default {
       // this.role = res.data
       // console.log(this.role)
       var akun = [
-      //   {
-      //   username: 'Stasiun Meteorologi Kelas I Blang Bintang, Banda Aceh',
-      //   email: 'blangbintang1@bmkg.go.id',
-      //   password: 'blangbintang1',
-      //   role: "62da5b5e86085485a9b60cca",
-      // },
+        {
+        username: 'Stasiun Meteorologi Kelas I Blang Bintang, Banda Aceh',
+        email: 'blangbintang1@bmkg.go.id',
+        password: 'blangbintang1',
+        role: "62da5b5e86085485a9b60cca",
+      },
       {
         username: 'Stasiun Meteorologi Kelas III Cut Bau Maimun Saleh - Sabang',
         email: 'cutbaumaimunsaleh@bmkg.go.id',
