@@ -119,9 +119,9 @@ export default {
     setInterval(() => {
       this.returningTimeZone()
     }, 1000)
-    // setInterval(() => {
-    //   this.refreshBrowserEveryHour()
-    // }, 3600000);
+    setInterval(() => {
+      this.refreshBrowserEveryHour()
+    }, 3600000);
   },
   computed: {
     getTimeZone() {
