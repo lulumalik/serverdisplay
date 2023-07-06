@@ -201,5 +201,29 @@ export const bandara = [{
         "Prov": "Sumut ",
         "Kode ": "WIMM",
         "Name": "Bandar Udara Internasional Kualanamu"
-    }
+    },
+    {
+        "No": "35",
+        "Prov": "Kepulauan Riau",
+        "Kode ": "WIDD",
+        "Name": "Bandar Udara Hang Nadim Batam "
+    },
+    {
+        "No": "36",
+        "Prov": "Kepulauan Babel",
+        "Kode ": "WIKK",
+        "Name": "Bandar Udara Depati Amir "
+    },
+    {
+        "No": "37",
+        "Prov": "NTT",
+        "Kode ": "WATC",
+        "Name": "Bandar Udara Fransiskus Xaverus Seda Maumare "
+    },
+    {
+        "No": "38",
+        "Prov": "NTB",
+        "Kode ": "WADB",
+        "Name": "Bandar Udara Sultan Muhammad Salahuddin"
+    },
 ]

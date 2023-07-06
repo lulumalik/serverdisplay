@@ -1,11 +1,8 @@
 <template>
   <div class="h-44 w-full">
     &nbsp;
-    <div
-      :style="backgroundnize"
-      class="fixed -top-24 w-full -left-6"
-      style="z-index: -1"
-    ></div>
+
+    <img :src="backgroundnize" class="fixed w-screen h-screen -top-32 left-0 object-cover" style="z-index: -1" />
     <!-- <img :src="img" class="fixed -top-24 w-full left-0" style="z-index: -1" /> -->
     <div class="
         absolute
@@ -13,8 +10,7 @@
         left-0
         w-full
       ">
-      <div
-        class=" 
+      <div class=" 
         pt-8
         pb-12
         pr-12
@@ -22,8 +18,7 @@
         w-full
         h-60
          "
-        :style="{ color: color, 'background-image': `linear-gradient(to bottom, rgba(${hexToRgb(backgroundColor, 0.4).join(',')}) , rgba(${hexToRgb(backgroundColor, 1).join(',')}) )` }"
-      >
+        :style="{ color: color, 'background-image': `linear-gradient(to bottom, rgba(${hexToRgb(backgroundColor, 0.4).join(',')}) , rgba(${hexToRgb(backgroundColor, 1).join(',')}) )` }">
         <div class="font-bold text-5xl">
           {{ name !== '' ? name : 'No Name of location' }}
         </div>
@@ -31,18 +26,10 @@
           {{ desc !== '' ? desc : '' }}
         </div>
       </div>
-      <div
-        class="w-96 absolute right-12 top-8 mb-4 h-48 mx-auto rounded-full "
-        :style="{ color: color, background: 'rgb(' + hexToRgb(backgroundColor).join(',') + ')' }"
-      >
-        <div
-          class="flex items-center h-full w-full justify-center"
-          :style="{ color: color }"
-        >
-          <div
-            class=" text-left"
-            style="font-weight: 200 !important"
-          >
+      <div class="w-96 absolute right-12 top-8 mb-4 h-48 mx-auto rounded-full "
+        :style="{ color: color, background: 'rgb(' + hexToRgb(backgroundColor).join(',') + ')' }">
+        <div class="flex items-center h-full w-full justify-center" :style="{ color: color }">
+          <div class=" text-left" style="font-weight: 200 !important">
             <div class="text-5xl text-center font-semibold flex space-x-4 items-center">
               <div>Visibility</div>
             </div>
@@ -90,11 +77,11 @@ export default {
       var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
       return result
         ? [
-            parseInt(result[1], 16),
-            parseInt(result[2], 16),
-            parseInt(result[3], 16),
-            opacity || 1,
-          ]
+          parseInt(result[1], 16),
+          parseInt(result[2], 16),
+          parseInt(result[3], 16),
+          opacity || 1,
+        ]
         : null
     },
     async getData() {
@@ -112,7 +99,7 @@ export default {
             if (key == 'bandara') {
               const datares = await this.$axios.$get(
                 'https://rami.bmkg.go.id/api/siam/code/current_or_latest/metar?icaoId=' +
-                  el.value['Kode ']
+                el.value['Kode ']
               )
               // console.log(datares)
               var keys = Object.keys(datares.data)[0]
@@ -171,14 +158,10 @@ export default {
             this.backgroundColor = el.value
           } else if (key == 'img') {
             this.img = el.value
-            this.backgroundnize = {
-              'background-image': 'url(' + this.img + ')',
-              'background-size': 'cover',
-              'background-position': 'center',
-              'background-repeat': 'no-repeat',
-              height: '140%',
-              width: '100vw',
-            }
+            var images = this.img.includes('/api/') ?
+              (this.$axios.defaults.baseURL +
+                this.img.split('/api/')[1]) : `${this.img}`
+            this.backgroundnize = images
           }
         }
       })
@@ -190,53 +173,58 @@ export default {
     } else {
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetVisibility_description'
+        this.idTemplate + '_WidgetVisibility_description'
         ]
       ) {
         this.desc =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetVisibility_description'
+          this.idTemplate + '_WidgetVisibility_description'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetVisibility_name'
+        this.idTemplate + '_WidgetVisibility_name'
         ]
       ) {
         this.name =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetVisibility_name'
+          this.idTemplate + '_WidgetVisibility_name'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetVisibility_color'
+        this.idTemplate + '_WidgetVisibility_color'
         ]
       ) {
         this.color =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetVisibility_color'
+          this.idTemplate + '_WidgetVisibility_color'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetVisibility_background'
+        this.idTemplate + '_WidgetVisibility_background'
         ]
       ) {
         this.backgroundColor =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetVisibility_background'
+          this.idTemplate + '_WidgetVisibility_background'
           ]
       }
       if (
         this.$store.state.displayWidget.widgetSaved[
-          this.idTemplate + '_WidgetVisibility_img'
+        this.idTemplate + '_WidgetVisibility_img'
         ]
       ) {
         this.img =
           this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetVisibility_img'
+          this.idTemplate + '_WidgetVisibility_img'
           ]
+
+        var images = this.img.includes('/api/') ?
+          (this.$axios.defaults.baseURL +
+            this.img.split('/api/')[1]) : `${this.img}`
+        this.backgroundnize = images
       }
     }
   },
