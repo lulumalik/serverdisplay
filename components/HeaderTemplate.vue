@@ -6,7 +6,7 @@
           :src="$parent.isHujan ? '/bmkglogowht-01.png' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? '/bmkglogowht-01.png' : '/bmkg.png'"
           alt="bmkg" class="w-20" />
         <div class="flex-grow">
-          <div style="font-size:27px" class="font-semibold"
+          <div style="font-size:27px" class="font-semibold whitespace-nowrap"
             :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'">
             BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA
           </div>
@@ -19,7 +19,7 @@
           :class="$parent.isHujan ? 'text-white' : new Date(currentDate).getHours() >= 18 || new Date(currentDate).getHours() <= 5 ? 'text-white' : 'text-black'"
           v-if="nodrag">
           <div class="flex items-center justify-end">
-            <div class="ml-2 font-bold text-3xl">
+            <div class="ml-2 font-bold text-3xl whitespace-nowrap">
               {{ $parent.location ? $parent.location.name : '-' }}
             </div>
           </div>
@@ -52,12 +52,7 @@
               &times;
             </button>
 
-            <img :src="$axios.defaults.baseURL +
-              $parent.$parent.logos[$parent.obj.idtemplate][l].url.replace(
-                '/api/',
-                ''
-              )
-              " style="width: 80px" />
+            <img :src="imageList[l] && imageList[l].url" :class="imageList[l] && imageList[l].isLandscape ? 'w-40' : 'w-20'" class="object-fit" />
           </div>
           <div v-else class="
               h-8
@@ -78,12 +73,7 @@
           <div v-if="$parent.$parent.logos[$parent.obj.idtemplate] &&
             $parent.$parent.logos[$parent.obj.idtemplate][l]
             ">
-            <img :src="$axios.defaults.baseURL +
-              $parent.$parent.logos[$parent.obj.idtemplate][l].url.replace(
-                '/api/',
-                ''
-              )
-              " style="width: 80px" />
+            <img :src="imageList[l] && imageList[l].url" :class="imageList[l] && imageList[l].isLandscape ? 'w-40' : 'w-20'" class="object-fit bg-cover" />
           </div>
         </div>
       </div>
@@ -111,10 +101,11 @@ export default {
       currentDate: '',
       indexdata: null,
       chooseLogo: true,
-      returningtime: ''
+      returningtime: '',
+      imageList: {}
     }
   },
-  mounted() {
+  async mounted() {
     this.returningTimeZone()
     setInterval(() => {
       this.returningTimeZone()
@@ -122,6 +113,24 @@ export default {
     setInterval(() => {
       this.refreshBrowserEveryHour()
     }, 3600000);
+
+    for (let i = 0; i < 4; i++) {
+      if (this.$parent.$parent.logos[this.$parent.obj.idtemplate] &&
+        this.$parent.$parent.logos[this.$parent.obj.idtemplate][i]
+      ) {
+        var url = this.$axios.defaults.baseURL +
+          this.$parent.$parent.logos[this.$parent.obj.idtemplate][i].url.replace(
+            '/api/',
+            '')
+
+        var isLandscape = await this.isLandscapeImage(url)
+        this.imageList[i] = {
+          url: url,
+          isLandscape: isLandscape
+        }
+      }
+
+    }
   },
   computed: {
     getTimeZone() {
@@ -136,6 +145,28 @@ export default {
     },
   },
   methods: {
+    async waitImage(url) {
+      var res = await this.isLandscapeImage(url)
+      return res
+    },
+    async isLandscapeImage(imageUrl) {
+      return new Promise(function (resolve, reject) {
+        var img = new Image();
+        img.src = imageUrl;
+
+        img.onload = function () {
+          var width = img.naturalWidth;
+          var height = img.naturalHeight;
+
+          resolve(width > height);
+        };
+
+        img.onerror = function () {
+          reject(new Error("Failed to load the image"));
+        };
+      });
+    },
+
     refreshBrowserEveryHour() {
       // Refresh the browser
       location.reload();
