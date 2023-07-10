@@ -135,47 +135,49 @@ export default {
             arr.forEach((el) => {
               el.value.forEach((el2) => {
                 const json = xml.parse(res.data)
-                json[1].children.forEach((el3) => {
-                  var icaoId = el3.children[0].children[0]
-                  if (el2.value.icaoid == icaoId) {
-                    // json[1].children.forEach((el2) => {
-                    var tagname = el3.children[1].children[0]
-                    var latitude = el3.children[2].children[0]
-                    var longitude = el3.children[3].children[0]
-                    var elevation = el3.children[4].children[0]
-                    var observationTime = el3.children[5].children[0]
-                    var time_zone = el3.children[6].children[0]
-                    var windDirection = el3.children[7].children[0]
-                    var windSpeed = el3.children[8].children[0]
-                    var windSpeedMax = el3.children[9].children[0]
-                    var visibility = el3.children[10].children[0]
-                    var weather = el3.children[12].children[0]
-                    var temperature = el3.children[13].children[0]
-                    var dewPoint = el3.children[14].children[0]
-                    var pressure = el3.children[15].children[0]
-                    var symbol = el3.children[16].children[0]
-                    // console.log(tagname)
-                    self.bandaras.push({
-                      url: el2.url,
-                      tagname,
-                      latitude,
-                      longitude,
-                      elevation,
-                      observationTime,
-                      time_zone,
-                      windDirection,
-                      windSpeed,
-                      windSpeedMax,
-                      visibility,
-                      weather,
-                      temperature,
-                      dewPoint,
-                      pressure,
-                      symbol,
-                    })
-                    // })
-                  }
-                })
+                if (json[1] && json[1].children) {
+                  json[1].children.forEach((el3) => {
+                    var icaoId = el3.children[0].children[0]
+                    if (el2.value.icaoid == icaoId) {
+                      // json[1].children.forEach((el2) => {
+                      var tagname = el3.children[1].children[0]
+                      var latitude = el3.children[2].children[0]
+                      var longitude = el3.children[3].children[0]
+                      var elevation = el3.children[4].children[0]
+                      var observationTime = el3.children[5].children[0]
+                      var time_zone = el3.children[6].children[0]
+                      var windDirection = el3.children[7].children[0]
+                      var windSpeed = el3.children[8].children[0]
+                      var windSpeedMax = el3.children[9].children[0]
+                      var visibility = el3.children[10].children[0]
+                      var weather = el3.children[12].children[0]
+                      var temperature = el3.children[13].children[0]
+                      var dewPoint = el3.children[14].children[0]
+                      var pressure = el3.children[15].children[0]
+                      var symbol = el3.children[16].children[0]
+                      // console.log(tagname)
+                      self.bandaras.push({
+                        url: el2.url,
+                        tagname,
+                        latitude,
+                        longitude,
+                        elevation,
+                        observationTime,
+                        time_zone,
+                        windDirection,
+                        windSpeed,
+                        windSpeedMax,
+                        visibility,
+                        weather,
+                        temperature,
+                        dewPoint,
+                        pressure,
+                        symbol,
+                      })
+                      // })
+                    }
+                  })
+                }
               })
             })
           })
@@ -249,10 +251,12 @@ export default {
     },
   },
   mounted() {
-    this.getData()
+    setTimeout(() => {
+      this.getData()
+    },2000)
     setInterval(() => {
       this.getData()
-    }, 3600000)
+    }, 300000)
   },
 }
 </script>

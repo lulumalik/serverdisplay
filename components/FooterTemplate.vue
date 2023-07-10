@@ -196,7 +196,7 @@ export default {
           const json = xml.parse(res.data)
           var id = 'CSU'
           if (this.$parent.useFooter) {
-            console.log(this.$parent.useFooter)
+            // console.log(this.$parent.useFooter)
             var split = this.$parent.useFooter.id.split('')
             id = split[0] + split[1] + split[2]
           }

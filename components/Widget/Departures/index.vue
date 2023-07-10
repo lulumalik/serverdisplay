@@ -152,45 +152,47 @@ export default {
               })
               .then((res) => {
                 const json = xml.parse(res.data)
-                json[1].children.forEach((el2) => {
-                  var icaoId = el2.children[0].children[0]
-                  // console.log(el.value, icaoId)
-                  if (el.value.icaoid == icaoId) {
-                    var tagname = el2.children[1].children[0]
-                    var latitude = el2.children[2].children[0]
-                    var longitude = el2.children[3].children[0]
-                    var elevation = el2.children[4].children[0]
-                    var observationTime = el2.children[5].children[0]
-                    var time_zone = el2.children[6].children[0]
-                    var windDirection = el2.children[7].children[0]
-                    var windSpeed = el2.children[8].children[0]
-                    var windSpeedMax = el2.children[9].children[0]
-                    var visibility = el2.children[10].children[0]
-                    var weather = el2.children[12].children[0]
-                    var temperature = el2.children[13].children[0]
-                    var dewPoint = el2.children[14].children[0]
-                    var pressure = el2.children[15].children[0]
-                    var symbol = el2.children[16].children[0]
+                if (json[1] && json[1].children) {
+                  json[1].children.forEach((el2) => {
+                    var icaoId = el2.children[0].children[0]
+                    // console.log(el.value, icaoId)
+                    if (el.value.icaoid == icaoId) {
+                      var tagname = el2.children[1].children[0]
+                      var latitude = el2.children[2].children[0]
+                      var longitude = el2.children[3].children[0]
+                      var elevation = el2.children[4].children[0]
+                      var observationTime = el2.children[5].children[0]
+                      var time_zone = el2.children[6].children[0]
+                      var windDirection = el2.children[7].children[0]
+                      var windSpeed = el2.children[8].children[0]
+                      var windSpeedMax = el2.children[9].children[0]
+                      var visibility = el2.children[10].children[0]
+                      var weather = el2.children[12].children[0]
+                      var temperature = el2.children[13].children[0]
+                      var dewPoint = el2.children[14].children[0]
+                      var pressure = el2.children[15].children[0]
+                      var symbol = el2.children[16].children[0]
 
-                    self.result = {
-                      tagname,
-                      latitude,
-                      longitude,
-                      elevation,
-                      observationTime,
-                      time_zone,
-                      windDirection,
-                      windSpeed,
-                      windSpeedMax,
-                      visibility,
-                      weather,
-                      temperature,
-                      dewPoint,
-                      pressure,
-                      symbol,
+                      self.result = {
+                        tagname,
+                        latitude,
+                        longitude,
+                        elevation,
+                        observationTime,
+                        time_zone,
+                        windDirection,
+                        windSpeed,
+                        windSpeedMax,
+                        visibility,
+                        weather,
+                        temperature,
+                        dewPoint,
+                        pressure,
+                        symbol,
+                      }
                     }
-                  }
-                })
+                  })
+                }
               })
           } else if (key2 == 'url') {
             // console.log(el.value)
@@ -259,10 +261,12 @@ export default {
     },
   },
   mounted() {
-    this.getData()
+    setTimeout(() => {
+      this.getData()
+    }, 2000)
     setInterval(() => {
       this.getData()
-    }, 3600000)
+    }, 300000)
   },
 }
 </script>

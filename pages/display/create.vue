@@ -188,7 +188,15 @@ export default {
         this.useVideo = res.data.properties.video
         this.backgroundStatic = res.data.properties.backgroundStatic
         this.$refs['preview'].logos = res.data.properties.allLogo || {}
-        this.$refs['preview'].times = res.data.properties.delay
+        // this.$refs['preview'].times = res.data.properties.delay
+        var delay = res.data.properties.delay
+        if (typeof delay == 'number') {
+          this.templateAddedList.forEach((el) => {
+            this.$refs['preview'].times[el.idtemplate] = delay
+          })
+        } else {
+          this.$refs['preview'].times = delay
+        }
         this.$refs['preview'].width = res.data.properties.width || 1366
         this.$refs['preview'].height = res.data.properties.height || 768
         this.templateAddedList.forEach((el) => {
@@ -318,6 +326,7 @@ export default {
       var alltemplate = {}
       var allndf = {}
       var logos = {}
+      // var times = {}
       // console.log(widgetparse, this.templateAddedList)
       this.templateAddedList.forEach((el, i) => {
         if (widgetparse[el.idtemplate]) {
@@ -326,6 +335,9 @@ export default {
           logos[el.idtemplate] = this.$refs['preview'].logos[el.idtemplate]
         }
       })
+      // for (var k in this.$refs['preview'].times) {
+      //   times[k] = this.$refs['preview'].times || 60
+      // }
       var obj = {
         username: this.displayID,
         name: this.displayName,
@@ -339,7 +351,7 @@ export default {
           },
         },
         properties: {
-          delay: parseFloat(this.$refs['preview'].times) || 60,
+          delay: this.$refs['preview'].times,
           width: this.$refs['preview'].width,
           height: this.$refs['preview'].height,
           footer: this.useFooter,

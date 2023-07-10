@@ -11,7 +11,7 @@
           ">
           <BackgroundVideo @hujan="isHujan = $event" />
         </div>
-        <carousel v-if="templates.length > 0" :autoPlay="true" :playSpeed="speed" :wheelControl="false"
+        <carousel v-if="templates.length > 0" :infiniteScroll="true" :autoPlay="false" :playSpeed="speed" :wheelControl="false"
           :hoverPause="false" style="height: 100vw !important; width: 100vw !important" ref="carousel">
           <carouselitem v-for="(obj, i) in templates" :key="i" class="overflow-hidden h-screen w-screen relative"
             :style="background[i]">
@@ -80,6 +80,53 @@ export default {
     },
   },
   methods: {
+    initSlideCustomTime(delay) {
+      var self = this
+      if (typeof delay == 'number') {
+
+        setInterval(() => {
+          self.next()
+        }, (parseFloat(delay) * 1000))
+      } else {
+        //  
+        var obj = delay
+        // Fungsi untuk dipicu
+        function triggerFunction(key) {
+          // console.log("Fungsi dipicu pada properti:", key);
+        
+
+          // Mengecek apakah properti selanjutnya ada
+          var nextKey = getNextKey(key);
+          if (nextKey) {
+            var interval = obj[nextKey];
+            setTimeout(function () {
+              self.next()
+              triggerFunction(nextKey);
+            }, interval * 1000);
+          } else {
+            // Jika tidak ada properti selanjutnya, kembali ke properti pertama
+            var firstKey = Object.keys(obj)[0];
+            var firstInterval = obj[firstKey];
+            setTimeout(function () {
+              triggerFunction(firstKey);
+            }, firstInterval * 1000);
+          }
+        }
+
+        // Membuat fungsi untuk mendapatkan properti selanjutnya
+        function getNextKey(key) {
+          var keys = Object.keys(obj);
+          var index = keys.indexOf(key);
+          if (index > -1 && index < keys.length - 1) {
+            return keys[index + 1];
+          }
+          return null;
+        }
+
+        // Memulai dengan memicu properti a
+        triggerFunction(Object.keys(delay)[0]);
+      }
+    },
     next() {
       this.$refs.carousel.slideNext()
     },
@@ -145,9 +192,6 @@ export default {
       this.responseDisplay = res.data
       if (res.data.properties && res.data.properties.allLogo) {
         this.logos = res.data.properties.allLogo || []
-      }
-      if (res.data.properties && res.data.properties.delay) {
-        this.speed = res.data.properties.delay * 1000
       }
       if (res.data.properties && res.data.properties.footer) {
         this.useFooter = res.data.properties.footer
@@ -217,6 +261,14 @@ export default {
         // }
       })
       this.$emit('finishloading', true)
+
+      setTimeout(() => {
+        if (res.data.properties && res.data.properties.delay) {
+          this.speed = res.data.properties.delay * 1000
+          this.initSlideCustomTime(res.data.properties.delay)
+        }
+      }, 2000)
+
       this.templates = arr
       this.location = res.data.location
     },
