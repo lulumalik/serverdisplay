@@ -157,7 +157,7 @@ export default {
         .$get('display?row=10000000&keyword=' + this.searchname.toLowerCase())
         .then((res) => {
           this.templateDB = res.data
-          this.total = parseInt(res.count / 10000000 + 1)
+          this.total = parseInt(res.total / 10000000 + 1)
         })
     },
     callAllData(order) {

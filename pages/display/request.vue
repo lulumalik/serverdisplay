@@ -122,13 +122,13 @@
           .$get('display_request?row=10000000&keyword=' + this.searchname.toLowerCase())
           .then((res) => {
             this.templateDB = res.data
-            this.total = parseInt(res.count / 10000000 + 1)
+            this.total = parseInt(res.total / 10000000 + 1)
           })
       },
       callAllData() {
         this.$axios.$get('display_request?row=50&order=desc&page=' + this.page).then((res) => {
           // parseInt res.count if decimal
-          var count = parseInt(res.count / 50 + 1)
+          var count = parseInt(res.total / 50 + 1)
           this.total = count
           this.templateDB = res.data
         })
@@ -147,7 +147,7 @@
       },
       functionName(e) {
         this.$axios.$get('display_request?row=50&page=' + e).then((res) => {
-          this.total = parseInt(res.count / 50 + 1)
+          this.total = parseInt(res.total / 50 + 1)
           this.templateDB = res.data
         })
       },

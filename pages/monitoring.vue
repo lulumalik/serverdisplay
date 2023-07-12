@@ -2,48 +2,72 @@
     <div class="bg-gray-100">
         <div class="fixed left-0 flex items-center justify-center right-0 w-full h-full"
             style="z-index:1000;background: rgba(0,0,0,0.5)" v-if="popup">
-            <div class="bg-white rounded-lg p-5">
-                <div class="font-bold mb-4 flex">
-                    <div class="flex-grow">
-                        Display Report
+            <div class="bg-white rounded-lg p-5" style="height: 80vh; width: 80vw">
+                <div class="pb-3 flex">
+                    <div class="flex-grow uppercase">
+                        <b>{{ reportselected.name }}</b>
                     </div>
-                    <div class="text-red-500 cursor-pointer" @click="popup = false">
+
+                    <div class="text-red-500 cursor-pointer text-2xl flex-none " @click="popup = false">
                         &times;
                     </div>
                 </div>
-                <div class="py-2">
-                    <b>{{ reportselected.name }}</b>
-                </div>
-                <div class="mt-2 flex space-x-4">
-                    <button class="text-white bg-green-500 w-44 text-center py-1 font-bold rounded-md"
-                        @click="makenew = true">Make new
-                        report</button>
-                    <button class="text-white bg-blue-500 w-44 text-center py-1 font-bold rounded-md"
-                        @click="makenew = false">Update report</button>
-                </div>
-                <div class="mt-2" v-if="!makenew">
-                    Uploaded Report
-                    <select class="py-1 px-4 w-full border border-gray-300 rounded">
-                        <option v-for="(c, i) in uploadedreport" :key="i">
-                            {{ c.description }}
-                        </option>
-                    </select>
-                </div>
-                <div>
-                    <div class="mt-2">
-                        Select Category
-                    </div>
-                    <select class="py-1 px-4 w-full border border-gray-300 rounded">
-                        <option v-for="(c, i) in category" :key="i">
-                            {{ c }}
-                        </option>
-                    </select>
-                    <div class="mt-2">Description</div>
-                    <textarea rows="7" v-model="descreport" class="border w-full border-gray-300">
+                <div class="flex space-x-8 w-full">
+                    <div class="w-80">
+                        <div>
+                            <div>
+                                Select Category
+                            </div>
+                            <select class="py-1 mt-3 px-1 w-full border border-gray-300 rounded" v-model="categoryselected">
+                                <option v-for="(c, i) in category" :value="c" :key="i">
+                                    {{ moreCategory[c] }}
+                                </option>
+                            </select>
+                            <div class="mt-6">Description</div>
+                            <textarea rows="7" v-model="descreport" class="border p-2 mt-3 w-full border-gray-300">
                 </textarea>
-                    <div class="mt-4 text-right">
-                        <button @click="submitreport"
-                            class="text-white bg-blue-500 px-4 py-1 font-bold rounded-md">Submit</button>
+                            <div class="mt-4 text-right">
+                                <button @click="submitreport"
+                                    class="text-white bg-blue-500 px-4 py-1 font-bold rounded-md">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full">
+                        <div class="font-semibold flex w-full mb-3">
+                            <div class="flex-grow">Uploaded Report</div>
+
+                        </div>
+                        <div class="overflow-auto">
+                            <div style="height:65vh;">
+                                <div v-for="(u, i) in uploadedreport" :key="i"
+                                    class="border border-gray-200 shadow-md p-3 rounded-md">
+                                    <div class="mt-1">
+                                        Category
+                                        <select class="py-1 px-1 w-full border border-gray-300 rounded"
+                                            v-model="savedReportCat[u._id]">
+                                            <option v-for="(c, i) in category" :value="c" :key="i">
+                                                {{ moreCategory[c] }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="mt-3">
+                                        Description
+                                    </div>
+                                    <div>
+                                        <textarea v-model="savedReportDesc[u._id]"
+                                            class="border p-2 w-full border-gray-300">
+                                    </textarea>
+                                    </div>
+                                    <div class="text-right mt-3 mb-1">
+                                        <button @click="deleteReport(u)"
+                                            class="text-white bg-red-500 px-4 py-1 font-bold rounded-md">Delete</button>
+                                        <button @click="updateReport(u)"
+                                            class="text-white bg-blue-500 px-4 py-1 font-bold rounded-md">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -251,7 +275,8 @@
                                                         <div class="grid grid-cols-2 items-center">
                                                             <div class="font-semibold">
                                                                 SPARTAN {{ val.spartan[1].value.name }} <span
-                                                                    class="uppercase">{{ val.spartan[0].value.id }}</span>
+                                                                    class="uppercase">{{ val.spartan[0].value.id
+                                                                    }}</span>
                                                             </div>
                                                             <img :src="`https://cdn.bmkg.go.id/DataMKG/MEWS/spartan/${val.spartan[1].value.key}_${val.spartan[0].value.id}_${val.spartan[2].value.key}.png`"
                                                                 width="150" />
@@ -260,18 +285,21 @@
                                                     <div v-else-if="val.deparr" class="mt-2">
                                                         <div class="underline text-blue-500 cursor-pointer">
                                                             <a href="http://aviation.bmkg.go.id/latest/observation.xml.php"
-                                                                target="_blank">All reference fo api Departure and Arrival
+                                                                target="_blank">All reference fo api Departure and
+                                                                Arrival
                                                                 goes to here</a>
                                                         </div>
                                                         <div class="grid grid-cols-2 items-start"
                                                             v-for="(v, ind) in val.deparr" :key="ind">
                                                             <div class="font-semibold">
-                                                                {{ v.key.includes('Departures') ? 'Departures' : 'Arrival'
+                                                                {{ v.key.includes('Departures') ? 'Departures' :
+                                                                    'Arrival'
                                                                 }}
                                                             </div>
                                                             <div v-if="Array.isArray(v.value)">
                                                                 <div v-for="(arrival, ar) in v.value" :key="ar">
-                                                                    {{ arrival.value.tagname }} - {{ arrival.value.icaoid }}
+                                                                    {{ arrival.value.tagname }} - {{
+                                                                        arrival.value.icaoid }}
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -362,9 +390,20 @@ export default {
             notes: '',
             popup: false,
             descreport: '',
-            category: [1, 2, 3, 4, 5, 6],
+            category: [1, 2, 3, 4, 5, 6, 7],
+            moreCategory: {
+                1: 'Display rusak',
+                2: 'Gangguan Jaringan',
+                3: 'Mini PC Rusak',
+                4: 'Listrik Mati',
+                5: 'Data Tidak Update',
+                6: 'Aplikasi Software Trouble',
+                7: 'Pemindahan Lokasi'
+            },
+            categoryselected: 1,
             reportselected: {},
-            makenew: true,
+            savedReportDesc: {},
+            savedReportCat: {},
             uploadedreport: []
         }
     },
@@ -389,11 +428,55 @@ export default {
     },
     middleware: ['checkLogin'],
     methods: {
+        deleteReport(db) {
+            this.$axios.$delete('report-display/delete/' + db._id).then((res) => {
+                this.$axios.$get('report-display/findbydisplay/' + db.display.id).then((res) => {
+                    // console.log(res)
+                    this.uploadedreport = res.data
+                    this.uploadedreport.forEach(el => {
+                        this.savedReportCat[el._id] = el.category
+                        this.savedReportDesc[el._id] = el.description
+                    })
+                })
+                this.$toast.open({
+                    message: 'Report deleted',
+                    type: 'success',
+                    duration: 2000,
+                })
+            })
+        },
+        updateReport(db) {
+            this.$axios.$put('report-display/update/' + db._id, {
+                category: this.savedReportCat[db._id],
+                description: this.savedReportDesc[db._id],
+                display: db.display._id
+            }).then((res) => {
+                this.$axios.$get('report-display/findbydisplay/' + db.display.id).then((res) => {
+                    // console.log(res)
+                    this.uploadedreport = res.data
+                    this.uploadedreport.forEach(el => {
+                        this.savedReportCat[el._id] = el.category
+                        this.savedReportDesc[el._id] = el.description
+                    })
+                })
+                this.$toast.open({
+                    message: 'Report saved',
+                    type: 'success',
+                    duration: 2000,
+                })
+            })
+        },
         openpopup(db) {
             this.reportselected = db
+            // console.log(db)
             this.$axios.$get('report-display/findbydisplay/' + db.id).then((res) => {
                 // console.log(res)
+
                 this.uploadedreport = res.data
+                this.uploadedreport.forEach(el => {
+                    this.savedReportCat[el._id] = el.category
+                    this.savedReportDesc[el._id] = el.description
+                })
                 this.popup = true
             })
         },
@@ -403,7 +486,20 @@ export default {
                 description: this.descreport,
                 display: this.reportselected.id
             }).then((res) => {
-                console.log(res)
+                this.$axios.$get('report-display/findbydisplay/' + this.reportselected.id).then((res) => {
+                    // console.log(res)
+                    this.uploadedreport = res.data
+                    this.uploadedreport.forEach(el => {
+                        this.savedReportCat[el._id] = el.category
+                        this.savedReportDesc[el._id] = el.description
+                    })
+                })
+                // console.log(res)
+                this.$toast.open({
+                    message: 'Report saved',
+                    type: 'success',
+                    duration: 2000,
+                })
             })
         },
         toLink(link) {
@@ -426,7 +522,8 @@ export default {
         callAllData() {
             this.$axios.$get('display?row=50&order=desc&sortBy=id&page=' + this.page).then((res) => {
                 // parseInt res.count if decimal
-                var count = parseInt(res.count / 50)
+                // console.log(res)
+                var count = parseInt(res.total / 50)
                 this.total = count
                 this.templateDB = res.data
             })
@@ -557,12 +654,12 @@ export default {
                             area: area
                         }
                     })
-                } else if (filtertemplate[key].name == 'Departure, Arrival') {
+                } else if (filtertemplate[key].name == 'Departure, Arrival' || filtertemplate[key].name == 'Departure & Arrival') {
                     result.push({
                         deparr: obj.allSetting[filtertemplate[key].idtemplate]
                     })
                 } else {
-                    console.log(filtertemplate[key].name, obj.allSetting[filtertemplate[key].idtemplate])
+                    // console.log(filtertemplate[key].name, obj.allSetting[filtertemplate[key].idtemplate])
                 }
             }
             return result
@@ -647,7 +744,7 @@ export default {
         },
         functionName(e) {
             this.$axios.$get('display?row=50&order=desc&sortBy=id&page=' + e).then((res) => {
-                this.total = parseInt(res.count / 50)
+                this.total = parseInt(res.total / 50)
                 this.templateDB = res.data
             })
         },
