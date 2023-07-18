@@ -1,18 +1,11 @@
 <template>
   <div>
-    <div
-      :id="idMap"
-      class="h-full w-full rounded-md"
-    ></div>
+    <div :id="idMap" class="h-full w-full rounded-md"></div>
   </div>
 </template>
   
-  <script>
-var maplibregl
-import 'maplibre-gl/dist/maplibre-gl.css'
-if (process.client) {
-  maplibregl = require('maplibre-gl')
-}
+<script>
+var maplibregl = require('maplibre-gl')
 export default {
   props: {
     idMap: {

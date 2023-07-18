@@ -17,7 +17,6 @@
             ">
           Prakiraan Wilayah Perairan <br> {{ showData && showData.value && showData.value.name }}
         </div>
-
         <MapPenyebrangan v-if="idtemplate" style="height: 650px;width:100%;"
           class="rounded-md relative shadow-md border-2 border-white" ref="map" :idMap="'mapPerairan' + idtemplate"
           @mapready="getData" />
@@ -192,7 +191,7 @@ export default {
       if (map.getLayer(id)) {
         map.removeLayer(id)
       }
-
+      
       for (var key in this.marker) {
         if (this.marker.hasOwnProperty(key)) {
           this.marker[key].remove()
@@ -210,7 +209,7 @@ export default {
         type: 'fill',
         source: id,
         paint: {
-          'fill-color': this.legenda.filter((val) => geojson.properties ? val.gelombang == geojson.properties.gelombang : [{color: '#088'}])[0].color || '#088',
+          'fill-color': this.legenda.filter((val) => geojson.properties ? val.gelombang == geojson.properties.gelombang : [{ color: '#088' }])[0].color || '#088',
           'fill-opacity': 0.8,
         },
       })
@@ -227,13 +226,14 @@ export default {
     },
     async getData() {
       var self = this
+      // console.log('ea')
       var parentDisplay = this.$parent.$parent.$parent
       this.idtemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
       this.listperairan = {}
       if (parentDisplay.production) {
         var setting = parentDisplay.responseDisplay.properties.allSetting
         var result = {}
-
+        // console.log(setting)
         this.currentDate = new Date().getHours()
         setting[self.idtemplate].map((el) => {
           // console.log(el)

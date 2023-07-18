@@ -1,7 +1,6 @@
 <template>
   <div>
     <div>
-
       <div v-if="showData && showData.value && showData.value.portname" class="text-center font-bold mb-8 text-5xl"
         :class="isDark ? 'text-white' : 'text-black'">Prakiraan Cuaca Pelabuhan {{ showData.value.portname }}
       </div>
@@ -27,40 +26,40 @@
               <div class="flex-none">
                 <div class="font-bold text-2xl px-12 text-white flex space-x-4 justify-center">
                   <div>{{ spliting(new Date(
-                      returningTimeZone(new Date(w.valid_from))
-                    ).toLocaleDateString('id'))
+                    returningTimeZone(new Date(w.valid_from))
+                  ).toLocaleDateString('id'))
                   }}</div>
                   <div>
                     {{
-                        returningTimeZone(new Date(w.valid_from))
-                          .split(' ')
-                          .splice(4, 4)[0]
-                          .split(':')
-                          .splice(0, 2)
-                          .join(':')
+                      returningTimeZone(new Date(w.valid_from))
+                        .split(' ')
+                        .splice(4, 4)[0]
+                        .split(':')
+                        .splice(0, 2)
+                        .join(':')
                     }}
                     {{
-                        getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+                      getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
                     }}
                   </div>
                 </div>
                 <div class="font-bold text-2xl px-12 text-white flex space-x-4 justify-center">
                   <div>Berlaku Sampai </div>
                   <div>{{ spliting(new Date(
-                      returningTimeZone(new Date(w.valid_to))
-                    ).toLocaleDateString('id'))
+                    returningTimeZone(new Date(w.valid_to))
+                  ).toLocaleDateString('id'))
                   }}</div>
                   <div>
                     {{
-                        returningTimeZone(new Date(w.valid_to))
-                          .split(' ')
-                          .splice(4, 4)[0]
-                          .split(':')
-                          .splice(0, 2)
-                          .join(':')
+                      returningTimeZone(new Date(w.valid_to))
+                        .split(' ')
+                        .splice(4, 4)[0]
+                        .split(':')
+                        .splice(0, 2)
+                        .join(':')
                     }}
                     {{
-                        getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
+                      getTimeZone == 7 ? 'WIB' : getTimeZone == 6 ? 'WITA' : 'WIT'
                     }}
                   </div>
                 </div>
@@ -179,6 +178,12 @@ import VueSlickCarousel from 'vue-slick-carousel'
 import { weather_parsed } from '../../../utils/helperNDF.js'
 
 export default {
+  props: {
+    idMap: {
+      type: String,
+      default: 'map2',
+    },
+  },
   data() {
     return {
       loc1: null,
@@ -275,31 +280,32 @@ export default {
     //   return parsed.split('-')
     // },
     initialMap(obj) {
-      var self = this
-      var map = this.$refs['map2'].map
+      // var self = this
+      // console.log(this.$refs['map2'])
+      // var map = this.$refs['map2'].map
 
-      if (this.loc1) {
-        this.loc1.remove()
-      }
-      // marker
-      var el = document.createElement('div')
-      el.style.width = '90px'
-      el.style.height = '95px'
-      el.style.backgroundImage = 'url(/defaultMarker.png)'
+      // if (this.loc1) {
+      //   this.loc1.remove()
+      // }
+      // // marker
+      // var el = document.createElement('div')
+      // el.style.width = '90px'
+      // el.style.height = '95px'
+      // el.style.backgroundImage = 'url(/defaultMarker.png)'
 
-      self.loc1 = new maplibregl.Marker(el, {
-        color: '#000',
-        draggable: false,
-        offset: [0, -50],
-      })
-        .setLngLat([obj.longitude, obj.latitude])
-        .addTo(map)
+      // self.loc1 = new maplibregl.Marker(el, {
+      //   color: '#000',
+      //   draggable: false,
+      //   offset: [0, -50],
+      // })
+      //   .setLngLat([obj.longitude, obj.latitude])
+      //   .addTo(map)
 
-      map.flyTo({
-        center: [obj.longitude, obj.latitude],
-        zoom: 10,
-        essential: true,
-      })
+      // map.flyTo({
+      //   center: [obj.longitude, obj.latitude],
+      //   zoom: 10,
+      //   essential: true,
+      // })
     },
     async getData() {
       var self = this

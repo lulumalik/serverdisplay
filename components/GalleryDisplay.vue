@@ -11,8 +11,9 @@
           ">
           <BackgroundVideo @hujan="isHujan = $event" />
         </div>
-        <carousel v-if="templates.length > 0" :infiniteScroll="true" :autoPlay="false" :playSpeed="speed" :wheelControl="false"
-          :hoverPause="false" style="height: 100vw !important; width: 100vw !important" ref="carousel">
+        <carousel v-if="templates.length > 0" :infiniteScroll="false" :autoPlay="false" :playSpeed="speed"
+          :wheelControl="false" :hoverPause="false" style="height: 100vw !important; width: 100vw !important"
+          ref="carousel">
           <carouselitem v-for="(obj, i) in templates" :key="i" class="overflow-hidden h-screen w-screen relative"
             :style="background[i]">
             <Dummy ref="dummy" :logos="logos">
@@ -93,21 +94,27 @@ export default {
         // Fungsi untuk dipicu
         function triggerFunction(key) {
           // console.log("Fungsi dipicu pada properti:", key);
-        
+
 
           // Mengecek apakah properti selanjutnya ada
           var nextKey = getNextKey(key);
           if (nextKey) {
             var interval = obj[nextKey];
             setTimeout(function () {
-              self.next()
+              var arr = Object.keys(obj)
+              var indexof = arr.indexOf(nextKey)
+              self.next(indexof)
               triggerFunction(nextKey);
             }, interval * 1000);
           } else {
+
             // Jika tidak ada properti selanjutnya, kembali ke properti pertama
             var firstKey = Object.keys(obj)[0];
             var firstInterval = obj[firstKey];
             setTimeout(function () {
+              var arr = Object.keys(obj)
+              var indexof = arr.indexOf(firstKey)
+              self.next(indexof)
               triggerFunction(firstKey);
             }, firstInterval * 1000);
           }
@@ -127,8 +134,8 @@ export default {
         triggerFunction(Object.keys(delay)[0]);
       }
     },
-    next() {
-      this.$refs.carousel.slideNext()
+    next(index) {
+      this.$refs.carousel.slideTo(index)
     },
     testImage(URL) {
       var tester = new Image()
