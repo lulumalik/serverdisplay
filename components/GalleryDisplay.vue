@@ -81,13 +81,48 @@ export default {
     },
   },
   methods: {
-    initSlideCustomTime(delay) {
+    initSlideCustomTime(delay, template) {
       var self = this
       if (typeof delay == 'number') {
+        var obj = template
+        // Fungsi untuk dipicu
+        function triggerFunction(key) {
+          // Mengecek apakah properti selanjutnya ada
+          var nextKey = getNextKey(key);
+          if (nextKey) {
+            // var interval = obj[nextKey];
+            setTimeout(function () {
+              var arr = Object.keys(obj)
+              var indexof = arr.indexOf(nextKey)
+              self.next(indexof)
+              triggerFunction(nextKey);
+            }, delay * 1000);
+          } else {
 
-        setInterval(() => {
-          self.next()
-        }, (parseFloat(delay) * 1000))
+            // Jika tidak ada properti selanjutnya, kembali ke properti pertama
+            var firstKey = Object.keys(obj)[0];
+            // var firstInterval = obj[firstKey];
+            setTimeout(function () {
+              var arr = Object.keys(obj)
+              var indexof = arr.indexOf(firstKey)
+              self.next(indexof)
+              triggerFunction(firstKey);
+            }, delay * 1000);
+          }
+        }
+
+        // Membuat fungsi untuk mendapatkan properti selanjutnya
+        function getNextKey(key) {
+          var keys = Object.keys(obj);
+          var index = keys.indexOf(key);
+          if (index > -1 && index < keys.length - 1) {
+            return keys[index + 1];
+          }
+          return null;
+        }
+
+        // Memulai dengan memicu properti a
+        triggerFunction(Object.keys(template)[0]);
       } else {
         //  
         var obj = delay
@@ -272,7 +307,7 @@ export default {
       setTimeout(() => {
         if (res.data.properties && res.data.properties.delay) {
           this.speed = res.data.properties.delay * 1000
-          this.initSlideCustomTime(res.data.properties.delay)
+          this.initSlideCustomTime(res.data.properties.delay, res.data.properties.allTemplate)
         }
       }, 2000)
 
