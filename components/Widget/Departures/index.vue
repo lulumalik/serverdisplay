@@ -40,7 +40,7 @@
                   items-center
                   text-black
                 ">
-                <div class="flex-grow relative right-4 text-left">
+                <div class="flex-grow relative right-8 text-left">
                   <div>{{ result.weather }}</div>
                 </div>
               </div>
@@ -54,21 +54,21 @@
             px-12
             pb-7
             px-8
-            pt-1
+            pt-2
             relative
             bottom-8
             rounded-md
           ">
           <div class="flex-grow">
             <div class="font-bold flex space-x-4">
-              <div class="font-semibold flex items-center space-x-3">
+              <div class="font-semibold flex items-center space-x-3 mt-4">
                 <div class="ml-2">
                   <img class="w-5" src="/weatherheadline/Temperature.svg" />
                 </div>
                 <div class="pl-1">Suhu</div>
               </div>
             </div>
-            <div class="mt-4 flex space-x-2 items-center">
+            <div class="mt-4 flex space-x-2 items-center mt-3">
               <div><img class="w-8" src="/weatherheadline/eye.svg" /></div>
               <div class="font-semibold">Jarak Pandang</div>
             </div>
@@ -80,7 +80,7 @@
               <div><b>Angin</b></div>
             </div>
           </div>
-          <div class="flex-grow">
+          <div class="flex-grow mt-4">
             <div class="font-bold">
               {{ result.temperature }}<sup>o</sup>C
             </div>

@@ -5,8 +5,8 @@
         Tujuan
       </div>
     </div>
-    <div class="overflow-auto mt-2" style="height: 600px">
-      <VueSlickCarousel v-bind="settings" style="height: 600px">
+    <div class="overflow-auto mt-2" style="height: 620px">
+      <VueSlickCarousel v-bind="settings" style="height: 620px">
         <template #prevArrow="arrowOption">
           <div v-show="false">{{ arrowOption }}</div>
         </template>
@@ -15,8 +15,8 @@
             {{ arrowOption }}
           </div>
         </template>
-        <div class="flex space-x-4 mt-8" style="height:400px;" v-for="(val, i) in bandaras" :key="i">
-          <div style="width: 100px !important;height:200px;" class="text-black rounded-md bg-white z-10">
+        <div class="flex space-x-4 mt-4" style="height:400px;" v-for="(val, i) in bandaras" :key="i">
+          <div style="width: 100px !important;height:200px;" class="text-black rounded-md bg-white shadow-md z-10">
             <div class="px-6 py-3 flex space-x-4 bg-indigo-500 relative z-20 rounded-md">
               <div class="text-3xl text-white truncate">
                 <b>{{ val.tagname }}</b>
