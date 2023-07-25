@@ -138,7 +138,7 @@ export default {
                 if (json[1] && json[1].children) {
                   json[1].children.forEach((el3) => {
                     var icaoId = el3.children[0].children[0]
-                    if (el2.value.icaoid == icaoId) {
+                    if (el2.value  && el2.value.icaoid == icaoId) {
                       // json[1].children.forEach((el2) => {
                       var tagname = el3.children[1].children[0]
                       var latitude = el3.children[2].children[0]

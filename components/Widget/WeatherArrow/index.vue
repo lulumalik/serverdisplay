@@ -82,10 +82,10 @@
       <div v-else>
         <div>
           <carousel :vertical="true" :autoPlay="true" :playSpeed="4000" :itemsToShow="1" :wheelControl="false"
-            :hoverPause="false" style="height: 1000px;width:1920px;right:280px" class="relative">
-            <carouselitem v-for="(forecast2, i) in parsedforecast" :key="i" style="height:900px;">
+            :hoverPause="false" style="height: 1150px;width:1920px;right:280px" class="relative">
+            <carouselitem v-for="(forecast2, i) in parsedforecast" :key="i" style="height:1150px;">
               <div class="grid grid-cols-3">
-                <div v-for="(b, k) in forecast2" :key="k" class="arrow my-2 w-full h-80 rounded-l-lg rounded-r-lg"
+                <div v-for="(b, k) in forecast2" :key="k" class="arrow my-4 w-full h-80 rounded-l-lg rounded-r-lg"
                   :style="{ 'z-index': i - (i - 2) }">
                   <div class="text-gray-800">
                     <div>
@@ -172,7 +172,7 @@ export default {
     parsedforecast() {
       var arr = []
       this.forecast.forEach((el, i) => {
-        if (i < 12) {
+        if (i < 15) {
           if (!arr[0]) {
             arr[0] = []
           }

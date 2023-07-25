@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     commify(n) {
-      return n / 1000
+      return n
     },
     hexToRgb(hex, opacity) {
       var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
@@ -86,52 +86,53 @@ export default {
     },
     async getData() {
       var self = this
+      console.log('ea')
       var parentDisplay = self.$parent.$parent.$parent
-      if (parentDisplay.production) {
-        this.allNDF = {}
-        var ndflistener = this.allNDF
-        var setting = parentDisplay.responseDisplay.properties.allSetting
-        var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
-        setting[obj].forEach(async (el) => {
-          var comp = el.key.split('_')[1]
-          if (comp == 'WidgetVisibility') {
-            var key = el.key.split('_')[2]
-            if (key == 'bandara') {
-              const datares = await this.$axios.$get(
-                'https://rami.bmkg.go.id/api/siam/code/current_or_latest/metar?icaoId=' +
-                el.value['Kode ']
-              )
-              // console.log(datares)
-              var keys = Object.keys(datares.data)[0]
-              var obj = datares.data[keys]
+      // if (parentDisplay.production) {
+      this.allNDF = {}
+      var ndflistener = this.allNDF
+      var setting = parentDisplay.responseDisplay.properties.allSetting
+      var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
+      setting[obj].forEach(async (el) => {
+        var comp = el.key.split('_')[1]
+        if (comp == 'WidgetVisibility' || comp == 'WidgetVisilibity') {
+          var key = el.key.split('_')[2]
+          if (key == 'bandara') {
+            const datares = await this.$axios.$get(
+              'https://rami.bmkg.go.id/api/siam/code/current_or_latest/metar?icaoId=' +
+              el.value['Kode ']
+            )
 
-              this.meters = obj.parsed.visibility.meters
-              if (obj.parsed && obj.parsed.cavok) {
-                this.indikator = '#3eeb53'
-              } else {
-                if (obj.parsed && obj.parsed.visibility) {
-                  this.meters = obj.parsed.visibility.meters
-                  if (obj.parsed.visibility.meters > 8000) {
-                    this.indikator = '#3eeb53'
-                  } else if (
-                    obj.parsed.visibility.meters <= 8000 &&
-                    obj.parsed.visibility.meters > 4800
-                  ) {
-                    this.indikator = '#03c1d9'
-                  } else if (
-                    obj.parsed.visibility.meters <= 4800 &&
-                    obj.parsed.visibility.meters > 1600
-                  ) {
-                    this.indikator = '#f3dd2f'
-                  } else if (obj.parsed.visibility.meters <= 1600) {
-                    this.indikator = '#f34f2f'
-                  }
+            var keys = Object.keys(datares.data)[0]
+            var obj = datares.data[keys]
+
+            this.meters = obj.parsed.visibility.kilometers
+            if (obj.parsed && obj.parsed.cavok) {
+              this.indikator = '#3eeb53'
+            } else {
+              if (obj.parsed && obj.parsed.visibility) {
+                this.meters = obj.parsed.visibility.kilometers
+                if (obj.parsed.visibility.meters > 8000) {
+                  this.indikator = '#3eeb53'
+                } else if (
+                  obj.parsed.visibility.meters <= 8000 &&
+                  obj.parsed.visibility.meters > 4800
+                ) {
+                  this.indikator = '#03c1d9'
+                } else if (
+                  obj.parsed.visibility.meters <= 4800 &&
+                  obj.parsed.visibility.meters > 1600
+                ) {
+                  this.indikator = '#f3dd2f'
+                } else if (obj.parsed.visibility.meters <= 1600) {
+                  this.indikator = '#f34f2f'
                 }
               }
             }
           }
-        })
-      }
+        }
+      })
+      // }
     },
   },
   mounted() {
@@ -143,8 +144,9 @@ export default {
       var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
       setting[obj].forEach((el) => {
         var comp = el.key.split('_')[1]
-        if (comp == 'WidgetVisibility') {
+        if (comp == 'WidgetVisibility' || comp == 'WidgetVisilibity') {
           var key = el.key.split('_')[2]
+
           if (key == 'name') {
             this.name = el.value
           } else if (key == 'bandara') {
@@ -169,7 +171,7 @@ export default {
       setInterval(() => {
         this.forecast.length = 0
         this.getData()
-      }, 3600000)
+      }, 60000)
     } else {
       if (
         this.$store.state.displayWidget.widgetSaved[

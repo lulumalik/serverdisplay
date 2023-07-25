@@ -51,8 +51,7 @@
               ">
               &times;
             </button>
-
-            <img :src="imageList[l] && imageList[l].url" :class="imageList[l] && imageList[l].isLandscape ? 'w-40' : 'w-20'" class="object-fit" />
+            <img :src="imageList[l] && imageList[l].url" :class="imageList[l] && imageList[l].isLandscape ? 'w-64' : 'w-20'" class="object-fit" />
           </div>
           <div v-else class="
               h-8
@@ -73,7 +72,7 @@
           <div v-if="$parent.$parent.logos[$parent.obj.idtemplate] &&
             $parent.$parent.logos[$parent.obj.idtemplate][l]
             ">
-            <img :src="imageList[l] && imageList[l].url" :class="imageList[l] && imageList[l].isLandscape ? 'w-40' : 'w-20'" class="object-fit bg-cover" />
+            <img :src="imageList[l] && imageList[l].url" :class="imageList[l] && imageList[l].isLandscape ? 'w-56' : 'w-20'" class="object-fit bg-cover" />
           </div>
         </div>
       </div>
