@@ -123,6 +123,7 @@ export default {
         'Berawan': 3,
         'Berawan Tebal': 4,
         'Udara Kabur': 5,
+        'Udara kabur': 5,
         'Asap': 10,
         'Kabut': 45,
         'Hujan Ringan': 60,

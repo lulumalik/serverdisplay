@@ -25,6 +25,7 @@ export const weather_parsed = {
     'Berawan Tebal': 4,
     'Berawan tebal': 4,
     'Udara Kabur': 5,
+    'Udara kabur': 5,
     'Asap': 10,
     'Kabut': 45,
     'Hujan ringan': 60,
