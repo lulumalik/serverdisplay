@@ -1,23 +1,23 @@
 <template>
   <div>
     <div class="grid grid-cols-2">
-      <div
-        class="
+      <div class="
           flex flex-none
           items-center
           justify-center
           overflow-hidden
           rounded-lg
           w-full
-        "
-        v-if="datagempa.Shakemap"
-      >
-        <img
-          style="max-width: 580px"
-          class="rounded-lg shadow-lg"
-          :src="'https://ews.bmkg.go.id/tews/data/' + datagempa.Shakemap"
-          alt="gempa"
-        />
+        " v-if="datagempa.Shakemap">
+        <div style="width:580px;height:680px" class="bg-white/80 flex items-center justify-center rounded-lg">
+          <div class="font-bold absolute text-center">
+            <img src="/bmkg.png" alt="bmkg" class="w-20 mx-auto mb-8" />
+            <div>Image not yet available</div>
+            <div class="text-xs">this page will automatically get the latest images</div>
+          </div>
+          <img style="max-width: 580px" class="rounded-lg shadow-lg relative z-50"
+            :src="'https://ews.bmkg.go.id/tews/data/' + datagempa.Shakemap" alt="gempa" />
+        </div>
       </div>
       <div class="uppercase flex-grow text-xl bg-white/80 rounded-lg shadow-md px-6 py-6">
         <div class="bg-indigo-500 text-2xl rounded-md font-bold text-white p-4 text-center">
@@ -45,14 +45,11 @@
           </tr>
           <tr>
             <td class="pt-4">Waktu</td>
-            <td class="pl-2 pt-4">: {{datagempa.Tanggal}}, {{ datagempa.Jam || '-' }}</td>
+            <td class="pl-2 pt-4">: {{ datagempa.Tanggal }}, {{ datagempa.Jam || '-' }}</td>
           </tr>
         </table>
         <hr class="border-gray-800 my-6 " />
-        <div
-          class="w-full mx-3 py-4 font-semibold"
-          :class="datagempa.Wilayah ? '' : 'mt-16'"
-        >
+        <div class="w-full mx-3 py-4 font-semibold" :class="datagempa.Wilayah ? '' : 'mt-16'">
           <div class="mt-2.5">Gempa terasa di wilayah</div>
           <p class="mt-2.5">{{ datagempa.Dirasakan }}</p>
           <p class="mt-2.5">{{ datagempa.Wilayah || '-' }}</p>
