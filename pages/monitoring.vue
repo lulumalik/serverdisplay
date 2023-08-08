@@ -78,10 +78,21 @@
             <client-only>
                 <div class="p-8 relative">
                     <div class="mb-6 flex space-x-6 absolute top-6 right-8">
-                        <div>
-                            <button @click="downloaddata"
-                                class="rounded-full bg-green-500 w-72 py-2 text-white font-semibold px-4 border border-green-600">Download
-                                Display Report</button>
+                        <div class="flex space-x-4">
+                            <div>
+                                <button @click="downloaddata"
+                                    class="rounded-full bg-green-500 w-72 py-2 text-white font-semibold px-4 border border-green-600">Download
+                                    Display Report</button>
+                            </div>
+                            <select v-model="yearly" class="border border-gray-500 rounded-full px-4">
+                                <option value="1">1 Day</option>
+                                <option value="7">7 Day</option>
+                                <option value="14">14 Day</option>
+                                <option value="30">1 Month</option>
+                                <option value="91">3 Month</option>
+                                <option value="182">6 Month</option>
+                                <option value="365">1 Years</option>
+                            </select>
                         </div>
                         <div class="relative">
                             <input type="text" v-model="searchname" placeholder="Search by name"
@@ -396,6 +407,7 @@ export default {
             popup: false,
             descreport: '',
             category: [1, 2, 3, 4, 5, 6, 7],
+            yearly: '1',
             moreCategory: {
                 1: 'Display rusak',
                 2: 'Gangguan Jaringan',
@@ -434,8 +446,10 @@ export default {
     middleware: ['checkLogin'],
     methods: {
         downloaddata() {
+            var settingdate = new Date(new Date().setDate(new Date().getDate() - parseInt(this.yearly)))
+            var fromdate = this.yearly == '1' ? '' : `&fromDate=${settingdate.toISOString()}&`
             axios({
-                url: this.$axios.defaults.baseURL + `monitor-display/report-display-summary/csv?toDate=${new Date().toISOString()}`,
+                url: this.$axios.defaults.baseURL + `monitor-display/report-display-summary/csv?${fromdate}toDate=${new Date().toISOString()}`,
                 methods: 'GET',
                 responseType: 'blob',
                 headers: {
@@ -448,13 +462,59 @@ export default {
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
                 link.href = href;
-                link.setAttribute('download', 'DisplayReport_exportdata.csv'); //or any other extension
+                link.setAttribute('download', 'DisplayReport_summary.csv'); //or any other extension
                 document.body.appendChild(link);
                 link.click();
 
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
+
+                axios({
+                    url: this.$axios.defaults.baseURL + `monitor-display/report-per-display/summary/csv?${fromdate}toDate=${new Date().toISOString()}`,
+                    methods: 'GET',
+                    responseType: 'blob',
+                    headers: {
+                        'x-access-token': this.$cookies.get('users')
+                    }
+                }).then(response => {
+                    // create file link in browser's memory
+                    const href = URL.createObjectURL(response.data);
+
+                    // create "a" HTML element with href to file & click
+                    const link = document.createElement('a');
+                    link.href = href;
+                    link.setAttribute('download', 'DisplayReport_exportdata.csv'); //or any other extension
+                    document.body.appendChild(link);
+                    link.click();
+
+                    // clean up "a" element & remove ObjectURL
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(href);
+
+                    axios({
+                        url: this.$axios.defaults.baseURL + `monitor-display/report-per-display/bycategory/csv?${fromdate}toDate=${new Date().toISOString()}`,
+                        methods: 'GET',
+                        responseType: 'blob',
+                        headers: {
+                            'x-access-token': this.$cookies.get('users')
+                        }
+                    }).then(response => {
+                        // create file link in browser's memory
+                        const href = URL.createObjectURL(response.data);
+
+                        // create "a" HTML element with href to file & click
+                        const link = document.createElement('a');
+                        link.href = href;
+                        link.setAttribute('download', 'DisplayReport_exportdata_bycategory.csv'); //or any other extension
+                        document.body.appendChild(link);
+                        link.click();
+
+                        // clean up "a" element & remove ObjectURL
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(href);
+                    })
+                })
             })
         },
         deleteReport(db) {
