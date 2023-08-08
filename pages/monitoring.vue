@@ -78,6 +78,11 @@
             <client-only>
                 <div class="p-8 relative">
                     <div class="mb-6 flex space-x-6 absolute top-6 right-8">
+                        <div>
+                            <button @click="downloaddata"
+                                class="rounded-full bg-green-500 w-72 py-2 text-white font-semibold px-4 border border-green-600">Download
+                                Display Report</button>
+                        </div>
                         <div class="relative">
                             <input type="text" v-model="searchname" placeholder="Search by name"
                                 class="rounded-full w-56 py-2 px-4 border border-sky-400" />
@@ -377,7 +382,7 @@ ul li.active {
 </style>
   
 <script>
-
+var axios = require('axios')
 export default {
     data() {
         return {
@@ -428,6 +433,30 @@ export default {
     },
     middleware: ['checkLogin'],
     methods: {
+        downloaddata() {
+            axios({
+                url: this.$axios.defaults.baseURL + `monitor-display/report-display-summary/csv?toDate=${new Date().toISOString()}`,
+                methods: 'GET',
+                responseType: 'blob',
+                headers: {
+                    'x-access-token': this.$cookies.get('users')
+                }
+            }).then(response => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                link.href = href;
+                link.setAttribute('download', 'DisplayReport_exportdata.csv'); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            })
+        },
         deleteReport(db) {
             this.$axios.$delete('report-display/delete/' + db._id).then((res) => {
                 this.$axios.$get('report-display/findbydisplay/' + db.display.id).then((res) => {
