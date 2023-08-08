@@ -13,7 +13,7 @@
       "
       v-if="useHeader"
       style="z-index:1000"
-      :nodrag="$route.name == 'display-create' ? false : true"
+      :nodrag="$route.name == 'display-create' || $route.name == 'display-createrequest' ? false : true"
     />
     <div
       :class="useHeader ? 'top-32' : ''"

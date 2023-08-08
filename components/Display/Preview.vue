@@ -221,9 +221,9 @@ export default {
   watch: {
     '$parent.templateAddedList': {
       handler: function (val) {
-        // this.times = {}
+        this.times = {}
         // var obj = {}
-        console.log(val)
+        // console.log(val)
         val.forEach(el => {
           if (this.times[el.idtemplate]) {
             // 

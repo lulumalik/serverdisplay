@@ -14,17 +14,14 @@
               class="border border-gray-200 rounded-md px-2 py-1 w-full" />
           </div>
         </div>
-        <button class="w-full bg-blue-500 rounded-md py-1 mt-8 text-white font-semibold" @click="uploadimage">
-          Upload image
+        <button :disabled="uploading" class="w-full bg-blue-500 rounded-md py-1 mt-8 text-white font-semibold" @click="uploadimage">
+                {{ uploading ? 'Wait for upload assets' : 'Upload Image' }}
         </button>
-        <picture-input id="fileUpload" type="file" accept="image/jpeg,image/png" @change="dataFile" class="hidden">
+        <picture-input id="fileUpload" size="5" type="file" accept="image/jpeg,image/png" @change="dataFile"
+          class="hidden">
         </picture-input>
       </client-only>
     </div>
-    <client-only>
-      <picture-input id="fileUpload" type="file" accept="image/jpeg,image/png" @change="dataFile" class="hidden">
-      </picture-input>
-    </client-only>
     <Navbar class="w-full" />
     <div class="flex w-full" style="height: calc(100vh - 65.5px)">
       <Sidebar class="flex-none" />
@@ -106,7 +103,7 @@
               </paginate>
             </div> -->
             <div class="flex-grow">
-              <button class="
+              <button :disabled="uploading" class="
                   bg-blue-200
                   border border-blue-400
                   shadow
@@ -117,7 +114,7 @@
                   rounded
                   text-xs
                 " @click="showoverlay = true">
-                Upload Assets
+                {{ uploading ? 'Wait for upload assets' : 'Upload Assets' }}
               </button>
             </div>
           </div>
@@ -156,7 +153,8 @@ export default {
       total: 10,
       title: '',
       showoverlay: false,
-      filedata: null
+      filedata: null,
+      uploading: false
     }
   },
   mounted() {
@@ -250,6 +248,8 @@ export default {
             })
             this.callAllData()
             resolve(res)
+
+            this.uploading = false
             this.showoverlay = false
           })
           .catch((err) => {
@@ -257,6 +257,8 @@ export default {
             // this.rerender = false
 
             this.showoverlay = false
+
+            this.uploading = false
             resolve()
             this.callAllData()
             this.$toast.open({
@@ -271,6 +273,7 @@ export default {
       // if (this.title.length == 0) {
       //   return alert('pleases fill form')
       // }
+      this.uploading = true
       this.uploadImage(this.dataURLtoFile(e, 'logos.png'))
     },
   },
