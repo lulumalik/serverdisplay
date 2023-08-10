@@ -612,7 +612,7 @@ export default {
             this.$axios.$get('display?row=50&order=desc&sortBy=id&page=' + this.page).then((res) => {
                 // parseInt res.count if decimal
                 // console.log(res)
-                var count = parseInt(res.total / 50)
+                var count = parseInt((res.total / 50) + 1)
                 this.total = count
                 this.templateDB = res.data
             })
@@ -833,7 +833,7 @@ export default {
         },
         functionName(e) {
             this.$axios.$get('display?row=50&order=desc&sortBy=id&page=' + e).then((res) => {
-                this.total = parseInt(res.total / 50)
+                this.total = parseInt((res.total / 50) + 1)
                 this.templateDB = res.data
             })
         },
