@@ -20,9 +20,17 @@ export default {
       if (this.$store.state.displayWidget.widgetSaved[
         this.idTemplate + '_WidgetCustomImage_img'
       ]) {
-        this.img = this.$store.state.displayWidget.widgetSaved[
+        if (this.$store.state.displayWidget.widgetSaved[
           this.idTemplate + '_WidgetCustomImage_img'
-        ]
+        ].includes('/api/')) {
+          this.img = this.$axios.defaults.baseURL.replace('/api/', '') + this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetCustomImage_img'
+          ]
+        } else {
+          this.img = this.$store.state.displayWidget.widgetSaved[
+            this.idTemplate + '_WidgetCustomImage_img'
+          ]
+        }
       }
     }
   },

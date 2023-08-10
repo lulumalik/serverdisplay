@@ -229,6 +229,13 @@ export default {
           })
         } else {
           // console.log(val)
+          val.forEach(el => {
+            if (this.times[el.idtemplate]) {
+              // 
+            } else {
+              this.times[el.idtemplate] = 60
+            }
+          })
         }
       },
       deep: true,

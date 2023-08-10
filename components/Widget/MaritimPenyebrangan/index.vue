@@ -68,7 +68,7 @@
               <div v-for="(data, i) in showData" :key="i" class="bg-white rounded-md mt-4">
                 <div class="">
                   <div>
-                    <div class="w-full bg-indigo-500 font-bold text-2xl rounded-md p-4 text-white">
+                    <div class="w-full bg-indigo-500 font-bold text-2xl rounded-md py-4 px-6 text-white">
                       {{ data.name }}
                     </div>
                     <div class="p-6 rounded-md flex justify-center items-center space-x-6">
@@ -344,63 +344,19 @@ export default {
           }
         )
         this.showData.push(res.data)
-        // var el = document.createElement('div')
-        // el.className = 'rounded-lg p-3'
-        // el.style.background = 'rgba(255,255,255, 0.7)'
-        // angin
-        // var div2 = document.createElement('div')
-        // div2.className = 'text-2xl font-bold'
-        // div2.innerHTML = `<div>
-        //     <div class="flex space-x-4"> <img
-        //               src="/general3/wind.svg"
-        //               class="w-8"
-        //             /> <div>Angin</div></div>
-        //     <div>${res.data.data[0].wind_speed_min} - ${res.data.data[0].wind_speed_max} Knots</div>
-        //   </div>`
-        // Gelombang
-        // var div3 = document.createElement('div')
-        // div3.className = 'text-2xl font-bold mt-2'
-        // div3.innerHTML = `<div>
-        //     <div class="flex space-x-4">
-        //               <img
-        //                 src="/weatherheadline/wave.svg"
-        //                 class="w-8"
-        //               />
-        //             <div>Gelombang</div></div>
-        //     <div>${res.data.data[0].wave_desc}</div>
-        //   </div>`
 
-        // el.appendChild(div2)
-        // el.appendChild(div3)
 
-        var el2 = document.createElement('div')
-        el2.className = 'rounded-lg px-4 py-1 text-xl w-44 text-center font-bold'
-        el2.style.background = 'rgba(255,255,255, 0.7)'
-        el2.innerHTML = `<div>${res.data.name}</div>`
+        // var el2 = document.createElement('div')
+        // el2.className = 'rounded-lg px-4 py-1 text-xl w-44 text-center font-bold'
+        // el2.style.background = 'rgba(255,255,255, 0.7)'
+        // el2.innerHTML = `<div>${res.data.name}</div>`
 
-        self.loc1 = new maplibregl.Marker(el2, {
-          offset: [0, 30],
-        })
-          .setLngLat([result[i].value.coor[1], result[i].value.coor[0]])
-          .addTo(map)
-
-        // marker
-        // var offseting
-        // if (i == 0) {
-        //   self.positionfrom.value == 'left'
-        //     ? (offseting = [-180, -80])
-        //     : (offseting = [180, -80])
-        // } else if (i == 1) {
-        //   self.positionto.value == 'left'
-        //     ? (offseting = [-180, -80])
-        //     : (offseting = [180, -80])
-        // }
-        // self.loc2 = new maplibregl.Marker(el, {
-        //   offset: offseting,
+        // self.loc1 = new maplibregl.Marker(el2, {
+        //   offset: [0, 30],
         // })
         //   .setLngLat([result[i].value.coor[1], result[i].value.coor[0]])
         //   .addTo(map)
-        // cuaca
+
       })
 
       map.loadImage('/maritim/DEPARTURE1.png', function (error, image) {
