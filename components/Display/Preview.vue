@@ -221,16 +221,15 @@ export default {
   watch: {
     '$parent.templateAddedList': {
       handler: function (val) {
-        this.times = {}
         // var obj = {}
-        // console.log(val)
-        val.forEach(el => {
-          if (this.times[el.idtemplate]) {
-            // 
-          } else {
+        if (typeof this.times == 'number') {
+          this.times = {}
+          val.forEach(el => {
             this.times[el.idtemplate] = 60
-          }
-        })
+          })
+        } else {
+          // console.log(val)
+        }
       },
       deep: true,
 

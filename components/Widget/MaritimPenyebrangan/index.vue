@@ -374,7 +374,7 @@ export default {
         // el.appendChild(div3)
 
         var el2 = document.createElement('div')
-        el2.className = 'rounded-lg px-4 py-1 text-xl font-bold'
+        el2.className = 'rounded-lg px-4 py-1 text-xl w-44 text-center font-bold'
         el2.style.background = 'rgba(255,255,255, 0.7)'
         el2.innerHTML = `<div>${res.data.name}</div>`
 
