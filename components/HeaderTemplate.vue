@@ -51,7 +51,8 @@
               ">
               &times;
             </button>
-            <img :src="imageList[l] && imageList[l].url" :class="imageList[l] && imageList[l].isLandscape ? 'w-64' : 'w-20'" class="object-fit" />
+            <img :src="imageList[l] && imageList[l].url"
+              :class="imageList[l] && imageList[l].isLandscape ? 'w-64' : 'w-20'" class="object-fit" />
           </div>
           <div v-else class="
               h-8
@@ -72,7 +73,8 @@
           <div v-if="$parent.$parent.logos[$parent.obj.idtemplate] &&
             $parent.$parent.logos[$parent.obj.idtemplate][l]
             ">
-            <img :src="imageList[l] && imageList[l].url" :class="imageList[l] && imageList[l].isLandscape ? 'w-56' : 'w-20'" class="object-fit bg-cover" />
+            <img :src="imageList[l] && imageList[l].url"
+              :class="imageList[l] && imageList[l].isLandscape ? 'w-56' : 'w-20'" class="object-fit bg-cover" />
           </div>
         </div>
       </div>
@@ -191,6 +193,17 @@ export default {
       // Mengembalikan offset GMT dalam format string
       return offsetString;
     },
+    formatDate(dateString) {
+      const months = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+      ];
+
+      const [year, month, day] = dateString.split("-");
+      const formattedDate = `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
+
+      return formattedDate;
+    },
     konversiWaktuGMT(waktu, offset) {
       // Mendapatkan waktu lokal
 
@@ -217,7 +230,7 @@ export default {
       var time = waktuGMT.toISOString()
       var date = time.split('T')[0]
       var time2 = time.split('T')[1].split(':')
-      return `${date} ${[time2[0], time2[1]].join(':')}`
+      return `${this.formatDate(date)} Pukul ${[time2[0], time2[1]].join(':')}`
     },
     returningTimeZone() {
       this.currentDate = new Date()

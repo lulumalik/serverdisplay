@@ -19,9 +19,9 @@
       <!-- {{  }} -->
       <div class="flex-grow pl-14 relative">
         <div class="text-xl font-semibold" v-if="offset && selectedTime">
-            <!-- {{ forecast[0].date }} -->
-            <div>{{ konversiWaktuGMT(selectedTime, offset) }} {{ returningtime }}</div>
-          </div>
+          <!-- {{ forecast[0].date }} -->
+          <div>{{ konversiWaktuGMT(selectedTime, offset) }} {{ returningtime }}</div>
+        </div>
         <div class="uppercase font-bold  text-4xl mt-2">
           {{ weather_code[forecast[0].weather_code] }}
         </div>
@@ -155,6 +155,17 @@ export default {
     },
   },
   methods: {
+    formatDate(dateString) {
+      const months = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+      ];
+
+      const [year, month, day] = dateString.split("-");
+      const formattedDate = `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
+
+      return formattedDate;
+    },
     konversiWaktuGMT(waktu, offset) {
       // Mendapatkan waktu lokal
       var waktuLokal = new Date(waktu);
@@ -175,7 +186,7 @@ export default {
       var time = waktuGMT.toISOString()
       var date = time.split('T')[0]
       var time2 = time.split('T')[1].split(':')
-      return `${date} ${[time2[0], time2[1]].join(':')}`
+      return `${this.formatDate(date)} Pukul ${[time2[0], time2[1]].join(':')}`
     },
     async getData() {
       var parentDisplay = this.$parent.$parent.$parent
