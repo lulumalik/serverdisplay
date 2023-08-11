@@ -13,16 +13,19 @@
         shadow-md
       ">
       <div class="flex-none w-32">
-        <img :src="'/Archive/' + forecast[0].weather_code + '.gif'" class="w-64 absolute left-0 -top-12 z-50"
+        <img :src="'/Archive/' + forecast[0].weather_code + '.gif'" class="w-60 absolute left-0 -top-16 z-50"
           alt="imgdata" />
+        <div class="w-48 text-center relative">
+          <div class="font-bold text-xl absolute -bottom-16 mt-1 left-0 right-0 w-32 mx-auto text-center">
+            {{ subdistrict }}
+          </div>
+        </div>
       </div>
-      <!-- {{  }} -->
       <div class="flex-grow pl-14 relative">
         <div class="text-xl font-semibold" v-if="offset && selectedTime">
-          <!-- {{ forecast[0].date }} -->
           <div>{{ konversiWaktuGMT(selectedTime, offset) }} {{ returningtime }}</div>
         </div>
-        <div class="uppercase font-bold  text-4xl mt-2">
+        <div class="uppercase font-bold  text-4xl">
           {{ weather_code[forecast[0].weather_code] }}
         </div>
         <div class="text-4xl font-bold flex items-end">
@@ -128,6 +131,7 @@ export default {
       ],
       selectedTime: null,
       returningtime: null,
+      subdistrict: null,
       listData: {
         Weather: 'weather_code',
         Temperature: 'temp',
@@ -205,7 +209,7 @@ export default {
               `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
               el.value.locationId
             )
-
+            this.subdistrict = el.value.subdistrict
             this.$set(ndflistener, el.value.ndf, datares.data)
 
             if (ndflistener[el.value.ndf].length > 0) {
