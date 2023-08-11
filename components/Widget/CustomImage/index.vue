@@ -16,22 +16,35 @@ export default {
     initImage() {
       var parentDisplay = this.$parent.$parent.$parent
       this.idTemplate = parentDisplay.obj && parentDisplay.obj.idtemplate
-      // var obj = parentDisplay.obj && parentDisplay.obj.idtemplate
-      if (this.$store.state.displayWidget.widgetSaved[
-        this.idTemplate + '_WidgetCustomImage_img'
-      ]) {
+
+      if (parentDisplay.responseDisplay.properties && parentDisplay.responseDisplay.properties.allSetting[this.idTemplate]) {
+        // production
+        var im = parentDisplay.responseDisplay.properties.allSetting[this.idTemplate][0].value
+
+        if (im.includes('/api/')) {
+          this.img = this.$axios.defaults.baseURL.replace('/api/', '') + im
+        } else {
+          this.img = im
+        }
+      } else {
+        // dev
         if (this.$store.state.displayWidget.widgetSaved[
           this.idTemplate + '_WidgetCustomImage_img'
-        ].includes('/api/')) {
-          this.img = this.$axios.defaults.baseURL.replace('/api/', '') + this.$store.state.displayWidget.widgetSaved[
+        ]) {
+          if (this.$store.state.displayWidget.widgetSaved[
             this.idTemplate + '_WidgetCustomImage_img'
-          ]
-        } else {
-          this.img = this.$store.state.displayWidget.widgetSaved[
-            this.idTemplate + '_WidgetCustomImage_img'
-          ]
+          ].includes('/api/')) {
+            this.img = this.$axios.defaults.baseURL.replace('/api/', '') + this.$store.state.displayWidget.widgetSaved[
+              this.idTemplate + '_WidgetCustomImage_img'
+            ]
+          } else {
+            this.img = this.$store.state.displayWidget.widgetSaved[
+              this.idTemplate + '_WidgetCustomImage_img'
+            ]
+          }
         }
       }
+
     }
   },
   mounted() {
