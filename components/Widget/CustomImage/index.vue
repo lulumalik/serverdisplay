@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <img :src="img" class="rounded-lg mx-auto" />
+    <img :src="img" v-if="img" class="rounded-lg mx-auto" />
   </div>
 </template>
 
@@ -51,7 +51,10 @@ export default {
     this.initImage()
 
     setInterval(() => {
-      this.initImage()
+      this.img = null
+      setTimeout(() => {
+        this.initImage()
+      }, 500)
     }, 60000)
   },
 }
