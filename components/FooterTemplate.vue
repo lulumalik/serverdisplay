@@ -127,7 +127,7 @@
                   />
                 </svg>
               </div>
-              <div>Call Center: BMKG 196</div>
+              <div>Call Center BMKG : 196</div>
             </div>
           </div>
         </div>
