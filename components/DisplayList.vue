@@ -40,7 +40,7 @@
             Actions
           </td>
         </tr>
-        <tr v-for="(db, i) in filterAdmin" :key="i" class="
+        <tr v-for="(db, i) in $route.name == 'display-request' ? filterAdmin.sort((a, b) => b.request_status.localeCompare(a.request_status)) : filterAdmin" :key="i" class="
           rounded
           w-auto
           font-normal
@@ -53,10 +53,11 @@
             <div>{{ db.name }}</div>
           </td>
           <td>
-            <div v-if="!db.request_status" @click="copytext(db.username)" class="flex items-center underline text-blue-500 cursor-pointer">
+            <div v-if="!db.request_status" @click="copytext(db.username)"
+              class="flex items-center underline text-blue-500 cursor-pointer">
               <div>{{ db.username }}</div>
             </div>
-            <div v-else > {{ db.username }}</div>
+            <div v-else> {{ db.username }}</div>
           </td>
           <td>
             {{ db.owner && db.owner.username || '-' }}
@@ -91,7 +92,7 @@
                     d="M1.438 16.872l-1.438 7.128 7.127-1.438 12.642-12.64-5.69-5.69-12.641 12.64zm2.271 2.253l-.85-.849 11.141-11.125.849.849-11.14 11.125zm20.291-13.436l-2.817 2.819-5.69-5.691 2.816-2.817 5.691 5.689z" />
                 </svg>
               </div>
-              <div >
+              <div>
                 <img @click="deleteTemplate(db)" src="/trash.svg" alt="trash" class="w-6" />
               </div>
             </div>
