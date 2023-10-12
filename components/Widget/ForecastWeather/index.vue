@@ -178,7 +178,7 @@ export default {
           var key = el.key.split('_')[2]
           var key1 = el.key.split('_')[1]
           if (key == 'kecamatan' && key1 == 'WidgetForecastWeather') {
-            console.log(el)
+            // console.log(el)
             const datares = await this.$axios.$get(
               `${this.$baseUrlNdf}/cgms/weather/ndf/get?locationId=` +
               el.value.locationId

@@ -83,12 +83,14 @@ export default {
   methods: {
     initSlideCustomTime(delay, template) {
       var self = this
+      // console.log(delay, template)
       if (typeof delay == 'number') {
         var obj = template
         // Fungsi untuk dipicu
         function triggerFunction(key) {
           // Mengecek apakah properti selanjutnya ada
           var nextKey = getNextKey(key);
+          console.log(nextKey)
           if (nextKey) {
             // var interval = obj[nextKey];
             setTimeout(function () {
@@ -101,6 +103,7 @@ export default {
 
             // Jika tidak ada properti selanjutnya, kembali ke properti pertama
             var firstKey = Object.keys(obj)[0];
+            console.log(firstKey)
             // var firstInterval = obj[firstKey];
             setTimeout(function () {
               var arr = Object.keys(obj)
@@ -125,12 +128,18 @@ export default {
         triggerFunction(Object.keys(template)[0]);
       } else {
         //  
-        var obj = delay
+        var delayed = {}
+        for (var k in template) {
+          if (delay[template[k].idtemplate]) {
+            delayed[template[k].idtemplate] = delay[template[k].idtemplate]
+          }
+        }
+        // console.log(delayed)
+        var obj = delayed
+        // console.log(template.filter(f => delay[f.idtemplate]))
         // Fungsi untuk dipicu
         function triggerFunction(key) {
           // console.log("Fungsi dipicu pada properti:", key);
-
-
           // Mengecek apakah properti selanjutnya ada
           var nextKey = getNextKey(key);
           if (nextKey) {
@@ -305,6 +314,7 @@ export default {
       this.$emit('finishloading', true)
 
       setTimeout(() => {
+        // console.log(res.data.properties)
         if (res.data.properties && res.data.properties.delay) {
           this.speed = res.data.properties.delay * 1000
           this.initSlideCustomTime(res.data.properties.delay, res.data.properties.allTemplate)

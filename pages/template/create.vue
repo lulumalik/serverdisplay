@@ -697,10 +697,10 @@ export default {
               logo: el,
             })
           })
-          console.log(logo)
+          // console.log(logo)
          setTimeout(el => {
            logo.forEach(async el => {
-            console.log(el)
+            // console.log(el)
             await this.uploadLogos(el, res.data._id)
           })
          },5000)

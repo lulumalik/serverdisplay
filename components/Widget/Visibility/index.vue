@@ -86,7 +86,7 @@ export default {
     },
     async getData() {
       var self = this
-      console.log('ea')
+      // console.log('ea')
       var parentDisplay = self.$parent.$parent.$parent
       // if (parentDisplay.production) {
       this.allNDF = {}
