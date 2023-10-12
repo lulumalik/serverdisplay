@@ -40,7 +40,7 @@
             Actions
           </td>
         </tr>
-        <tr v-for="(db, i) in $route.name == 'display-request' ? filterAdmin.sort((a, b) => b.request_status.localeCompare(a.request_status)) : filterAdmin" :key="i" class="
+        <tr v-for="(db, i) in filterAdmin" :key="i" class="
           rounded
           w-auto
           font-normal
@@ -223,7 +223,7 @@ export default {
       })
     },
     filterAdmin() {
-      return this.templateDB
+      return this.$route.name == 'display-request' ? this.templateDB.sort((a, b) => b.request_status.localeCompare(a.request_status)) : this.templateDB
     }
   },
 }
