@@ -286,6 +286,7 @@ export default {
           window.location.href = '/display'
         }, 1000)
       } catch (error) {
+        console.log(error)
         if (error.response.data.message.code == 11000) {
           this.saving = false
           this.$toast.open({

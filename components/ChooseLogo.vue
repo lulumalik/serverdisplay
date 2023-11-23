@@ -69,14 +69,14 @@ export default {
   methods: {
     searchData() {
       this.$axios
-        .$get('display?row=10000&keyword=' + this.searchname)
+        .$get('display?row=100000000&keyword=' + this.searchname)
         .then((res) => {
           this.templateDB = res.data
           this.total = res.count / 10 + 1
         })
     },
     callAllData() {
-      this.$axios.$get('logo?row=100').then((res) => {
+      this.$axios.$get('logo?row=100000000').then((res) => {
         this.templateDB = res.data
       })
     },
