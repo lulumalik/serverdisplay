@@ -25,11 +25,11 @@
         "
         @click="clickTemplate(db)"
       >
-        <img
+        <!-- <img
           v-if="db.preview"
           :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
           class="absolute w-full h-full z-10"
-        />
+        /> -->
         <p class="truncate relative z-20 bg-white p-1 rounded">
           {{ db.name }}
         </p>
@@ -93,18 +93,7 @@ export default {
   },
   computed: {
     filterByCategory() {
-      return this.templateDB.filter((db) => {
-        return this.$parent.searchname.length > 0
-          ? this.$parent.searchname
-              .toLowerCase()
-              .split(' ')
-              .every((v) => db.name.toLowerCase().includes(v))
-          : this.$parent.selectedCategory
-              .toLowerCase()
-              .split(' ')
-              .every((v) => db.category && db.category.name.toLowerCase().includes(v))
-        // return db.category.name == this.$parent.selectedCategory
-      })
+      return this.templateDB
     },
   },
 }

@@ -68,7 +68,7 @@
             relative
           ">
           <div class="mb-4">
-            <button class="bg-sky-500 px-6 py-2 rounded-lg text-white font-semibold" @click="adduser">Add User</button>
+            <button class="bg-sky-500 px-6 py-2 rounded-full text-white font-semibold" @click="adduser">Add User</button>
           </div>
           <div style="height:calc(100vh - 210px)" class="overflow-auto">
             <table class="w-full bg-white rounded-b-lg shadow-lg">

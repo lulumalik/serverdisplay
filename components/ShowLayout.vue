@@ -131,7 +131,8 @@ export default {
             ? obj.component.layout._id
             : obj.component.layout
         ]
-      this.selectedCategory = obj.category.name
+      // console.log(obj)
+      // this.selectedCategory = obj.category.name
       this.backgroundColor = obj.properties.background
         ? obj.properties.background
         : this.$axios.defaults.baseURL + obj.backgroundImage.split('/api/')[1]

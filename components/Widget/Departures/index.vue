@@ -4,33 +4,30 @@
       bg-white
       text-black
       shadow-md
-      flex
-      justify-center
-      items-center
     ">
-    <div class="flex items-start space-x-4 w-full">
-      <div class="w-full">
-        <div>
-          <div class="bg-indigo-500 text-white rounded">
-            <div class="px-6 pb-3.5 pt-6 font-semibold text-center text-4xl">
-              Keberangkatan
-            </div>
-            <div class="flex pb-6 justify-center">
-              <div class="
+    <div class="bg-indigo-500 text-white rounded-lg flex items-center px-6 py-4">
+      <div class=" flex-grow font-semibold text-left text-4xl">
+        Cuaca Bandara
+      </div>
+      <div class="flex justify-center">
+        <div class="
                   flex-grow
                   font-thin
                   text-center
                   font-semibold
                   text-3xl
                 ">
-                {{ result.tagname }}
-              </div>
-            </div>
-          </div>
-          <div class="h-80 w-full relative flex items-center justify-center">
+          {{ result.tagname }}
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2">
+      <div class="w-full border-r-4 border-gray-300 border-dashed">
+        <div>
+          <div class="h-56 w-full mx-auto relative flex items-center justify-center">
             <div class="flex pb-12">
-              <div>
-                <img :src="'/Archive/' + weather_codeParsed[result.weather] + '.gif'" class="w-72 mx-auto" />
+              <div class="absolute left-0 -top-6">
+                <img :src="'/Archive/' + weather_codeParsed[result.weather] + '.gif'" class="w-64 mx-auto" />
               </div>
               <div class="
                   font-bold
@@ -40,54 +37,76 @@
                   items-center
                   text-black
                 ">
-                <div class="flex-grow relative right-8 text-left">
+                <div class="flex-grow relative left-12 text-left w-64">
                   <div>{{ result.weather }}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="
+        <div class="flex">
+          <div class="
             flex
+            space-x-4
             justify-center
             text-3xl
-            px-12
+            pl-12
             pb-7
             px-8
             pt-2
             relative
             bottom-8
             rounded-md
+            w-full
           ">
-          <div class="flex-grow">
-            <div class="font-bold flex space-x-4">
-              <div class="font-semibold flex items-center space-x-3 mt-4">
-                <div class="ml-2">
-                  <img class="w-5" src="/weatherheadline/Temperature.svg" />
+            <div class="flex-grow w-full">
+              <div class="font-bold flex space-x-4">
+                <div class="font-semibold flex items-center space-x-3 mt-4">
+                  <div class="pl-1">Suhu</div>
                 </div>
-                <div class="pl-1">Suhu</div>
               </div>
-            </div>
-            <div class="mt-4 flex space-x-2 items-center mt-3">
-              <div><img class="w-8" src="/weatherheadline/eye.svg" /></div>
-              <div class="font-semibold">Jarak Pandang</div>
-            </div>
+              <div class="mt-4 flex space-x-2 items-center mt-3">
+                <div class="font-semibold">Visibilitas</div>
+              </div>
 
-            <div class=" mt-4 flex items-center space-x-4">
-              <div class="ml-2">
-                <img class="w-5" src="/weatherheadline/WDir.svg" />
+              <div class=" mt-4 flex items-center space-x-4">
+                <div><b>Angin</b></div>
               </div>
-              <div><b>Angin</b></div>
+            </div>
+            <div class="flex-none mt-4">
+              <div class="font-bold">
+                {{ result.temperature }}<sup>o</sup>C
+              </div>
+              <div class="font-bold mt-4">{{ result.visibility }} kilometers</div>
+              <div class="mt-4 font-semibold">{{ result.windSpeed }} km/jam</div>
+              <div class="mt-1.5 font-semibold">
+                dari {{ result.windDirection }}
+              </div>
             </div>
           </div>
-          <div class="flex-grow mt-4">
-            <div class="font-bold">
-              {{ result.temperature }}<sup>o</sup>C
+        </div>
+      </div>
+      <div>
+        <div class="font-semibold text-xl p-8">Prakiraan Cuaca</div>
+        <div class="grid grid-cols-2 gap-4 p-4">
+          <div class="bg-gray-100 shadow-md rounded-lg h-32 p-4 relative" v-for="(data, i) in 4" :key="i">
+            <div class="absolute top-0">
+              <img :src="'/Archive/' + weather_codeParsed[result.weather] + '.gif'" class="w-32 mx-auto" />
             </div>
-            <div class="font-bold mt-4">{{ result.visibility }} kilometers</div>
-            <div class="mt-4 font-semibold">{{ result.windSpeed }} km/jam</div>
-            <div class="mt-1.5 font-semibold">
-              dari {{ result.windDirection }}
+            <div class="
+                  font-bold
+                  flex-none
+                  text-lg
+                  flex
+                  items-center
+                  text-black
+                ">
+              <div class="flex-grow text-right">
+                <div>Pukul 0{{ data }}:00</div>
+                <div class="font-bold text-xl mt-10">
+                  {{ result.temperature }}<sup>o</sup>C
+                </div>
+              </div>
             </div>
           </div>
         </div>

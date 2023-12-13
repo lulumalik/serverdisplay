@@ -9,7 +9,7 @@
           rounded
           px-4
           w-44
-          h-32
+          h-20
           flex
           items-center
           justify-center
@@ -21,11 +21,11 @@
           bg-white
         "
       >
-        <img
+        <!-- <img
           v-if="db.preview"
           :src="$axios.defaults.baseURL + db.preview.split('/api/')[1]"
           class="absolute w-full h-full z-10"
-        />
+        /> -->
         <p class="line-clamp-2 bg-white rounded px-2 py-1 text-center relative z-20">
           {{ db.name }}
         </p>

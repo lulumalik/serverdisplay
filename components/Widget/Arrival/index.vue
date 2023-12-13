@@ -2,66 +2,57 @@
   <div>
     <div class="rounded-md bg-indigo-500 text-white shadow-md">
       <div class="text-white px-6 py-3.5 font-semibold text-center text-4xl">
-        Tujuan
+        <div>
+          Cuaca Bandara Tujuan
+        </div>
+        <div class="mt-4">
+          {{ formatReadableDate(new Date()) }}
+        </div>
       </div>
     </div>
-    <div class="overflow-auto mt-2" style="height: 620px">
-      <VueSlickCarousel v-bind="settings" style="height: 620px">
-        <template #prevArrow="arrowOption">
-          <div v-show="false">{{ arrowOption }}</div>
-        </template>
-        <template #nextArrow="arrowOption">
-          <div v-show="false">
-            {{ arrowOption }}
-          </div>
-        </template>
-        <div class="flex space-x-4 mt-4" style="height:400px;" v-for="(val, i) in bandaras" :key="i">
-          <div style="width: 100px !important;height:200px;" class="text-black rounded-md bg-white shadow-md z-10">
-            <div class="px-6 py-3 flex space-x-4 bg-indigo-500 relative z-20 rounded-md">
-              <div class="text-3xl text-white truncate">
-                <b>{{ val.tagname }}</b>
-              </div>
+
+    <div class="overflow-auto mt-2 grid gap-4 " :class="`grid-cols-${bandaras.length}`" style="height: 650px">
+
+      <div class="flex space-x-4 mt-4" style="height:400px;" v-for="(val, i) in bandaras" :key="i">
+        <div style="width: 100% !important;height:100%;" class="text-black rounded-md bg-white shadow-md z-10">
+          <div class="px-6 py-3 flex space-x-4 bg-indigo-500 relative z-20 rounded-md">
+            <div class="text-3xl text-white truncate">
+              <b>{{ val.tagname }}</b>
             </div>
-            <div class="p-6 rounded-md z-10">
-              <div class="text-2xl">
-                <div class="text-3xl relative font-bold flex items-center space-x-4">
-                  <img :src="'/Archive/' + weather_codeParsed[val.weather] + '.gif'" class="w-32 absolute" />
-                  <div class="pl-32 ">{{ val.weather }}</div>
+          </div>
+          <div class="p-6 rounded-md z-10">
+            <div class="text-2xl mt-8">
+              <div class="text-3xl relative font-bold flex h-20 items-center space-x-4">
+                <img :src="'/Archive/' + weather_codeParsed[val.weather] + '.gif'" class="w-32 absolute" />
+                <div class="pl-32 ">{{ val.weather }}</div>
+              </div>
+              <div class="font-semibold flex w-full mt-10">
+                <div class="flex space-x-4 items-start w-5/12">
+                  <div>Angin</div>
                 </div>
-                <div class="font-semibold flex w-full mt-10">
-                  <div class="flex space-x-4 items-center w-5/12">
-                    <div class="ml-2">
-                      <img class="w-4" src="/weatherheadline/WDir.svg" />
-                    </div>
-                    <div>Angin</div>
-                  </div>
-                  <div class="w-7/12">
-                    {{ parseFloat(val.windSpeed) ? val.windSpeed + 'km/jam dari ' + val.windDirection : val.windSpeed }}
-                  </div>
+                <div class="w-7/12">
+                  {{ parseFloat(val.windSpeed) ? val.windSpeed + 'km/jam dari ' + val.windDirection : val.windSpeed }}
                 </div>
-                <div class="font-semibold flex w-full mt-1.5">
-                  <div class="flex items-center space-x-3 w-5/12">
-                    <img class="w-6 ml-1" src="/weatherheadline/eye.svg" />
-                    <div class="whitespace-nowrap">Jarak Pandang</div>
-                  </div>
-                  <div class="w-7/12">
-                    {{ val.visibility || '-' }} Kilometers
-                  </div>
+              </div>
+              <div class="font-semibold flex w-full mt-1.5">
+                <div class="flex items-center space-x-3 w-5/12">
+                  <div class="whitespace-nowrap">Visibilitas</div>
                 </div>
-                <div class="font-semibold flex w-full mt-1.5">
-                  <div class="flex items-center space-x-4 w-5/12">
-                    <div class="ml-2">
-                      <img class="w-3.5" src="/weatherheadline/Temperature.svg" />
-                    </div>
-                    <div>Suhu</div>
-                  </div>
-                  <div class="w-7/12">{{ val.temperature }} <sup>o</sup>C</div>
+                <div class="w-7/12">
+                  {{ val.visibility || '-' }} Kilometers
                 </div>
+              </div>
+              <div class="font-semibold flex w-full mt-1.5">
+                <div class="flex items-center space-x-4 w-5/12">
+                  <div>Suhu</div>
+                </div>
+                <div class="w-7/12">{{ val.temperature }} <sup>o</sup>C</div>
               </div>
             </div>
           </div>
         </div>
-      </VueSlickCarousel>
+      </div>
+
     </div>
   </div>
 </template>
@@ -77,17 +68,12 @@ export default {
   data() {
     return {
       settings: {
-        dots: false,
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        vertical: true,
-        verticalSwiping: true,
-        autoplay: true,
-        speed: 1000,
-        centerPadding: "30px",
-        adaptiveHeight: true,
-        autoplaySpeed: 5000,
+        "centerMode": true,
+        "centerPadding": "20px",
+        "focusOnSelect": true,
+        "infinite": true,
+        "slidesToShow": 3,
+        "speed": 500
       },
       idTemplate: null,
       bandaras: [
@@ -109,6 +95,10 @@ export default {
     },
   },
   methods: {
+    formatReadableDate(date) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit' };
+      return new Date(date).toLocaleDateString('id-ID', options);
+    },
     async getData() {
       var self = this
       var parentDisplay = this.$parent.$parent.$parent
@@ -138,7 +128,7 @@ export default {
                 if (json[1] && json[1].children) {
                   json[1].children.forEach((el3) => {
                     var icaoId = el3.children[0].children[0]
-                    if (el2.value  && el2.value.icaoid == icaoId) {
+                    if (el2.value && el2.value.icaoid == icaoId) {
                       // json[1].children.forEach((el2) => {
                       var tagname = el3.children[1].children[0]
                       var latitude = el3.children[2].children[0]
@@ -253,7 +243,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.getData()
-    },2000)
+    }, 2000)
     setInterval(() => {
       this.getData()
     }, 300000)

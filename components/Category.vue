@@ -2,9 +2,9 @@
   <div>
     <div class="text-xl mb-4 font-bold text-sky-500">Category</div>
     <div class="flex space-x-8 items-center">
-      <div v-for="(l, i) in list" :key="i" class="cursor-pointer" @click="$parent.selectedCategory = (l.name == 'All' ? '' : l.name)">
-        <div
-          class="
+      <div v-for="(l, i) in list" :key="i" class="cursor-pointer"
+        @click="$parent.selectedCategory = (l.name == 'All' ? '' : l.name)">
+        <div class="
             rounded-full
             w-10
             h-10
@@ -14,8 +14,7 @@
             shadow-md
             mx-auto
           "
-          :class="$parent.selectedCategory === (l.name == 'All' ? '' : l.name) ? 'bg-sky-500 text-white' : 'bg-white text-sky-500'"
-        >
+          :class="$parent.selectedCategory === (l.name == 'All' ? '' : l.name) ? 'bg-sky-500 text-white' : 'bg-white text-sky-500'">
           <component :is="l.id" class="w-5 h-5" />
         </div>
 
@@ -30,27 +29,27 @@ export default {
   data() {
     return {
       list: [
-        {
-          name: 'All',
-          id: 'CategoryiconAll',
-        },
+        // {
+        //   name: 'All',
+        //   id: 'CategoryiconAll',
+        // },
         {
           name: 'Bandara',
           id: 'CategoryiconBandara',
         },
 
-        {
-          name: 'Maritim',
-          id: 'CategoryiconMaritim',
-        },
-        {
-          name: 'Umum',
-          id: 'CategoryiconUmum',
-        },
-        {
-          name: 'Wisata',
-          id: 'CategoryiconWisata',
-        },
+        // {
+        //   name: 'Maritim',
+        //   id: 'CategoryiconMaritim',
+        // },
+        // {
+        //   name: 'Umum',
+        //   id: 'CategoryiconUmum',
+        // },
+        // {
+        //   name: 'Wisata',
+        //   id: 'CategoryiconWisata',
+        // },
         // {
         //   name: 'Custom',
         //   id: 'CategoryiconCustom',

@@ -38,7 +38,10 @@ export const weather_parsed = {
     'Hujan lokal': 80,
     'Hujan Petir': 95,
     'Hujan petir': 95,
-    'Hujan Petir': 97,
+    'Hujan Petir': 95,
+    'Guntur': 95,
+    'Guntur di sekitarnya': 95,
+    'Guntur dan hujan ringan': 80
 }
 
 export const weather_video = {

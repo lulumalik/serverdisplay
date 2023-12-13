@@ -235,7 +235,7 @@
             <div class="w-3/12 p-4">
 
               &nbsp;
-              <!-- <div class="text-left flex justify-start items-center space-x-3">
+              <div class="text-left flex justify-start items-center space-x-3">
                 <button
                   v-if="$route.query.id ? isRoled == currentRole : true"
                   @click="savingTemplate(false)"
@@ -271,7 +271,7 @@
                 >
                   {{ saving ? 'Saving ...' : 'Save as new Template' }}
                 </button>
-              </div> -->
+              </div>
             </div>
             <div class="flex space-x-3 justify-end mt-4 w-9/12 relative">
               <div

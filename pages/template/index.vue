@@ -8,8 +8,8 @@
           class="flex-grow bg-gray-100 w-full h-full px-4 py-4 overflow-auto"
         >
           <div class="mb-6 flex space-x-6 items-end">
-            <Category class="flex-grow" />
-            <div class="relative">
+            <!-- <Category class="flex-grow" /> -->
+            <!-- <div class="relative">
               <input
                 type="text"
                 v-model="searchname"
@@ -30,14 +30,14 @@
                   />
                 </svg>
               </div>
-            </div>
+            </div> -->
           </div>
           <div>
             <TemplateList :templateDB="templateDB" />
           </div>
-          <div class="text-right hidden">
+          <div class="text-right">
             &nbsp;
-            <!-- <button
+            <button
               class="
                 bg-blue-200
                 border border-blue-400
@@ -52,7 +52,7 @@
               @click="creating"
             >
               {{  'Create New' }}
-            </button> -->
+            </button>
           </div>
         </div>
       </client-only>
@@ -69,7 +69,7 @@ export default {
       templateDB: [],
       layoutDB: {},
       categoryDB: {},
-      selectedCategory: '',
+      selectedCategory: 'Bandara',
       templateDBSelected: null,
       searchname: ''
     }

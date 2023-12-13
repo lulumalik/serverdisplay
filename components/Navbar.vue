@@ -1,8 +1,8 @@
 <template>
-  <div class="py-2 px-6 bg-white flex w-full items-center shadow-md">
+  <div class="py-2 px-6 bg-black flex w-full items-center shadow-md">
     <div class="flex-grow flex items-center space-x-4 cursor-pointer" @click="$router.push('/display')">
-      <img src="/bmkg.png" alt="bmkg" class="w-10" />
-      <div class="flex-grow">
+      <img src="/bmkglogowht-01.png" alt="bmkg" class="w-10" />
+      <div class="flex-grow text-white">
         <div style="font-size: 22px" class="font-semibold">
           BADAN METEOROLOGI, KLIMATOLOGI, DAN GEOFISIKA
         </div>
@@ -22,7 +22,7 @@
           py-2
           text-white
           font-semibold
-          rounded
+          rounded-full
           text-xs
         ">
         Create Display
@@ -35,7 +35,7 @@
           py-2
           text-white
           font-semibold
-          rounded
+          rounded-full
           text-xs
         ">
         Logout

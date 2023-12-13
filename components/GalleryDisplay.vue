@@ -3,14 +3,15 @@
     <div v-if="!responseDisplay.status">
       <AnimatedBG />
     </div>
+    <!-- backgroundStatic -->
     <div v-else class="overflow-hidden h-screen w-screen relative"
-      :style="{ backgroundImage: 'url(' + backgroundStatic + ')', backgroundSize: 'cover' }">
+      :style="{ backgroundImage: 'url(' + '/subtle-prism.svg' + ')', backgroundSize: 'cover' }">
       <client-only>
-        <div class="h-full w-full overflow-hidden fixed left-0" style="z-index: 0" v-if="responseDisplay.properties &&
+        <!-- <div class="h-full w-full overflow-hidden fixed left-0" style="z-index: 0" v-if="responseDisplay.properties &&
           responseDisplay.properties.video
           ">
           <BackgroundVideo @hujan="isHujan = $event" />
-        </div>
+        </div> -->
         <carousel v-if="templates.length > 0" :infiniteScroll="false" :autoPlay="false" :playSpeed="speed"
           :wheelControl="false" :hoverPause="false" style="height: 100vw !important; width: 100vw !important"
           ref="carousel">
